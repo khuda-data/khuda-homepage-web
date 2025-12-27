@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import {
   getRadioButtonClass,
   getInterviewTimeButtonClass
 } from "@/lib/form-utils";
+import { submitApplication, getQuestions, type Question } from "@/lib/api";
 
 const interviewTimes = generateInterviewTimes();
 
@@ -24,6 +25,8 @@ const Apply = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const [formData, setFormData] = useState({
     privacyAgreement: "",
     name: "",
@@ -54,6 +57,36 @@ const Apply = () => {
     trackInterest: "",
     obExpectations: "",
   });
+
+  // 지원 분야 선택 시 질문 목록 가져오기
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      if (!formData.applicationType) {
+        setQuestions([]);
+        return;
+      }
+
+      setIsLoadingQuestions(true);
+      try {
+        const response = await getQuestions(formData.applicationType);
+        // position 순서로 정렬
+        const sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
+        setQuestions(sortedQuestions);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "질문을 가져오는데 실패했습니다.";
+        toast({
+          title: "질문 로드 실패",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        setQuestions([]);
+      } finally {
+        setIsLoadingQuestions(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [formData.applicationType, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,10 +145,99 @@ const Apply = () => {
 
     setIsSubmitting(true);
     
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    try {
+      // 필드명을 질문 ID로 매핑하는 맵
+      const fieldToQuestionIdMap: Record<string, number> = {
+        privacyAgreement: 1,
+        name: 2,
+        studentId: 3,
+        gradeSemester: 4,
+        major: 5,
+        doubleMajor: 6,
+        email: 7,
+        phone: 8,
+        residence: 9,
+        pythonLevel: 10,
+        dataAnalysisFields: 11,
+        coreQuestion1: 12,
+        coreQuestion2: 13,
+        coreQuestion3: 14,
+        studyGroup: 15,
+        otherActivities: 16,
+        schedule2026: 17,
+        certificates: 18,
+        expectations: 19,
+        interviewDates: 20,
+        interviewTimesByDate: 21,
+        studyIntention: 22,
+        studyDetails: 23,
+        trackInterest: 24,
+        obExpectations: 25,
+      };
+
+      // formData를 질문 ID 기반 answers로 변환
+      const answers: Record<string, string> = {};
+      
+      // 공통 필드
+      if (formData.privacyAgreement) answers[fieldToQuestionIdMap.privacyAgreement.toString()] = formData.privacyAgreement;
+      if (formData.name) answers[fieldToQuestionIdMap.name.toString()] = formData.name;
+      if (formData.studentId) answers[fieldToQuestionIdMap.studentId.toString()] = formData.studentId;
+      if (formData.gradeSemester) answers[fieldToQuestionIdMap.gradeSemester.toString()] = formData.gradeSemester;
+      if (formData.major) answers[fieldToQuestionIdMap.major.toString()] = formData.major;
+      if (formData.doubleMajor) answers[fieldToQuestionIdMap.doubleMajor.toString()] = formData.doubleMajor;
+      if (formData.email) answers[fieldToQuestionIdMap.email.toString()] = formData.email;
+      if (formData.phone) answers[fieldToQuestionIdMap.phone.toString()] = formData.phone;
+
+      // YB 필드
+      if (formData.applicationType === "yb") {
+        if (formData.residence) answers[fieldToQuestionIdMap.residence.toString()] = formData.residence;
+        if (formData.pythonLevel) answers[fieldToQuestionIdMap.pythonLevel.toString()] = formData.pythonLevel;
+        if (formData.dataAnalysisFields.length > 0) {
+          answers[fieldToQuestionIdMap.dataAnalysisFields.toString()] = JSON.stringify(formData.dataAnalysisFields);
+        }
+        if (formData.coreQuestion1) answers[fieldToQuestionIdMap.coreQuestion1.toString()] = formData.coreQuestion1;
+        if (formData.coreQuestion2) answers[fieldToQuestionIdMap.coreQuestion2.toString()] = formData.coreQuestion2;
+        if (formData.coreQuestion3) answers[fieldToQuestionIdMap.coreQuestion3.toString()] = formData.coreQuestion3;
+        if (formData.studyGroup) answers[fieldToQuestionIdMap.studyGroup.toString()] = formData.studyGroup;
+        if (formData.otherActivities) answers[fieldToQuestionIdMap.otherActivities.toString()] = formData.otherActivities;
+        if (formData.schedule2026) answers[fieldToQuestionIdMap.schedule2026.toString()] = formData.schedule2026;
+        if (formData.certificates) answers[fieldToQuestionIdMap.certificates.toString()] = formData.certificates;
+        if (formData.expectations) answers[fieldToQuestionIdMap.expectations.toString()] = formData.expectations;
+        if (formData.interviewDates.length > 0) {
+          answers[fieldToQuestionIdMap.interviewDates.toString()] = JSON.stringify(formData.interviewDates);
+        }
+        if (Object.keys(formData.interviewTimesByDate).length > 0) {
+          answers[fieldToQuestionIdMap.interviewTimesByDate.toString()] = JSON.stringify(formData.interviewTimesByDate);
+        }
+      }
+
+      // OB 필드
+      if (formData.applicationType === "ob") {
+        if (formData.studyIntention) answers[fieldToQuestionIdMap.studyIntention.toString()] = formData.studyIntention;
+        if (formData.studyDetails) answers[fieldToQuestionIdMap.studyDetails.toString()] = formData.studyDetails;
+        if (formData.trackInterest) answers[fieldToQuestionIdMap.trackInterest.toString()] = formData.trackInterest;
+        if (formData.obExpectations) answers[fieldToQuestionIdMap.obExpectations.toString()] = formData.obExpectations;
+      }
+
+      // API 호출
+      const response = await submitApplication(formData.applicationType, answers);
+      
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      toast({
+        title: "지원서가 제출되었습니다",
+        description: `지원서 ID: ${response.application_id}`,
+      });
+    } catch (error) {
+      setIsSubmitting(false);
+      const errorMessage = error instanceof Error ? error.message : "지원서 제출 중 오류가 발생했습니다.";
+      toast({
+        title: "제출 실패",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleCheckboxChange = (field: string, value: string, checked: boolean) => {
@@ -207,7 +329,7 @@ const Apply = () => {
     }
 
     if (formData.applicationType === "yb") {
-      const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some(times => times.length > 0);
+      const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some((times: string[]) => times.length > 0);
       if (!formData.residence || !formData.pythonLevel || !formData.coreQuestion1 || !formData.coreQuestion2 || !formData.coreQuestion3 || formData.interviewDates.length === 0 || !hasInterviewTimes) {
         return false;
       }
