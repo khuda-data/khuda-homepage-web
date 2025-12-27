@@ -13,7 +13,7 @@ const recruitmentInfo = [
     icon: Users,
     title: "모집 대상",
     description: "경희대학교 재학생 및 휴학생",
-    details: "전공 무관, AI/데이터에 관심 있는 모든 분",
+    details: "전공 무관, 데이터분석/AI에 관심 있는 모든 분",
   },
   {
     icon: Calendar,

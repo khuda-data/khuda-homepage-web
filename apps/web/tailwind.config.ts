@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -14,7 +15,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Outfit', 'Noto Sans KR', 'sans-serif'],
+        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -43,8 +44,7 @@ export default {
           foreground: "hsl(var(--accent-foreground))",
         },
         khuda: {
-          red: "hsl(4 85% 50%)",
-          blue: "hsl(220 75% 50%)",
+          crimson: "hsl(341 100% 32%)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -101,5 +101,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

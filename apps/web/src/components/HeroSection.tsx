@@ -44,11 +44,11 @@ const HeroSection = () => {
 
           {/* Sub text */}
           <p className="text-lg md:text-xl text-muted-foreground mb-4 opacity-0 animate-fade-up animation-delay-200">
-            Since 2018
+            Since 2021
           </p>
           
           <p className="text-base md:text-lg text-muted-foreground max-w-xl mb-12 opacity-0 animate-fade-up animation-delay-400">
-            KHUDA는 경희대학교 AI/빅데이터 연합 동아리입니다.<br />
+            KHUDA는 경희대학교 데이터분석/AI 학회입니다.<br />
             함께 성장하고, 함께 도전하며, 새로운 가능성을 만들어갑니다.
           </p>
 

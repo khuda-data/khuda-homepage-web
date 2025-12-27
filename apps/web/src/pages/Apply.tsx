@@ -238,7 +238,7 @@ const Apply = () => {
                 <Label htmlFor="experience">관련 경험 (선택)</Label>
                 <Textarea
                   id="experience"
-                  placeholder="AI/데이터 관련 프로젝트, 스터디, 공모전 등의 경험이 있다면 작성해주세요. (500자 이내)"
+                  placeholder="데이터분석/AI 관련 프로젝트, 스터디, 공모전 등의 경험이 있다면 작성해주세요. (500자 이내)"
                   value={formData.experience}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                   className="min-h-[150px] bg-secondary border-border focus:border-primary"

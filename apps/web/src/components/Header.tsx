@@ -16,8 +16,8 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { label: "활동 소개", href: "#curriculum" },
-    { label: "모집 안내", href: "#recruiting" },
+    { label: "Activities", href: "#curriculum" },
+    { label: "Recruiting", href: "#recruiting" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -37,13 +37,14 @@ const Header = () => {
       }`}
     >
       <div className="container mx-auto px-6 md:px-12">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border-2 border-foreground flex items-center justify-center">
-              <span className="text-lg font-bold">K</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight">KHUDA</span>
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/images/khuda-logo.png" 
+              alt="KHUDA" 
+              className="h-[50px] md:h-[60px] w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -79,7 +80,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in">
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in">
             <nav className="flex flex-col py-6 px-6 gap-4">
               {navLinks.map((link) => (
                 <button
