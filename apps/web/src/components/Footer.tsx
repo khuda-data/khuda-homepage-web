@@ -6,7 +6,6 @@ const Footer = () => {
     <footer className="bg-secondary/50 border-t border-border py-16">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid md:grid-cols-3 gap-12">
-          {/* Description */}
           <div className="flex flex-col">
             <p className="text-muted-foreground text-sm mb-4">
               경희대학교 데이터분석/AI 학회
@@ -19,7 +18,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">Contact Us</h4>
             <div className="space-y-3">
@@ -53,7 +51,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Location */}
           <div>
             <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">Location</h4>
             <p className="text-muted-foreground text-sm">

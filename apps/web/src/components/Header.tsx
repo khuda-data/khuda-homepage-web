@@ -38,7 +38,6 @@ const Header = () => {
     >
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <img 
               src="/images/khuda-logo.png" 
@@ -47,7 +46,6 @@ const Header = () => {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
               <button
@@ -60,7 +58,6 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
             <Link to="/apply">
               <Button variant="nav" size="default" className="rounded-full px-6">
@@ -69,7 +66,6 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -78,7 +74,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in">
             <nav className="flex flex-col py-6 px-6 gap-4">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Sparkles, Instagram, Copy, ExternalLink, UserCircle, ClipboardList, GraduationCap, Target, Layers, Info, Activity, Heart, Circle, Check } from "lucide-react";
+import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, ClipboardList, GraduationCap, Target, Layers, Info, Activity, Heart, Circle, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   generateInterviewTimes, 
@@ -21,7 +21,6 @@ import {
 const interviewTimes = generateInterviewTimes();
 
 const Apply = () => {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
