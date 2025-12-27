@@ -1,8 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ColorBends from "./ColorBends";
+import { useEffect, useState } from "react";
 
 const HeroSection = () => {
+  const [currentWord, setCurrentWord] = useState(0);
+  const words = ["Future", "Growth", "Learning"];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord((prev) => (prev + 1) % words.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -36,8 +47,8 @@ const HeroSection = () => {
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 text-white">
             <span className="block">Unlock Your</span>
             <span className="block mt-2">
-              <span className="inline-block min-w-[200px] md:min-w-[280px] border-b-4 border-white pb-2">
-                Future
+              <span className="inline-block min-w-[200px] md:min-w-[280px] border-b-4 border-white pb-2 transition-all duration-500">
+                {words[currentWord]}
               </span>
               <span className="text-muted-foreground">.</span>
             </span>
