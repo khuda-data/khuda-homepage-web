@@ -1,4 +1,7 @@
-const API_BASE_URL = "http://3.38.172.201:8000";
+// 개발 환경에서는 프록시를 사용하고, 프로덕션에서는 직접 API 서버를 사용
+const API_BASE_URL = import.meta.env.PROD 
+  ? "http://3.38.172.201:8000" 
+  : ""; // 프록시 사용 시 빈 문자열
 
 export interface Question {
   id: number;
@@ -6,7 +9,7 @@ export interface Question {
   applicant_type: string;
   field_type: string;
   required: boolean;
-  max_len: number;
+  max_len: number | null;
   position: number;
 }
 
@@ -52,6 +55,10 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
+      // CORS 또는 네트워크 오류인 경우 더 자세한 메시지 제공
+      if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
+        throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
+      }
       throw error;
     }
     throw new Error("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
@@ -97,6 +104,10 @@ export async function submitApplication(
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
+      // CORS 또는 네트워크 오류인 경우 더 자세한 메시지 제공
+      if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
+        throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
+      }
       throw error;
     }
     throw new Error("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
