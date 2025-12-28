@@ -26,6 +26,17 @@ export interface ApplicationResponse {
   status: string;
 }
 
+export interface InterviewDate {
+  value: string;
+  label: string;
+  subLabel: string;
+}
+
+export interface InterviewSchedule {
+  dates: InterviewDate[];
+  times: string[];
+}
+
 // ============================================================================
 // 상수
 // ============================================================================
@@ -288,4 +299,5 @@ export async function submitApplication(
     "지원서 제출에"
   );
 }
+
 

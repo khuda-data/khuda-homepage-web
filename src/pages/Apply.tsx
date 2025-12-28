@@ -10,14 +10,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
-  generateInterviewTimes, 
   copyToClipboard,
   getCheckboxContainerClass,
   getCheckboxIconClass,
   getRadioButtonClass,
   getInterviewTimeButtonClass
 } from "@/lib/form-utils";
-import { submitApplication, getQuestions, type Question } from "@/lib/api";
+import { submitApplication, getQuestions, type Question, type InterviewSchedule } from "@/lib/api";
 import { 
   CONTACT_EMAIL, 
   CONTACT_PHONE, 
@@ -29,8 +28,7 @@ import {
   SOCIAL_LINKS,
   COMMON_STYLES,
 } from "@/lib/constants";
-
-const interviewTimes = generateInterviewTimes();
+import { generateInterviewTimes } from "@/lib/form-utils";
 
 const Apply = () => {
   const { toast } = useToast();
@@ -39,6 +37,7 @@ const Apply = () => {
   const [commonQuestions, setCommonQuestions] = useState<Question[]>([]);
   const [typeQuestions, setTypeQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
+  const [interviewSchedule, setInterviewSchedule] = useState<InterviewSchedule | null>(null);
   const [formData, setFormData] = useState({
     applicationType: "",
     answers: {} as Record<string, string>,
@@ -82,7 +81,7 @@ const Apply = () => {
         const response = await getQuestions(formData.applicationType as "yb" | "ob" | "common");
         let sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
         
-        if (formData.applicationType === "ob") {
+        if (isApplicationType("ob")) {
           sortedQuestions = filterOBQuestions(sortedQuestions);
         }
         
@@ -102,6 +101,21 @@ const Apply = () => {
 
     fetchTypeQuestions();
   }, [formData.applicationType, toast]);
+
+  useEffect(() => {
+    if (formData.applicationType !== "yb") {
+      setInterviewSchedule(null);
+      return;
+    }
+
+    // 프론트엔드에서 하드코딩된 면접 일정 옵션 사용
+    const schedule: InterviewSchedule = {
+      dates: RECRUITMENT_SCHEDULE.interview.dates,
+      times: generateInterviewTimes(),
+    };
+
+    setInterviewSchedule(schedule);
+  }, [formData.applicationType]);
 
   const questions = [...commonQuestions, ...typeQuestions];
 
@@ -126,7 +140,7 @@ const Apply = () => {
       return;
     }
 
-    const privacyQuestion = questions.find(q => q.question.includes("개인정보") || q.question.includes("동의"));
+    const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
     if (privacyQuestion) {
       const privacyAnswer = formData.answers[privacyQuestion.id.toString()];
       if (!privacyAnswer || privacyAnswer === "disagree") {
@@ -139,7 +153,7 @@ const Apply = () => {
       }
     }
 
-    if (formData.applicationType === "yb") {
+    if (isApplicationType("yb")) {
       if (formData.interviewDates.length === 0) {
         toast({
           title: APPLICATION_FORM_CONFIG.errorMessages.selectInterviewDate.title,
@@ -158,12 +172,8 @@ const Apply = () => {
         return;
       }
       
-      const interviewDatesQuestion = questions.find(q => 
-        q.question.includes("면접") && (q.question.includes("날짜") || q.question.includes("일정"))
-      );
-      const interviewTimesQuestion = questions.find(q => 
-        q.question.includes("면접") && q.question.includes("시간")
-      );
+      const interviewDatesQuestion = findInterviewQuestion(true);
+      const interviewTimesQuestion = findInterviewQuestion(false);
       
       if (interviewDatesQuestion) {
         formData.answers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
@@ -189,7 +199,7 @@ const Apply = () => {
       return;
     }
 
-    if (formData.applicationType === "ob") {
+    if (isApplicationType("ob")) {
       const studyIntentionQuestionId = findQuestionId(["스터디 개설"]);
       const trackInterestQuestionId = findQuestionId(["트랙"]);
       
@@ -221,17 +231,13 @@ const Apply = () => {
         }
       });
 
-      if (formData.applicationType === "yb") {
-        const interviewDatesQuestion = questions.find(q => 
-          q.question.includes("면접") && (q.question.includes("날짜") || q.question.includes("일정"))
-        );
+      const interviewDatesQuestion = findInterviewQuestion(true);
+      const interviewTimesQuestion = findInterviewQuestion(false);
+      
+      if (isApplicationType("yb")) {
         if (interviewDatesQuestion) {
           filteredAnswers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
         }
-
-        const interviewTimesQuestion = questions.find(q => 
-          q.question.includes("면접") && q.question.includes("시간")
-        );
         if (interviewTimesQuestion) {
           filteredAnswers[interviewTimesQuestion.id.toString()] = JSON.stringify(formData.interviewTimesByDate);
         }
@@ -240,9 +246,9 @@ const Apply = () => {
       questions.forEach(question => {
         const questionId = question.id.toString();
         if (question.required && !filteredAnswers[questionId]) {
-          if (question.question.includes("면접") && question.question.includes("시간")) {
+          if (interviewTimesQuestion && question.id === interviewTimesQuestion.id) {
             filteredAnswers[questionId] = JSON.stringify({});
-          } else if (question.question.includes("면접") && question.question.includes("날짜")) {
+          } else if (interviewDatesQuestion && question.id === interviewDatesQuestion.id) {
             filteredAnswers[questionId] = JSON.stringify([]);
           } else {
             filteredAnswers[questionId] = "";
@@ -297,11 +303,25 @@ const Apply = () => {
   };
 
   const findQuestionId = (keywords: string[]): number | null => {
-    const question = questions.find(q => 
-      keywords.some(keyword => q.question.includes(keyword))
-    );
+    const question = findQuestionByKeywords(keywords);
     return question ? question.id : null;
   };
+
+  const findInterviewQuestion = (isDate: boolean): Question | undefined => {
+    return questions.find(q => {
+      const hasInterview = q.question.includes("면접");
+      if (isDate) {
+        return hasInterview && (q.question.includes("날짜") || q.question.includes("일정"));
+      }
+      return hasInterview && q.question.includes("시간");
+    });
+  };
+
+  const findQuestionByKeywords = (keywords: string[]): Question | undefined => {
+    return questions.find(q => keywords.some(keyword => q.question.includes(keyword)));
+  };
+
+  const isApplicationType = (type: "yb" | "ob") => formData.applicationType === type;
 
   const getAnswer = (questionId: number | null): string => {
     if (!questionId) return "";
@@ -341,19 +361,193 @@ const Apply = () => {
     const questionId = question.id.toString();
     const answer = formData.answers[questionId] || "";
     
-    const studyIntentionQuestionId = formData.applicationType === "ob" ? findQuestionId(["스터디 개설"]) : null;
+    const studyIntentionQuestionId = isApplicationType("ob") ? findQuestionId(["스터디 개설"]) : null;
     const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
-    const isStudyDisabled = formData.applicationType === "ob" && studyIntentionValue === "no" && 
+    const isStudyDisabled = isApplicationType("ob") && studyIntentionValue === "no" && 
                             question.question.includes("스터디") && question.question.includes("세부");
     
-    if (formData.applicationType === "yb" && question.question.includes("면접") && question.question.includes("날짜")) {
-      return null;
+    // 면접 날짜 질문 - 커스텀 UI로 렌더링
+    const interviewDatesQuestion = findInterviewQuestion(true);
+    if (isApplicationType("yb") && interviewDatesQuestion && question.id === interviewDatesQuestion.id) {
+      return (
+        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-xl flex items-center gap-3">
+              <Clock className="w-5 h-5 text-primary" />
+              {question.question}
+              {question.required && (
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
+              )}
+            </CardTitle>
+            <CardDescription>
+              면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6 relative z-10">
+            {!interviewSchedule ? (
+              <div className="p-6 rounded-xl bg-secondary/20 border border-border/40 text-center">
+                <p className="text-sm text-muted-foreground">
+                  면접 일정을 불러올 수 없습니다.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-1 h-4 bg-primary rounded-full" />
+                    <h3 className="text-sm font-semibold text-foreground">면접 가능 날짜</h3>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {interviewSchedule.dates.map((date) => (
+                      <div
+                        key={date.value}
+                        data-interview-select="true"
+                        className={`group relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
+                          formData.interviewDates.includes(date.value)
+                            ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                            : "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const isSelected = formData.interviewDates.includes(date.value);
+                          setFormData((prev) => ({
+                            ...prev,
+                            interviewDates: isSelected
+                              ? prev.interviewDates.filter((d) => d !== date.value)
+                              : [...prev.interviewDates, date.value],
+                            selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate,
+                          }));
+                        }}
+                      >
+                        <div className="cursor-pointer w-full flex flex-col items-center gap-1.5">
+                          <span className={`text-base font-semibold ${
+                            formData.interviewDates.includes(date.value) ? "text-primary" : "text-foreground"
+                          }`}>
+                            {date.label}
+                          </span>
+                          <span className="text-xs text-muted-foreground">{date.subLabel}</span>
+                          {formData.interviewDates.includes(date.value) && (
+                            <div className="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
+                              <CheckCircle className="w-4 h-4 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {formData.selectedInterviewDate ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-1 h-4 bg-primary rounded-full" />
+                      <h3 className="text-sm font-semibold text-foreground">
+                        면접 가능 시간
+                        <span className="text-xs text-muted-foreground ml-2">
+                          ({formData.selectedInterviewDate} 선택 중)
+                        </span>
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2.5">
+                      {interviewSchedule.times.map((time) => {
+                        const currentTimes = formData.interviewTimesByDate[formData.selectedInterviewDate] || [];
+                        const isSelected = currentTimes.includes(time);
+                        return (
+                          <div
+                            key={time}
+                            data-interview-select="true"
+                            className={getInterviewTimeButtonClass(isSelected)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const selectedDate = formData.selectedInterviewDate;
+                              const currentTimes = formData.interviewTimesByDate[selectedDate] || [];
+                              setFormData((prev) => ({
+                                ...prev,
+                                interviewTimesByDate: {
+                                  ...prev.interviewTimesByDate,
+                                  [selectedDate]: isSelected
+                                    ? currentTimes.filter((t) => t !== time)
+                                    : [...currentTimes, time],
+                                },
+                              }));
+                            }}
+                          >
+                            <div className="cursor-pointer w-full flex flex-col items-center gap-1">
+                              <span className={`text-sm font-medium ${
+                                isSelected ? "text-primary" : "text-foreground"
+                              }`}>
+                                {time}
+                              </span>
+                              {isSelected && (
+                                <CheckCircle className="w-3.5 h-3.5 text-primary animate-in fade-in zoom-in-95 duration-200" />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-6 rounded-xl bg-secondary/20 border border-border/40 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      날짜를 먼저 선택해주세요
+                    </p>
+                  </div>
+                )}
+
+                {formData.interviewDates.length > 0 && Object.keys(formData.interviewTimesByDate).length > 0 && (
+                  <div className="pt-4 border-t border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="flex items-start gap-2 p-4 rounded-xl bg-primary/5 border border-primary/20 transition-all duration-200 ease-out hover:bg-primary/10">
+                      <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <div className="flex-1 space-y-3">
+                        <p className="text-xs font-semibold text-foreground">선택된 일정</p>
+                        <div className="space-y-2.5">
+                          {formData.interviewDates.map((date, idx) => {
+                            const times = formData.interviewTimesByDate[date] || [];
+                            if (times.length === 0) return null;
+                            return (
+                              <div key={date} className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${idx * 50}ms` }}>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-1 h-4 bg-primary rounded-full" />
+                                  <span className="text-sm font-medium text-foreground">{date}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-1.5 pl-3">
+                                  {times.map((time, timeIdx) => (
+                                    <Badge 
+                                      key={`${date}-${time}`} 
+                                      variant="default" 
+                                      className="text-[10px] px-2 py-0.5 rounded-md animate-in fade-in zoom-in-95 duration-200 transition-all duration-200 ease-out hover:scale-105"
+                                      style={{ animationDelay: `${(idx * 50) + (timeIdx * 30)}ms` }}
+                                    >
+                                      {time}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      );
     }
-    if (formData.applicationType === "yb" && question.question.includes("면접") && question.question.includes("시간")) {
+
+    // 면접 시간 질문 - 숨김 처리 (날짜 질문에서 함께 처리)
+    const interviewTimesQuestion = findInterviewQuestion(false);
+    if (isApplicationType("yb") && interviewTimesQuestion && question.id === interviewTimesQuestion.id) {
       return null;
     }
 
-    if (question.question.includes("개인정보") || question.question.includes("동의")) {
+    if (findQuestionByKeywords(["개인정보", "동의"])?.id === question.id) {
       return null;
     }
 
@@ -748,7 +942,7 @@ const Apply = () => {
 
     const questionIcon = getIcon(question.question);
     
-    const isOBStudyOrTrack = formData.applicationType === "ob" && 
+    const isOBStudyOrTrack = isApplicationType("ob") && 
       (question.question.includes("스터디 개설") || question.question.includes("트랙"));
     
     const getOBRequirementStatus = () => {
@@ -816,11 +1010,11 @@ const Apply = () => {
               </span>
             )}
           </CardTitle>
-          {question.question.includes("스터디 개설") && formData.applicationType === "ob" ? (
+          {question.question.includes("스터디 개설") && isApplicationType("ob") ? (
             <CardDescription>
               KHUDA는 강의 및 교재비를 일부 지원하고 있습니다. 많은 관심과 참여 부탁드립니다.
             </CardDescription>
-          ) : question.question.includes("트랙") && formData.applicationType === "ob" ? (
+          ) : question.question.includes("트랙") && isApplicationType("ob") ? (
             <CardDescription>
               심화 트랙 참여를 희망하시는 경우에만 선택해주세요.
             </CardDescription>
@@ -872,7 +1066,7 @@ const Apply = () => {
           )}
         </CardHeader>
         <CardContent className="space-y-4 relative z-10">
-          {question.question.includes("스터디 개설") && formData.applicationType === "ob" ? (
+          {question.question.includes("스터디 개설") && isApplicationType("ob") ? (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <button
@@ -962,7 +1156,7 @@ const Apply = () => {
                 </button>
               </div>
             </div>
-          ) : question.question.includes("트랙") && formData.applicationType === "ob" ? (
+          ) : question.question.includes("트랙") && isApplicationType("ob") ? (
             <div className="space-y-4">
               <Select
                 value={answer || ""}
@@ -1342,7 +1536,7 @@ const Apply = () => {
                 </div>
                 <div className="space-y-3">
                   {(() => {
-                    const privacyQuestion = questions.find(q => q.question.includes("개인정보") || q.question.includes("동의"));
+                    const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
                     if (!privacyQuestion) return null;
                     const privacyAnswer = formData.answers[privacyQuestion.id.toString()] || "";
                     return (
@@ -1444,7 +1638,7 @@ const Apply = () => {
               <CardContent className="relative z-10">
                 <div className="space-y-3">
                   <div 
-                    className={getRadioButtonClass(formData.applicationType === "yb")}
+                    className={getRadioButtonClass(isApplicationType("yb"))}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -1457,17 +1651,17 @@ const Apply = () => {
                     }}
                   >
                     <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      formData.applicationType === "yb"
+                      isApplicationType("yb")
                         ? "border-primary bg-primary"
                         : "border-border"
                     }`}>
-                      {formData.applicationType === "yb" && (
+                      {isApplicationType("yb") && (
                         <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
                       )}
                     </div>
                     <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">
                       <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
-                      {formData.applicationType === "yb" && (
+                      {isApplicationType("yb") && (
                         <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                           선택됨
                         </Badge>
@@ -1475,7 +1669,7 @@ const Apply = () => {
                     </div>
                   </div>
                   <div 
-                    className={getRadioButtonClass(formData.applicationType === "ob")}
+                    className={getRadioButtonClass(isApplicationType("ob"))}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -1488,17 +1682,17 @@ const Apply = () => {
                     }}
                   >
                     <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      formData.applicationType === "ob"
+                      isApplicationType("ob")
                         ? "border-primary bg-primary"
                         : "border-border"
                     }`}>
-                      {formData.applicationType === "ob" && (
+                      {isApplicationType("ob") && (
                         <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
                       )}
                     </div>
                     <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">
                       <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
-                      {formData.applicationType === "ob" && (
+                      {isApplicationType("ob") && (
                         <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                           선택됨
                         </Badge>
@@ -1511,172 +1705,7 @@ const Apply = () => {
             
             {/* yb/ob 질문은 선택 후에만 표시 */}
             {formData.applicationType && typeQuestions
-              .filter(q => {
-                if (formData.applicationType === "yb" && q.question.includes("면접")) return false;
-                return true;
-              })
               .map(question => renderQuestion(question))}
-
-            {formData.applicationType === "yb" && (
-              <div className="space-y-8">
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Clock className="w-5 h-5 text-primary" />
-                      {APPLICATION_FORM_CONFIG.sections.interviewSchedule}
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6 relative z-10">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-1 h-4 bg-primary rounded-full" />
-                        <h3 className="text-sm font-semibold text-foreground">면접 가능 날짜</h3>
-                      </div>
-                      <div className="grid grid-cols-3 gap-3">
-                        {RECRUITMENT_SCHEDULE.interview.dates.map((date) => (
-                          <div
-                            key={date.value}
-                            data-interview-select="true"
-                            className={`group relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
-                              formData.interviewDates.includes(date.value)
-                                ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                                : "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20"
-                            }`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              const isSelected = formData.interviewDates.includes(date.value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                interviewDates: isSelected
-                                  ? prev.interviewDates.filter((d) => d !== date.value)
-                                  : [...prev.interviewDates, date.value],
-                                selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate,
-                              }));
-                            }}
-                          >
-                            <div className="cursor-pointer w-full flex flex-col items-center gap-1.5">
-                              <span className={`text-base font-semibold ${
-                                formData.interviewDates.includes(date.value) ? "text-primary" : "text-foreground"
-                              }`}>
-                                {date.label}
-                              </span>
-                              <span className="text-xs text-muted-foreground">{date.subLabel}</span>
-                              {formData.interviewDates.includes(date.value) && (
-                                <div className="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
-                                  <CheckCircle className="w-4 h-4 text-primary-foreground" />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {formData.selectedInterviewDate ? (
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1 h-4 bg-primary rounded-full" />
-                          <h3 className="text-sm font-semibold text-foreground">
-                            면접 가능 시간
-                            <span className="text-xs text-muted-foreground ml-2">
-                              ({formData.selectedInterviewDate} 선택 중)
-                            </span>
-                          </h3>
-                        </div>
-                        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2.5">
-                          {interviewTimes.map((time) => {
-                            const currentTimes = formData.interviewTimesByDate[formData.selectedInterviewDate] || [];
-                            const isSelected = currentTimes.includes(time);
-                            return (
-                              <div
-                                key={time}
-                                data-interview-select="true"
-                                className={getInterviewTimeButtonClass(isSelected)}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  const selectedDate = formData.selectedInterviewDate;
-                                  const currentTimes = formData.interviewTimesByDate[selectedDate] || [];
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    interviewTimesByDate: {
-                                      ...prev.interviewTimesByDate,
-                                      [selectedDate]: isSelected
-                                        ? currentTimes.filter((t) => t !== time)
-                                        : [...currentTimes, time],
-                                    },
-                                  }));
-                          }}
-                        >
-                                <div className="cursor-pointer w-full flex flex-col items-center gap-1">
-                                  <span className={`text-sm font-medium ${
-                                    isSelected ? "text-primary" : "text-foreground"
-                                  }`}>
-                            {time}
-                                  </span>
-                              {isSelected && (
-                                <CheckCircle className="w-3.5 h-3.5 text-primary animate-in fade-in zoom-in-95 duration-200" />
-                              )}
-                        </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-6 rounded-xl bg-secondary/20 border border-border/40 text-center">
-                        <p className="text-sm text-muted-foreground">
-                          날짜를 먼저 선택해주세요
-                        </p>
-                      </div>
-                    )}
-
-                    {formData.interviewDates.length > 0 && Object.keys(formData.interviewTimesByDate).length > 0 && (
-                      <div className="pt-4 border-t border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className="flex items-start gap-2 p-4 rounded-xl bg-primary/5 border border-primary/20 transition-all duration-200 ease-out hover:bg-primary/10">
-                          <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                          <div className="flex-1 space-y-3">
-                            <p className="text-xs font-semibold text-foreground">선택된 일정</p>
-                            <div className="space-y-2.5">
-                              {formData.interviewDates.map((date, idx) => {
-                                const times = formData.interviewTimesByDate[date] || [];
-                                if (times.length === 0) return null;
-                                return (
-                                  <div key={date} className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${idx * 50}ms` }}>
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-1 h-4 bg-primary rounded-full" />
-                                      <span className="text-sm font-medium text-foreground">{date}</span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-1.5 pl-3">
-                                      {times.map((time, timeIdx) => (
-                                        <Badge 
-                                          key={`${date}-${time}`} 
-                                          variant="default" 
-                                          className="text-[10px] px-2 py-0.5 rounded-md animate-in fade-in zoom-in-95 duration-200 transition-all duration-200 ease-out hover:scale-105"
-                                          style={{ animationDelay: `${(idx * 50) + (timeIdx * 30)}ms` }}
-                                        >
-                                          {time}
-                                        </Badge>
-                                      ))}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            )}
 
 
             <div className="sticky bottom-0 pb-8 pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-6 md:-mx-12 px-6 md:px-12">
