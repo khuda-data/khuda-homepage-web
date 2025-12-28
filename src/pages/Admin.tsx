@@ -78,31 +78,72 @@ const Admin = () => {
     const fetchSubmitQuestions = async () => {
       if (!submitApplicantType) {
         setSubmitQuestions([]);
+        setAnswersJson("");
         return;
       }
 
       setLoadingSubmitQuestions(true);
+      setAnswersJson("");
       try {
-        const data = await getQuestions(submitApplicantType);
-        const sortedQuestions = data.questions.sort((a, b) => a.position - b.position);
+        const data = await getQuestions(submitApplicantType as "yb" | "ob" | "common");
+        let sortedQuestions = data.questions.sort((a, b) => a.position - b.position);
+        
+        if (submitApplicantType === "ob") {
+          sortedQuestions = sortedQuestions.filter(q => q.position < 9 || q.position > 21);
+        }
+        
         setSubmitQuestions(sortedQuestions);
       } catch (err) {
         setSubmitQuestions([]);
+        toast({
+          title: "질문 목록 로드 실패",
+          description: err instanceof Error ? err.message : "질문 목록을 가져오는데 실패했습니다.",
+          variant: "destructive",
+        });
       } finally {
         setLoadingSubmitQuestions(false);
       }
     };
 
     fetchSubmitQuestions();
-  }, [submitApplicantType]);
+  }, [submitApplicantType, toast]);
 
-  const validateAnswers = (answers: Record<string, string>, questions: Question[]): string | null => {
+  const validateAnswers = (answers: Record<string, string>, questions: Question[], applicantType: string): string | null => {
     const questionMap = new Map(questions.map(q => [q.id.toString(), q]));
+    
+    if (applicantType === "yb") {
+      const interviewDatesQuestion = questions.find(q => 
+        q.question.includes("면접") && (q.question.includes("날짜") || q.question.includes("일정"))
+      );
+      const interviewTimesQuestion = questions.find(q => 
+        q.question.includes("면접") && q.question.includes("시간")
+      );
+      
+      if (interviewDatesQuestion) {
+        const datesAnswer = answers[interviewDatesQuestion.id.toString()];
+        if (!datesAnswer || datesAnswer === "[]" || datesAnswer === "{}") {
+          return `필수 질문 #${interviewDatesQuestion.id} "${interviewDatesQuestion.question}"에 대한 답변이 없습니다.`;
+        }
+      }
+      
+      if (interviewTimesQuestion) {
+        const timesAnswer = answers[interviewTimesQuestion.id.toString()];
+        if (!timesAnswer || timesAnswer === "[]" || timesAnswer === "{}") {
+          return `필수 질문 #${interviewTimesQuestion.id} "${interviewTimesQuestion.question}"에 대한 답변이 없습니다.`;
+        }
+      }
+    }
     
     for (const question of questions) {
       if (question.required) {
+        if (applicantType === "yb" && 
+            ((question.question.includes("면접") && (question.question.includes("날짜") || question.question.includes("일정"))) ||
+             (question.question.includes("면접") && question.question.includes("시간")))) {
+          continue;
+        }
+        
         const answer = answers[question.id.toString()];
-        if (!answer || answer.trim() === "" || answer === "[]") {
+        if (!answer || answer.trim() === "" || answer === "[]" || answer === "{}") {
           return `필수 질문 #${question.id} "${question.question}"에 대한 답변이 없습니다.`;
         }
       }
@@ -150,7 +191,7 @@ const Admin = () => {
     }
 
     if (submitQuestions.length > 0) {
-      const validationError = validateAnswers(answers, submitQuestions);
+      const validationError = validateAnswers(answers, submitQuestions, submitApplicantType);
       if (validationError) {
         toast({
           title: "검증 실패",
@@ -167,7 +208,7 @@ const Admin = () => {
     setSubmitResponse(null);
 
     try {
-      const data = await submitApplication(submitApplicantType, answers);
+      const data = await submitApplication(submitApplicantType as "yb" | "ob" | "common", answers);
       setSubmitResponse(data);
       toast({
         title: "성공",
@@ -202,7 +243,7 @@ const Admin = () => {
     setResponse(null);
 
     try {
-      const data = await getQuestions(applicantType);
+      const data = await getQuestions(applicantType as "yb" | "ob" | "common");
       setResponse(data);
       toast({
         title: "성공",
@@ -320,6 +361,7 @@ const Admin = () => {
                     <SelectContent>
                       <SelectItem value="yb">YB (Young Blood)</SelectItem>
                       <SelectItem value="ob">OB (Old Blood)</SelectItem>
+                      <SelectItem value="common">Common</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -449,6 +491,7 @@ const Admin = () => {
                     <SelectContent>
                       <SelectItem value="yb">YB (Young Blood)</SelectItem>
                       <SelectItem value="ob">OB (Old Blood)</SelectItem>
+                      <SelectItem value="common">Common</SelectItem>
                     </SelectContent>
                   </Select>
                   {submitQuestions.length > 0 && (
@@ -480,6 +523,7 @@ const Admin = () => {
                           
                           const generateTextExample = (question: Question): string => {
                             const q = question.question.toLowerCase();
+                            if (q.includes("개인정보") || q.includes("동의")) return "agree";
                             if (q.includes("이름")) return "홍길동";
                             if (q.includes("학번")) return "202012345";
                             if (q.includes("학년") || q.includes("학기")) return "3학년 2학기";
@@ -487,11 +531,11 @@ const Admin = () => {
                             if (q.includes("다전공") || q.includes("부전공")) return "경영학과";
                             if (q.includes("이메일")) return "hong@example.com";
                             if (q.includes("휴대폰") || q.includes("번호")) return "010-1234-5678";
-                            if (q.includes("동의")) return "동의합니다";
                             if (q.includes("거주지역") || q.includes("거주")) return "서울";
                             if (q.includes("파이썬") || q.includes("익숙")) return "중급";
-                            if (q.includes("소모임") || q.includes("스터디")) return "데이터 분석 스터디";
-                            if (q.includes("트랙")) return "데이터 분석 트랙";
+                            if (q.includes("소모임") || (q.includes("스터디") && !q.includes("세부") && !q.includes("개설"))) return "데이터 분석 스터디";
+                            if (q.includes("스터디") && q.includes("개설")) return "yes"; // 스터디 개설 여부는 yes/no
+                            if (q.includes("트랙")) return "da"; // 트랙은 값으로 (nlp, cv, de, da, aie, fin, none)
                             return "예시 답변";
                           };
 
@@ -506,16 +550,18 @@ const Admin = () => {
                               baseText = "대학 입학 후 처음 접한 프로그래밍 과목에서 어려움을 겪었지만, 매일 2시간씩 코딩 연습을 하며 성적을 향상시켰습니다. 온라인 강의와 교재를 병행하며 자가 학습 능력을 기르고, 동아리 프로젝트에서 어려운 기술 스택을 직접 학습하여 적용한 경험이 있습니다. 이러한 끈기와 도전 정신으로 여러 프로젝트를 성공적으로 완료할 수 있었습니다.";
                             } else if (q.includes("프로젝트") || q.includes("탐구")) {
                               baseText = "2학년 때 진행한 캡스톤 디자인 프로젝트에서 서울시 대기질 데이터를 분석하여 미세먼지 농도 예측 모델을 개발했습니다. 데이터 수집부터 전처리, 모델링, 평가까지 전 과정을 담당했으며, XGBoost와 Random Forest 알고리즘을 비교 분석하여 최적의 모델을 선택했습니다. 이 프로젝트를 통해 실제 데이터 분석 프로세스를 경험하고, 팀원들과 협업하는 방법을 배웠습니다.";
-                            } else if (q.includes("활동")) {
-                              baseText = "학부 연구생으로 6개월간 데이터 마이닝 연구에 참여했습니다. 또한 데이터 분석 동아리에서 정기적으로 프로젝트를 진행하며 실무 경험을 쌓았습니다.";
-                            } else if (q.includes("일정") || q.includes("스케줄")) {
-                              baseText = "2026년 1학기에는 매주 화요일과 목요일 오후에 KHUDA 활동에 참여할 예정입니다. 정기 세미나와 프로젝트 활동에 적극적으로 참여하겠습니다.";
-                            } else if (q.includes("자격증") || q.includes("수상")) {
-                              baseText = "정보처리기사, SQLD 자격증 보유. 2024년 캡스톤 디자인 경진대회 우수상 수상.";
-                            } else if (q.includes("바라는") || q.includes("기대")) {
-                              baseText = "KHUDA에서 데이터 분석 전문성을 더욱 발전시키고, 다양한 프로젝트를 통해 실무 역량을 키우고 싶습니다. 또한 선배들과의 네트워킹을 통해 진로에 대한 인사이트를 얻고 싶습니다.";
+                            } else if (q.includes("기타 활동") || (q.includes("활동") && q.includes("기타"))) {
+                              baseText = "학부 연구생으로 6개월간 데이터 마이닝 연구에 참여했습니다. 또한 데이터 분석 동아리에서 정기적으로 프로젝트를 진행하며 실무 경험을 쌓았습니다. 해커톤 대회에 참가하여 팀 프로젝트로 우수상을 수상한 경험이 있습니다.";
+                            } else if (q.includes("활동 일정") || q.includes("일정") || (q.includes("스케줄") && q.includes("학기"))) {
+                              baseText = "2026년 1학기에는 매주 화요일과 목요일 오후에 KHUDA 활동에 참여할 예정입니다. 정기 세미나와 프로젝트 활동에 적극적으로 참여하겠습니다. 학기 중에는 주 2회, 방학 중에는 주 3회 참여 가능합니다.";
+                            } else if (q.includes("자격증") || q.includes("수상") || q.includes("수상이력")) {
+                              baseText = "정보처리기사, SQLD 자격증 보유. 2024년 캡스톤 디자인 경진대회 우수상 수상. 2023년 데이터 분석 경진대회 장려상 수상.";
+                            } else if (q.includes("9기") || q.includes("바라는") || (q.includes("기대") && q.includes("9기"))) {
+                              baseText = "KHUDA 9기에서 데이터 분석 전문성을 더욱 발전시키고, 다양한 프로젝트를 통해 실무 역량을 키우고 싶습니다. 또한 선배들과의 네트워킹을 통해 진로에 대한 인사이트를 얻고, 함께 성장하는 동료들과 협업하는 경험을 쌓고 싶습니다.";
                             } else if (q.includes("스터디") && q.includes("세부")) {
                               baseText = "파이썬을 활용한 데이터 분석 스터디를 개설하고 싶습니다. 주 1회 모임을 통해 실습 위주의 학습을 진행하고, 프로젝트를 통해 실전 경험을 쌓는 것을 목표로 합니다.";
+                            } else if (q.includes("활동")) {
+                              baseText = "학부 연구생으로 6개월간 데이터 마이닝 연구에 참여했습니다. 또한 데이터 분석 동아리에서 정기적으로 프로젝트를 진행하며 실무 경험을 쌓았습니다.";
                             } else {
                               baseText = "관련 경험과 역량을 바탕으로 KHUDA 활동에 적극적으로 참여하겠습니다.";
                             }
@@ -526,24 +572,27 @@ const Admin = () => {
                           for (const question of submitQuestions) {
                             const id = question.id.toString();
                             
-                            if (question.field_type === "checkbox_multi") {
+                            if (submitApplicantType === "yb" && question.question.includes("면접")) {
+                              if (question.question.includes("날짜") || question.question.includes("일정")) {
+                                exampleAnswers[id] = JSON.stringify(["1월 9일 (금)", "1월 10일 (토)"]);
+                              } else if (question.question.includes("시간")) {
+                                exampleAnswers[id] = JSON.stringify({
+                                  "1월 9일 (금)": ["10:20", "10:40", "14:00"],
+                                  "1월 10일 (토)": ["11:00", "15:20"]
+                                });
+                              }
+                            } else if (question.field_type === "checkbox_multi") {
                               if (question.required) {
-                                if (question.question.includes("날짜")) {
-                                  exampleAnswers[id] = JSON.stringify(["2026-01-15", "2026-01-16"]);
-                                } else if (question.question.includes("시간")) {
-                                  exampleAnswers[id] = JSON.stringify(["10:00", "14:00"]);
-                                } else {
-                                  exampleAnswers[id] = JSON.stringify(["머신러닝", "딥러닝"]);
-                                }
+                                exampleAnswers[id] = JSON.stringify(["머신러닝", "딥러닝"]);
                               } else {
                                 exampleAnswers[id] = JSON.stringify([]);
                               }
                             } else if (question.field_type === "textarea") {
                               const exampleText = generateTextareaExample(question);
-                              exampleAnswers[id] = question.required ? exampleText : "";
+                              exampleAnswers[id] = exampleText || "";
                             } else {
                               const exampleText = generateTextExample(question);
-                              exampleAnswers[id] = question.required ? exampleText : "";
+                              exampleAnswers[id] = exampleText || "";
                             }
                           }
                           

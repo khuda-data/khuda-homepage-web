@@ -1,7 +1,6 @@
-// 개발 환경에서는 프록시를 사용하고, 프로덕션에서는 직접 API 서버를 사용
 const API_BASE_URL = import.meta.env.PROD 
   ? "http://3.38.172.201:8000" 
-  : ""; // 프록시 사용 시 빈 문자열
+  : "";
 
 export interface Question {
   id: number;
@@ -28,7 +27,7 @@ export interface ApplicationResponse {
   status: string;
 }
 
-export async function getQuestions(applicantType: string): Promise<QuestionsResponse> {
+export async function getQuestions(applicantType: "yb" | "ob" | "common"): Promise<QuestionsResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/questions/${applicantType}`);
     
@@ -47,6 +46,13 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
           }
         }
       } catch {
+        if (response.status === 500) {
+          errorMessage = `서버 오류가 발생했습니다. "${applicantType}" 타입이 백엔드에서 지원되지 않을 수 있습니다.`;
+        } else if (response.status === 404) {
+          errorMessage = `"${applicantType}" 타입의 질문을 찾을 수 없습니다.`;
+        } else {
+          errorMessage = `질문을 가져오는데 실패했습니다. (상태 코드: ${response.status})`;
+        }
       }
       
       throw new Error(errorMessage);
@@ -55,7 +61,6 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
-      // CORS 또는 네트워크 오류인 경우 더 자세한 메시지 제공
       if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
         throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
       }
@@ -66,7 +71,7 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
 }
 
 export async function submitApplication(
-  applicantType: string,
+  applicantType: "yb" | "ob" | "common",
   answers: Record<string, string>
 ): Promise<ApplicationResponse> {
   try {
@@ -104,7 +109,6 @@ export async function submitApplication(
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
-      // CORS 또는 네트워크 오류인 경우 더 자세한 메시지 제공
       if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
         throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
       }

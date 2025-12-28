@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, ClipboardList, GraduationCap, Target, Layers, Info, Activity, Heart, Circle, Check, HelpCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   generateInterviewTimes, 
@@ -25,51 +25,24 @@ const Apply = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [commonQuestions, setCommonQuestions] = useState<Question[]>([]);
+  const [typeQuestions, setTypeQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
   const [formData, setFormData] = useState({
-    privacyAgreement: "",
-    name: "",
-    studentId: "",
-    gradeSemester: "",
-    major: "",
-    doubleMajor: "",
-    email: "",
-    phone: "",
     applicationType: "",
-    residence: "",
-    pythonLevel: "",
-    dataAnalysisFields: [] as string[],
-    coreQuestion1: "",
-    coreQuestion2: "",
-    coreQuestion3: "",
-    studyGroup: "",
-    otherActivities: "",
-    schedule2026: "",
-    certificates: "",
-    expectations: "",
+    answers: {} as Record<string, string>,
     interviewDates: [] as string[],
     interviewTimesByDate: {} as Record<string, string[]>,
     selectedInterviewDate: "" as string,
-    completionCondition: [] as string[],
-    studyIntention: "",
-    studyDetails: "",
-    trackInterest: "",
-    obExpectations: "",
   });
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      if (!formData.applicationType) {
-        setQuestions([]);
-        return;
-      }
-
+    const fetchCommonQuestions = async () => {
       setIsLoadingQuestions(true);
       try {
-        const response = await getQuestions(formData.applicationType);
+        const response = await getQuestions("common");
         const sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
-        setQuestions(sortedQuestions);
+        setCommonQuestions(sortedQuestions);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "질문을 가져오는데 실패했습니다.";
         toast({
@@ -77,36 +50,55 @@ const Apply = () => {
           description: errorMessage,
           variant: "destructive",
         });
-        setQuestions([]);
+        setCommonQuestions([]);
       } finally {
         setIsLoadingQuestions(false);
       }
     };
 
-    fetchQuestions();
+    fetchCommonQuestions();
+  }, [toast]);
+
+  useEffect(() => {
+    const fetchTypeQuestions = async () => {
+      if (!formData.applicationType) {
+        setTypeQuestions([]);
+        return;
+      }
+
+      setIsLoadingQuestions(true);
+      try {
+        const response = await getQuestions(formData.applicationType as "yb" | "ob" | "common");
+        let sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
+        
+        if (formData.applicationType === "ob") {
+          sortedQuestions = sortedQuestions.filter(q => q.position < 9 || q.position > 21);
+        }
+        
+        setTypeQuestions(sortedQuestions);
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "질문을 가져오는데 실패했습니다.";
+        toast({
+          title: "질문 로드 실패",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        setTypeQuestions([]);
+      } finally {
+        setIsLoadingQuestions(false);
+      }
+    };
+
+    fetchTypeQuestions();
   }, [formData.applicationType, toast]);
+
+  const questions = formData.applicationType === "ob"
+    ? [...commonQuestions, ...typeQuestions]
+    : [...commonQuestions, ...typeQuestions];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.privacyAgreement) {
-      toast({
-        title: "제출할 수 없습니다",
-        description: "개인정보 수집 및 이용에 동의해주셔야 지원서를 제출할 수 있습니다.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (formData.privacyAgreement === "disagree") {
-      toast({
-        title: "제출할 수 없습니다",
-        description: "개인정보 수집 및 이용에 동의하지 않으시면 지원서를 제출할 수 없습니다.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!formData.applicationType) {
       toast({
         title: "지원 분야를 선택해주세요",
@@ -116,24 +108,91 @@ const Apply = () => {
       return;
     }
 
-    if (formData.applicationType === "yb") {
-      if (!formData.coreQuestion1 || !formData.coreQuestion2 || !formData.coreQuestion3) {
+    if (questions.length === 0) {
+      toast({
+        title: "질문을 불러오는 중입니다",
+        description: "잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const privacyQuestion = questions.find(q => q.question.includes("개인정보") || q.question.includes("동의"));
+    if (privacyQuestion) {
+      const privacyAnswer = formData.answers[privacyQuestion.id.toString()];
+      if (!privacyAnswer || privacyAnswer === "disagree") {
         toast({
-          title: "필수 항목을 작성해주세요",
-          description: "지원 동기 및 역량, 도전과 끈기, 프로젝트 및 탐구 경험을 모두 작성해주세요.",
+          title: "제출할 수 없습니다",
+          description: "개인정보 수집 및 이용에 동의해주셔야 지원서를 제출할 수 있습니다.",
           variant: "destructive",
         });
         return;
       }
     }
 
-    if (formData.applicationType === "ob") {
-      const hasTrackInterest = formData.trackInterest && formData.trackInterest !== "none";
-      const hasStudyIntention = formData.studyIntention === "yes";
-      
-      if (!hasTrackInterest && !hasStudyIntention) {
+    if (formData.applicationType === "yb") {
+      if (formData.interviewDates.length === 0) {
         toast({
-          title: "필수 항목을 선택해주세요",
+          title: "면접 일정을 선택해주세요",
+          description: "면접 가능한 날짜를 선택해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+      const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some((times: string[]) => times.length > 0);
+      if (!hasInterviewTimes) {
+        toast({
+          title: "면접 시간을 선택해주세요",
+          description: "면접 가능한 시간을 선택해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const interviewDatesQuestion = questions.find(q => 
+        q.question.includes("면접") && (q.question.includes("날짜") || q.question.includes("일정"))
+      );
+      const interviewTimesQuestion = questions.find(q => 
+        q.question.includes("면접") && q.question.includes("시간")
+      );
+      
+      if (interviewDatesQuestion) {
+        formData.answers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
+      }
+      if (interviewTimesQuestion) {
+        formData.answers[interviewTimesQuestion.id.toString()] = JSON.stringify(formData.interviewTimesByDate);
+      }
+    }
+
+    const missingRequiredQuestions = questions.filter(q => {
+      if (!q.required) return false;
+      const questionId = q.id.toString();
+      const answer = formData.answers[questionId];
+      return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
+    });
+
+    if (missingRequiredQuestions.length > 0) {
+      toast({
+        title: "필수 항목을 작성해주세요",
+        description: `${missingRequiredQuestions.length}개의 필수 질문에 답변해주세요.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (formData.applicationType === "ob") {
+      const studyIntentionQuestionId = findQuestionId(["스터디 개설"]);
+      const trackInterestQuestionId = findQuestionId(["트랙"]);
+      
+      const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
+      const trackInterestValue = trackInterestQuestionId ? getAnswer(trackInterestQuestionId) : "";
+      
+      const hasStudyIntention = studyIntentionValue === "yes";
+      const hasTrackInterest = trackInterestValue && trackInterestValue !== "none" && trackInterestValue !== "";
+      
+      if (!hasStudyIntention && !hasTrackInterest) {
+        toast({
+          title: "스터디 개설 또는 심화 트랙을 선택해주세요",
           description: "트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 합니다.",
           variant: "destructive",
         });
@@ -144,75 +203,45 @@ const Apply = () => {
     setIsSubmitting(true);
     
     try {
-      const fieldToQuestionIdMap: Record<string, number> = {
-        privacyAgreement: 1,
-        name: 2,
-        studentId: 3,
-        gradeSemester: 4,
-        major: 5,
-        doubleMajor: 6,
-        email: 7,
-        phone: 8,
-        residence: 9,
-        pythonLevel: 10,
-        dataAnalysisFields: 11,
-        coreQuestion1: 12,
-        coreQuestion2: 13,
-        coreQuestion3: 14,
-        studyGroup: 15,
-        otherActivities: 16,
-        schedule2026: 17,
-        certificates: 18,
-        expectations: 19,
-        interviewDates: 20,
-        interviewTimesByDate: 21,
-        studyIntention: 22,
-        studyDetails: 23,
-        trackInterest: 24,
-        obExpectations: 25,
-      };
-
-      const answers: Record<string, string> = {};
+      const filteredAnswers: Record<string, string> = {};
+      const questionIds = new Set(questions.map(q => q.id.toString()));
       
-      if (formData.privacyAgreement) answers[fieldToQuestionIdMap.privacyAgreement.toString()] = formData.privacyAgreement;
-      if (formData.name) answers[fieldToQuestionIdMap.name.toString()] = formData.name;
-      if (formData.studentId) answers[fieldToQuestionIdMap.studentId.toString()] = formData.studentId;
-      if (formData.gradeSemester) answers[fieldToQuestionIdMap.gradeSemester.toString()] = formData.gradeSemester;
-      if (formData.major) answers[fieldToQuestionIdMap.major.toString()] = formData.major;
-      if (formData.doubleMajor) answers[fieldToQuestionIdMap.doubleMajor.toString()] = formData.doubleMajor;
-      if (formData.email) answers[fieldToQuestionIdMap.email.toString()] = formData.email;
-      if (formData.phone) answers[fieldToQuestionIdMap.phone.toString()] = formData.phone;
+      Object.keys(formData.answers).forEach(questionId => {
+        if (questionIds.has(questionId)) {
+          filteredAnswers[questionId] = formData.answers[questionId];
+        }
+      });
 
       if (formData.applicationType === "yb") {
-        if (formData.residence) answers[fieldToQuestionIdMap.residence.toString()] = formData.residence;
-        if (formData.pythonLevel) answers[fieldToQuestionIdMap.pythonLevel.toString()] = formData.pythonLevel;
-        if (formData.dataAnalysisFields.length > 0) {
-          answers[fieldToQuestionIdMap.dataAnalysisFields.toString()] = JSON.stringify(formData.dataAnalysisFields);
+        const interviewDatesQuestion = questions.find(q => 
+          q.question.includes("면접") && (q.question.includes("날짜") || q.question.includes("일정"))
+        );
+        if (interviewDatesQuestion) {
+          filteredAnswers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
         }
-        if (formData.coreQuestion1) answers[fieldToQuestionIdMap.coreQuestion1.toString()] = formData.coreQuestion1;
-        if (formData.coreQuestion2) answers[fieldToQuestionIdMap.coreQuestion2.toString()] = formData.coreQuestion2;
-        if (formData.coreQuestion3) answers[fieldToQuestionIdMap.coreQuestion3.toString()] = formData.coreQuestion3;
-        if (formData.studyGroup) answers[fieldToQuestionIdMap.studyGroup.toString()] = formData.studyGroup;
-        if (formData.otherActivities) answers[fieldToQuestionIdMap.otherActivities.toString()] = formData.otherActivities;
-        if (formData.schedule2026) answers[fieldToQuestionIdMap.schedule2026.toString()] = formData.schedule2026;
-        if (formData.certificates) answers[fieldToQuestionIdMap.certificates.toString()] = formData.certificates;
-        if (formData.expectations) answers[fieldToQuestionIdMap.expectations.toString()] = formData.expectations;
-        if (formData.interviewDates.length > 0) {
-          answers[fieldToQuestionIdMap.interviewDates.toString()] = JSON.stringify(formData.interviewDates);
-        }
-        if (Object.keys(formData.interviewTimesByDate).length > 0) {
-          answers[fieldToQuestionIdMap.interviewTimesByDate.toString()] = JSON.stringify(formData.interviewTimesByDate);
+
+        const interviewTimesQuestion = questions.find(q => 
+          q.question.includes("면접") && q.question.includes("시간")
+        );
+        if (interviewTimesQuestion) {
+          filteredAnswers[interviewTimesQuestion.id.toString()] = JSON.stringify(formData.interviewTimesByDate);
         }
       }
 
-      if (formData.applicationType === "ob") {
-        if (formData.studyIntention) answers[fieldToQuestionIdMap.studyIntention.toString()] = formData.studyIntention;
-        if (formData.studyDetails) answers[fieldToQuestionIdMap.studyDetails.toString()] = formData.studyDetails;
-        if (formData.trackInterest) answers[fieldToQuestionIdMap.trackInterest.toString()] = formData.trackInterest;
-        if (formData.obExpectations) answers[fieldToQuestionIdMap.obExpectations.toString()] = formData.obExpectations;
-      }
+      questions.forEach(question => {
+        const questionId = question.id.toString();
+        if (question.required && !filteredAnswers[questionId]) {
+          if (question.question.includes("면접") && question.question.includes("시간")) {
+            filteredAnswers[questionId] = JSON.stringify({});
+          } else if (question.question.includes("면접") && question.question.includes("날짜")) {
+            filteredAnswers[questionId] = JSON.stringify([]);
+          } else {
+            filteredAnswers[questionId] = "";
+          }
+        }
+      });
 
-      const response = await submitApplication(formData.applicationType, answers);
+      const response = await submitApplication(formData.applicationType as "yb" | "ob", filteredAnswers);
       
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -232,58 +261,51 @@ const Apply = () => {
     }
   };
 
-  const handleCheckboxChange = (field: string, value: string, checked: boolean) => {
-    if (field === "dataAnalysisFields") {
-      setFormData((prev) => ({
-        ...prev,
-        dataAnalysisFields: checked
-          ? [...prev.dataAnalysisFields, value]
-          : prev.dataAnalysisFields.filter((item) => item !== value),
-      }));
-    } else if (field === "interviewDates") {
-      setFormData((prev) => {
-        const newDates = checked
-          ? [...prev.interviewDates, value]
-          : prev.interviewDates.filter((item) => item !== value);
-        
-        const newSelectedDate = checked ? value : (prev.selectedInterviewDate === value ? "" : prev.selectedInterviewDate);
-        
-        const newTimesByDate = { ...prev.interviewTimesByDate };
-        if (!checked && newTimesByDate[value]) {
-          delete newTimesByDate[value];
-        }
-        
-        return {
-          ...prev,
-          interviewDates: newDates,
-          selectedInterviewDate: newSelectedDate,
-          interviewTimesByDate: newTimesByDate,
-        };
-      });
-    } else if (field === "interviewTimes") {
-      setFormData((prev) => {
-        if (!prev.selectedInterviewDate) return prev;
-        
-        const currentTimes = prev.interviewTimesByDate[prev.selectedInterviewDate] || [];
-        const newTimes = checked
-          ? [...currentTimes, value]
-          : currentTimes.filter((item) => item !== value);
-        
-        return {
-        ...prev,
-          interviewTimesByDate: {
-            ...prev.interviewTimesByDate,
-            [prev.selectedInterviewDate]: newTimes,
-          },
-        };
-      });
-    } else if (field === "completionCondition") {
-      setFormData((prev) => ({
-        ...prev,
-        completionCondition: checked
-          ? [...prev.completionCondition, value]
-          : prev.completionCondition.filter((item) => item !== value),
-      }));
+  const updateAnswer = (questionId: number, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      answers: {
+        ...prev.answers,
+        [questionId.toString()]: value,
+      },
+    }));
+  };
+
+  const handleCheckboxChange = (questionId: number, value: string, checked: boolean) => {
+    const currentAnswer = formData.answers[questionId.toString()] || "[]";
+    let currentArray: string[] = [];
+    try {
+      currentArray = JSON.parse(currentAnswer);
+    } catch {
+      currentArray = [];
+    }
+    
+    const newArray = checked
+      ? [...currentArray, value]
+      : currentArray.filter((item) => item !== value);
+    
+    updateAnswer(questionId, JSON.stringify(newArray));
+  };
+
+  const findQuestionId = (keywords: string[]): number | null => {
+    const question = questions.find(q => 
+      keywords.some(keyword => q.question.includes(keyword))
+    );
+    return question ? question.id : null;
+  };
+
+  const getAnswer = (questionId: number | null): string => {
+    if (!questionId) return "";
+    return formData.answers[questionId.toString()] || "";
+  };
+
+  const getArrayAnswer = (questionId: number | null): string[] => {
+    if (!questionId) return [];
+    const answer = formData.answers[questionId.toString()] || "[]";
+    try {
+      return JSON.parse(answer);
+    } catch {
+      return [];
     }
   };
 
@@ -307,27 +329,791 @@ const Apply = () => {
     }
   };
 
-  const isFormValid = () => {
-    if (!formData.privacyAgreement || formData.privacyAgreement === "disagree") {
-      return false;
+  const renderQuestion = (question: Question) => {
+    const questionId = question.id.toString();
+    const answer = formData.answers[questionId] || "";
+    
+    const studyIntentionQuestionId = formData.applicationType === "ob" ? findQuestionId(["스터디 개설"]) : null;
+    const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
+    const isStudyDisabled = formData.applicationType === "ob" && studyIntentionValue === "no" && 
+                            question.question.includes("스터디") && question.question.includes("세부");
+    
+    if (formData.applicationType === "yb" && question.question.includes("면접") && question.question.includes("날짜")) {
+      return null;
+    }
+    if (formData.applicationType === "yb" && question.question.includes("면접") && question.question.includes("시간")) {
+      return null;
     }
 
-    if (!formData.name || !formData.studentId || !formData.gradeSemester || !formData.major || !formData.email || !formData.phone) {
-      return false;
+    if (question.question.includes("개인정보") || question.question.includes("동의")) {
+      return null;
     }
 
-    if (!formData.applicationType) {
-      return false;
+    const isCommonQuestion = question.applicant_type === "common";
+    
+    const getPlaceholder = (q: string) => {
+      if (q.includes("이름")) return "홍길동";
+      if (q.includes("학번")) return "2024123456";
+      if (q.includes("학년") || q.includes("학기")) return "3학년 2학기";
+      if (q.includes("주전공")) return "컴퓨터공학과";
+      if (q.includes("다전공") || q.includes("부전공")) return "경영학과 또는 없음";
+      if (q.includes("이메일")) return "example@email.com";
+      if (q.includes("휴대폰") || q.includes("전화번호")) return "010-1234-5678";
+      return "답변을 입력해주세요";
+    };
+
+    const getIcon = (q: string) => {
+      if (q.includes("거주") || q.includes("지역")) return <MapPin className="w-5 h-5 text-primary" />;
+      if (q.includes("파이썬") || q.includes("Python")) return <Code className="w-5 h-5 text-primary" />;
+      if (q.includes("데이터 분석") || q.includes("AI 분야")) return <BookOpen className="w-5 h-5 text-primary" />;
+      if (q.includes("지원 동기") || q.includes("역량")) return null; // 번호로 표시
+      if (q.includes("도전") || q.includes("끈기")) return null; // 번호로 표시
+      if (q.includes("프로젝트") || q.includes("탐구")) return null; // 번호로 표시
+      if (q.includes("소모임") || q.includes("스터디")) return <Users className="w-5 h-5 text-primary" />;
+      if (q.includes("활동")) return <Activity className="w-5 h-5 text-primary" />;
+      if (q.includes("일정")) return <Calendar className="w-5 h-5 text-primary" />;
+      if (q.includes("자격증") || q.includes("수상")) return <Award className="w-5 h-5 text-primary" />;
+      if (q.includes("바라는") || q.includes("9기에게")) return <Heart className="w-5 h-5 text-primary" />;
+      if (q.includes("트랙")) return <Layers className="w-5 h-5 text-primary" />;
+      if (q.includes("스터디 개설")) return <BookOpen className="w-5 h-5 text-primary" />;
+      return <FileText className="w-5 h-5 text-primary" />;
+    };
+
+    const getQuestionNumber = (q: string) => {
+      if (q.includes("지원 동기") || q.includes("역량")) return "1";
+      if (q.includes("도전") || q.includes("끈기")) return "2";
+      if (q.includes("프로젝트") || q.includes("탐구")) return "3";
+      return null;
+    };
+
+    if (isCommonQuestion && question.field_type === "text") {
+      const isPhoneField = question.question.includes("휴대폰") || question.question.includes("전화번호");
+      
+      return (
+        <div key={question.id} className="space-y-2">
+          <Label htmlFor={questionId} className="text-sm font-semibold">
+            {question.question}
+            {question.required && (
+              <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md ml-2">
+                필수
+              </Badge>
+            )}
+          </Label>
+          <Input
+            id={questionId}
+            value={answer}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (question.max_len === null || value.length <= question.max_len) {
+                updateAnswer(question.id, value);
+              }
+            }}
+            placeholder={getPlaceholder(question.question)}
+            required={question.required}
+            maxLength={question.max_len || undefined}
+            className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
+          />
+          {isPhoneField && (
+            <p className="text-xs text-muted-foreground">하이픈(-)을 포함하여 입력해주세요. 예: 010-1234-5678</p>
+          )}
+        </div>
+      );
     }
 
-    if (formData.applicationType === "yb") {
-      const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some((times: string[]) => times.length > 0);
-      if (!formData.residence || !formData.pythonLevel || !formData.coreQuestion1 || !formData.coreQuestion2 || !formData.coreQuestion3 || formData.interviewDates.length === 0 || !hasInterviewTimes) {
-        return false;
+    if (question.question.includes("거주지역") || question.question.includes("거주")) {
+      const residenceOptions = [
+        "서울", "경기 수원/영통", "경기 성남/분당", "경기 용인", "경기 고양/의정부", "경기 기타",
+        "인천", "부산", "대구", "대전", "광주", "울산", "세종",
+        "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "해외"
+      ];
+      
+      return (
+        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-xl flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-primary" />
+              {question.question}
+              {question.required && (
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+              )}
+            </CardTitle>
+            <CardDescription className="text-sm text-muted-foreground">
+              1월~2월 기준 거주 지역을 선택해주세요
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 relative z-10">
+            <Select
+              value={answer}
+              onValueChange={(value) => updateAnswer(question.id, value)}
+              required={question.required}
+            >
+              <SelectTrigger 
+                className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
+                  answer
+                    ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
+                    : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
+                } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
+              >
+                <div className="flex items-center gap-2.5 flex-1">
+                  {answer && (
+                    <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                  )}
+                  <SelectValue placeholder="지역을 선택해주세요" />
+                </div>
+              </SelectTrigger>
+              <SelectContent 
+                className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[320px] p-2"
+                position="popper"
+              >
+                {residenceOptions.map((option) => (
+                  <SelectItem 
+                    key={option}
+                    value={option} 
+                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
+                  >
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    if (question.question.includes("파이썬") || question.question.includes("Python")) {
+      const pythonLevels = [
+        { 
+          value: "1", 
+          label: "1단계: 기초 문법",
+          description: "input/print, 변수, 연산자",
+        },
+        { 
+          value: "2", 
+          label: "2단계: 기본 프로그래밍",
+          description: "반복문, 조건문, 자료형, 파일 입출력",
+        },
+        { 
+          value: "3", 
+          label: "3단계: 데이터 분석 라이브러리 활용",
+          description: "numpy, pandas, scikit-learn, 시각화",
+        },
+        { 
+          value: "4", 
+          label: "4단계: 딥러닝 프레임워크로 모델 구현",
+          description: "PyTorch/TensorFlow",
+        },
+        { 
+          value: "5", 
+          label: "5단계: 프로젝트 관리",
+          description: "아키텍처 설계, 성능 최적화, 모듈화, 테스트/배포, 협업",
+        },
+      ];
+      
+      return (
+        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-xl flex items-center gap-3">
+              <Code className="w-5 h-5 text-primary" />
+              {question.question}
+              {question.required && (
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 relative z-10">
+            <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20">
+              <div className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Info className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div className="flex-1 space-y-1.5">
+                  <p className="text-sm font-medium text-foreground">평가 기준 안내</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    각 단계는 이전 단계의 내용을 포함합니다. 예를 들어, 3단계를 선택하시면 1-2단계 내용도 할 수 있다는 의미입니다. 
+                    <span className="block mt-1.5 font-medium text-foreground/90">현재 본인이 실제로 할 수 있는 수준을 선택해주세요.</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
+              {pythonLevels.map((level) => (
+                <div 
+                  key={level.value} 
+                  className={`group relative flex items-start gap-4 p-4 rounded-2xl border-2 transition-all duration-200 ease-out cursor-pointer transform ${
+                    answer === level.value
+                      ? "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg shadow-primary/10 scale-[1.02]"
+                      : "border-border/50 hover:border-primary/30 hover:bg-secondary/20 hover:scale-[1.01] active:scale-[0.99]"
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    updateAnswer(question.id, level.value);
+                  }}
+                >
+                  <div className={`mt-0.5 h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+                    answer === level.value
+                      ? "border-primary bg-primary"
+                      : "border-border"
+                  }`}>
+                    {answer === level.value && (
+                      <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="cursor-pointer flex items-start gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-semibold text-foreground">
+                            {level.label}
+                          </span>
+                          {answer === level.value && (
+                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                              선택됨
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          {level.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    if (question.question.includes("데이터 분석") || question.question.includes("AI 분야")) {
+      const dataAnalysisFields = [
+        "데이터 전처리 및 분석 (Pandas, NumPy)",
+        "데이터 시각화 (Matplotlib, Seaborn, Plotly)",
+        "통계 분석 및 가설검정 (T-test, ANOVA, 회귀분석)",
+        "머신러닝 알고리즘 (Random Forest, SVM)",
+        "데이터베이스 및 SQL",
+        "딥러닝 (CNN, RNN, Transformer)",
+        "자연어처리(NLP) 및 컴퓨터비전(CV)",
+      ];
+      
+      const dataAnalysisFieldsArray = getArrayAnswer(question.id);
+      
+      return (
+        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-xl flex items-center gap-3">
+              <BookOpen className="w-5 h-5 text-primary" />
+              {question.question}
+            </CardTitle>
+            <CardDescription>해당하는 항목을 모두 선택해주세요.</CardDescription>
+          </CardHeader>
+          <CardContent className="relative z-10">
+            <div className="space-y-3">
+              {dataAnalysisFields.map((field) => (
+                <div 
+                  key={field} 
+                  className={getCheckboxContainerClass(dataAnalysisFieldsArray.includes(field))}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleCheckboxChange(question.id, field, !dataAnalysisFieldsArray.includes(field));
+                  }}
+                >
+                  <div className={getCheckboxIconClass(dataAnalysisFieldsArray.includes(field))}>
+                    {dataAnalysisFieldsArray.includes(field) && (
+                      <Check className="h-3 w-3 text-primary-foreground" />
+                    )}
+                  </div>
+                  <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
+                    <span>{field}</span>
+                    {dataAnalysisFieldsArray.includes(field) && (
+                      <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                        선택됨
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div 
+                className={getCheckboxContainerClass(dataAnalysisFieldsArray.some((f) => f.startsWith("기타")))}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const isSelected = dataAnalysisFieldsArray.some((f) => f.startsWith("기타"));
+                  const newArray = isSelected
+                    ? dataAnalysisFieldsArray.filter((f) => !f.startsWith("기타"))
+                    : [...dataAnalysisFieldsArray, "기타"];
+                  updateAnswer(question.id, JSON.stringify(newArray));
+                }}
+              >
+                <div className={getCheckboxIconClass(dataAnalysisFieldsArray.some((f) => f.startsWith("기타")))}>
+                  {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
+                    <Check className="h-3 w-3 text-primary-foreground" />
+                  )}
+                </div>
+                <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
+                  <span>기타</span>
+                  {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
+                    <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                      선택됨
+                    </Badge>
+                  )}
+                </div>
+                {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
+                  <Input
+                    placeholder="기타 항목을 입력해주세요"
+                    className="ml-2 flex-1 h-10 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
+                    onClick={(e) => e.stopPropagation()}
+                    value={dataAnalysisFieldsArray.find((f) => f.startsWith("기타"))?.replace("기타: ", "") || ""}
+                    onChange={(e) => {
+                      const otherValue = e.target.value;
+                      const newArray = otherValue
+                        ? [...dataAnalysisFieldsArray.filter((f) => !f.startsWith("기타")), `기타: ${otherValue}`]
+                        : dataAnalysisFieldsArray.filter((f) => !f.startsWith("기타"));
+                      updateAnswer(question.id, JSON.stringify(newArray));
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    const questionNumber = getQuestionNumber(question.question);
+    if (questionNumber && (question.field_type === "textarea" || question.question.includes("지원 동기") || question.question.includes("도전") || question.question.includes("프로젝트"))) {
+      const maxLen = question.max_len || 500;
+      const getDescription = (q: string) => {
+        if (q.includes("지원 동기") || q.includes("역량")) {
+          return "KHUDA에 지원한 이유와 자기가 가지고 있는 역량을 바탕으로 쿠다에서 어떠한 장점을 발휘할 수 있는지 서술해주세요.";
+        }
+        if (q.includes("도전") || q.includes("끈기")) {
+          return "힘들었거나 끈기있게 무언가를 수행해 본 경험이 있다면 서술해주세요.";
+        }
+        if (q.includes("프로젝트") || q.includes("탐구")) {
+          return "자신이 했던 프로젝트나, 탐구했던 경험이 있다면 서술해주세요.";
+        }
+        return "";
+      };
+      
+      return (
+        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+          <CardHeader className="relative z-10">
+            <CardTitle className="text-xl flex items-center gap-3">
+              {question.question}
+              {question.required && (
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+              )}
+            </CardTitle>
+            <CardDescription>
+              {getDescription(question.question)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 relative z-10">
+            <div className="relative">
+              <Textarea
+                id={`question-${question.id}`}
+                value={answer}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (maxLen === null || value.length <= maxLen) {
+                    updateAnswer(question.id, value);
+                  }
+                }}
+                required={question.required}
+                maxLength={maxLen || undefined}
+                className={`min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 ${
+                  maxLen && answer.length >= maxLen * 0.9 ? "border-orange-500/50" : ""
+                }`}
+                placeholder="답변을 작성해주세요..."
+              />
+              {maxLen && (
+                <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+                  <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-all duration-200 ease-out ${
+                    answer.length >= maxLen 
+                      ? "bg-orange-500/10 border border-orange-500/30" 
+                      : answer.length > 0
+                      ? "bg-primary/10 border border-primary/20"
+                      : "bg-background/80 backdrop-blur-sm border border-border/40"
+                  }`}>
+                    <span className={`text-xs font-semibold ${
+                      answer.length >= maxLen 
+                        ? "text-orange-600" 
+                        : answer.length >= maxLen * 0.9
+                        ? "text-orange-500"
+                        : answer.length > 0 
+                        ? "text-primary" 
+                        : "text-muted-foreground"
+                    }`}>
+                      {answer.length}
+                    </span>
+                    <span className="text-xs text-muted-foreground">/</span>
+                    <span className="text-xs text-muted-foreground">{maxLen}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            {maxLen && answer.length >= maxLen * 0.9 && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/5 border border-orange-500/20 animate-in fade-in slide-in-from-top-1 duration-200">
+                <Info className="w-3.5 h-3.5 text-orange-500 shrink-0" />
+                <p className="text-xs text-orange-600">
+                  {answer.length >= maxLen 
+                    ? "최대 글자수에 도달했습니다" 
+                    : `${maxLen - answer.length}자 남았습니다`}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      );
+    }
+
+    const questionIcon = getIcon(question.question);
+    
+    const isOBStudyOrTrack = formData.applicationType === "ob" && 
+      (question.question.includes("스터디 개설") || question.question.includes("트랙"));
+    
+    const getOBRequirementStatus = () => {
+      if (!isOBStudyOrTrack) return null;
+      
+      const studyIntentionQuestionId = findQuestionId(["스터디 개설"]);
+      const trackInterestQuestionId = findQuestionId(["트랙"]);
+      
+      const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
+      const trackInterestValue = trackInterestQuestionId ? getAnswer(trackInterestQuestionId) : "";
+      
+      const hasStudyIntention = studyIntentionValue === "yes";
+      const hasTrackInterest = trackInterestValue && trackInterestValue !== "none" && trackInterestValue !== "";
+      
+      const isFulfilled = hasStudyIntention || hasTrackInterest;
+      
+      if (question.question.includes("스터디 개설")) {
+        return {
+          isFulfilled: hasStudyIntention || hasTrackInterest,
+          message: hasStudyIntention 
+            ? "스터디 개설을 선택하셨습니다" 
+            : hasTrackInterest
+            ? "심화 트랙을 선택하셔서 조건을 충족했습니다"
+            : "스터디 개설 또는 심화 트랙 중 하나는 선택해주세요"
+        };
       }
-    }
+      
+      if (question.question.includes("트랙")) {
+        return {
+          isFulfilled: hasStudyIntention || hasTrackInterest,
+          message: hasTrackInterest
+            ? "심화 트랙을 선택하셨습니다"
+            : hasStudyIntention
+            ? "스터디 개설을 선택하셔서 조건을 충족했습니다"
+            : "스터디 개설 또는 심화 트랙 중 하나는 선택해주세요"
+        };
+      }
+      
+      return null;
+    };
+    
+    const requirementStatus = getOBRequirementStatus();
+    
+    return (
+      <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle className="text-xl flex items-center gap-3">
+            {questionIcon}
+            {question.question}
+            {question.required && (
+              <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
+                필수
+              </Badge>
+            )}
+            {((question.question.includes("바라는") || question.question.includes("9기에게") || question.question.includes("KHUDA에게")) && answer && answer.length > 0) && (
+              <span 
+                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-pink-500/10 text-pink-400 rounded-full border border-pink-500/20"
+                style={{
+                  animation: 'tossAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                }}
+              >
+                <span>💖</span>
+                좋은 의견 감사합니다
+              </span>
+            )}
+          </CardTitle>
+          {question.question.includes("스터디 개설") && formData.applicationType === "ob" ? (
+            <CardDescription>
+              KHUDA는 강의 및 교재비를 일부 지원하고 있습니다. 많은 관심과 참여 부탁드립니다.
+            </CardDescription>
+          ) : question.question.includes("트랙") && formData.applicationType === "ob" ? (
+            <CardDescription>
+              심화 트랙 참여를 희망하시는 경우에만 선택해주세요.
+            </CardDescription>
+          ) : isStudyDisabled ? (
+            <CardDescription className="text-muted-foreground">
+              스터디 개설을 선택하지 않으셔서 이 항목은 비활성화되었습니다.
+            </CardDescription>
+          ) : question.question.includes("소모임") || question.question.includes("스터디") ? (
+            <CardDescription>
+              KHUDA는 스터디 및 소모임을 적극 권장하고 있으며, KHUDA 9기에서는 더욱 강조하여 활성화할 생각입니다. (산학협력 프로젝트, SQL 스터디, 공모전 스터디 등이 예정되어 있습니다)
+            </CardDescription>
+          ) : question.question.includes("기타 활동") || question.question.includes("활동") ? (
+            <CardDescription>데이터 분석과 관련이 없더라도 괜찮습니다.</CardDescription>
+          ) : question.question.includes("일정") ? (
+            <CardDescription>
+              타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
+            </CardDescription>
+          ) : question.question.includes("자격증") || question.question.includes("수상") ? (
+            <CardDescription>해당 사항이 없는 경우 작성하지 않으셔도 됩니다.</CardDescription>
+          ) : null}
+          
+          {/* OB 스터디/트랙 필수 선택 안내 */}
+          {isOBStudyOrTrack && requirementStatus && (
+            <div className="mt-3 animate-in fade-in slide-in-from-top-1 duration-300">
+              <div className={`flex items-start gap-2.5 p-3 rounded-xl transition-all duration-200 ${
+                requirementStatus.isFulfilled
+                  ? "bg-blue-50/10 border border-blue-500/30"
+                  : "bg-orange-50/10 border border-orange-500/30"
+              }`}>
+                <div className={`mt-0.5 flex-shrink-0 ${
+                  requirementStatus.isFulfilled ? "text-blue-400" : "text-orange-400"
+                }`}>
+                  <Info className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-medium leading-relaxed ${
+                    requirementStatus.isFulfilled ? "text-blue-100" : "text-orange-100"
+                  }`}>
+                    {requirementStatus.message}
+                  </p>
+                  {!requirementStatus.isFulfilled && (
+                    <p className="text-xs text-orange-200/80 mt-1 leading-relaxed">
+                      트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 지원서를 제출할 수 있습니다.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </CardHeader>
+        <CardContent className="space-y-4 relative z-10">
+          {question.question.includes("스터디 개설") && formData.applicationType === "ob" ? (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    updateAnswer(question.id, answer === "yes" ? "" : "yes");
+                  }}
+                  className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
+                    answer === "yes"
+                      ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                      : "border-border/50 bg-secondary/20 hover:border-primary/40 hover:bg-secondary/30"
+                  }`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
+                    answer === "yes"
+                      ? "bg-primary"
+                      : "bg-secondary/40 border-2 border-border/50 group-hover:border-primary/40"
+                  }`}>
+                    {answer === "yes" ? (
+                      <CheckCircle className="w-3.5 h-3.5 text-primary-foreground animate-in zoom-in-95 duration-200" />
+                    ) : (
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-primary/50 transition-colors" />
+                    )}
+                  </div>
+                  <span className={`text-sm font-semibold transition-colors duration-200 ${
+                    answer === "yes" ? "text-primary" : "text-foreground group-hover:text-primary/80"
+                  }`}>
+                    예
+                  </span>
+                  <span className={`text-xs mt-0.5 transition-colors duration-200 ${
+                    answer === "yes" ? "text-primary/70" : "text-muted-foreground"
+                  }`}>
+                    스터디 개설 희망
+                  </span>
+                  {answer === "yes" && (
+                    <div className="absolute top-1.5 right-1.5">
+                      <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                        선택됨
+                      </Badge>
+                    </div>
+                  )}
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    updateAnswer(question.id, answer === "no" ? "" : "no");
+                  }}
+                  className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
+                    answer === "no"
+                      ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                      : "border-border/50 bg-secondary/20 hover:border-primary/40 hover:bg-secondary/30"
+                  }`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
+                    answer === "no"
+                      ? "bg-primary"
+                      : "bg-secondary/40 border-2 border-border/50 group-hover:border-primary/40"
+                  }`}>
+                    {answer === "no" ? (
+                      <CheckCircle className="w-3.5 h-3.5 text-primary-foreground animate-in zoom-in-95 duration-200" />
+                    ) : (
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-primary/50 transition-colors" />
+                    )}
+                  </div>
+                  <span className={`text-sm font-semibold transition-colors duration-200 ${
+                    answer === "no" ? "text-primary" : "text-foreground group-hover:text-primary/80"
+                  }`}>
+                    아니오
+                  </span>
+                  <span className={`text-xs mt-0.5 transition-colors duration-200 ${
+                    answer === "no" ? "text-primary/70" : "text-muted-foreground"
+                  }`}>
+                    스터디 개설 없음
+                  </span>
+                  {answer === "no" && (
+                    <div className="absolute top-1.5 right-1.5">
+                      <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                        선택됨
+                      </Badge>
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
+          ) : question.question.includes("트랙") && formData.applicationType === "ob" ? (
+            <div className="space-y-4">
+              <Select
+                value={answer || ""}
+                onValueChange={(value) => updateAnswer(question.id, value)}
+                required={question.required}
+              >
+                <SelectTrigger 
+                  className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
+                    answer && answer !== "none"
+                      ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
+                      : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
+                  } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
+                >
+                  <div className="flex items-center gap-2.5 flex-1">
+                    {answer && answer !== "none" && (
+                      <div className="w-2 h-2 rounded-full bg-primary shrink-0 animate-in zoom-in-95 duration-200" />
+                    )}
+                    <SelectValue placeholder="트랙을 선택해주세요 (선택사항)" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent 
+                  className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[400px] p-2"
+                  position="popper"
+                >
+                  {[
+                    { value: "nlp", label: "NLP (자연어처리)", description: "자연어 처리 및 언어 모델" },
+                    { value: "cv", label: "CV (컴퓨터비전)", description: "이미지 분석 및 컴퓨터 비전" },
+                    { value: "de", label: "DE (데이터엔지니어링)", description: "데이터 파이프라인 및 인프라" },
+                    { value: "da", label: "DA (데이터분석)", description: "데이터 분석 및 인사이트 도출" },
+                    { value: "aie", label: "AIE (AI엔지니어링)", description: "AI 모델 개발 및 배포" },
+                    { value: "fin", label: "FIN (금융)", description: "금융 데이터 분석 및 모델링" },
+                    { value: "none", label: "참여 의사 없음", description: "트랙에 참여하지 않습니다" },
+                  ].map((track) => (
+                    <SelectItem 
+                      key={track.value}
+                      value={track.value} 
+                      className="rounded-xl px-4 py-3 pl-4 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02] group [&>span:has(svg)]:hidden"
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-base font-medium">{track.label}</span>
+                        {track.description && (
+                          <span className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors">
+                            {track.description}
+                          </span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : question.field_type === "text" && (
+            <Input
+              value={answer}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (question.max_len === null || value.length <= question.max_len) {
+                  updateAnswer(question.id, value);
+                }
+              }}
+              placeholder={question.question.includes("소모임") || question.question.includes("스터디") ? "ex) 자격증 스터디, 수학 스터디, 운동 소모임 등" : "답변을 입력해주세요"}
+              required={question.required && !isStudyDisabled}
+              disabled={isStudyDisabled}
+              maxLength={question.max_len || undefined}
+              className={`h-12 rounded-xl border-border/50 focus:outline-none transition-all duration-200 ease-out ${
+                isStudyDisabled 
+                  ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
+                  : "bg-secondary/30 focus:border-primary/60 focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
+              }`}
+            />
+          )}
+          
+          {question.field_type === "textarea" && (
+            <Textarea
+              value={answer}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (question.max_len === null || value.length <= question.max_len) {
+                  updateAnswer(question.id, value);
+                }
+              }}
+              placeholder={question.question.includes("바라는") || question.question.includes("9기에게") || question.question.includes("KHUDA에게") ? "KHUDA에 대한 바람이나 제안사항을 작성해주세요..." : "답변을 작성해주세요..."}
+              required={question.required && !isStudyDisabled}
+              disabled={isStudyDisabled}
+              maxLength={question.max_len || undefined}
+              rows={question.question.includes("기타 활동") ? 5 : 5}
+              className={`min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out ${
+                isStudyDisabled 
+                  ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
+                  : "bg-secondary/30 focus:border-primary/60 focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
+              }`}
+            />
+          )}
 
-    return true;
+          {question.field_type === "checkbox_multi" && (
+            <div className="space-y-2">
+              {question.question.includes("데이터 분석") || question.question.includes("AI 분야") ? (
+                ["머신러닝", "딥러닝", "자연어처리", "컴퓨터비전", "강화학습", "추천시스템"].map((option) => {
+                  const currentArray: string[] = answer ? JSON.parse(answer) : [];
+                  const isChecked = currentArray.includes(option);
+                  return (
+                    <div
+                      key={option}
+                      className={getCheckboxContainerClass(isChecked)}
+                      onClick={() => handleCheckboxChange(question.id, option, !isChecked)}
+                    >
+                      <div className={getCheckboxIconClass(isChecked)}>
+                        {isChecked && <Check className="h-3 w-3 text-primary-foreground" />}
+                      </div>
+                      <span className="font-medium">{option}</span>
+                    </div>
+                    );
+                  })
+              ) : (
+                <p className="text-sm text-muted-foreground">체크박스 옵션을 설정해주세요</p>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
   };
 
   if (isSubmitted) {
@@ -353,12 +1139,12 @@ const Apply = () => {
             
             <div className="space-y-4 pt-4">
               <p className="text-lg text-foreground leading-relaxed">
-                <span className="font-semibold">{formData.name}</span>님의 지원서가<br />
+                지원서가<br />
                 정상적으로 접수되었습니다.
               </p>
               <p className="text-base text-muted-foreground leading-relaxed">
-                결과는 입력하신 이메일로<br />
-                안내드리겠습니다.
+                결과는 입력하신 전화번호로<br />
+                문자로 발송해드리겠습니다.
               </p>
             </div>
           </div>
@@ -552,7 +1338,7 @@ const Apply = () => {
             }}
           >
             <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
               <CardHeader className="relative z-10">
                 <CardTitle className="text-xl flex items-center gap-3">
                   <FileText className="w-5 h-5 text-primary" />
@@ -584,194 +1370,95 @@ const Apply = () => {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <div 
-                    className={getCheckboxContainerClass(formData.privacyAgreement === "agree")}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setFormData((prev) => {
-                        if (prev.privacyAgreement !== "agree") {
-                          return { ...prev, privacyAgreement: "agree" };
-                        }
-                        return prev;
-                      });
-                    }}
-                  >
-                    <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      formData.privacyAgreement === "agree"
-                        ? "border-primary bg-primary"
-                        : "border-border"
-                    }`}>
-                      {formData.privacyAgreement === "agree" && (
-                        <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                      )}
-                    </div>
-                    <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                      <span className="transition-all duration-200">상기 내용에 동의합니다.</span>
-                      {formData.privacyAgreement === "agree" && (
-                        <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                          선택됨
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <div 
-                    className={getCheckboxContainerClass(formData.privacyAgreement === "disagree")}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setFormData((prev) => {
-                        if (prev.privacyAgreement !== "disagree") {
-                          return { ...prev, privacyAgreement: "disagree" };
-                        }
-                        return prev;
-                      });
-                    }}
-                  >
-                    <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      formData.privacyAgreement === "disagree"
-                        ? "border-primary bg-primary"
-                        : "border-border"
-                    }`}>
-                      {formData.privacyAgreement === "disagree" && (
-                        <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                      )}
-                    </div>
-                    <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                      <span className="transition-all duration-200">상기 내용에 동의하지 않습니다.</span>
-                      {formData.privacyAgreement === "disagree" && (
-                        <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                          선택됨
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
+                  {(() => {
+                    const privacyQuestion = questions.find(q => q.question.includes("개인정보") || q.question.includes("동의"));
+                    if (!privacyQuestion) return null;
+                    const privacyAnswer = formData.answers[privacyQuestion.id.toString()] || "";
+                    return (
+                      <>
+                        <div 
+                          className={getCheckboxContainerClass(privacyAnswer === "agree")}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            updateAnswer(privacyQuestion.id, privacyAnswer === "agree" ? "" : "agree");
+                          }}
+                        >
+                          <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                            privacyAnswer === "agree"
+                              ? "border-primary bg-primary"
+                              : "border-border"
+                          }`}>
+                            {privacyAnswer === "agree" && (
+                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                            )}
+                          </div>
+                          <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
+                            <span className="transition-all duration-200">상기 내용에 동의합니다.</span>
+                            {privacyAnswer === "agree" && (
+                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                                선택됨
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                        <div 
+                          className={getCheckboxContainerClass(privacyAnswer === "disagree")}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            updateAnswer(privacyQuestion.id, privacyAnswer === "disagree" ? "" : "disagree");
+                          }}
+                        >
+                          <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                            privacyAnswer === "disagree"
+                              ? "border-primary bg-primary"
+                              : "border-border"
+                          }`}>
+                            {privacyAnswer === "disagree" && (
+                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                            )}
+                          </div>
+                          <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
+                            <span className="transition-all duration-200">상기 내용에 동의하지 않습니다.</span>
+                            {privacyAnswer === "disagree" && (
+                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                                선택됨
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-              <CardHeader className="relative z-10">
-                <CardTitle className="text-xl flex items-center gap-3">
-                  <UserCircle className="w-5 h-5 text-primary" />
-                  기본 정보
-                </CardTitle>
-                <CardDescription>기본 정보를 입력해주세요.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6 relative z-10">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-semibold flex items-center gap-2">
-                      이름
-                      <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                    </Label>
-                    <Input
-                      id="name"
-                      placeholder="홍길동"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
+            {commonQuestions.filter(q => !q.question.includes("개인정보") && !q.question.includes("동의")).length > 0 && (
+              <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                <CardHeader className="relative z-10">
+                  <CardTitle className="text-xl flex items-center gap-3">
+                    <UserCircle className="w-5 h-5 text-primary" />
+                    기본 정보
+                  </CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    지원에 필요한 기본 정보를 입력해주세요.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {commonQuestions
+                      .filter(q => {
+                        if (q.question.includes("개인정보") || q.question.includes("동의")) return false;
+                        return true;
+                      })
+                      .map(question => renderQuestion(question))}
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="studentId" className="text-sm font-semibold flex items-center gap-2">
-                      학번
-                      <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                    </Label>
-                    <Input
-                      id="studentId"
-                      placeholder="2021104022"
-                      value={formData.studentId}
-                      onChange={(e) => setFormData({ ...formData, studentId: e.target.value })}
-                      required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="gradeSemester" className="text-sm font-semibold flex items-center gap-2">
-                    학년, 학기
-                    <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                  </Label>
-                  <Input
-                    id="gradeSemester"
-                    placeholder="예) 3학년 2학기"
-                    value={formData.gradeSemester}
-                    onChange={(e) => setFormData({ ...formData, gradeSemester: e.target.value })}
-                    required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                  />
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="major" className="text-sm font-semibold flex items-center gap-2">
-                      주전공
-                      <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                    </Label>
-                    <Input
-                      id="major"
-                      placeholder="컴퓨터공학과"
-                      value={formData.major}
-                      onChange={(e) => setFormData({ ...formData, major: e.target.value })}
-                      required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="doubleMajor" className="text-sm font-semibold">다전공 / 부전공</Label>
-                    <Input
-                      id="doubleMajor"
-                      placeholder="해당 없음"
-                      value={formData.doubleMajor}
-                      onChange={(e) => setFormData({ ...formData, doubleMajor: e.target.value })}
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      이메일
-                      <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                    </Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="example@khu.ac.kr"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2">
-                      <Phone className="w-4 h-4" />
-                      휴대폰 번호
-                      <Badge variant="destructive" className="text-[10px] px-1.5 py-0 h-4 rounded">필수</Badge>
-                    </Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="010-1234-5678"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      required
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
@@ -783,7 +1470,7 @@ const Apply = () => {
                 </CardTitle>
                 <CardDescription>지원하실 분야를 선택해주세요.</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative z-10">
                 <div className="space-y-3">
                   <div 
                     className={getRadioButtonClass(formData.applicationType === "yb")}
@@ -850,718 +1537,17 @@ const Apply = () => {
                 </div>
               </CardContent>
             </Card>
+            
+            {/* yb/ob 질문은 선택 후에만 표시 */}
+            {formData.applicationType && typeQuestions
+              .filter(q => {
+                if (formData.applicationType === "yb" && q.question.includes("면접")) return false;
+                return true;
+              })
+              .map(question => renderQuestion(question))}
 
             {formData.applicationType === "yb" && (
               <div className="space-y-8">
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="pb-4 relative z-10">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <ClipboardList className="w-5 h-5 text-primary" />
-                      </div>
-                      <CardTitle className="text-xl">YB 설문섹션</CardTitle>
-                    </div>
-                    <CardDescription className="text-sm leading-relaxed">
-                      작성된 내용을 바탕으로 KHUDA에서 함께 성장하려는 의지와 열정을 평가합니다.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-primary" />
-                      방학 중 거주지역
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
-                    </CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      1월~2월 기준 거주 지역을 선택해주세요
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4 relative z-10">
-                    <Select
-                      value={formData.residence}
-                      onValueChange={(value) => setFormData({ ...formData, residence: value })}
-                      required
-                    >
-                      <SelectTrigger 
-                        className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
-                          formData.residence
-                            ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
-                            : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
-                        } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
-                      >
-                        <div className="flex items-center gap-2.5 flex-1">
-                          {formData.residence && (
-                            <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
-                          )}
-                          <SelectValue placeholder="지역을 선택해주세요" />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent 
-                        className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[320px] p-2"
-                        position="popper"
-                      >
-                        <SelectItem 
-                          value="서울" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          서울
-                        </SelectItem>
-                        <SelectItem 
-                          value="경기 수원/영통" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경기 수원/영통
-                        </SelectItem>
-                        <SelectItem 
-                          value="경기 성남/분당" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경기 성남/분당
-                        </SelectItem>
-                        <SelectItem 
-                          value="경기 용인" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경기 용인
-                        </SelectItem>
-                        <SelectItem 
-                          value="경기 고양/의정부" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경기 고양/의정부
-                        </SelectItem>
-                        <SelectItem 
-                          value="경기 기타" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경기 기타
-                        </SelectItem>
-                        <SelectItem 
-                          value="인천" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          인천
-                        </SelectItem>
-                        <SelectItem 
-                          value="부산" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          부산
-                        </SelectItem>
-                        <SelectItem 
-                          value="대구" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          대구
-                        </SelectItem>
-                        <SelectItem 
-                          value="대전" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          대전
-                        </SelectItem>
-                        <SelectItem 
-                          value="광주" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          광주
-                        </SelectItem>
-                        <SelectItem 
-                          value="울산" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          울산
-                        </SelectItem>
-                        <SelectItem 
-                          value="세종" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          세종
-                        </SelectItem>
-                        <SelectItem 
-                          value="강원" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          강원
-                        </SelectItem>
-                        <SelectItem 
-                          value="충북" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          충북
-                        </SelectItem>
-                        <SelectItem 
-                          value="충남" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          충남
-                        </SelectItem>
-                        <SelectItem 
-                          value="전북" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          전북
-                        </SelectItem>
-                        <SelectItem 
-                          value="전남" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          전남
-                        </SelectItem>
-                        <SelectItem 
-                          value="경북" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경북
-                        </SelectItem>
-                        <SelectItem 
-                          value="경남" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          경남
-                        </SelectItem>
-                        <SelectItem 
-                          value="제주" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          제주
-                        </SelectItem>
-                        <SelectItem 
-                          value="해외" 
-                          className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
-                        >
-                          해외
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {formData.residence && (
-                      <div className="flex items-center gap-2.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                          <span className="text-sm font-medium text-foreground">{formData.residence}</span>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Code className="w-5 h-5 text-primary" />
-                      파이썬에 익숙한 정도
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 relative z-10">
-                    <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20">
-                      <div className="flex items-start gap-3">
-                        <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Info className="w-3.5 h-3.5 text-primary" />
-                        </div>
-                        <div className="flex-1 space-y-1.5">
-                          <p className="text-sm font-medium text-foreground">평가 기준 안내</p>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
-                            각 단계는 이전 단계의 내용을 포함합니다. 예를 들어, 3단계를 선택하시면 1-2단계 내용도 할 수 있다는 의미입니다. 
-                            <span className="block mt-1.5 font-medium text-foreground/90">현재 본인이 실제로 할 수 있는 수준을 선택해주세요.</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {[
-                        { 
-                          value: "1", 
-                          label: "1단계: 기초 문법",
-                          description: "input/print, 변수, 연산자",
-                          color: "from-blue-500/10 to-blue-500/5"
-                        },
-                        { 
-                          value: "2", 
-                          label: "2단계: 기본 프로그래밍",
-                          description: "반복문, 조건문, 자료형, 파일 입출력",
-                          color: "from-green-500/10 to-green-500/5"
-                        },
-                        { 
-                          value: "3", 
-                          label: "3단계: 데이터 분석 라이브러리 활용",
-                          description: "numpy, pandas, scikit-learn, 시각화",
-                          color: "from-purple-500/10 to-purple-500/5"
-                        },
-                        { 
-                          value: "4", 
-                          label: "4단계: 딥러닝 프레임워크로 모델 구현",
-                          description: "PyTorch/TensorFlow",
-                          color: "from-orange-500/10 to-orange-500/5"
-                        },
-                        { 
-                          value: "5", 
-                          label: "5단계: 프로젝트 관리",
-                          description: "아키텍처 설계, 성능 최적화, 모듈화, 테스트/배포, 협업",
-                          color: "from-pink-500/10 to-pink-500/5"
-                        },
-                      ].map((level) => (
-                        <div 
-                          key={level.value} 
-                          className={`group relative flex items-start gap-4 p-4 rounded-2xl border-2 transition-all duration-200 ease-out cursor-pointer transform ${
-                            formData.pythonLevel === level.value
-                              ? "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg shadow-primary/10 scale-[1.02]"
-                              : "border-border/50 hover:border-primary/30 hover:bg-secondary/20 hover:scale-[1.01] active:scale-[0.99]"
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setFormData((prev) => {
-                              if (prev.pythonLevel !== level.value) {
-                                return { ...prev, pythonLevel: level.value };
-                              }
-                              return prev;
-                            });
-                          }}
-                        >
-                          <div className={`mt-0.5 h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
-                            formData.pythonLevel === level.value
-                              ? "border-primary bg-primary"
-                              : "border-border"
-                          }`}>
-                            {formData.pythonLevel === level.value && (
-                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="cursor-pointer flex items-start gap-2">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <span className="text-sm font-semibold text-foreground">
-                            {level.label}
-                                  </span>
-                                  {formData.pythonLevel === level.value && (
-                                    <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                                      선택됨
-                                    </Badge>
-                                  )}
-                                </div>
-                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                  {level.description}
-                                </p>
-                              </div>
-                          </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <BookOpen className="w-5 h-5 text-primary" />
-                      지금까지 공부해 본 데이터 분석 및 AI 분야
-                    </CardTitle>
-                    <CardDescription>해당하는 항목을 모두 선택해주세요.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {[
-                        "데이터 전처리 및 분석 (Pandas, NumPy)",
-                        "데이터 시각화 (Matplotlib, Seaborn, Plotly)",
-                        "통계 분석 및 가설검정 (T-test, ANOVA, 회귀분석)",
-                        "머신러닝 알고리즘 (Random Forest, SVM)",
-                        "데이터베이스 및 SQL",
-                        "딥러닝 (CNN, RNN, Transformer)",
-                        "자연어처리(NLP) 및 컴퓨터비전(CV)",
-                      ].map((field) => (
-                        <div 
-                          key={field} 
-                          className={getCheckboxContainerClass(formData.dataAnalysisFields.includes(field))}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            const isSelected = formData.dataAnalysisFields.includes(field);
-                            handleCheckboxChange("dataAnalysisFields", field, !isSelected);
-                          }}
-                        >
-                          <div className={getCheckboxIconClass(formData.dataAnalysisFields.includes(field))}>
-                            {formData.dataAnalysisFields.includes(field) && (
-                              <Check className="h-3 w-3 text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
-                            <span>{field}</span>
-                            {formData.dataAnalysisFields.includes(field) && (
-                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                                선택됨
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                      <div 
-                        className={getCheckboxContainerClass(formData.dataAnalysisFields.some((f) => f.startsWith("기타")))}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          const isSelected = formData.dataAnalysisFields.some((f) => f.startsWith("기타"));
-                          if (isSelected) {
-                            setFormData({
-                              ...formData,
-                              dataAnalysisFields: formData.dataAnalysisFields.filter((f) => !f.startsWith("기타")),
-                            });
-                          } else {
-                            setFormData({
-                              ...formData,
-                              dataAnalysisFields: [...formData.dataAnalysisFields, "기타"],
-                            });
-                          }
-                        }}
-                      >
-                        <div className={getCheckboxIconClass(formData.dataAnalysisFields.some((f) => f.startsWith("기타")))}>
-                          {formData.dataAnalysisFields.some((f) => f.startsWith("기타")) && (
-                            <Check className="h-3 w-3 text-primary-foreground" />
-                          )}
-                        </div>
-                        <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
-                          <span>기타</span>
-                          {formData.dataAnalysisFields.some((f) => f.startsWith("기타")) && (
-                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                              선택됨
-                            </Badge>
-                          )}
-                        </div>
-                        {formData.dataAnalysisFields.some((f) => f.startsWith("기타")) && (
-                          <Input
-                            placeholder="기타 항목을 입력해주세요"
-                            className="ml-2 flex-1 h-10 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => {
-                              const fields = formData.dataAnalysisFields.filter((f) => !f.startsWith("기타"));
-                              setFormData({
-                                ...formData,
-                                dataAnalysisFields: [...fields, `기타: ${e.target.value}`],
-                              });
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                        1
-                      </div>
-                      지원 동기 및 역량
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      KHUDA에 지원한 이유와 자기가 가지고 있는 역량을 바탕으로 쿠다에서 어떠한 장점을 발휘할 수 있는지 서술해주세요.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3 relative z-10">
-                    <div className="relative">
-                    <Textarea
-                      id="coreQuestion1"
-                      value={formData.coreQuestion1}
-                        onChange={(e) => {
-                          if (e.target.value.length <= 500) {
-                            setFormData({ ...formData, coreQuestion1: e.target.value });
-                          }
-                        }}
-                      required
-                        maxLength={500}
-                        className={`min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 ${
-                          formData.coreQuestion1.length >= 450 ? "border-orange-500/50" : ""
-                        }`}
-                      placeholder="답변을 작성해주세요..."
-                    />
-                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                        <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-all duration-200 ease-out ${
-                          formData.coreQuestion1.length >= 450 
-                            ? "bg-orange-500/10 border border-orange-500/30" 
-                            : formData.coreQuestion1.length > 0
-                            ? "bg-primary/10 border border-primary/20"
-                            : "bg-background/80 backdrop-blur-sm border border-border/40"
-                        }`}>
-                          <span className={`text-xs font-semibold ${
-                            formData.coreQuestion1.length >= 500 
-                              ? "text-orange-600" 
-                              : formData.coreQuestion1.length >= 450
-                              ? "text-orange-500"
-                              : formData.coreQuestion1.length > 0 
-                              ? "text-primary" 
-                              : "text-muted-foreground"
-                          }`}>
-                            {formData.coreQuestion1.length}
-                          </span>
-                          <span className="text-xs text-muted-foreground">/</span>
-                          <span className="text-xs text-muted-foreground">500</span>
-                        </div>
-                      </div>
-                    </div>
-                    {formData.coreQuestion1.length >= 450 && (
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/5 border border-orange-500/20 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <Info className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                        <p className="text-xs text-orange-600">
-                          {formData.coreQuestion1.length >= 500 
-                            ? "최대 글자수에 도달했습니다" 
-                            : `${500 - formData.coreQuestion1.length}자 남았습니다`}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                        2
-                      </div>
-                      도전과 끈기
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      힘들었거나 끈기있게 무언가를 수행해 본 경험이 있다면 서술해주세요.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3 relative z-10">
-                    <div className="relative">
-                    <Textarea
-                      id="coreQuestion2"
-                      value={formData.coreQuestion2}
-                        onChange={(e) => {
-                          if (e.target.value.length <= 500) {
-                            setFormData({ ...formData, coreQuestion2: e.target.value });
-                          }
-                        }}
-                      required
-                        maxLength={500}
-                        className={`min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 ${
-                          formData.coreQuestion2.length >= 450 ? "border-orange-500/50" : ""
-                        }`}
-                      placeholder="답변을 작성해주세요..."
-                    />
-                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                        <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-all duration-200 ease-out ${
-                          formData.coreQuestion2.length >= 450 
-                            ? "bg-orange-500/10 border border-orange-500/30" 
-                            : formData.coreQuestion2.length > 0
-                            ? "bg-primary/10 border border-primary/20"
-                            : "bg-background/80 backdrop-blur-sm border border-border/40"
-                        }`}>
-                          <span className={`text-xs font-semibold ${
-                            formData.coreQuestion2.length >= 500 
-                              ? "text-orange-600" 
-                              : formData.coreQuestion2.length >= 450
-                              ? "text-orange-500"
-                              : formData.coreQuestion2.length > 0 
-                              ? "text-primary" 
-                              : "text-muted-foreground"
-                          }`}>
-                            {formData.coreQuestion2.length}
-                          </span>
-                          <span className="text-xs text-muted-foreground">/</span>
-                          <span className="text-xs text-muted-foreground">500</span>
-                        </div>
-                      </div>
-                    </div>
-                    {formData.coreQuestion2.length >= 450 && (
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/5 border border-orange-500/20 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <Info className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                        <p className="text-xs text-orange-600">
-                          {formData.coreQuestion2.length >= 500 
-                            ? "최대 글자수에 도달했습니다" 
-                            : `${500 - formData.coreQuestion2.length}자 남았습니다`}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                        3
-                      </div>
-                      프로젝트 및 탐구 경험
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      자신이 했던 프로젝트나, 탐구했던 경험이 있다면 서술해주세요.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3 relative z-10">
-                    <div className="relative">
-                    <Textarea
-                      id="coreQuestion3"
-                      value={formData.coreQuestion3}
-                        onChange={(e) => {
-                          if (e.target.value.length <= 500) {
-                            setFormData({ ...formData, coreQuestion3: e.target.value });
-                          }
-                        }}
-                      required
-                        maxLength={500}
-                        className={`min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 ${
-                          formData.coreQuestion3.length >= 450 ? "border-orange-500/50" : ""
-                        }`}
-                      placeholder="답변을 작성해주세요..."
-                    />
-                      <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-                        <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-all duration-200 ease-out ${
-                          formData.coreQuestion3.length >= 450 
-                            ? "bg-orange-500/10 border border-orange-500/30" 
-                            : formData.coreQuestion3.length > 0
-                            ? "bg-primary/10 border border-primary/20"
-                            : "bg-background/80 backdrop-blur-sm border border-border/40"
-                        }`}>
-                          <span className={`text-xs font-semibold ${
-                            formData.coreQuestion3.length >= 500 
-                              ? "text-orange-600" 
-                              : formData.coreQuestion3.length >= 450
-                              ? "text-orange-500"
-                              : formData.coreQuestion3.length > 0 
-                              ? "text-primary" 
-                              : "text-muted-foreground"
-                          }`}>
-                            {formData.coreQuestion3.length}
-                          </span>
-                          <span className="text-xs text-muted-foreground">/</span>
-                          <span className="text-xs text-muted-foreground">500</span>
-                        </div>
-                      </div>
-                    </div>
-                    {formData.coreQuestion3.length >= 450 && (
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/5 border border-orange-500/20 animate-in fade-in slide-in-from-top-1 duration-200">
-                        <Info className="w-3.5 h-3.5 text-orange-500 shrink-0" />
-                        <p className="text-xs text-orange-600">
-                          {formData.coreQuestion3.length >= 500 
-                            ? "최대 글자수에 도달했습니다" 
-                            : `${500 - formData.coreQuestion3.length}자 남았습니다`}
-                        </p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Users className="w-5 h-5 text-primary" />
-                      하고 싶은 소모임이나 스터디가 있나요?
-                    </CardTitle>
-                    <CardDescription>
-                      KHUDA는 스터디 및 소모임을 적극 권장하고 있으며, KHUDA 9기에서는 더욱 강조하여 활성화할 생각입니다. (산학협력 프로젝트, SQL 스터디, 공모전 스터디 등이 예정되어 있습니다)
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Input
-                      id="studyGroup"
-                      placeholder="ex) 자격증 스터디, 수학 스터디, 운동 소모임 등"
-                      value={formData.studyGroup}
-                      onChange={(e) => setFormData({ ...formData, studyGroup: e.target.value })}
-                      className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
-                    />
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Activity className="w-5 h-5 text-primary" />
-                      지금까지 했던 기타 활동을 작성해주세요
-                    </CardTitle>
-                    <CardDescription>데이터 분석과 관련이 없더라도 괜찮습니다.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      id="otherActivities"
-                      value={formData.otherActivities}
-                      onChange={(e) => setFormData({ ...formData, otherActivities: e.target.value })}
-                      className="min-h-[120px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
-                      placeholder="답변을 작성해주세요..."
-                    />
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-primary" />
-                      2026년도 1학기 활동 일정
-                    </CardTitle>
-                    <CardDescription>
-                      타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      id="schedule2026"
-                      value={formData.schedule2026}
-                      onChange={(e) => setFormData({ ...formData, schedule2026: e.target.value })}
-                      className="min-h-[120px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
-                      placeholder="답변을 작성해주세요..."
-                    />
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Award className="w-5 h-5 text-primary" />
-                      취득한 자격증 및 수상이력
-                    </CardTitle>
-                    <CardDescription>해당 사항이 없는 경우 작성하지 않으셔도 됩니다.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      id="certificates"
-                      value={formData.certificates}
-                      onChange={(e) => setFormData({ ...formData, certificates: e.target.value })}
-                      className="min-h-[120px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
-                      placeholder="답변을 작성해주세요..."
-                    />
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Heart className="w-5 h-5 text-primary" />
-                      KHUDA 9기에게 바라는 내용
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      id="expectations"
-                      value={formData.expectations}
-                      onChange={(e) => setFormData({ ...formData, expectations: e.target.value })}
-                      className="min-h-[120px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
-                      placeholder="답변을 작성해주세요..."
-                    />
-                  </CardContent>
-                </Card>
-
                 <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
                   <CardHeader className="relative z-10">
@@ -1598,13 +1584,13 @@ const Apply = () => {
                               e.preventDefault();
                               e.stopPropagation();
                               const isSelected = formData.interviewDates.includes(date.value);
-                              handleCheckboxChange("interviewDates", date.value, !isSelected);
-                              if (!isSelected) {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  selectedInterviewDate: date.value,
-                                }));
-                              }
+                              setFormData((prev) => ({
+                                ...prev,
+                                interviewDates: isSelected
+                                  ? prev.interviewDates.filter((d) => d !== date.value)
+                                  : [...prev.interviewDates, date.value],
+                                selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate,
+                              }));
                             }}
                           >
                             <div className="cursor-pointer w-full flex flex-col items-center gap-1.5">
@@ -1648,7 +1634,17 @@ const Apply = () => {
                                 onClick={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
-                            handleCheckboxChange("interviewTimes", time, !isSelected);
+                                  const selectedDate = formData.selectedInterviewDate;
+                                  const currentTimes = formData.interviewTimesByDate[selectedDate] || [];
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    interviewTimesByDate: {
+                                      ...prev.interviewTimesByDate,
+                                      [selectedDate]: isSelected
+                                        ? currentTimes.filter((t) => t !== time)
+                                        : [...currentTimes, time],
+                                    },
+                                  }));
                           }}
                         >
                                 <div className="cursor-pointer w-full flex flex-col items-center gap-1">
@@ -1715,268 +1711,6 @@ const Apply = () => {
               </div>
             )}
 
-            {formData.applicationType === "ob" && (
-              <div className="space-y-8">
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="pb-4 relative z-10">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <ClipboardList className="w-5 h-5 text-primary" />
-                      </div>
-                      <CardTitle className="text-xl">OB 설문섹션</CardTitle>
-                    </div>
-                    <CardDescription className="text-sm leading-relaxed">
-                      OB 지원자의 경우 별도 면접 없이 진행되며, 본 학기 OB 스터디 및 다양한 활동 프로그램이 준비되어 있습니다. 적극적인 참여를 기대합니다.
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <GraduationCap className="w-5 h-5 text-primary" />
-                      수료조건
-                    </CardTitle>
-                    <CardDescription>스터디와 트랙 모두 참여 가능합니다.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-4 rounded-xl bg-secondary/30 border border-border/50 flex items-center justify-center">
-                        <p className="text-sm font-medium text-foreground text-center">스터디 1회 + KHUDA 학술제</p>
-                      </div>
-                      <div className="p-4 rounded-xl bg-secondary/30 border border-border/50 flex items-center justify-center">
-                        <p className="text-sm font-medium text-foreground text-center">심화 트랙 + KHUDA 학술제</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <BookOpen className="w-5 h-5 text-primary" />
-                      스터디 개설 여부
-                    </CardTitle>
-                    <CardDescription>
-                      KHUDA는 강의 및 교재비를 일부 지원하고 있습니다. 많은 관심과 참여 부탁드립니다.
-                      <br />
-                      <span className="text-destructive font-medium">※ 트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 합니다.</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div 
-                        className={getCheckboxContainerClass(formData.studyIntention === "yes")}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setFormData((prev) => {
-                            if (prev.studyIntention !== "yes") {
-                              return { ...prev, studyIntention: "yes" };
-                            }
-                            return prev;
-                          });
-                        }}
-                      >
-                        <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                          formData.studyIntention === "yes"
-                            ? "border-primary bg-primary"
-                            : "border-border"
-                        }`}>
-                          {formData.studyIntention === "yes" && (
-                            <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                          )}
-                        </div>
-                        <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                          <span className="transition-all duration-200">개설 의사 있다</span>
-                          {formData.studyIntention === "yes" && (
-                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                              선택됨
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      <div 
-                        className={getCheckboxContainerClass(formData.studyIntention === "no")}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setFormData((prev) => {
-                            if (prev.studyIntention !== "no") {
-                              return { ...prev, studyIntention: "no" };
-                            }
-                            return prev;
-                          });
-                        }}
-                      >
-                        <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                          formData.studyIntention === "no"
-                            ? "border-primary bg-primary"
-                            : "border-border"
-                        }`}>
-                          {formData.studyIntention === "no" && (
-                            <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                          )}
-                        </div>
-                        <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                          <span className="transition-all duration-200">개설 의사 없다</span>
-                          {formData.studyIntention === "no" && (
-                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                              선택됨
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {formData.studyIntention === "yes" && (
-                  <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                    <CardHeader className="relative z-10">
-                      <CardTitle className="text-xl flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-primary" />
-                        스터디를 개설한다면 세부 사항
-                      </CardTitle>
-                      <CardDescription>스터디 개설에 대한 세부 사항을 작성해주세요.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Textarea
-                        id="studyDetails"
-                        value={formData.studyDetails}
-                        onChange={(e) => setFormData({ ...formData, studyDetails: e.target.value })}
-                        className="min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none"
-                        placeholder="스터디 주제, 진행 방식, 예상 일정 등을 작성해주세요..."
-                      />
-                    </CardContent>
-                  </Card>
-                )}
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Layers className="w-5 h-5 text-primary" />
-                      참여하고자 하는 심화 트랙
-                    </CardTitle>
-                    <CardDescription>
-                      심화 트랙 참여를 희망하시는 경우에만 선택해주세요.
-                      <br />
-                      <span className="text-destructive font-medium">※ 트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 합니다.</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {[
-                        { value: "nlp", label: "NLP (자연어처리)" },
-                        { value: "cv", label: "CV (컴퓨터비전)" },
-                        { value: "de", label: "DE (데이터엔지니어링)" },
-                        { value: "da", label: "DA (데이터분석)" },
-                        { value: "aie", label: "AIE (AI엔지니어링)" },
-                        { value: "fin", label: "FIN (금융)" },
-                      ].map((track) => (
-                        <div 
-                          key={track.value} 
-                          className={getCheckboxContainerClass(formData.trackInterest === track.value)}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setFormData((prev) => {
-                              if (prev.trackInterest !== track.value) {
-                                return { ...prev, trackInterest: track.value };
-                              }
-                              return prev;
-                            });
-                          }}
-                        >
-                          <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                            formData.trackInterest === track.value
-                              ? "border-primary bg-primary"
-                              : "border-border"
-                          }`}>
-                            {formData.trackInterest === track.value && (
-                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                            <span className="transition-all duration-200">{track.label}</span>
-                            {formData.trackInterest === track.value && (
-                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                                선택됨
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                      <div 
-                        className={getCheckboxContainerClass(formData.trackInterest === "none")}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setFormData((prev) => {
-                            if (prev.trackInterest !== "none") {
-                              return { ...prev, trackInterest: "none" };
-                            }
-                            return prev;
-                          });
-                        }}
-                      >
-                        <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                          formData.trackInterest === "none"
-                            ? "border-primary bg-primary"
-                            : "border-border"
-                        }`}>
-                          {formData.trackInterest === "none" && (
-                            <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                          )}
-                        </div>
-                        <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                          <span className="transition-all duration-200">참여 의사 없음</span>
-                          {formData.trackInterest === "none" && (
-                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                              선택됨
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-                  <CardHeader className="relative z-10">
-                    <CardTitle className="text-xl flex items-center gap-3">
-                      <Heart className="w-5 h-5 text-primary" />
-                      KHUDA에게 바라는 것
-                      {formData.obExpectations.length > 0 && (
-                        <span 
-                          className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full border border-primary/20"
-                          style={{
-                            animation: 'tossAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                          }}
-                        >
-                          좋은 의견 감사합니다
-                        </span>
-                      )}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Textarea
-                      id="obExpectations"
-                      value={formData.obExpectations}
-                      onChange={(e) => setFormData({ ...formData, obExpectations: e.target.value })}
-                      className="min-h-[120px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
-                      placeholder="KHUDA에 대한 바람이나 제안사항을 작성해주세요..."
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-            )}
 
             <div className="sticky bottom-0 pb-8 pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-6 md:-mx-12 px-6 md:px-12">
               <Button
@@ -1984,7 +1718,7 @@ const Apply = () => {
                 variant="hero"
                 size="xl"
                 className="w-full rounded-xl h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98]"
-                disabled={isSubmitting || !isFormValid()}
+                disabled={isSubmitting || questions.length === 0}
               >
                 {isSubmitting ? "제출 중..." : "지원서 제출하기"}
               </Button>
