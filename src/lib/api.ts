@@ -1,6 +1,4 @@
-const API_BASE_URL = import.meta.env.PROD 
-  ? "http://3.38.172.201:8000" 
-  : "";
+import { API_BASE_URL } from "./constants";
 
 export interface Question {
   id: number;
@@ -27,46 +25,56 @@ export interface ApplicationResponse {
   status: string;
 }
 
+// 공통 에러 처리 함수
+const handleApiError = async (response: Response, context: string): Promise<never> => {
+  let errorMessage = `${context}에 실패했습니다.`;
+  
+  try {
+    const errorData = await response.json();
+    if (errorData.detail) {
+      if (Array.isArray(errorData.detail)) {
+        errorMessage = errorData.detail.map((err: { msg?: string } | string) => 
+          typeof err === "string" ? err : err.msg || JSON.stringify(err)
+        ).join(", ");
+      } else if (typeof errorData.detail === "string") {
+        errorMessage = errorData.detail;
+      }
+    }
+  } catch {
+    if (response.status === 500) {
+      errorMessage = `서버 오류가 발생했습니다.`;
+    } else if (response.status === 404) {
+      errorMessage = `요청한 리소스를 찾을 수 없습니다.`;
+    } else {
+      errorMessage = `${context}에 실패했습니다. (상태 코드: ${response.status})`;
+    }
+  }
+  
+  throw new Error(errorMessage);
+};
+
+// 공통 네트워크 에러 처리
+const handleNetworkError = (error: unknown): never => {
+  if (error instanceof Error) {
+    if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
+      throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
+    }
+    throw error;
+  }
+  throw new Error("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
+};
+
 export async function getQuestions(applicantType: "yb" | "ob" | "common"): Promise<QuestionsResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/questions/${applicantType}`);
     
     if (!response.ok) {
-      let errorMessage = "질문을 가져오는데 실패했습니다.";
-      
-      try {
-        const errorData = await response.json();
-        if (errorData.detail) {
-          if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map((err: { msg?: string } | string) => 
-              typeof err === "string" ? err : err.msg || JSON.stringify(err)
-            ).join(", ");
-          } else if (typeof errorData.detail === "string") {
-            errorMessage = errorData.detail;
-          }
-        }
-      } catch {
-        if (response.status === 500) {
-          errorMessage = `서버 오류가 발생했습니다. "${applicantType}" 타입이 백엔드에서 지원되지 않을 수 있습니다.`;
-        } else if (response.status === 404) {
-          errorMessage = `"${applicantType}" 타입의 질문을 찾을 수 없습니다.`;
-        } else {
-          errorMessage = `질문을 가져오는데 실패했습니다. (상태 코드: ${response.status})`;
-        }
-      }
-      
-      throw new Error(errorMessage);
+      await handleApiError(response, "질문을 가져오는데");
     }
     
     return await response.json();
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
-        throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
-      }
-      throw error;
-    }
-    throw new Error("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
+    handleNetworkError(error);
   }
 }
 
@@ -87,34 +95,12 @@ export async function submitApplication(
     });
     
     if (!response.ok) {
-      let errorMessage = "지원서 제출에 실패했습니다.";
-      
-      try {
-        const errorData = await response.json();
-        if (errorData.detail) {
-          if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map((err: { msg?: string } | string) => 
-              typeof err === "string" ? err : err.msg || JSON.stringify(err)
-            ).join(", ");
-          } else if (typeof errorData.detail === "string") {
-            errorMessage = errorData.detail;
-          }
-        }
-      } catch {
-      }
-      
-      throw new Error(errorMessage);
+      await handleApiError(response, "지원서 제출에");
     }
     
     return await response.json();
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message.includes("fetch") || error.message.includes("Failed to fetch")) {
-        throw new Error("API 서버에 연결할 수 없습니다. CORS 설정 또는 네트워크 연결을 확인해주세요.");
-      }
-      throw error;
-    }
-    throw new Error("네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
+    handleNetworkError(error);
   }
 }
 

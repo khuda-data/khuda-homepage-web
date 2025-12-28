@@ -4,69 +4,51 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { HelpCircle } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { FAQ_DATA, FAQ_MESSAGES, SECTION_STYLES, FAQ_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-const faqs = [
-  {
-    question: "비전공자도 지원 가능한가요?",
-    answer: "미정",
-  },
-  {
-    question: "활동 기간과 시간은 어떻게 되나요?",
-    answer: "미정",
-  },
-  {
-    question: "트랙은 어떻게 선택하나요?",
-    answer: "미정",
-  },
-  {
-    question: "활동비가 있나요?",
-    answer: "미정",
-  },
-  {
-    question: "다른 동아리와 병행 가능한가요?",
-    answer: "미정",
-  },
-];
-
 const FAQSection = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
+  const IconComponent = FAQ_STYLES.accordion.trigger.iconComponent;
 
   return (
     <section 
-      id="faq" 
+      id={FAQ_STYLES.sectionId} 
       ref={ref}
       className={cn(
-        "section-padding relative transition-all duration-1000",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        SECTION_STYLES.section.base,
+        isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
-      <div className="container mx-auto">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6">
-              자주 묻는 질문
+      <div className={SECTION_STYLES.container.base}>
+        <div className={SECTION_STYLES.maxWidth.narrow}>
+          <div className={SECTION_STYLES.header.container}>
+            <h2 className={SECTION_STYLES.header.title}>
+              {FAQ_MESSAGES.title}
             </h2>
-            <p className="text-base md:text-lg text-muted-foreground">
-              궁금한 점이 있으신가요?
+            <p className={SECTION_STYLES.header.subtitle}>
+              {FAQ_MESSAGES.subtitle}
             </p>
           </div>
-          <Accordion type="single" collapsible className="w-full space-y-3">
-            {faqs.map((faq, index) => (
+          <Accordion 
+            type={FAQ_STYLES.accordion.type} 
+            collapsible={FAQ_STYLES.accordion.collapsible} 
+            className={FAQ_STYLES.accordion.container}
+          >
+            {FAQ_DATA.map((faq) => (
               <AccordionItem 
-                key={index} 
-                value={`item-${index}`} 
-                className="border-0 rounded-2xl bg-card border border-border/50 overflow-hidden transition-all duration-200 hover:border-border"
+                key={faq.question} 
+                value={faq.question} 
+                className={FAQ_STYLES.accordion.item.base}
               >
-                <AccordionTrigger className="text-left hover:no-underline px-6 py-5 text-foreground font-medium transition-colors">
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                    <span>{faq.question}</span>
+                <AccordionTrigger className={FAQ_STYLES.accordion.trigger.base}>
+                  <div className={FAQ_STYLES.accordion.trigger.iconContainer}>
+                    <IconComponent className={FAQ_STYLES.accordion.trigger.icon} />
+                    {faq.question}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-6 pb-5 text-muted-foreground leading-relaxed">
+                <AccordionContent className={FAQ_STYLES.accordion.content.base}>
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

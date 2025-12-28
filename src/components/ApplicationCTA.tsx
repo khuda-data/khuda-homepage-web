@@ -1,12 +1,60 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
+import { 
+  RECRUITMENT_SCHEDULE, 
+  APPLICATION_CTA_MESSAGES, 
+  TIME_UNITS,
+  TIME_SEPARATOR,
+  ANIMATION_CONFIG,
+  CTA_STYLES,
+  ROUTES,
+  SECTION_STYLES,
+  BUTTON_CONFIG,
+  SCROLL_ANIMATION_CONFIG
+} from "@/lib/constants";
+import { calculateTimeLeft, type TimeLeft, TIME_CONSTANTS } from "@/lib/date-utils";
+
+// 상수 정의
+const APPLICATION_DEADLINE = import.meta.env.VITE_APPLICATION_DEADLINE || RECRUITMENT_SCHEDULE.application.deadlineISO;
+const TIMER_UPDATE_INTERVAL = TIME_CONSTANTS.MS_PER_SECOND;
+
+// 타이머 단위 컴포넌트
+const TimeUnitDisplay = ({ value, label, delay }: { value: number; label: string; delay: string }) => (
+  <div className={cn(
+    CTA_STYLES.timer.unit.container,
+    ANIMATION_CONFIG.timeUnit.fadeInDuration,
+    delay
+  )}>
+    <div 
+      className={cn(
+        CTA_STYLES.timer.unit.value.base,
+        ANIMATION_CONFIG.timeUnit.duration
+      )}
+    >
+      {String(value).padStart(CTA_STYLES.padding.padStartLength, CTA_STYLES.padding.padStartChar)}
+    </div>
+    <div className={CTA_STYLES.timer.unit.label}>{label}</div>
+  </div>
+);
+
+// 콜론 구분자 컴포넌트
+const TimeSeparator = () => (
+  <div className={CTA_STYLES.timer.separator}>{TIME_SEPARATOR}</div>
+);
+
+// 공통 메시지 래퍼 컴포넌트
+const MessageWrapper = ({ children }: { children: ReactNode }) => (
+  <div className={cn(CTA_STYLES.contentWrapper.marginBottom, ANIMATION_CONFIG.fadeIn)}>
+    {children}
+  </div>
+);
 
 const ApplicationCTA = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
-  const [timeLeft, setTimeLeft] = useState({
+  const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -14,116 +62,87 @@ const ApplicationCTA = () => {
   });
 
   useEffect(() => {
-    const deadline = new Date("2026-01-04T23:59:59");
-    
     const updateTimer = () => {
-      const now = new Date();
-      const difference = deadline.getTime() - now.getTime();
-
-      if (difference <= 0) {
-        setTimeLeft({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          isExpired: true,
-        });
-        return;
-      }
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-
-      setTimeLeft({
-        days,
-        hours,
-        minutes,
-        isExpired: false,
-      });
+      setTimeLeft(calculateTimeLeft(APPLICATION_DEADLINE));
     };
 
     updateTimer();
-    const interval = setInterval(updateTimer, 1000);
+    const interval = setInterval(updateTimer, TIMER_UPDATE_INTERVAL);
 
     return () => clearInterval(interval);
   }, []);
+
+  // Button 공통 props
+  const commonButtonProps = {
+    variant: BUTTON_CONFIG.variant.hero,
+    size: BUTTON_CONFIG.size.xl,
+  } as const;
+
+  const buttonText = APPLICATION_CTA_MESSAGES.buttonText;
 
   return (
     <section 
       ref={ref}
       className={cn(
-        "py-12 md:py-20 px-6 md:px-12 relative bg-background transition-all duration-1000 overflow-hidden",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        CTA_STYLES.section.padding,
+        CTA_STYLES.section.base,
+        isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/3 to-transparent pointer-events-none" />
-      <div className="container mx-auto relative z-10">
-        <div className="text-center">
-          {!timeLeft.isExpired ? (
-            <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <p className="text-sm text-muted-foreground mb-4 animate-pulse">서류 마감까지</p>
-              <div className="flex justify-center items-center gap-1.5 md:gap-4 mb-6 md:mb-8">
-                <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500 delay-100">
-                  <div 
-                    key={timeLeft.days}
-                    className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary mb-0.5 md:mb-1 transition-all duration-300 animate-in zoom-in-95 fade-in"
-                    style={{ animationDuration: '0.3s' }}
-                  >
-                    {String(timeLeft.days).padStart(2, "0")}
-                  </div>
-                  <div className="text-xs text-muted-foreground font-medium">일</div>
-                </div>
-                <div className="text-xl md:text-3xl font-bold text-muted-foreground pb-3 md:pb-4 animate-pulse">:</div>
-                <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500 delay-200">
-                  <div 
-                    key={timeLeft.hours}
-                    className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary mb-0.5 md:mb-1 transition-all duration-300 animate-in zoom-in-95 fade-in"
-                    style={{ animationDuration: '0.3s' }}
-                  >
-                    {String(timeLeft.hours).padStart(2, "0")}
-                  </div>
-                  <div className="text-xs text-muted-foreground font-medium">시간</div>
-                </div>
-                <div className="text-xl md:text-3xl font-bold text-muted-foreground pb-3 md:pb-4 animate-pulse">:</div>
-                <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500 delay-300">
-                  <div 
-                    key={timeLeft.minutes}
-                    className="text-2xl md:text-4xl lg:text-5xl font-bold text-primary mb-0.5 md:mb-1 transition-all duration-300 animate-in zoom-in-95 fade-in"
-                    style={{ animationDuration: '0.3s' }}
-                  >
-                    {String(timeLeft.minutes).padStart(2, "0")}
-                  </div>
-                  <div className="text-xs text-muted-foreground font-medium">분</div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <p className="text-base text-muted-foreground font-medium mb-2">서류 접수가 마감되었습니다.</p>
-              <p className="text-sm text-muted-foreground">다음 기수에 지원해보세요. 기다리고 있을게요! 😊</p>
-            </div>
-          )}
-          
+      <div className={CTA_STYLES.gradient.vertical} />
+      <div className={CTA_STYLES.gradient.horizontal} />
+      <div className={SECTION_STYLES.container.base}>
+        <div className={SECTION_STYLES.textCenter}>
           {timeLeft.isExpired ? (
-            <Button 
-              variant="hero" 
-              size="xl" 
-              disabled
-              className="rounded-2xl px-8 py-6 text-lg font-semibold transition-all duration-200 opacity-50 cursor-not-allowed"
-            >
-              지원하기
-            </Button>
-          ) : (
-            <Link to="/apply" className="inline-block animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
+            <>
+              <MessageWrapper>
+                <p className={CTA_STYLES.title.base}>
+                  {APPLICATION_CTA_MESSAGES.deadlineExpired.title}
+                </p>
+                <p className={CTA_STYLES.subtitle}>
+                  {APPLICATION_CTA_MESSAGES.deadlineExpired.subtitle}
+                </p>
+              </MessageWrapper>
               <Button 
-                variant="hero" 
-                size="xl" 
-                className="rounded-2xl px-8 py-6 text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                {...commonButtonProps}
+                disabled
+                className={ANIMATION_CONFIG.button.disabled}
               >
-                지원하기
+                {buttonText}
               </Button>
-            </Link>
+            </>
+          ) : (
+            <>
+              <MessageWrapper>
+                <p className={CTA_STYLES.title.active}>
+                  {APPLICATION_CTA_MESSAGES.deadlineActive.title}
+                </p>
+                <div className={cn(
+                  CTA_STYLES.timerContainer.flex,
+                  CTA_STYLES.timerContainer.gap,
+                  CTA_STYLES.timerContainer.marginBottom
+                )}>
+                  {TIME_UNITS.map((unit, index) => (
+                    <div key={unit.key} className={CTA_STYLES.timerContainer.item}>
+                      <TimeUnitDisplay 
+                        value={timeLeft[unit.key]} 
+                        label={unit.label} 
+                        delay={unit.delay} 
+                      />
+                      {index < TIME_UNITS.length - 1 && <TimeSeparator />}
+                    </div>
+                  ))}
+                </div>
+              </MessageWrapper>
+              <Link to={ROUTES.apply} className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
+                <Button 
+                  {...commonButtonProps}
+                  className={ANIMATION_CONFIG.button.active}
+                >
+                  {buttonText}
+                </Button>
+              </Link>
+            </>
           )}
         </div>
       </div>

@@ -1,7 +1,14 @@
+// 면접 시간 생성 설정
+const INTERVIEW_TIME_CONFIG = {
+  startHour: 10,
+  endHour: 20,
+  minuteInterval: 20,
+} as const;
+
 export const generateInterviewTimes = (): string[] => {
   const times: string[] = [];
-  for (let hour = 10; hour <= 20; hour++) {
-    for (let minute = 0; minute < 60; minute += 20) {
+  for (let hour = INTERVIEW_TIME_CONFIG.startHour; hour <= INTERVIEW_TIME_CONFIG.endHour; hour++) {
+    for (let minute = 0; minute < 60; minute += INTERVIEW_TIME_CONFIG.minuteInterval) {
       const timeStr = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
       times.push(timeStr);
     }

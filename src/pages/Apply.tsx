@@ -18,6 +18,17 @@ import {
   getInterviewTimeButtonClass
 } from "@/lib/form-utils";
 import { submitApplication, getQuestions, type Question } from "@/lib/api";
+import { 
+  CONTACT_EMAIL, 
+  CONTACT_PHONE, 
+  RECRUITMENT_SCHEDULE, 
+  RECRUITMENT_INFO,
+  filterOBQuestions,
+  APPLICATION_FORM_CONFIG,
+  CURRICULUM_INFO,
+  SOCIAL_LINKS,
+  COMMON_STYLES,
+} from "@/lib/constants";
 
 const interviewTimes = generateInterviewTimes();
 
@@ -72,7 +83,7 @@ const Apply = () => {
         let sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
         
         if (formData.applicationType === "ob") {
-          sortedQuestions = sortedQuestions.filter(q => q.position < 9 || q.position > 21);
+          sortedQuestions = filterOBQuestions(sortedQuestions);
         }
         
         setTypeQuestions(sortedQuestions);
@@ -92,17 +103,15 @@ const Apply = () => {
     fetchTypeQuestions();
   }, [formData.applicationType, toast]);
 
-  const questions = formData.applicationType === "ob"
-    ? [...commonQuestions, ...typeQuestions]
-    : [...commonQuestions, ...typeQuestions];
+  const questions = [...commonQuestions, ...typeQuestions];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.applicationType) {
       toast({
-        title: "지원 분야를 선택해주세요",
-        description: "9기 YB 또는 9기 OB를 선택해주세요.",
+        title: APPLICATION_FORM_CONFIG.errorMessages.selectApplicationType.title,
+        description: APPLICATION_FORM_CONFIG.errorMessages.selectApplicationType.description(RECRUITMENT_INFO.generation),
         variant: "destructive",
       });
       return;
@@ -133,8 +142,8 @@ const Apply = () => {
     if (formData.applicationType === "yb") {
       if (formData.interviewDates.length === 0) {
         toast({
-          title: "면접 일정을 선택해주세요",
-          description: "면접 가능한 날짜를 선택해주세요.",
+          title: APPLICATION_FORM_CONFIG.errorMessages.selectInterviewDate.title,
+          description: APPLICATION_FORM_CONFIG.errorMessages.selectInterviewDate.description,
           variant: "destructive",
         });
         return;
@@ -142,8 +151,8 @@ const Apply = () => {
       const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some((times: string[]) => times.length > 0);
       if (!hasInterviewTimes) {
         toast({
-          title: "면접 시간을 선택해주세요",
-          description: "면접 가능한 시간을 선택해주세요.",
+          title: APPLICATION_FORM_CONFIG.errorMessages.selectInterviewTime.title,
+          description: APPLICATION_FORM_CONFIG.errorMessages.selectInterviewTime.description,
           variant: "destructive",
         });
         return;
@@ -173,8 +182,8 @@ const Apply = () => {
 
     if (missingRequiredQuestions.length > 0) {
       toast({
-        title: "필수 항목을 작성해주세요",
-        description: `${missingRequiredQuestions.length}개의 필수 질문에 답변해주세요.`,
+        title: APPLICATION_FORM_CONFIG.errorMessages.requiredFields.title,
+        description: APPLICATION_FORM_CONFIG.errorMessages.requiredFields.description(missingRequiredQuestions.length),
         variant: "destructive",
       });
       return;
@@ -192,8 +201,8 @@ const Apply = () => {
       
       if (!hasStudyIntention && !hasTrackInterest) {
         toast({
-          title: "스터디 개설 또는 심화 트랙을 선택해주세요",
-          description: "트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 합니다.",
+          title: APPLICATION_FORM_CONFIG.errorMessages.obRequirement.title,
+          description: APPLICATION_FORM_CONFIG.errorMessages.obRequirement.description,
           variant: "destructive",
         });
         return;
@@ -311,8 +320,7 @@ const Apply = () => {
 
   const handleCopyEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const email = "khuda.official.khu@gmail.com";
-    const success = await copyToClipboard(email);
+    const success = await copyToClipboard(CONTACT_EMAIL);
     if (success) {
       toast({
         title: "복사되었습니다",
@@ -352,14 +360,14 @@ const Apply = () => {
     const isCommonQuestion = question.applicant_type === "common";
     
     const getPlaceholder = (q: string) => {
-      if (q.includes("이름")) return "홍길동";
-      if (q.includes("학번")) return "2024123456";
-      if (q.includes("학년") || q.includes("학기")) return "3학년 2학기";
-      if (q.includes("주전공")) return "컴퓨터공학과";
-      if (q.includes("다전공") || q.includes("부전공")) return "경영학과 또는 없음";
-      if (q.includes("이메일")) return "example@email.com";
-      if (q.includes("휴대폰") || q.includes("전화번호")) return "010-1234-5678";
-      return "답변을 입력해주세요";
+      if (q.includes("이름")) return APPLICATION_FORM_CONFIG.placeholderTexts.name;
+      if (q.includes("학번")) return APPLICATION_FORM_CONFIG.placeholderTexts.studentId;
+      if (q.includes("학년") || q.includes("학기")) return APPLICATION_FORM_CONFIG.placeholderTexts.grade;
+      if (q.includes("주전공")) return APPLICATION_FORM_CONFIG.placeholderTexts.major;
+      if (q.includes("다전공") || q.includes("부전공")) return APPLICATION_FORM_CONFIG.placeholderTexts.doubleMajor;
+      if (q.includes("이메일")) return APPLICATION_FORM_CONFIG.placeholderTexts.email;
+      if (q.includes("휴대폰") || q.includes("전화번호")) return APPLICATION_FORM_CONFIG.placeholderTexts.phone;
+      return APPLICATION_FORM_CONFIG.commonTexts.defaultPlaceholder;
     };
 
     const getIcon = (q: string) => {
@@ -380,9 +388,9 @@ const Apply = () => {
     };
 
     const getQuestionNumber = (q: string) => {
-      if (q.includes("지원 동기") || q.includes("역량")) return "1";
-      if (q.includes("도전") || q.includes("끈기")) return "2";
-      if (q.includes("프로젝트") || q.includes("탐구")) return "3";
+      if (q.includes("지원 동기") || q.includes("역량")) return APPLICATION_FORM_CONFIG.questionNumbers.motivation;
+      if (q.includes("도전") || q.includes("끈기")) return APPLICATION_FORM_CONFIG.questionNumbers.challenge;
+      if (q.includes("프로젝트") || q.includes("탐구")) return APPLICATION_FORM_CONFIG.questionNumbers.project;
       return null;
     };
 
@@ -421,25 +429,21 @@ const Apply = () => {
     }
 
     if (question.question.includes("거주지역") || question.question.includes("거주")) {
-      const residenceOptions = [
-        "서울", "경기 수원/영통", "경기 성남/분당", "경기 용인", "경기 고양/의정부", "경기 기타",
-        "인천", "부산", "대구", "대전", "광주", "울산", "세종",
-        "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "해외"
-      ];
+      const residenceOptions = APPLICATION_FORM_CONFIG.residenceOptions;
       
       return (
-        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+        <Card key={question.id} className={COMMON_STYLES.cardBase}>
+          <div className={COMMON_STYLES.cardGradient}></div>
           <CardHeader className="relative z-10">
             <CardTitle className="text-xl flex items-center gap-3">
               <MapPin className="w-5 h-5 text-primary" />
               {question.question}
               {question.required && (
-                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
               )}
             </CardTitle>
             <CardDescription className="text-sm text-muted-foreground">
-              1월~2월 기준 거주 지역을 선택해주세요
+              {APPLICATION_FORM_CONFIG.residenceDescription}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 relative z-10">
@@ -459,7 +463,7 @@ const Apply = () => {
                   {answer && (
                     <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
                   )}
-                  <SelectValue placeholder="지역을 선택해주세요" />
+                  <SelectValue placeholder={APPLICATION_FORM_CONFIG.commonTexts.selectRegion} />
                 </div>
               </SelectTrigger>
               <SelectContent 
@@ -483,43 +487,17 @@ const Apply = () => {
     }
 
     if (question.question.includes("파이썬") || question.question.includes("Python")) {
-      const pythonLevels = [
-        { 
-          value: "1", 
-          label: "1단계: 기초 문법",
-          description: "input/print, 변수, 연산자",
-        },
-        { 
-          value: "2", 
-          label: "2단계: 기본 프로그래밍",
-          description: "반복문, 조건문, 자료형, 파일 입출력",
-        },
-        { 
-          value: "3", 
-          label: "3단계: 데이터 분석 라이브러리 활용",
-          description: "numpy, pandas, scikit-learn, 시각화",
-        },
-        { 
-          value: "4", 
-          label: "4단계: 딥러닝 프레임워크로 모델 구현",
-          description: "PyTorch/TensorFlow",
-        },
-        { 
-          value: "5", 
-          label: "5단계: 프로젝트 관리",
-          description: "아키텍처 설계, 성능 최적화, 모듈화, 테스트/배포, 협업",
-        },
-      ];
+      const pythonLevels = APPLICATION_FORM_CONFIG.pythonLevels;
       
       return (
-        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+        <Card key={question.id} className={COMMON_STYLES.cardBase}>
+          <div className={COMMON_STYLES.cardGradient}></div>
           <CardHeader className="relative z-10">
             <CardTitle className="text-xl flex items-center gap-3">
               <Code className="w-5 h-5 text-primary" />
               {question.question}
               {question.required && (
-                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
               )}
             </CardTitle>
           </CardHeader>
@@ -530,10 +508,10 @@ const Apply = () => {
                   <Info className="w-3.5 h-3.5 text-primary" />
                 </div>
                 <div className="flex-1 space-y-1.5">
-                  <p className="text-sm font-medium text-foreground">평가 기준 안내</p>
+                  <p className="text-sm font-medium text-foreground">{APPLICATION_FORM_CONFIG.pythonLevelGuide.title}</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    각 단계는 이전 단계의 내용을 포함합니다. 예를 들어, 3단계를 선택하시면 1-2단계 내용도 할 수 있다는 의미입니다. 
-                    <span className="block mt-1.5 font-medium text-foreground/90">현재 본인이 실제로 할 수 있는 수준을 선택해주세요.</span>
+                    {APPLICATION_FORM_CONFIG.pythonLevelGuide.description}
+                    <span className="block mt-1.5 font-medium text-foreground/90">{APPLICATION_FORM_CONFIG.pythonLevelGuide.note}</span>
                   </p>
                 </div>
               </div>
@@ -591,21 +569,13 @@ const Apply = () => {
     }
 
     if (question.question.includes("데이터 분석") || question.question.includes("AI 분야")) {
-      const dataAnalysisFields = [
-        "데이터 전처리 및 분석 (Pandas, NumPy)",
-        "데이터 시각화 (Matplotlib, Seaborn, Plotly)",
-        "통계 분석 및 가설검정 (T-test, ANOVA, 회귀분석)",
-        "머신러닝 알고리즘 (Random Forest, SVM)",
-        "데이터베이스 및 SQL",
-        "딥러닝 (CNN, RNN, Transformer)",
-        "자연어처리(NLP) 및 컴퓨터비전(CV)",
-      ];
+      const dataAnalysisFields = APPLICATION_FORM_CONFIG.dataAnalysisFields;
       
       const dataAnalysisFieldsArray = getArrayAnswer(question.id);
       
       return (
-        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+        <Card key={question.id} className={COMMON_STYLES.cardBase}>
+          <div className={COMMON_STYLES.cardGradient}></div>
           <CardHeader className="relative z-10">
             <CardTitle className="text-xl flex items-center gap-3">
               <BookOpen className="w-5 h-5 text-primary" />
@@ -704,13 +674,13 @@ const Apply = () => {
       };
       
       return (
-        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+        <Card key={question.id} className={COMMON_STYLES.cardBase}>
+          <div className={COMMON_STYLES.cardGradient}></div>
           <CardHeader className="relative z-10">
             <CardTitle className="text-xl flex items-center gap-3">
               {question.question}
               {question.required && (
-                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
               )}
             </CardTitle>
             <CardDescription>
@@ -831,7 +801,7 @@ const Apply = () => {
             {question.question}
             {question.required && (
               <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
-                필수
+                {APPLICATION_FORM_CONFIG.commonTexts.required}
               </Badge>
             )}
             {((question.question.includes("바라는") || question.question.includes("9기에게") || question.question.includes("KHUDA에게")) && answer && answer.length > 0) && (
@@ -842,7 +812,7 @@ const Apply = () => {
                 }}
               >
                 <span>💖</span>
-                좋은 의견 감사합니다
+                {APPLICATION_FORM_CONFIG.commonTexts.thankYouMessage}
               </span>
             )}
           </CardTitle>
@@ -1018,13 +988,12 @@ const Apply = () => {
                   position="popper"
                 >
                   {[
-                    { value: "nlp", label: "NLP (자연어처리)", description: "자연어 처리 및 언어 모델" },
-                    { value: "cv", label: "CV (컴퓨터비전)", description: "이미지 분석 및 컴퓨터 비전" },
-                    { value: "de", label: "DE (데이터엔지니어링)", description: "데이터 파이프라인 및 인프라" },
-                    { value: "da", label: "DA (데이터분석)", description: "데이터 분석 및 인사이트 도출" },
-                    { value: "aie", label: "AIE (AI엔지니어링)", description: "AI 모델 개발 및 배포" },
-                    { value: "fin", label: "FIN (금융)", description: "금융 데이터 분석 및 모델링" },
-                    { value: "none", label: "참여 의사 없음", description: "트랙에 참여하지 않습니다" },
+                    ...CURRICULUM_INFO.tracks.map(track => ({
+                      value: track.id,
+                      label: `${track.label} (${track.title})`,
+                      description: track.description.split(".")[0] + ".",
+                    })),
+                    ...APPLICATION_FORM_CONFIG.trackSelectOptions,
                   ].map((track) => (
                     <SelectItem 
                       key={track.value}
@@ -1132,19 +1101,17 @@ const Apply = () => {
             
             <div className="space-y-3">
               <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                지원이 완료되었습니다
+                {APPLICATION_FORM_CONFIG.submissionSuccess.title}
               </h1>
               <div className="h-1 w-12 bg-primary/30 mx-auto rounded-full"></div>
             </div>
             
             <div className="space-y-4 pt-4">
               <p className="text-lg text-foreground leading-relaxed">
-                지원서가<br />
-                정상적으로 접수되었습니다.
+                {APPLICATION_FORM_CONFIG.submissionSuccess.subtitle}
               </p>
               <p className="text-base text-muted-foreground leading-relaxed">
-                결과는 입력하신 전화번호로<br />
-                문자로 발송해드리겠습니다.
+                {APPLICATION_FORM_CONFIG.submissionSuccess.description}
               </p>
             </div>
           </div>
@@ -1156,7 +1123,7 @@ const Apply = () => {
                 size="lg"
                 className="w-full h-14 text-base font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
               >
-                메인으로 돌아가기
+                {APPLICATION_FORM_CONFIG.submissionSuccess.backToHome}
               </Button>
             </Link>
           </div>
@@ -1183,11 +1150,15 @@ const Apply = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-6 mb-12">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-relaxed">
-              함께 성장하며,<br />
-              <span className="block mt-2">한계를 뛰어넘는 경험을 만들어가요 🏃‍♂️</span>
+              {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < APPLICATION_FORM_CONFIG.pageTitle.split("\n").length - 1 && <br />}
+                </span>
+              ))}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              KHUDA는 데이터 분석과 인공지능(AI)에 열정을 가진 경희인이 함께 모여 체계적인 학습과 실무 프로젝트 경험을 통해 성장하는 학회입니다.
+              {APPLICATION_FORM_CONFIG.pageDescription}
             </p>
           </div>
 
@@ -1198,26 +1169,26 @@ const Apply = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-primary" />
                 </div>
-                <CardTitle className="text-xl">모집 일정</CardTitle>
+                <CardTitle className="text-xl">{APPLICATION_FORM_CONFIG.sections.schedule}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6 relative z-10">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 모집기간</p>
-                  <p className="text-lg font-semibold leading-relaxed">2025년 12월 31일 (수) ~ 2026년 1월 4일 (일) 23:59</p>
+                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.application.full}</p>
                 </div>
                 <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 합격자 발표</p>
-                  <p className="text-lg font-semibold leading-relaxed">2026년 1월 7일 (수) 18:00 이후 개별 안내</p>
+                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.announcement.full}</p>
                 </div>
                 <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">면접</p>
-                  <p className="text-lg font-semibold leading-relaxed">2026년 1월 9일 (금) ~ 1월 11일 (일) 온라인 비대면</p>
+                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.interview.full}</p>
                 </div>
                 <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">최종 합격자 발표</p>
-                  <p className="text-lg font-semibold leading-relaxed">2026년 1월 12일 (월)</p>
+                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.final.full}</p>
                 </div>
               </div>
               <div className="pt-4 border-t border-border/50">
@@ -1226,19 +1197,19 @@ const Apply = () => {
                   <div className="p-4 rounded-xl bg-primary/5 border-2 border-primary/20 hover:border-primary/40 transition-all">
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="default" className="text-xs">YB</Badge>
-                      <span className="text-sm font-semibold">9기 YB</span>
+                      <span className="text-sm font-semibold">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      머신러닝과 딥러닝 공부를 시작하시거나, 발전해 나가고 싶은 학우
+                      {APPLICATION_FORM_CONFIG.applicationTypes.yb.description}
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-primary/5 border-2 border-primary/20 hover:border-primary/40 transition-all">
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="default" className="text-xs">OB</Badge>
-                      <span className="text-sm font-semibold">9기 OB</span>
+                      <span className="text-sm font-semibold">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      KHUDA 활동을 수료하고 계속 참여하고자 하는 기존 부원
+                      {APPLICATION_FORM_CONFIG.applicationTypes.ob.description}
                     </p>
                   </div>
                 </div>
@@ -1253,7 +1224,7 @@ const Apply = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Users className="w-5 h-5 text-primary" />
                 </div>
-                <CardTitle className="text-xl">자주 묻는 질문</CardTitle>
+                <CardTitle className="text-xl">{APPLICATION_FORM_CONFIG.sections.faq}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6 relative z-10">
@@ -1277,7 +1248,7 @@ const Apply = () => {
                 <p className="text-sm font-semibold text-foreground mb-4 text-center">문의는 SNS 또는 운영진 연락처로 연락바랍니다!</p>
                 <div className="space-y-2">
                   <a 
-                    href="https://www.instagram.com/khu_da.official/" 
+                    href={SOCIAL_LINKS.instagram} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-primary/30 transition-all group"
@@ -1291,7 +1262,7 @@ const Apply = () => {
                     </div>
                   </a>
                   <a 
-                    href="mailto:khuda.official.khu@gmail.com" 
+                    href={`mailto:${CONTACT_EMAIL}`} 
                     className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-primary/30 transition-all group cursor-pointer relative"
                   >
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -1311,7 +1282,7 @@ const Apply = () => {
                           복사
                         </button>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">khuda.official.khu@gmail.com</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{CONTACT_EMAIL}</p>
                     </div>
                   </a>
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50">
@@ -1320,7 +1291,7 @@ const Apply = () => {
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-foreground">운영진 연락처</p>
-                      <p className="text-xs text-muted-foreground">회장 조윤수 010-3448-4802 / 부회장 신진수 010-2127-3406</p>
+                      <p className="text-xs text-muted-foreground">회장 조윤수 {CONTACT_PHONE.회장} / 부회장 신진수 {CONTACT_PHONE.부회장}</p>
                     </div>
                   </div>
                 </div>
@@ -1340,9 +1311,9 @@ const Apply = () => {
             <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
               <CardHeader className="relative z-10">
-                <CardTitle className="text-xl flex items-center gap-3">
+                  <CardTitle className="text-xl flex items-center gap-3">
                   <FileText className="w-5 h-5 text-primary" />
-                  개인정보 수집 동의
+                  {APPLICATION_FORM_CONFIG.sections.privacy}
                   <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
                     필수
                   </Badge>
@@ -1351,21 +1322,21 @@ const Apply = () => {
               </CardHeader>
               <CardContent className="space-y-6 relative z-10">
                 <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
-                  <h3 className="text-lg font-semibold mb-4 text-center">개인정보 수집·이용 동의서</h3>
+                  <h3 className="text-lg font-semibold mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
                   <div className="space-y-4 text-sm leading-relaxed">
                     <div>
-                      <p className="font-semibold mb-2">1. 개인정보의 수집·이용에 관한 사항</p>
-                      <p className="mb-2 text-muted-foreground">본인은 "경희대학교 데이터 분석 동아리(KHUDA)"가 신규 회원 모집과 관련하여 아래의 내용에 따라 개인정보를 수집·이용하는 것에 동의합니다.</p>
-                      <p className="mb-2"><strong>가. 수집·이용 목적:</strong> ① 신규 회원 모집</p>
-                      <p><strong>나. 수집하는 개인정보의 항목:</strong> ① 신청자 : 성명, 성별, 생년월일, 이메일, 전화번호, 전공 등</p>
+                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
+                      <p className="mb-2 text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
+                      <p className="mb-2"><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.purpose}</strong></p>
+                      <p><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.items}</strong></p>
                     </div>
                     <div>
-                      <p className="font-semibold mb-2">2. 개인정보의 보유 및 이용기간</p>
-                      <p className="text-muted-foreground">본인은 경희대학교 데이터 분석 동아리가 본 동의서에 명시된 개인정보를 본 동의서에 명시된 수집·이용 목적이 달성될 때까지(9개월) 보유·이용하는 것에 동의합니다.</p>
+                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section2.title}</p>
+                      <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section2.description}</p>
                     </div>
                     <div>
-                      <p className="font-semibold mb-2">3. 개인정보 수집·이용에 대한 동의 거부 권리 및 동의 거부 시 불이익</p>
-                      <p className="text-muted-foreground">본인은 위 개인정보의 수집·이용에 대한 동의를 거부할 권리가 있으며, 동의를 거부할 경우 신규 회원 모집 명단에서 제외될 수 있다는 사실을 인지한 상태에서 작성한 것임을 확인합니다.</p>
+                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section3.title}</p>
+                      <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section3.description}</p>
                     </div>
                   </div>
                 </div>
@@ -1394,7 +1365,7 @@ const Apply = () => {
                             )}
                           </div>
                           <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                            <span className="transition-all duration-200">상기 내용에 동의합니다.</span>
+                            <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
                             {privacyAnswer === "agree" && (
                               <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                                 선택됨
@@ -1420,7 +1391,7 @@ const Apply = () => {
                             )}
                           </div>
                           <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                            <span className="transition-all duration-200">상기 내용에 동의하지 않습니다.</span>
+                            <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
                             {privacyAnswer === "disagree" && (
                               <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                                 선택됨
@@ -1441,7 +1412,7 @@ const Apply = () => {
                 <CardHeader className="relative z-10">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <UserCircle className="w-5 h-5 text-primary" />
-                    기본 정보
+                    {APPLICATION_FORM_CONFIG.sections.basicInfo}
                   </CardTitle>
                   <CardDescription className="text-sm text-muted-foreground">
                     지원에 필요한 기본 정보를 입력해주세요.
@@ -1465,8 +1436,8 @@ const Apply = () => {
               <CardHeader className="relative z-10">
                 <CardTitle className="text-xl flex items-center gap-3">
                   <Users className="w-5 h-5 text-primary" />
-                  지원 분야
-                  <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+                  {APPLICATION_FORM_CONFIG.sections.applicationType}
+                  <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
                 </CardTitle>
                 <CardDescription>지원하실 분야를 선택해주세요.</CardDescription>
               </CardHeader>
@@ -1495,7 +1466,7 @@ const Apply = () => {
                       )}
                     </div>
                     <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">
-                      <span className="transition-all duration-200">9기 YB</span>
+                      <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
                       {formData.applicationType === "yb" && (
                         <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                           선택됨
@@ -1526,7 +1497,7 @@ const Apply = () => {
                       )}
                     </div>
                     <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">
-                      <span className="transition-all duration-200">9기 OB</span>
+                      <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
                       {formData.applicationType === "ob" && (
                         <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                           선택됨
@@ -1553,8 +1524,8 @@ const Apply = () => {
                   <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Clock className="w-5 h-5 text-primary" />
-                      면접 가능 일정
-                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
+                      {APPLICATION_FORM_CONFIG.sections.interviewSchedule}
+                      <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
                     </CardTitle>
                     <CardDescription>
                       면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
@@ -1567,11 +1538,7 @@ const Apply = () => {
                         <h3 className="text-sm font-semibold text-foreground">면접 가능 날짜</h3>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
-                        {[
-                          { value: "1월 9일 (금)", label: "1월 9일", subLabel: "금요일" },
-                          { value: "1월 10일 (토)", label: "1월 10일", subLabel: "토요일" },
-                          { value: "1월 11일 (일)", label: "1월 11일", subLabel: "일요일" },
-                        ].map((date) => (
+                        {RECRUITMENT_SCHEDULE.interview.dates.map((date) => (
                           <div
                             key={date.value}
                             data-interview-select="true"

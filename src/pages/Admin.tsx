@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { getQuestions, submitApplication, type QuestionsResponse, type ApplicationResponse, type Question } from "@/lib/api";
+import { filterOBQuestions } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, CheckCircle, XCircle, Lock, Settings, Eye, EyeOff, Send, Copy, FileText } from "lucide-react";
 
@@ -89,7 +90,7 @@ const Admin = () => {
         let sortedQuestions = data.questions.sort((a, b) => a.position - b.position);
         
         if (submitApplicantType === "ob") {
-          sortedQuestions = sortedQuestions.filter(q => q.position < 9 || q.position > 21);
+          sortedQuestions = filterOBQuestions(sortedQuestions);
         }
         
         setSubmitQuestions(sortedQuestions);

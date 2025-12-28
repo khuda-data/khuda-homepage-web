@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { scrollToSection, IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -9,88 +11,90 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > HEADER_CONFIG.scrollThreshold);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: "Activities", href: "#curriculum" },
-    { label: "Recruiting", href: "#recruiting" },
-    { label: "FAQ", href: "#faq" },
-  ];
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleScrollToSection = (href: string) => {
+    scrollToSection(href);
     setIsMobileMenuOpen(false);
   };
 
+  // 네비게이션 링크 렌더링 컴포넌트
+  const NavLinkButton = ({ 
+    link, 
+    className 
+  }: { 
+    link: typeof HEADER_CONFIG.navLinks[0]; 
+    className?: string;
+  }) => (
+    <button
+      onClick={() => handleScrollToSection(link.href)}
+      className={className}
+    >
+      {link.label}
+    </button>
+  );
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-border/50"
-          : "bg-transparent"
-      }`}
+      className={cn(
+        HEADER_STYLES.header.base,
+        isScrolled ? HEADER_STYLES.header.scrolled : HEADER_STYLES.header.transparent
+      )}
     >
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="flex items-center">
+      <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
+        <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base)}>
+          <Link to={ROUTES.home} className={HEADER_STYLES.logo.container}>
             <img 
-              src="/images/khuda-logo.png" 
-              alt="KHUDA" 
-              className="h-[50px] md:h-[60px] w-auto"
+              src={IMAGE_PATHS.logo} 
+              alt={HEADER_CONFIG.logo.alt} 
+              className={cn(HEADER_STYLES.logo.height, HEADER_STYLES.logo.width)}
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <button
+          <nav className={HEADER_STYLES.nav.desktop.container}>
+            {HEADER_CONFIG.navLinks.map((link) => (
+              <NavLinkButton
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
-                className="nav-link text-sm tracking-wide"
-              >
-                {link.label}
-              </button>
+                link={link}
+                className={HEADER_STYLES.nav.desktop.link}
+              />
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
-            <Link to="/apply">
-              <Button variant="nav" size="default" className="rounded-full px-6">
-                지원하기
+          <div className={HEADER_STYLES.button.desktop.container}>
+            <Link to={ROUTES.apply}>
+              <Button variant="nav" size="default" className={HEADER_STYLES.button.desktop.apply}>
+                {HEADER_CONFIG.applyButton.desktop}
               </Button>
             </Link>
           </div>
 
           <button
-            className="md:hidden p-2"
+            className={HEADER_STYLES.button.mobile.menuToggle}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={HEADER_STYLES.icon.size} /> : <Menu size={HEADER_STYLES.icon.size} />}
           </button>
         </div>
 
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in">
-            <nav className="flex flex-col py-6 px-6 gap-4">
-              {navLinks.map((link) => (
-                <button
+          <div className={cn(HEADER_STYLES.height.mobileMenuOffset, HEADER_STYLES.nav.mobile.container)}>
+            <nav className={HEADER_STYLES.nav.mobile.menu}>
+              {HEADER_CONFIG.navLinks.map((link) => (
+                <NavLinkButton
                   key={link.label}
-                  onClick={() => scrollToSection(link.href)}
-                  className="text-left py-3 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </button>
+                  link={link}
+                  className={HEADER_STYLES.nav.mobile.link}
+                />
               ))}
-              <Link to="/apply" className="mt-0">
-                <button className="text-left py-3 text-muted-foreground hover:text-foreground transition-colors w-full">
-                  Apply
-                </button>
+              <Link to={ROUTES.apply} className={HEADER_STYLES.nav.mobile.applyLink}>
+                <Button variant="nav" size="default" className={HEADER_STYLES.button.mobile.apply}>
+                  {HEADER_CONFIG.applyButton.mobile}
+                </Button>
               </Link>
             </nav>
           </div>

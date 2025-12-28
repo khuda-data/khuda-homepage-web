@@ -1,8 +1,65 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { cn } from '@/lib/utils';
 import './ColorBends.css';
 
 const MAX_COLORS = 8;
+
+// 상수 정의
+const CLEAR_COLOR = 0x000000;
+const DEFAULT_PIXEL_RATIO = 1;
+const MAX_PIXEL_RATIO = 2;
+const FULL_ROTATION = 360;
+const DEGREES_TO_RADIANS = Math.PI / 180;
+const RGB_MAX = 255;
+const HEX_BASE = 16;
+const POINTER_SMOOTH_FACTOR = 8;
+const LERP_MAX = 1;
+const CONTAINER_FALLBACK = 1;
+const POINTER_COORD_MULTIPLIER = 2;
+const POINTER_COORD_OFFSET = 1;
+
+// Three.js 설정 상수
+const THREE_CONFIG = {
+  camera: {
+    left: -1,
+    right: 1,
+    top: 1,
+    bottom: -1,
+    near: 0,
+    far: 1,
+  },
+  geometry: {
+    width: 2,
+    height: 2,
+  },
+  initialVectors: {
+    canvas: { x: 1, y: 1 },
+    rotation: { x: 1, y: 0 },
+    pointer: { x: 0, y: 0 },
+    color: { x: 0, y: 0, z: 0 },
+  },
+} as const;
+
+// Renderer DOM 스타일 상수
+const RENDERER_DOM_STYLES = {
+  width: '100%',
+  height: '100%',
+  display: 'block',
+} as const;
+
+// Renderer 설정 상수
+const RENDERER_CONFIG = {
+  antialias: false,
+  powerPreference: 'high-performance' as WebGLPowerPreference,
+  alpha: true,
+} as const;
+
+// Material 설정 상수
+const MATERIAL_CONFIG = {
+  premultipliedAlpha: true,
+  transparent: true,
+} as const;
 
 const frag = `
 #define MAX_COLORS ${MAX_COLORS}
@@ -136,40 +193,63 @@ export default function ColorBends({
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
   const rotationRef = useRef(rotation);
   const autoRotateRef = useRef(autoRotate);
-  const pointerTargetRef = useRef(new THREE.Vector2(0, 0));
-  const pointerCurrentRef = useRef(new THREE.Vector2(0, 0));
-  const pointerSmoothRef = useRef(8);
+  const pointerTargetRef = useRef(new THREE.Vector2(THREE_CONFIG.initialVectors.pointer.x, THREE_CONFIG.initialVectors.pointer.y));
+  const pointerCurrentRef = useRef(new THREE.Vector2(THREE_CONFIG.initialVectors.pointer.x, THREE_CONFIG.initialVectors.pointer.y));
+  const pointerSmoothRef = useRef(POINTER_SMOOTH_FACTOR);
+
+  // Transparent 값을 숫자로 변환하는 헬퍼 함수
+  const transparentToNumber = (isTransparent: boolean): number => {
+    return isTransparent ? 1 : 0;
+  };
+
+  // Renderer clear color 설정 헬퍼 함수
+  const setRendererClearColor = (renderer: THREE.WebGLRenderer, isTransparent: boolean) => {
+    renderer.setClearColor(CLEAR_COLOR, isTransparent ? 0 : 1);
+  };
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const uColorsArray = Array.from({ length: MAX_COLORS }, () => new THREE.Vector3(0, 0, 0));
+    const camera = new THREE.OrthographicCamera(
+      THREE_CONFIG.camera.left,
+      THREE_CONFIG.camera.right,
+      THREE_CONFIG.camera.top,
+      THREE_CONFIG.camera.bottom,
+      THREE_CONFIG.camera.near,
+      THREE_CONFIG.camera.far
+    );
+    const geometry = new THREE.PlaneGeometry(THREE_CONFIG.geometry.width, THREE_CONFIG.geometry.height);
+    const uColorsArray = Array.from({ length: MAX_COLORS }, () => 
+      new THREE.Vector3(
+        THREE_CONFIG.initialVectors.color.x,
+        THREE_CONFIG.initialVectors.color.y,
+        THREE_CONFIG.initialVectors.color.z
+      )
+    );
 
     const material = new THREE.ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
       uniforms: {
-        uCanvas: { value: new THREE.Vector2(1, 1) },
+        uCanvas: { value: new THREE.Vector2(THREE_CONFIG.initialVectors.canvas.x, THREE_CONFIG.initialVectors.canvas.y) },
         uTime: { value: 0 },
         uSpeed: { value: speed },
-        uRot: { value: new THREE.Vector2(1, 0) },
+        uRot: { value: new THREE.Vector2(THREE_CONFIG.initialVectors.rotation.x, THREE_CONFIG.initialVectors.rotation.y) },
         uColorCount: { value: 0 },
         uColors: { value: uColorsArray },
-        uTransparent: { value: transparent ? 1 : 0 },
+        uTransparent: { value: transparentToNumber(transparent) },
         uScale: { value: scale },
         uFrequency: { value: frequency },
         uWarpStrength: { value: warpStrength },
-        uPointer: { value: new THREE.Vector2(0, 0) },
+        uPointer: { value: new THREE.Vector2(THREE_CONFIG.initialVectors.pointer.x, THREE_CONFIG.initialVectors.pointer.y) },
         uMouseInfluence: { value: mouseInfluence },
         uParallax: { value: parallax },
         uNoise: { value: noise }
       },
-      premultipliedAlpha: true,
-      transparent: true
+      premultipliedAlpha: MATERIAL_CONFIG.premultipliedAlpha,
+      transparent: MATERIAL_CONFIG.transparent
     });
 
     materialRef.current = material;
@@ -178,33 +258,33 @@ export default function ColorBends({
     scene.add(mesh);
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      powerPreference: 'high-performance',
-      alpha: true
+      antialias: RENDERER_CONFIG.antialias,
+      powerPreference: RENDERER_CONFIG.powerPreference,
+      alpha: RENDERER_CONFIG.alpha
     });
 
     rendererRef.current = renderer;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x000000, transparent ? 0 : 1);
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    renderer.domElement.style.display = 'block';
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || DEFAULT_PIXEL_RATIO, MAX_PIXEL_RATIO));
+    setRendererClearColor(renderer, transparent);
+    renderer.domElement.style.width = RENDERER_DOM_STYLES.width;
+    renderer.domElement.style.height = RENDERER_DOM_STYLES.height;
+    renderer.domElement.style.display = RENDERER_DOM_STYLES.display;
 
     container.appendChild(renderer.domElement);
 
     const clock = new THREE.Clock();
 
     const handleResize = () => {
-      const w = container.clientWidth || 1;
-      const h = container.clientHeight || 1;
+      const w = container.clientWidth || CONTAINER_FALLBACK;
+      const h = container.clientHeight || CONTAINER_FALLBACK;
       renderer.setSize(w, h, false);
       material.uniforms.uCanvas.value.set(w, h);
     };
 
     handleResize();
 
-    if ('ResizeObserver' in window) {
+    if (typeof ResizeObserver !== 'undefined') {
       const ro = new ResizeObserver(handleResize);
       ro.observe(container);
       resizeObserverRef.current = ro;
@@ -218,15 +298,15 @@ export default function ColorBends({
 
       material.uniforms.uTime.value = elapsed;
 
-      const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
-      const rad = (deg * Math.PI) / 180;
+      const deg = (rotationRef.current % FULL_ROTATION) + autoRotateRef.current * elapsed;
+      const rad = deg * DEGREES_TO_RADIANS;
       const c = Math.cos(rad);
       const s = Math.sin(rad);
       material.uniforms.uRot.value.set(c, s);
 
       const cur = pointerCurrentRef.current;
       const tgt = pointerTargetRef.current;
-      const amt = Math.min(1, dt * pointerSmoothRef.current);
+      const amt = Math.min(LERP_MAX, dt * pointerSmoothRef.current);
       cur.lerp(tgt, amt);
       material.uniforms.uPointer.value.copy(cur);
 
@@ -270,21 +350,25 @@ export default function ColorBends({
       const h = hex.replace('#', '').trim();
       const v =
         h.length === 3
-          ? [parseInt(h[0] + h[0], 16), parseInt(h[1] + h[1], 16), parseInt(h[2] + h[2], 16)]
-          : [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-      return new THREE.Vector3(v[0] / 255, v[1] / 255, v[2] / 255);
+          ? [parseInt(h[0] + h[0], HEX_BASE), parseInt(h[1] + h[1], HEX_BASE), parseInt(h[2] + h[2], HEX_BASE)]
+          : [parseInt(h.slice(0, 2), HEX_BASE), parseInt(h.slice(2, 4), HEX_BASE), parseInt(h.slice(4, 6), HEX_BASE)];
+      return new THREE.Vector3(v[0] / RGB_MAX, v[1] / RGB_MAX, v[2] / RGB_MAX);
     };
 
     const arr = (colors || []).filter(Boolean).slice(0, MAX_COLORS).map(toVec3);
     for (let i = 0; i < MAX_COLORS; i++) {
       const vec = material.uniforms.uColors.value[i];
       if (i < arr.length) vec.copy(arr[i]);
-      else vec.set(0, 0, 0);
+      else vec.set(
+        THREE_CONFIG.initialVectors.color.x,
+        THREE_CONFIG.initialVectors.color.y,
+        THREE_CONFIG.initialVectors.color.z
+      );
     }
 
     material.uniforms.uColorCount.value = arr.length;
-    material.uniforms.uTransparent.value = transparent ? 1 : 0;
-    if (renderer) renderer.setClearColor(0x000000, transparent ? 0 : 1);
+    material.uniforms.uTransparent.value = transparentToNumber(transparent);
+    if (renderer) setRendererClearColor(renderer, transparent);
   }, [
     rotation,
     autoRotate,
@@ -306,8 +390,10 @@ export default function ColorBends({
 
     const handlePointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
-      const y = -(((e.clientY - rect.top) / (rect.height || 1)) * 2 - 1);
+      const width = rect.width || CONTAINER_FALLBACK;
+      const height = rect.height || CONTAINER_FALLBACK;
+      const x = ((e.clientX - rect.left) / width) * POINTER_COORD_MULTIPLIER - POINTER_COORD_OFFSET;
+      const y = -(((e.clientY - rect.top) / height) * POINTER_COORD_MULTIPLIER - POINTER_COORD_OFFSET);
       pointerTargetRef.current.set(x, y);
     };
 
@@ -318,6 +404,6 @@ export default function ColorBends({
     };
   }, []);
 
-  return <div ref={containerRef} className={`color-bends-container ${className || ''}`} style={style} />;
+  return <div ref={containerRef} className={cn('color-bends-container', className)} style={style} />;
 }
 

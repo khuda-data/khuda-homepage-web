@@ -1,67 +1,55 @@
-import { Instagram, Link2, Github } from "lucide-react";
+import { LOCATION, FOOTER_INFO, FOOTER_STYLES, EXTERNAL_LINK_PROPS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-secondary/50 border-t border-border py-12 md:py-16">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-          <div className="flex flex-col">
-            <p className="text-muted-foreground text-sm mb-4">
-              경희대학교 데이터분석/AI 학회
+    <footer className={cn(FOOTER_STYLES.footer.base, FOOTER_STYLES.footer.padding)}>
+      <div className={cn(FOOTER_STYLES.container.base, FOOTER_STYLES.container.padding)}>
+        <div className={cn(FOOTER_STYLES.grid.base, FOOTER_STYLES.grid.gap)}>
+          <div className={FOOTER_STYLES.layout.flexCol}>
+            <p className={cn(FOOTER_STYLES.section.text.base, FOOTER_STYLES.section.spacing.marginBottom)}>
+              {FOOTER_INFO.organization}
             </p>
-            <p className="text-muted-foreground text-sm">
-              데이터와 AI로 미래를 만들어가는 KHUDA와 함께하세요.
+            <p className={FOOTER_STYLES.section.text.base}>
+              {FOOTER_INFO.description}
             </p>
-            <p className="text-muted-foreground/60 text-xs mt-6">
-              Copyright © 2025 KHUDA. All Rights Reserved.
+            <p className={cn(FOOTER_STYLES.section.text.small, FOOTER_STYLES.section.spacing.marginTop)}>
+              {FOOTER_INFO.copyright(currentYear)}
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-foreground">Contact Us</h4>
-            <div className="space-y-3">
-              <a
-                href="https://instagram.com/khu_da.official"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <Instagram className="w-4 h-4 group-hover:text-primary transition-colors" />
-                </div>
-                <span className="text-sm">@khu_da.official</span>
-              </a>
-              <a
-                href="https://linktr.ee/khuda_data"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <Link2 className="w-4 h-4 group-hover:text-primary transition-colors" />
-                </div>
-                <span className="text-sm">Linktree</span>
-              </a>
-              <a
-                href="https://github.com/khuda-data"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <Github className="w-4 h-4 group-hover:text-primary transition-colors" />
-                </div>
-                <span className="text-sm">KHUDA Github</span>
-              </a>
+            <h4 className={FOOTER_STYLES.section.header}>
+              {FOOTER_INFO.sections.contact}
+            </h4>
+            <div className={FOOTER_STYLES.section.spacing.itemGap}>
+              {FOOTER_INFO.socialLinks.map(({ id, label, href, icon: Icon }) => (
+                <a
+                  key={id}
+                  href={href}
+                  target={EXTERNAL_LINK_PROPS.target}
+                  rel={EXTERNAL_LINK_PROPS.rel}
+                  className={FOOTER_STYLES.socialLink.base}
+                >
+                  <div className={FOOTER_STYLES.socialLink.iconContainer}>
+                    <Icon className={FOOTER_STYLES.socialLink.icon} />
+                  </div>
+                  <span className={FOOTER_STYLES.socialLink.label}>{label}</span>
+                </a>
+              ))}
             </div>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-foreground">Location</h4>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              경기도 용인시 기흥구 덕영대로 1732<br />
-              경희대학교 국제캠퍼스
-            </p>
+            <h4 className={FOOTER_STYLES.section.header}>
+              {FOOTER_INFO.sections.location}
+            </h4>
+            <div className={FOOTER_STYLES.section.spacing.itemGap}>
+              <p className={FOOTER_STYLES.section.text.base}>{LOCATION.address}</p>
+              <p className={FOOTER_STYLES.section.text.base}>{LOCATION.campus}</p>
+            </div>
           </div>
         </div>
       </div>
