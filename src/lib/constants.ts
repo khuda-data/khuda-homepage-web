@@ -153,46 +153,47 @@ export const HEADER_CONFIG = {
 
 export const HEADER_STYLES = {
   header: {
-    base: "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-    scrolled: "bg-background/80 backdrop-blur-lg border-b border-border/50",
+    base: "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out",
+    scrolled: "bg-background/98 backdrop-blur-2xl border-b border-border/40 shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
     transparent: "bg-transparent",
   },
   container: {
     base: "container mx-auto",
-    padding: "px-6 md:px-12",
+    padding: "px-6 md:px-12 lg:px-16",
   },
   wrapper: {
     base: "flex items-center justify-between",
   },
   logo: {
-    container: "flex items-center",
-    height: "h-[50px] md:h-[60px]",
+    container: "flex items-center justify-center transition-all duration-300 ease-out hover:scale-[1.02] hover:opacity-90 -ml-6 md:-ml-8",
+    height: "h-[100px] md:h-[120px]",
     width: "w-auto",
+    image: "object-contain object-center max-h-full max-w-[320px] md:max-w-[380px] drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
   },
   height: {
-    base: "h-16 md:h-20",
-    mobileMenuOffset: "top-16",
+    base: "h-28 md:h-32",
+    mobileMenuOffset: "top-28 md:top-32",
   },
   nav: {
     desktop: {
-      container: "hidden md:flex items-center gap-10",
-      link: "nav-link text-sm tracking-wide",
+      container: "hidden md:flex items-center gap-6 lg:gap-10",
+      link: "nav-link text-[15px] font-medium tracking-[-0.01em] px-3 py-2 rounded-xl transition-all duration-300 ease-out hover:bg-gradient-to-b hover:from-foreground/8 hover:to-foreground/4 hover:scale-[1.02] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
     },
     mobile: {
-      container: "md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in",
-      menu: "flex flex-col py-6 px-6 gap-4",
-      link: "text-left py-3 text-muted-foreground hover:text-foreground transition-colors",
-      applyLink: "mt-0",
+      container: "md:hidden absolute left-0 right-0 bg-background/98 backdrop-blur-2xl border-b border-border/40 animate-fade-in shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
+      menu: "flex flex-col py-6 px-6 gap-1",
+      link: "text-left py-3.5 px-4 text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-foreground/8 hover:to-foreground/4 rounded-xl transition-all duration-300 ease-out font-medium",
+      applyLink: "mt-2",
     },
   },
   button: {
     desktop: {
       container: "hidden md:flex items-center gap-4",
-      apply: "rounded-full px-6",
+      apply: "rounded-full px-8 py-3.5 font-semibold text-[15px] tracking-[-0.01em] bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_2px_8px_rgba(0,100%,25%,0.2)] hover:shadow-[0_4px_16px_rgba(0,100%,25%,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-out",
     },
     mobile: {
-      menuToggle: "md:hidden p-2",
-      apply: "text-left py-3 text-muted-foreground hover:text-foreground transition-colors w-full",
+      menuToggle: "md:hidden p-2.5 rounded-xl hover:bg-foreground/8 transition-all duration-300 ease-out active:scale-95",
+      apply: "text-left py-3.5 px-4 text-foreground hover:bg-foreground/8 rounded-xl transition-all duration-200 ease-out w-full font-semibold",
     },
   },
   icon: {

@@ -51,7 +51,7 @@ const Header = () => {
             <img 
               src={IMAGE_PATHS.logo} 
               alt={HEADER_CONFIG.logo.alt} 
-              className={cn(HEADER_STYLES.logo.height, HEADER_STYLES.logo.width)}
+              className={cn(HEADER_STYLES.logo.height, HEADER_STYLES.logo.width, HEADER_STYLES.logo.image)}
             />
           </Link>
 
@@ -67,7 +67,7 @@ const Header = () => {
 
           <div className={HEADER_STYLES.button.desktop.container}>
             <Link to={ROUTES.apply}>
-              <Button variant="nav" size="default" className={HEADER_STYLES.button.desktop.apply}>
+              <Button variant="default" size="default" className={HEADER_STYLES.button.desktop.apply}>
                 {HEADER_CONFIG.applyButton.desktop}
               </Button>
             </Link>
