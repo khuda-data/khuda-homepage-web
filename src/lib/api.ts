@@ -25,9 +25,6 @@ export interface ApplicationResponse {
   status: string;
 }
 
-/**
- * 지원 유형에 따른 질문 목록을 가져옵니다.
- */
 export async function getQuestions(applicantType: string): Promise<QuestionsResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/questions/${applicantType}`);
@@ -39,13 +36,14 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
         const errorData = await response.json();
         if (errorData.detail) {
           if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map((err: any) => err.msg || JSON.stringify(err)).join(", ");
+            errorMessage = errorData.detail.map((err: { msg?: string } | string) => 
+              typeof err === "string" ? err : err.msg || JSON.stringify(err)
+            ).join(", ");
           } else if (typeof errorData.detail === "string") {
             errorMessage = errorData.detail;
           }
         }
       } catch {
-        // JSON 파싱 실패 시 기본 메시지 사용
       }
       
       throw new Error(errorMessage);
@@ -60,9 +58,6 @@ export async function getQuestions(applicantType: string): Promise<QuestionsResp
   }
 }
 
-/**
- * 지원서를 제출합니다.
- */
 export async function submitApplication(
   applicantType: string,
   answers: Record<string, string>
@@ -86,13 +81,14 @@ export async function submitApplication(
         const errorData = await response.json();
         if (errorData.detail) {
           if (Array.isArray(errorData.detail)) {
-            errorMessage = errorData.detail.map((err: any) => err.msg || JSON.stringify(err)).join(", ");
+            errorMessage = errorData.detail.map((err: { msg?: string } | string) => 
+              typeof err === "string" ? err : err.msg || JSON.stringify(err)
+            ).join(", ");
           } else if (typeof errorData.detail === "string") {
             errorMessage = errorData.detail;
           }
         }
       } catch {
-        // JSON 파싱 실패 시 기본 메시지 사용
       }
       
       throw new Error(errorMessage);

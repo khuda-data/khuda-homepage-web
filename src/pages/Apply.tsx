@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, ClipboardList, GraduationCap, Target, Layers, Info, Activity, Heart, Circle, Check } from "lucide-react";
+import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, ClipboardList, GraduationCap, Target, Layers, Info, Activity, Heart, Circle, Check, HelpCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   generateInterviewTimes, 
@@ -58,7 +58,6 @@ const Apply = () => {
     obExpectations: "",
   });
 
-  // 지원 분야 선택 시 질문 목록 가져오기
   useEffect(() => {
     const fetchQuestions = async () => {
       if (!formData.applicationType) {
@@ -69,7 +68,6 @@ const Apply = () => {
       setIsLoadingQuestions(true);
       try {
         const response = await getQuestions(formData.applicationType);
-        // position 순서로 정렬
         const sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
         setQuestions(sortedQuestions);
       } catch (error) {
@@ -146,7 +144,6 @@ const Apply = () => {
     setIsSubmitting(true);
     
     try {
-      // 필드명을 질문 ID로 매핑하는 맵
       const fieldToQuestionIdMap: Record<string, number> = {
         privacyAgreement: 1,
         name: 2,
@@ -175,10 +172,8 @@ const Apply = () => {
         obExpectations: 25,
       };
 
-      // formData를 질문 ID 기반 answers로 변환
       const answers: Record<string, string> = {};
       
-      // 공통 필드
       if (formData.privacyAgreement) answers[fieldToQuestionIdMap.privacyAgreement.toString()] = formData.privacyAgreement;
       if (formData.name) answers[fieldToQuestionIdMap.name.toString()] = formData.name;
       if (formData.studentId) answers[fieldToQuestionIdMap.studentId.toString()] = formData.studentId;
@@ -188,7 +183,6 @@ const Apply = () => {
       if (formData.email) answers[fieldToQuestionIdMap.email.toString()] = formData.email;
       if (formData.phone) answers[fieldToQuestionIdMap.phone.toString()] = formData.phone;
 
-      // YB 필드
       if (formData.applicationType === "yb") {
         if (formData.residence) answers[fieldToQuestionIdMap.residence.toString()] = formData.residence;
         if (formData.pythonLevel) answers[fieldToQuestionIdMap.pythonLevel.toString()] = formData.pythonLevel;
@@ -211,7 +205,6 @@ const Apply = () => {
         }
       }
 
-      // OB 필드
       if (formData.applicationType === "ob") {
         if (formData.studyIntention) answers[fieldToQuestionIdMap.studyIntention.toString()] = formData.studyIntention;
         if (formData.studyDetails) answers[fieldToQuestionIdMap.studyDetails.toString()] = formData.studyDetails;
@@ -219,7 +212,6 @@ const Apply = () => {
         if (formData.obExpectations) answers[fieldToQuestionIdMap.obExpectations.toString()] = formData.obExpectations;
       }
 
-      // API 호출
       const response = await submitApplication(formData.applicationType, answers);
       
       setIsSubmitting(false);
@@ -340,24 +332,49 @@ const Apply = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/20 flex items-center justify-center px-6">
-        <Card className="max-w-md w-full border-0 shadow-xl bg-card/95 backdrop-blur-sm">
-          <CardContent className="pt-12 pb-8 px-8 text-center">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mx-auto mb-6 animate-fade-up">
-              <CheckCircle className="w-10 h-10 text-primary" />
+      <div className="min-h-screen bg-background flex items-center justify-center px-6 py-12">
+        <div className="max-w-md w-full space-y-8 text-center">
+          <div className="space-y-6 animate-fade-up">
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+                  <CheckCircle className="w-12 h-12 text-primary" />
+                </div>
+                <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-20"></div>
+              </div>
             </div>
-            <h1 className="text-2xl font-bold mb-3">지원이 완료되었습니다!</h1>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
-              {formData.name}님의 지원서가 정상적으로 접수되었습니다.<br />
-              결과는 입력하신 이메일로 안내드리겠습니다.
-            </p>
+            
+            <div className="space-y-3">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                지원이 완료되었습니다
+              </h1>
+              <div className="h-1 w-12 bg-primary/30 mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="space-y-4 pt-4">
+              <p className="text-lg text-foreground leading-relaxed">
+                <span className="font-semibold">{formData.name}</span>님의 지원서가<br />
+                정상적으로 접수되었습니다.
+              </p>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                결과는 입력하신 이메일로<br />
+                안내드리겠습니다.
+              </p>
+            </div>
+          </div>
+          
+          <div className="pt-4 animate-fade-up animation-delay-200">
             <Link to="/">
-              <Button variant="heroOutline" className="rounded-xl w-full">
+              <Button 
+                variant="default" 
+                size="lg"
+                className="w-full h-14 text-base font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+              >
                 메인으로 돌아가기
               </Button>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   }
@@ -388,8 +405,9 @@ const Apply = () => {
             </p>
           </div>
 
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-6">
+          <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+            <CardHeader className="pb-6 relative z-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-primary" />
@@ -397,7 +415,7 @@ const Apply = () => {
                 <CardTitle className="text-xl">모집 일정</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 relative z-10">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 모집기간</p>
@@ -442,8 +460,9 @@ const Apply = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-            <CardHeader className="pb-4">
+          <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+            <CardHeader className="pb-4 relative z-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Users className="w-5 h-5 text-primary" />
@@ -451,14 +470,20 @@ const Apply = () => {
                 <CardTitle className="text-xl">자주 묻는 질문</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6 relative z-10">
               <div className="space-y-4 text-sm">
                 <div className="p-4 rounded-xl bg-secondary/30 border border-border/50">
-                  <p className="font-semibold mb-2">Q. 학기 중 세션은 어디서 진행되나요?</p>
+                  <p className="font-semibold mb-2 flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                    Q. 학기 중 세션은 어디서 진행되나요?
+                  </p>
                   <p className="text-muted-foreground">A. 국제캠퍼스에서 진행되며, 구체적 일정과 장소는 합격자 발표 시 안내드립니다.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-secondary/30 border border-border/50">
-                  <p className="font-semibold mb-2">Q. 활동비가 있나요?</p>
+                  <p className="font-semibold mb-2 flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                    Q. 활동비가 있나요?
+                  </p>
                   <p className="text-muted-foreground">A. YB 학회비 45,000원 / OB 학회비 5,000원으로 합격자 발표 시 안내드립니다.</p>
                 </div>
               </div>
@@ -526,8 +551,9 @@ const Apply = () => {
               }
             }}
           >
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-              <CardHeader>
+            <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+              <CardHeader className="relative z-10">
                 <CardTitle className="text-xl flex items-center gap-3">
                   <FileText className="w-5 h-5 text-primary" />
                   개인정보 수집 동의
@@ -537,7 +563,7 @@ const Apply = () => {
                 </CardTitle>
                 <CardDescription>개인정보 수집 및 이용에 동의해주세요.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 relative z-10">
                 <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
                   <h3 className="text-lg font-semibold mb-4 text-center">개인정보 수집·이용 동의서</h3>
                   <div className="space-y-4 text-sm leading-relaxed">
@@ -624,15 +650,16 @@ const Apply = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-              <CardHeader>
+            <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+              <CardHeader className="relative z-10">
                 <CardTitle className="text-xl flex items-center gap-3">
                   <UserCircle className="w-5 h-5 text-primary" />
                   기본 정보
                 </CardTitle>
                 <CardDescription>기본 정보를 입력해주세요.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 relative z-10">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-sm font-semibold flex items-center gap-2">
@@ -746,8 +773,9 @@ const Apply = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-              <CardHeader>
+            <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+              <CardHeader className="relative z-10">
                 <CardTitle className="text-xl flex items-center gap-3">
                   <Users className="w-5 h-5 text-primary" />
                   지원 분야
@@ -825,8 +853,9 @@ const Apply = () => {
 
             {formData.applicationType === "yb" && (
               <div className="space-y-8">
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader className="pb-4">
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="pb-4 relative z-10">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                         <ClipboardList className="w-5 h-5 text-primary" />
@@ -839,8 +868,9 @@ const Apply = () => {
                   </CardHeader>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <MapPin className="w-5 h-5 text-primary" />
                       방학 중 거주지역
@@ -850,7 +880,7 @@ const Apply = () => {
                       1월~2월 기준 거주 지역을 선택해주세요
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 relative z-10">
                     <Select
                       value={formData.residence}
                       onValueChange={(value) => setFormData({ ...formData, residence: value })}
@@ -1019,15 +1049,16 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Code className="w-5 h-5 text-primary" />
                       파이썬에 익숙한 정도
                       <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">필수</Badge>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 relative z-10">
                     <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20">
                       <div className="flex items-start gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -1128,8 +1159,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <BookOpen className="w-5 h-5 text-primary" />
                       지금까지 공부해 본 데이터 분석 및 AI 분야
@@ -1223,8 +1255,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
                         1
@@ -1236,7 +1269,7 @@ const Apply = () => {
                       KHUDA에 지원한 이유와 자기가 가지고 있는 역량을 바탕으로 쿠다에서 어떠한 장점을 발휘할 수 있는지 서술해주세요.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-3 relative z-10">
                     <div className="relative">
                     <Textarea
                       id="coreQuestion1"
@@ -1290,8 +1323,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
                         2
@@ -1303,7 +1337,7 @@ const Apply = () => {
                       힘들었거나 끈기있게 무언가를 수행해 본 경험이 있다면 서술해주세요.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-3 relative z-10">
                     <div className="relative">
                     <Textarea
                       id="coreQuestion2"
@@ -1357,8 +1391,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
                         3
@@ -1370,7 +1405,7 @@ const Apply = () => {
                       자신이 했던 프로젝트나, 탐구했던 경험이 있다면 서술해주세요.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-3 relative z-10">
                     <div className="relative">
                     <Textarea
                       id="coreQuestion3"
@@ -1424,8 +1459,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Users className="w-5 h-5 text-primary" />
                       하고 싶은 소모임이나 스터디가 있나요?
@@ -1445,8 +1481,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Activity className="w-5 h-5 text-primary" />
                       지금까지 했던 기타 활동을 작성해주세요
@@ -1464,8 +1501,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Calendar className="w-5 h-5 text-primary" />
                       2026년도 1학기 활동 일정
@@ -1485,8 +1523,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Award className="w-5 h-5 text-primary" />
                       취득한 자격증 및 수상이력
@@ -1504,8 +1543,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Heart className="w-5 h-5 text-primary" />
                       KHUDA 9기에게 바라는 내용
@@ -1522,8 +1562,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Clock className="w-5 h-5 text-primary" />
                       면접 가능 일정
@@ -1533,7 +1574,7 @@ const Apply = () => {
                       면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
+                  <CardContent className="space-y-6 relative z-10">
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 mb-3">
                         <div className="w-1 h-4 bg-primary rounded-full" />
@@ -1558,7 +1599,6 @@ const Apply = () => {
                               e.stopPropagation();
                               const isSelected = formData.interviewDates.includes(date.value);
                               handleCheckboxChange("interviewDates", date.value, !isSelected);
-                              // 날짜 선택 시 해당 날짜로 전환
                               if (!isSelected) {
                                 setFormData((prev) => ({
                                   ...prev,
@@ -1677,8 +1717,9 @@ const Apply = () => {
 
             {formData.applicationType === "ob" && (
               <div className="space-y-8">
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader className="pb-4">
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="pb-4 relative z-10">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                         <ClipboardList className="w-5 h-5 text-primary" />
@@ -1691,8 +1732,9 @@ const Apply = () => {
                   </CardHeader>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <GraduationCap className="w-5 h-5 text-primary" />
                       수료조건
@@ -1711,8 +1753,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <BookOpen className="w-5 h-5 text-primary" />
                       스터디 개설 여부
@@ -1792,8 +1835,9 @@ const Apply = () => {
                 </Card>
 
                 {formData.studyIntention === "yes" && (
-                  <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                    <CardHeader>
+                  <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                    <CardHeader className="relative z-10">
                       <CardTitle className="text-xl flex items-center gap-3">
                         <FileText className="w-5 h-5 text-primary" />
                         스터디를 개설한다면 세부 사항
@@ -1812,8 +1856,9 @@ const Apply = () => {
                   </Card>
                 )}
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Layers className="w-5 h-5 text-primary" />
                       참여하고자 하는 심화 트랙
@@ -1902,8 +1947,9 @@ const Apply = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-                  <CardHeader>
+                <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
                     <CardTitle className="text-xl flex items-center gap-3">
                       <Heart className="w-5 h-5 text-primary" />
                       KHUDA에게 바라는 것

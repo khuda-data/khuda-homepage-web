@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import ColorBends from "./ColorBends";
 import { useEffect, useState } from "react";
 
+const words = ["Data Skills", "AI Skills"] as const;
+
 const HeroSection = () => {
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ["Future", "Growth", "Learning"];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -44,23 +45,30 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="max-w-3xl">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 text-white">
-            <span className="block">Unlock Your</span>
+          <h1 className="text-4xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4 md:mb-6 opacity-0 animate-fade-up">
+            <span className="block bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
+              Build Your
+            </span>
             <span className="block mt-2">
-              <span className="inline-block min-w-[200px] md:min-w-[280px] border-b-4 border-white pb-2 transition-all duration-500">
-                {words[currentWord]}
+              <span className="inline-block min-w-[240px] md:min-w-[320px] relative">
+                <span 
+                  key={currentWord}
+                  className="inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-4 border-white/50 pb-2 transition-all duration-700"
+                >
+                  {words[currentWord]}
+                </span>
+                <span className="text-white/60 ml-2">.</span>
               </span>
-              <span className="text-muted-foreground">.</span>
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-white mb-4 opacity-0 animate-fade-up animation-delay-200">
+          <p className="text-base md:text-xl text-white mb-3 md:mb-4 opacity-0 animate-fade-up animation-delay-200">
             Since 2021
           </p>
           
-          <p className="text-base md:text-lg text-white max-w-xl mb-12 opacity-0 animate-fade-up animation-delay-400">
+          <p className="text-sm md:text-lg text-white/90 max-w-xl mb-8 md:mb-12 opacity-0 animate-fade-up animation-delay-400 leading-relaxed">
             KHUDA는 경희대학교 데이터분석/AI 학회입니다.<br />
-            함께 성장하고, 함께 도전하며, 새로운 가능성을 만들어갑니다.
+            <span className="text-white/70">함께 성장하고, 함께 도전하며, 새로운 가능성을 만들어갑니다.</span>
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-up animation-delay-600">

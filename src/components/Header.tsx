@@ -18,6 +18,7 @@ const Header = () => {
   const navLinks = [
     { label: "Activities", href: "#curriculum" },
     { label: "Recruiting", href: "#recruiting" },
+    { label: "FAQ", href: "#faq" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -86,10 +87,10 @@ const Header = () => {
                   {link.label}
                 </button>
               ))}
-              <Link to="/apply" className="mt-4">
-                <Button variant="hero" className="w-full rounded-md">
-                  지원하기
-                </Button>
+              <Link to="/apply" className="mt-0">
+                <button className="text-left py-3 text-muted-foreground hover:text-foreground transition-colors w-full">
+                  Apply
+                </button>
               </Link>
             </nav>
           </div>
