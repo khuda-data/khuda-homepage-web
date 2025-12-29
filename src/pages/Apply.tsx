@@ -1286,108 +1286,89 @@ const Apply = () => {
     };
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10 flex items-center justify-center px-6 py-12">
-        <div className="max-w-lg w-full">
-          <Card className="relative border border-white/10 shadow-2xl bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-            
-            <CardContent className="relative z-10 p-8 md:p-10">
-              <div className="space-y-8">
-                {/* 성공 아이콘 */}
-                <div className="flex justify-center">
-                  <div className="relative">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border-2 border-primary/30">
-                      <CheckCircle className="w-10 h-10 text-primary" />
-                    </div>
-                    <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-30"></div>
-                  </div>
+      <div className="fixed inset-0 bg-background flex flex-col">
+        <div className="flex-1 flex flex-col px-6 py-8">
+          <div className="w-full max-w-md mx-auto flex flex-col flex-1">
+            {/* 성공 아이콘 */}
+            <div className="flex justify-center mb-6 mt-8">
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/30">
+                  <CheckCircle className="w-8 h-8 text-primary" />
                 </div>
+              </div>
+            </div>
 
-                {/* 제목 */}
-                <div className="text-center space-y-3">
-                  <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
-                    지원서가 정상적으로 제출되었습니다
-                  </h1>
-                  <div className="h-1 w-16 bg-primary/40 mx-auto rounded-full"></div>
+            {/* 제목 */}
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-semibold text-foreground">
+                지원서가 정상적으로 제출되었습니다
+              </h1>
+            </div>
+
+            {/* 지원서 정보 카드 */}
+            <div className="bg-secondary/30 rounded-2xl p-6 space-y-4 border border-border/50 mb-6">
+              {submittedApplicationId && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">지원서 번호</span>
+                  <span className="text-base font-semibold text-foreground font-mono">
+                    #{submittedApplicationId}
+                  </span>
                 </div>
+              )}
+              {submittedAt && (
+                <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                  <span className="text-sm text-muted-foreground">제출 일시</span>
+                  <span className="text-sm font-medium text-foreground">
+                    {formatDate(submittedAt)}
+                  </span>
+                </div>
+              )}
+            </div>
 
-                {/* 지원서 정보 카드 */}
-                <div className="space-y-4">
-                  <div className="p-5 rounded-2xl bg-gradient-to-br from-secondary/20 to-secondary/10 border border-border/40">
-                    <div className="space-y-3">
-                      {submittedApplicationId && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-muted-foreground">지원서 번호</span>
-                          <span className="text-base font-semibold text-foreground font-mono">
-                            #{submittedApplicationId}
-                          </span>
-                        </div>
-                      )}
-                      {submittedAt && (
-                        <div className="flex items-center justify-between pt-3 border-t border-border/30">
-                          <span className="text-sm font-medium text-muted-foreground">제출 일시</span>
-                          <span className="text-sm text-foreground">
-                            {formatDate(submittedAt)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 안내 메시지 */}
-                  <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
-                    <div className="flex items-start gap-3">
-                      <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1 space-y-2">
-                        <p className="text-sm font-semibold text-foreground">
-                          결과 확인 안내
-                        </p>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          서류 심사 결과는 <span className="font-semibold text-foreground">웹사이트에서 확인</span>하실 수 있습니다. 
-                          발표 일정에 맞춰 KHUDA 홈페이지를 방문해주시기 바랍니다.
-                        </p>
-                        <div className="pt-2 mt-3 border-t border-blue-500/20">
-                          <p className="text-xs text-muted-foreground">
-                            발표 일정: {RECRUITMENT_SCHEDULE.announcement.full}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 다음 단계 안내 */}
-                  <div className="p-4 rounded-xl bg-secondary/20 border border-border/30">
-                    <p className="text-xs text-muted-foreground text-center leading-relaxed">
-                      지원해주셔서 감사합니다. 심사 결과를 기다려주시기 바랍니다.
+            {/* 안내 메시지 */}
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5 mb-auto">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 space-y-2">
+                  <p className="text-sm font-semibold text-foreground">
+                    결과 확인 안내
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    서류 심사 결과는 <span className="font-semibold text-foreground">웹사이트에서 확인</span>하실 수 있습니다. 
+                    발표 일정에 맞춰 KHUDA 홈페이지를 방문해주시기 바랍니다.
+                  </p>
+                  <div className="pt-2 mt-3 border-t border-blue-500/20">
+                    <p className="text-xs text-muted-foreground">
+                      발표 일정: {RECRUITMENT_SCHEDULE.announcement.full}
                     </p>
                   </div>
                 </div>
-
-                {/* 버튼 */}
-                <div className="pt-2 space-y-3">
-                  <Link to="/">
-                    <Button 
-                      variant="default" 
-                      size="lg"
-                      className="w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      메인으로 돌아가기
-                    </Button>
-                  </Link>
-                  <Link to="/">
-                    <Button 
-                      variant="outline" 
-                      size="lg"
-                      className="w-full h-12 text-sm font-medium rounded-xl border-border/50 hover:border-primary/50 transition-all duration-200"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      홈페이지에서 결과 확인하기
-                    </Button>
-                  </Link>
-                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* 버튼 - 하단 고정 */}
+            <div className="space-y-3 mt-8 pb-4">
+              <Link to="/">
+                <Button 
+                  variant="hero" 
+                  size="lg"
+                  className="w-full h-14 text-base font-semibold rounded-xl"
+                >
+                  메인으로 돌아가기
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="w-full h-12 text-base font-medium rounded-xl"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  홈페이지에서 결과 확인하기
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
