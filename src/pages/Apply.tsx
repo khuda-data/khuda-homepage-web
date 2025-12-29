@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle, ExternalLink, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   copyToClipboard,
@@ -1204,100 +1204,72 @@ const Apply = () => {
     const membershipType = isApplicationType("yb") ? "YB" : "OB";
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10 flex items-center justify-center px-6 py-12">
-        <div className="max-w-lg w-full">
-          <Card className="relative border border-white/10 shadow-2xl bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-            
-            <CardContent className="relative z-10 p-8 md:p-10">
-              <div className="space-y-8">
-                {/* 아이콘 */}
-                <div className="flex justify-center">
-                  <div className="relative">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500/20 to-orange-500/10 flex items-center justify-center border-2 border-orange-500/30">
-                      <Info className="w-10 h-10 text-orange-500" />
-                    </div>
-                    <div className="absolute inset-0 rounded-full bg-orange-500/20 animate-ping opacity-30"></div>
-                  </div>
+      <div className="fixed inset-0 bg-background flex flex-col">
+        <div className="flex-1 flex flex-col px-6 py-8">
+          <div className="w-full max-w-md mx-auto flex flex-col flex-1">
+            {/* 제목 */}
+            <div className="text-center mb-8 mt-4">
+              <h1 className="text-2xl font-semibold text-foreground">
+                입금 확인
+              </h1>
+            </div>
+
+            {/* 학회비 정보 */}
+            <div className="bg-secondary/30 rounded-2xl p-6 space-y-4 border border-border/50 mb-6">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">지원 유형</span>
+                <Badge variant="default" className="text-xs">
+                  {membershipType}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t border-border/30">
+                <span className="text-base font-medium text-foreground">학회비</span>
+                <span className="text-2xl font-bold text-foreground">
+                  {membershipFee}
+                </span>
+              </div>
+            </div>
+
+            {/* 경고 메시지 - 토스 스타일 */}
+            <div className="bg-red-50 dark:bg-red-950/20 border-2 border-red-200 dark:border-red-900/50 rounded-2xl p-5 mb-auto">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
-
-                {/* 제목 */}
-                <div className="text-center space-y-3">
-                  <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
-                    지원 전에 잠깐!<br />
-                    입금 했니?
-                  </h1>
-                  <div className="h-1 w-16 bg-orange-500/40 mx-auto rounded-full"></div>
-                </div>
-
-                {/* 학회비 안내 카드 */}
-                <div className="space-y-4">
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-muted-foreground">지원 유형</span>
-                        <Badge variant="default" className="text-xs px-2 py-1">
-                          {membershipType}
-                        </Badge>
-                      </div>
-                      <div className="pt-3 border-t border-orange-500/20">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-muted-foreground">학회비</span>
-                          <span className="text-2xl font-bold text-foreground">
-                            {membershipFee}
-                          </span>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          {membershipType === "YB" 
-                            ? "YB 학회비는 합격자 발표 시 안내드립니다."
-                            : "OB 학회비는 합격자 발표 시 안내드립니다."}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 안내 메시지 */}
-                  <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
-                    <div className="flex items-start gap-3">
-                      <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1 space-y-2">
-                        <p className="text-sm font-semibold text-foreground">
-                          입금 확인 안내
-                        </p>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          학회비 입금 여부를 확인한 후 지원서를 제출해주세요. 
-                          입금하지 않으신 경우 합격 후 입금하시면 됩니다.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 버튼 */}
-                <div className="pt-2 space-y-3">
-                  <Button
-                    onClick={handleFinalSubmit}
-                    variant="hero"
-                    size="lg"
-                    className="w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "제출 중..." : "입금했어요, 제출하기"}
-                  </Button>
-                  <Button
-                    onClick={() => setShowPaymentCheck(false)}
-                    variant="outline"
-                    size="lg"
-                    className="w-full h-12 text-sm font-medium rounded-xl border-border/50 hover:border-primary/50 transition-all duration-200"
-                    disabled={isSubmitting}
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    뒤로가기
-                  </Button>
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm font-semibold text-red-900 dark:text-red-100">
+                    입금하지 않으면 제출이 취소됩니다
+                  </p>
+                  <p className="text-xs text-red-700 dark:text-red-300 leading-relaxed">
+                    학회비 입금을 완료하지 않으시면 지원서 제출이 취소될 수 있습니다.
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* 버튼 - 하단 고정 */}
+            <div className="space-y-3 mt-8 pb-4">
+              <Button
+                onClick={handleFinalSubmit}
+                variant="hero"
+                size="lg"
+                className="w-full h-14 text-base font-semibold rounded-xl"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "제출 중..." : "입금 완료, 제출하기"}
+              </Button>
+              <Button
+                onClick={() => setShowPaymentCheck(false)}
+                variant="ghost"
+                size="lg"
+                className="w-full h-12 text-base font-medium text-muted-foreground hover:text-foreground"
+                disabled={isSubmitting}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                뒤로가기
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     );
