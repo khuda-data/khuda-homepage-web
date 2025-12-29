@@ -331,8 +331,8 @@ export const RECRUITMENT_INFO = {
   targetDetails: "전공 무관, 데이터분석/AI에 관심 있는 모든 분",
   trackCapacity: 8,
   totalCapacity: 50,
-  trackCapacityText: "트랙별 8명",
-  totalCapacityText: "총 50명 내외",
+  trackCapacityText: "트랙별 6~8명",
+  totalCapacityText: "총 40명 내외",
   generation: "9기",
   sectionTitle: "모집 안내",
   sectionSubtitle: (generation: string) => `KHUDA와 함께 성장할 ${generation} 멤버를 모집합니다.`,
@@ -386,9 +386,10 @@ export const RECRUITMENT_SCHEDULE = {
     ],
   },
   final: {
-    date: "2026년 1월 12일 (월)",
+    date: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
     short: "1.12",
-    full: "2026년 1월 12일 (월)",
+    full: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
+    ot: "1월 15일 OT 진행",
   },
 };
 
@@ -418,7 +419,7 @@ export const RECRUITMENT_STYLES = {
       desktop: "grid md:grid-cols-3 gap-4 md:gap-6 mb-16",
     },
     stepCard: {
-      base: "rounded-3xl border transition-all duration-300 shadow-sm min-h-[140px] flex flex-col relative overflow-hidden",
+      base: "rounded-3xl border transition-all duration-300 shadow-sm h-[220px] flex flex-col relative overflow-hidden",
       active: "bg-black/70 backdrop-blur-2xl border-primary/50 shadow-lg shadow-primary/20 hover:border-white/20",
       inactive: "bg-black/70 backdrop-blur-2xl border-white/10 hover:border-white/20",
       padding: {
@@ -804,24 +805,24 @@ export const CURRICULUM_STYLES = {
 
 export const FAQ_DATA: FAQ[] = [
   {
-    question: "비전공자도 지원 가능한가요?",
-    answer: "미정",
+    question: "비전공자도 지원이 가능한가요?",
+    answer: "네, 가능합니다. 데이터 분석 및 인공지능 역량은 이제 모든 직무에서 필수적인 소양으로 자리 잡고 있습니다. 전공에 관계없이 해당 분야의 전문성을 기르고자 하는 열정을 가진 분이라면 누구든 환영합니다.",
   },
   {
-    question: "활동 기간과 시간은 어떻게 되나요?",
-    answer: "미정",
+    question: "활동 기간 및 시간은 어떻게 되나요?",
+    answer: "2026년 1월 15일 최종 선발 시점부터 2026학년도 1학기 정기학술제 종료 시까지 약 6개월간 활동합니다. 수료 이후에는 KHUDA OB로서 지속적인 네트워크 참여 및 활동이 가능합니다.",
   },
   {
-    question: "트랙은 어떻게 선택하나요?",
-    answer: "미정",
+    question: "트랙 배정은 어떤 방식으로 이루어지나요?",
+    answer: "방학 기간 내 학습한 역량을 바탕으로 본인의 희망 트랙을 우선적으로 반영하여 배정합니다. 다만, 특정 트랙에 지원 인원이 집중될 경우 부득이하게 지망 순위에 따라 조정될 수 있음을 양해 부탁드립니다.",
   },
   {
-    question: "활동비가 있나요?",
-    answer: "미정",
+    question: "활동비는 얼마인가요?",
+    answer: "9기 YB는 45,000원, 9기 OB는 5,000원입니다. 납부하신 활동비는 동아리 운영, 행사 기획 및 회원분들께 제공되는 교재비 등으로 투명하게 사용될 예정입니다.",
   },
   {
-    question: "다른 동아리와 병행 가능한가요?",
-    answer: "미정",
+    question: "타 동아리와 병행이 가능한가요?",
+    answer: "가능합니다. 다만, KHUDA의 커리큘럼은 심도 있는 학습과 다양한 실전 경험을 포함하고 있어 학습량이 다소 많을 수 있습니다. 따라서 타 학술 동아리와의 병행은 신중히 결정하시길 권장해 드립니다.",
   },
 ];
 
@@ -998,14 +999,16 @@ export const APPLICATION_FORM_CONFIG = {
       title: "필수 항목을 작성해주세요",
       description: (count: number) => `${count}개의 필수 질문에 답변해주세요.`,
     },
-    obRequirement: {
-      title: "스터디 개설 또는 심화 트랙을 선택해주세요",
-      description: "트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 합니다.",
-    },
+  },
+  
+  // OB 면접 안내 메시지
+  obInterviewNotice: {
+    title: "OB 면접 안내",
+    description: "OB 지원자는 면접 없이 서류 심사만 진행됩니다.",
   },
   
   // 페이지 제목 및 설명
-  pageTitle: "함께 성장하며,\n한계를 뛰어넘는 경험을 만들어가요 🏃‍♂️",
+  pageTitle: "함께 성장하며\n한계를 뛰어넘는 경험을 만들어가요",
   pageDescription: "KHUDA는 데이터 분석과 인공지능(AI)에 열정을 가진 경희인이 함께 모여 체계적인 학습과 실무 프로젝트 경험을 통해 성장하는 학회입니다.",
   
   // 섹션 제목

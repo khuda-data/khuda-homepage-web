@@ -1,8 +1,8 @@
-import { CheckCircle, Calendar, Users, UserPlus } from "lucide-react";
+import { CheckCircle, Calendar, Users, UserPlus, Info } from "lucide-react";
 import { getStepStatus, type ProcessStep } from "@/lib/date-utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
-import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, SECTION_STYLES, RECRUITMENT_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, SECTION_STYLES, RECRUITMENT_STYLES, SCROLL_ANIMATION_CONFIG, APPLICATION_FORM_CONFIG } from "@/lib/constants";
 
 // 모집 정보 배열 (상수)
 const RECRUITMENT_INFO_ITEMS = [
@@ -127,6 +127,30 @@ const RecruitingSection = () => {
     </div>
   );
 
+  // 안내 메시지 렌더링 컴포넌트 (공통)
+  const NoticeMessage = ({ 
+    message, 
+    isActive, 
+    isMobile = false 
+  }: { 
+    message: string; 
+    isActive: boolean; 
+    isMobile?: boolean;
+  }) => (
+    <div className="mt-3 pt-3 border-t border-border/30">
+      <div className="flex items-start gap-2">
+        <Info className="w-3.5 h-3.5 text-primary/70 mt-0.5 shrink-0" />
+        <p className={cn(
+          isMobile ? "text-xs" : "text-xs md:text-sm",
+          "leading-relaxed",
+          isActive ? RECRUITMENT_STYLES.process.content.fullDate.active : RECRUITMENT_STYLES.process.content.fullDate.inactive
+        )}>
+          {message}
+        </p>
+      </div>
+    </div>
+  );
+
   // 스텝 콘텐츠 렌더링 컴포넌트 (중복 제거)
   const StepContent = ({ 
     step, 
@@ -136,27 +160,44 @@ const RecruitingSection = () => {
     step: ProcessStep; 
     isActive: boolean; 
     isMobile?: boolean;
-  }) => (
-    <>
-      {isActive && <GradientBackground />}
-      <div className={isMobile ? RECRUITMENT_STYLES.layout.mobileProcess.contentWrapper : RECRUITMENT_STYLES.layout.desktopProcess.contentWrapper}>
-        <div className={RECRUITMENT_STYLES.process.content.header.container}>
-          <h4 className={cn(
-            isMobile ? RECRUITMENT_STYLES.process.content.mobile.title : RECRUITMENT_STYLES.process.content.header.title.base,
-            isActive ? RECRUITMENT_STYLES.process.content.header.title.active : RECRUITMENT_STYLES.process.content.header.title.inactive
-          )}>{step.title}</h4>
+  }) => {
+    // 안내 메시지 결정
+    let noticeMessage: string | null = null;
+    if (step.step === 3) {
+      noticeMessage = APPLICATION_FORM_CONFIG.obInterviewNotice.description;
+    } else if (step.step === 4) {
+      noticeMessage = RECRUITMENT_SCHEDULE.final.ot;
+    }
+
+    return (
+      <>
+        {isActive && <GradientBackground />}
+        <div className={isMobile ? RECRUITMENT_STYLES.layout.mobileProcess.contentWrapper : RECRUITMENT_STYLES.layout.desktopProcess.contentWrapper}>
+          <div className={RECRUITMENT_STYLES.process.content.header.container}>
+            <h4 className={cn(
+              isMobile ? RECRUITMENT_STYLES.process.content.mobile.title : RECRUITMENT_STYLES.process.content.header.title.base,
+              isActive ? RECRUITMENT_STYLES.process.content.header.title.active : RECRUITMENT_STYLES.process.content.header.title.inactive
+            )}>{step.title}</h4>
+            <p className={cn(
+              RECRUITMENT_STYLES.process.content.header.date.base,
+              isActive ? RECRUITMENT_STYLES.process.content.header.date.active : RECRUITMENT_STYLES.process.content.header.date.inactive
+            )}>{step.date}</p>
+          </div>
           <p className={cn(
-            RECRUITMENT_STYLES.process.content.header.date.base,
-            isActive ? RECRUITMENT_STYLES.process.content.header.date.active : RECRUITMENT_STYLES.process.content.header.date.inactive
-          )}>{step.date}</p>
+            isMobile ? RECRUITMENT_STYLES.process.content.mobile.fullDate : RECRUITMENT_STYLES.process.content.fullDate.base,
+            isActive ? RECRUITMENT_STYLES.process.content.fullDate.active : RECRUITMENT_STYLES.process.content.fullDate.inactive
+          )}>{step.fullDate}</p>
+          {noticeMessage && (
+            <NoticeMessage 
+              message={noticeMessage} 
+              isActive={isActive} 
+              isMobile={isMobile} 
+            />
+          )}
         </div>
-        <p className={cn(
-          isMobile ? RECRUITMENT_STYLES.process.content.mobile.fullDate : RECRUITMENT_STYLES.process.content.fullDate.base,
-          isActive ? RECRUITMENT_STYLES.process.content.fullDate.active : RECRUITMENT_STYLES.process.content.fullDate.inactive
-        )}>{step.fullDate}</p>
-      </div>
-    </>
-  );
+      </>
+    );
+  };
 
   return (
     <section 

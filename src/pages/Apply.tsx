@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { 
   copyToClipboard,
@@ -34,6 +34,9 @@ const Apply = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentCheck, setShowPaymentCheck] = useState(false);
+  const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
+  const [submittedAt, setSubmittedAt] = useState<Date | null>(null);
   const [commonQuestions, setCommonQuestions] = useState<Question[]>([]);
   const [typeQuestions, setTypeQuestions] = useState<Question[]>([]);
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
@@ -199,26 +202,11 @@ const Apply = () => {
       return;
     }
 
-    if (isApplicationType("ob")) {
-      const studyIntentionQuestionId = findQuestionId(["스터디 개설"]);
-      const trackInterestQuestionId = findQuestionId(["트랙"]);
-      
-      const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
-      const trackInterestValue = trackInterestQuestionId ? getAnswer(trackInterestQuestionId) : "";
-      
-      const hasStudyIntention = studyIntentionValue === "yes";
-      const hasTrackInterest = trackInterestValue && trackInterestValue !== "none" && trackInterestValue !== "";
-      
-      if (!hasStudyIntention && !hasTrackInterest) {
-        toast({
-          title: APPLICATION_FORM_CONFIG.errorMessages.obRequirement.title,
-          description: APPLICATION_FORM_CONFIG.errorMessages.obRequirement.description,
-          variant: "destructive",
-        });
-        return;
-      }
-    }
+    // 모든 검증 통과 시 입금 확인 페이지 표시
+    setShowPaymentCheck(true);
+  };
 
+  const handleFinalSubmit = async () => {
     setIsSubmitting(true);
     
     try {
@@ -259,6 +247,9 @@ const Apply = () => {
       const response = await submitApplication(formData.applicationType as "yb" | "ob", filteredAnswers);
       
       setIsSubmitting(false);
+      setShowPaymentCheck(false);
+      setSubmittedApplicationId(response.application_id.toString());
+      setSubmittedAt(new Date());
       setIsSubmitted(true);
       
       toast({
@@ -366,24 +357,24 @@ const Apply = () => {
     const isStudyDisabled = isApplicationType("ob") && studyIntentionValue === "no" && 
                             question.question.includes("스터디") && question.question.includes("세부");
     
-    // 면접 날짜 질문 - 커스텀 UI로 렌더링
+    // 면접 날짜 질문 - 커스텀 UI로 렌더링 (YB만 표시)
     const interviewDatesQuestion = findInterviewQuestion(true);
     if (isApplicationType("yb") && interviewDatesQuestion && question.id === interviewDatesQuestion.id) {
-      return (
-        <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-          <CardHeader className="relative z-10">
-            <CardTitle className="text-xl flex items-center gap-3">
-              <Clock className="w-5 h-5 text-primary" />
-              {question.question}
-              {question.required && (
-                <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
-              )}
-            </CardTitle>
-            <CardDescription>
-              면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
-            </CardDescription>
-          </CardHeader>
+        return (
+          <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+            <CardHeader className="relative z-10">
+              <CardTitle className="text-xl flex items-center gap-3">
+                <Clock className="w-5 h-5 text-primary" />
+                {question.question}
+                {question.required && (
+                  <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">{APPLICATION_FORM_CONFIG.commonTexts.required}</Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.
+              </CardDescription>
+            </CardHeader>
           <CardContent className="space-y-6 relative z-10">
             {!interviewSchedule ? (
               <div className="p-6 rounded-xl bg-secondary/20 border border-border/40 text-center">
@@ -543,7 +534,8 @@ const Apply = () => {
 
     // 면접 시간 질문 - 숨김 처리 (날짜 질문에서 함께 처리)
     const interviewTimesQuestion = findInterviewQuestion(false);
-    if (isApplicationType("yb") && interviewTimesQuestion && question.id === interviewTimesQuestion.id) {
+    if (interviewTimesQuestion && question.id === interviewTimesQuestion.id) {
+      // YB는 날짜 질문에서 함께 처리되므로 숨김, OB는 면접이 없으므로 숨김
       return null;
     }
 
@@ -942,57 +934,13 @@ const Apply = () => {
 
     const questionIcon = getIcon(question.question);
     
-    const isOBStudyOrTrack = isApplicationType("ob") && 
-      (question.question.includes("스터디 개설") || question.question.includes("트랙"));
-    
-    const getOBRequirementStatus = () => {
-      if (!isOBStudyOrTrack) return null;
-      
-      const studyIntentionQuestionId = findQuestionId(["스터디 개설"]);
-      const trackInterestQuestionId = findQuestionId(["트랙"]);
-      
-      const studyIntentionValue = studyIntentionQuestionId ? getAnswer(studyIntentionQuestionId) : "";
-      const trackInterestValue = trackInterestQuestionId ? getAnswer(trackInterestQuestionId) : "";
-      
-      const hasStudyIntention = studyIntentionValue === "yes";
-      const hasTrackInterest = trackInterestValue && trackInterestValue !== "none" && trackInterestValue !== "";
-      
-      const isFulfilled = hasStudyIntention || hasTrackInterest;
-      
-      if (question.question.includes("스터디 개설")) {
-        return {
-          isFulfilled: hasStudyIntention || hasTrackInterest,
-          message: hasStudyIntention 
-            ? "스터디 개설을 선택하셨습니다" 
-            : hasTrackInterest
-            ? "심화 트랙을 선택하셔서 조건을 충족했습니다"
-            : "스터디 개설 또는 심화 트랙 중 하나는 선택해주세요"
-        };
-      }
-      
-      if (question.question.includes("트랙")) {
-        return {
-          isFulfilled: hasStudyIntention || hasTrackInterest,
-          message: hasTrackInterest
-            ? "심화 트랙을 선택하셨습니다"
-            : hasStudyIntention
-            ? "스터디 개설을 선택하셔서 조건을 충족했습니다"
-            : "스터디 개설 또는 심화 트랙 중 하나는 선택해주세요"
-        };
-      }
-      
-      return null;
-    };
-    
-    const requirementStatus = getOBRequirementStatus();
-    
     return (
       <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
         <CardHeader className="relative z-10">
           <CardTitle className="text-xl flex items-center gap-3">
             {questionIcon}
-            {question.question}
+            {question.question.includes("일정") && !question.question.includes("면접") ? "2026년도 1학기 활동 일정을 작성해주세요." : question.question}
             {question.required && (
               <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
                 {APPLICATION_FORM_CONFIG.commonTexts.required}
@@ -1028,42 +976,13 @@ const Apply = () => {
             </CardDescription>
           ) : question.question.includes("기타 활동") || question.question.includes("활동") ? (
             <CardDescription>데이터 분석과 관련이 없더라도 괜찮습니다.</CardDescription>
-          ) : question.question.includes("일정") ? (
+          ) : question.question.includes("일정") && !question.question.includes("면접") ? (
             <CardDescription>
-              타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
+              여기에 타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
             </CardDescription>
           ) : question.question.includes("자격증") || question.question.includes("수상") ? (
             <CardDescription>해당 사항이 없는 경우 작성하지 않으셔도 됩니다.</CardDescription>
           ) : null}
-          
-          {/* OB 스터디/트랙 필수 선택 안내 */}
-          {isOBStudyOrTrack && requirementStatus && (
-            <div className="mt-3 animate-in fade-in slide-in-from-top-1 duration-300">
-              <div className={`flex items-start gap-2.5 p-3 rounded-xl transition-all duration-200 ${
-                requirementStatus.isFulfilled
-                  ? "bg-blue-50/10 border border-blue-500/30"
-                  : "bg-orange-50/10 border border-orange-500/30"
-              }`}>
-                <div className={`mt-0.5 flex-shrink-0 ${
-                  requirementStatus.isFulfilled ? "text-blue-400" : "text-orange-400"
-                }`}>
-                  <Info className="w-4 h-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm font-medium leading-relaxed ${
-                    requirementStatus.isFulfilled ? "text-blue-100" : "text-orange-100"
-                  }`}>
-                    {requirementStatus.message}
-                  </p>
-                  {!requirementStatus.isFulfilled && (
-                    <p className="text-xs text-orange-200/80 mt-1 leading-relaxed">
-                      트랙 참여와 스터디 개설 중 최소한 하나는 선택해주셔야 지원서를 제출할 수 있습니다.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
         </CardHeader>
         <CardContent className="space-y-4 relative z-10">
           {question.question.includes("스터디 개설") && isApplicationType("ob") ? (
@@ -1279,48 +1198,224 @@ const Apply = () => {
     );
   };
 
-  if (isSubmitted) {
+  // 입금 확인 페이지
+  if (showPaymentCheck) {
+    const membershipFee = isApplicationType("yb") ? "45,000원" : "5,000원";
+    const membershipType = isApplicationType("yb") ? "YB" : "OB";
+
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-6 py-12">
-        <div className="max-w-md w-full space-y-8 text-center">
-          <div className="space-y-6 animate-fade-up">
-            <div className="flex justify-center">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                  <CheckCircle className="w-12 h-12 text-primary" />
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10 flex items-center justify-center px-6 py-12">
+        <div className="max-w-lg w-full">
+          <Card className="relative border border-white/10 shadow-2xl bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+            
+            <CardContent className="relative z-10 p-8 md:p-10">
+              <div className="space-y-8">
+                {/* 아이콘 */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-orange-500/20 to-orange-500/10 flex items-center justify-center border-2 border-orange-500/30">
+                      <Info className="w-10 h-10 text-orange-500" />
+                    </div>
+                    <div className="absolute inset-0 rounded-full bg-orange-500/20 animate-ping opacity-30"></div>
+                  </div>
                 </div>
-                <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-20"></div>
+
+                {/* 제목 */}
+                <div className="text-center space-y-3">
+                  <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                    지원 전에 잠깐!<br />
+                    입금 했니?
+                  </h1>
+                  <div className="h-1 w-16 bg-orange-500/40 mx-auto rounded-full"></div>
+                </div>
+
+                {/* 학회비 안내 카드 */}
+                <div className="space-y-4">
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-muted-foreground">지원 유형</span>
+                        <Badge variant="default" className="text-xs px-2 py-1">
+                          {membershipType}
+                        </Badge>
+                      </div>
+                      <div className="pt-3 border-t border-orange-500/20">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-muted-foreground">학회비</span>
+                          <span className="text-2xl font-bold text-foreground">
+                            {membershipFee}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {membershipType === "YB" 
+                            ? "YB 학회비는 합격자 발표 시 안내드립니다."
+                            : "OB 학회비는 합격자 발표 시 안내드립니다."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 안내 메시지 */}
+                  <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1 space-y-2">
+                        <p className="text-sm font-semibold text-foreground">
+                          입금 확인 안내
+                        </p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          학회비 입금 여부를 확인한 후 지원서를 제출해주세요. 
+                          입금하지 않으신 경우 합격 후 입금하시면 됩니다.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                <div className="pt-2 space-y-3">
+                  <Button
+                    onClick={handleFinalSubmit}
+                    variant="hero"
+                    size="lg"
+                    className="w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "제출 중..." : "입금했어요, 제출하기"}
+                  </Button>
+                  <Button
+                    onClick={() => setShowPaymentCheck(false)}
+                    variant="outline"
+                    size="lg"
+                    className="w-full h-12 text-sm font-medium rounded-xl border-border/50 hover:border-primary/50 transition-all duration-200"
+                    disabled={isSubmitting}
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    뒤로가기
+                  </Button>
+                </div>
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (isSubmitted) {
+    const formatDate = (date: Date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}.${month}.${day} ${hours}:${minutes}`;
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10 flex items-center justify-center px-6 py-12">
+        <div className="max-w-lg w-full">
+          <Card className="relative border border-white/10 shadow-2xl bg-black/70 backdrop-blur-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
             
-            <div className="space-y-3">
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-                {APPLICATION_FORM_CONFIG.submissionSuccess.title}
-              </h1>
-              <div className="h-1 w-12 bg-primary/30 mx-auto rounded-full"></div>
-            </div>
-            
-            <div className="space-y-4 pt-4">
-              <p className="text-lg text-foreground leading-relaxed">
-                {APPLICATION_FORM_CONFIG.submissionSuccess.subtitle}
-              </p>
-              <p className="text-base text-muted-foreground leading-relaxed">
-                {APPLICATION_FORM_CONFIG.submissionSuccess.description}
-              </p>
-            </div>
-          </div>
-          
-          <div className="pt-4 animate-fade-up animation-delay-200">
-            <Link to="/">
-              <Button 
-                variant="default" 
-                size="lg"
-                className="w-full h-14 text-base font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
-              >
-                {APPLICATION_FORM_CONFIG.submissionSuccess.backToHome}
-              </Button>
-            </Link>
-          </div>
+            <CardContent className="relative z-10 p-8 md:p-10">
+              <div className="space-y-8">
+                {/* 성공 아이콘 */}
+                <div className="flex justify-center">
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center border-2 border-primary/30">
+                      <CheckCircle className="w-10 h-10 text-primary" />
+                    </div>
+                    <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-30"></div>
+                  </div>
+                </div>
+
+                {/* 제목 */}
+                <div className="text-center space-y-3">
+                  <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                    지원서가 정상적으로 제출되었습니다
+                  </h1>
+                  <div className="h-1 w-16 bg-primary/40 mx-auto rounded-full"></div>
+                </div>
+
+                {/* 지원서 정보 카드 */}
+                <div className="space-y-4">
+                  <div className="p-5 rounded-2xl bg-gradient-to-br from-secondary/20 to-secondary/10 border border-border/40">
+                    <div className="space-y-3">
+                      {submittedApplicationId && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-muted-foreground">지원서 번호</span>
+                          <span className="text-base font-semibold text-foreground font-mono">
+                            #{submittedApplicationId}
+                          </span>
+                        </div>
+                      )}
+                      {submittedAt && (
+                        <div className="flex items-center justify-between pt-3 border-t border-border/30">
+                          <span className="text-sm font-medium text-muted-foreground">제출 일시</span>
+                          <span className="text-sm text-foreground">
+                            {formatDate(submittedAt)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* 안내 메시지 */}
+                  <div className="p-5 rounded-2xl bg-blue-500/5 border border-blue-500/20">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1 space-y-2">
+                        <p className="text-sm font-semibold text-foreground">
+                          결과 확인 안내
+                        </p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          서류 심사 결과는 <span className="font-semibold text-foreground">웹사이트에서 확인</span>하실 수 있습니다. 
+                          발표 일정에 맞춰 KHUDA 홈페이지를 방문해주시기 바랍니다.
+                        </p>
+                        <div className="pt-2 mt-3 border-t border-blue-500/20">
+                          <p className="text-xs text-muted-foreground">
+                            발표 일정: {RECRUITMENT_SCHEDULE.announcement.full}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 다음 단계 안내 */}
+                  <div className="p-4 rounded-xl bg-secondary/20 border border-border/30">
+                    <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                      지원해주셔서 감사합니다. 심사 결과를 기다려주시기 바랍니다.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                <div className="pt-2 space-y-3">
+                  <Link to="/">
+                    <Button 
+                      variant="default" 
+                      size="lg"
+                      className="w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      메인으로 돌아가기
+                    </Button>
+                  </Link>
+                  <Link to="/">
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="w-full h-12 text-sm font-medium rounded-xl border-border/50 hover:border-primary/50 transition-all duration-200"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      홈페이지에서 결과 확인하기
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -1343,13 +1438,12 @@ const Apply = () => {
       <main className="container mx-auto px-6 md:px-12 py-12 md:py-16">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-6 mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-relaxed">
-              {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < APPLICATION_FORM_CONFIG.pageTitle.split("\n").length - 1 && <br />}
-                </span>
-              ))}
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+              <div className="space-y-3">
+                {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))}
+              </div>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               {APPLICATION_FORM_CONFIG.pageDescription}
@@ -1386,25 +1480,35 @@ const Apply = () => {
                 </div>
               </div>
               <div className="pt-4 border-t border-border/50">
-                <p className="text-sm font-semibold text-muted-foreground mb-4">모집대상</p>
+                <p className="text-sm font-semibold text-muted-foreground mb-6">모집대상</p>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-primary/5 border-2 border-primary/20 hover:border-primary/40 transition-all">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="default" className="text-xs">YB</Badge>
-                      <span className="text-sm font-semibold">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
+                  <div className="group relative p-6 rounded-2xl bg-gradient-to-br from-background to-muted/5 border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <Badge variant="default" className="text-xs font-semibold px-2 py-0.5">YB</Badge>
+                      <span className="text-base font-bold text-foreground">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       {APPLICATION_FORM_CONFIG.applicationTypes.yb.description}
                     </p>
                   </div>
-                  <div className="p-4 rounded-xl bg-primary/5 border-2 border-primary/20 hover:border-primary/40 transition-all">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="default" className="text-xs">OB</Badge>
-                      <span className="text-sm font-semibold">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
+                  <div className="group relative p-6 rounded-2xl bg-gradient-to-br from-background to-muted/5 border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <Badge variant="default" className="text-xs font-semibold px-2 py-0.5">OB</Badge>
+                      <span className="text-base font-bold text-foreground">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                       {APPLICATION_FORM_CONFIG.applicationTypes.ob.description}
                     </p>
+                    <div className="pt-4 mt-4 border-t border-border/30">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                          <Info className="w-2.5 h-2.5 text-primary" />
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          {APPLICATION_FORM_CONFIG.obInterviewNotice.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1616,6 +1720,7 @@ const Apply = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {commonQuestions
                       .filter(q => {
+                        // 개인정보 동의 질문 제외
                         if (q.question.includes("개인정보") || q.question.includes("동의")) return false;
                         return true;
                       })
@@ -1705,6 +1810,7 @@ const Apply = () => {
             
             {/* yb/ob 질문은 선택 후에만 표시 */}
             {formData.applicationType && typeQuestions
+              .filter(question => question.applicant_type !== "common")
               .map(question => renderQuestion(question))}
 
 
