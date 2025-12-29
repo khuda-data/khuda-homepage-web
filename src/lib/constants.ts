@@ -46,7 +46,7 @@ export interface FAQ {
 // ============================================================================
 
 export const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_BASE_URL || "https://api.khuda.gaeng02.com")
+  ? (import.meta.env.VITE_API_BASE_URL || "https://api-khuda.gaeng02.com")
   : (import.meta.env.VITE_API_BASE_URL || "");
 
 // ============================================================================
