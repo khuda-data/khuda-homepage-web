@@ -34,7 +34,6 @@ const Apply = () => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPaymentCheck, setShowPaymentCheck] = useState(false);
   const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
   const [submittedAt, setSubmittedAt] = useState<Date | null>(null);
   const [commonQuestions, setCommonQuestions] = useState<Question[]>([]);
@@ -202,8 +201,8 @@ const Apply = () => {
       return;
     }
 
-    // 모든 검증 통과 시 입금 확인 페이지 표시
-    setShowPaymentCheck(true);
+    // 모든 검증 통과 시 바로 제출
+    handleFinalSubmit();
   };
 
   const handleFinalSubmit = async () => {
@@ -247,7 +246,6 @@ const Apply = () => {
       const response = await submitApplication(formData.applicationType as "yb" | "ob", filteredAnswers);
       
       setIsSubmitting(false);
-      setShowPaymentCheck(false);
       setSubmittedApplicationId(response.application_id.toString());
       setSubmittedAt(new Date());
       setIsSubmitted(true);
@@ -1198,173 +1196,48 @@ const Apply = () => {
     );
   };
 
-  // 입금 확인 페이지
-  if (showPaymentCheck) {
-    const membershipFee = isApplicationType("yb") ? "45,000원" : "5,000원";
-    const membershipType = isApplicationType("yb") ? "YB" : "OB";
-
+  if (isSubmitted) {
     return (
       <div className="fixed inset-0 bg-background flex flex-col">
-        <div className="flex-1 flex flex-col px-6 py-8">
-          <div className="w-full max-w-md mx-auto flex flex-col flex-1">
-            {/* 제목 */}
-            <div className="text-center mb-8 mt-4">
-              <h1 className="text-2xl font-semibold text-foreground">
-                입금 확인
-              </h1>
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+          <div className="w-full max-w-sm mx-auto flex flex-col items-center">
+            {/* 성공 아이콘 */}
+            <div className="mb-8 animate-[fade-up_0.4s_ease-out]">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-primary" strokeWidth={2.5} />
+              </div>
             </div>
 
-            {/* 학회비 정보 */}
-            <div className="bg-secondary/30 rounded-2xl p-6 space-y-4 border border-border/50 mb-6">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">지원 유형</span>
-                <Badge variant="default" className="text-xs">
-                  {membershipType}
-                </Badge>
-              </div>
-              <div className="flex items-center justify-between pt-4 border-t border-border/30">
-                <span className="text-base font-medium text-foreground">학회비</span>
-                <span className="text-2xl font-bold text-foreground">
-                  {membershipFee}
+            {/* 제목 */}
+            <div className="text-center mb-12 animate-[fade-up_0.4s_ease-out_0.1s_both]">
+              <h1 className="text-[28px] font-semibold text-foreground leading-[1.3] mb-3 tracking-[-0.02em]">
+                지원서가 제출되었습니다
+              </h1>
+              <p className="text-[15px] text-muted-foreground leading-relaxed">
+                결과는 발표 일정에 맞춰<br />
+                홈페이지에서 확인하실 수 있습니다
+              </p>
+            </div>
+
+            {/* 발표 일정 */}
+            <div className="w-full mb-8 animate-[fade-up_0.4s_ease-out_0.2s_both]">
+              <div className="flex flex-col items-center gap-2 py-3">
+                <span className="text-[14px] text-muted-foreground">발표 일정</span>
+                <span className="text-[14px] font-medium text-foreground text-center">
+                  {RECRUITMENT_SCHEDULE.announcement.full}
                 </span>
               </div>
             </div>
 
-            {/* 경고 메시지 - 토스 스타일 */}
-            <div className="bg-red-50 dark:bg-red-950/20 border-2 border-red-200 dark:border-red-900/50 rounded-2xl p-5 mb-auto">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-0.5">
-                  <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-semibold text-red-900 dark:text-red-100">
-                    입금하지 않으면 제출이 취소됩니다
-                  </p>
-                  <p className="text-xs text-red-700 dark:text-red-300 leading-relaxed">
-                    학회비 입금을 완료하지 않으시면 지원서 제출이 취소될 수 있습니다.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* 버튼 - 하단 고정 */}
-            <div className="space-y-3 mt-8 pb-4">
-              <Button
-                onClick={handleFinalSubmit}
-                variant="hero"
-                size="lg"
-                className="w-full h-14 text-base font-semibold rounded-xl"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "제출 중..." : "입금 완료, 제출하기"}
-              </Button>
-              <Button
-                onClick={() => setShowPaymentCheck(false)}
-                variant="ghost"
-                size="lg"
-                className="w-full h-12 text-base font-medium text-muted-foreground hover:text-foreground"
-                disabled={isSubmitting}
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                뒤로가기
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isSubmitted) {
-    const formatDate = (date: Date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      return `${year}.${month}.${day} ${hours}:${minutes}`;
-    };
-
-    return (
-      <div className="fixed inset-0 bg-background flex flex-col">
-        <div className="flex-1 flex flex-col px-6 py-8">
-          <div className="w-full max-w-md mx-auto flex flex-col flex-1">
-            {/* 성공 아이콘 */}
-            <div className="flex justify-center mb-6 mt-8">
-              <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/30">
-                  <CheckCircle className="w-8 h-8 text-primary" />
-                </div>
-              </div>
-            </div>
-
-            {/* 제목 */}
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-semibold text-foreground">
-                지원서가 정상적으로 제출되었습니다
-              </h1>
-            </div>
-
-            {/* 지원서 정보 카드 */}
-            <div className="bg-secondary/30 rounded-2xl p-6 space-y-4 border border-border/50 mb-6">
-              {submittedApplicationId && (
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">지원서 번호</span>
-                  <span className="text-base font-semibold text-foreground font-mono">
-                    #{submittedApplicationId}
-                  </span>
-                </div>
-              )}
-              {submittedAt && (
-                <div className="flex items-center justify-between pt-4 border-t border-border/30">
-                  <span className="text-sm text-muted-foreground">제출 일시</span>
-                  <span className="text-sm font-medium text-foreground">
-                    {formatDate(submittedAt)}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* 안내 메시지 */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5 mb-auto">
-              <div className="flex items-start gap-3">
-                <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 space-y-2">
-                  <p className="text-sm font-semibold text-foreground">
-                    결과 확인 안내
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    서류 심사 결과는 <span className="font-semibold text-foreground">웹사이트에서 확인</span>하실 수 있습니다. 
-                    발표 일정에 맞춰 KHUDA 홈페이지를 방문해주시기 바랍니다.
-                  </p>
-                  <div className="pt-2 mt-3 border-t border-blue-500/20">
-                    <p className="text-xs text-muted-foreground">
-                      발표 일정: {RECRUITMENT_SCHEDULE.announcement.full}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 버튼 - 하단 고정 */}
-            <div className="space-y-3 mt-8 pb-4">
-              <Link to="/">
+            <div className="w-full mt-auto pt-8 animate-[fade-up_0.4s_ease-out_0.3s_both]">
+              <Link to="/" className="block">
                 <Button 
                   variant="hero" 
-                  size="lg"
-                  className="w-full h-14 text-base font-semibold rounded-xl"
+                  size="xl"
+                  className="w-full h-14 text-[16px] font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 ease-out hover:scale-[1.01] active:scale-[0.99]"
                 >
                   메인으로 돌아가기
-                </Button>
-              </Link>
-              <Link to="/">
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="w-full h-12 text-base font-medium rounded-xl"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  홈페이지에서 결과 확인하기
                 </Button>
               </Link>
             </div>

@@ -369,9 +369,9 @@ export const RECRUITMENT_SCHEDULE = {
     deadlineWithLabel: (label: string, deadline: string) => `${label} ${deadline}`,
   },
   announcement: {
-    date: "2026년 1월 7일 (수) 18:00 이후 개별 안내",
+    date: "2026년 1월 7일 (수) 18:00",
     short: "1.7",
-    full: "2026년 1월 7일 (수) 18:00 이후 개별 안내",
+    full: "2026년 1월 7일 (수) 18:00",
   },
   interview: {
     start: "2026년 1월 9일 (금)",
