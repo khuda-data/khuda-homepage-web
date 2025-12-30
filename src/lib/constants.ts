@@ -389,7 +389,7 @@ export const RECRUITMENT_SCHEDULE = {
     date: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
     short: "1.12",
     full: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
-    ot: "1월 15일 OT 진행",
+    ot: "합격자 대상으로 1월 15일에 오리엔테이션을 진행합니다.",
   },
 };
 
@@ -402,11 +402,11 @@ export const RECRUITMENT_STYLES = {
     },
   },
   infoCard: {
-    base: "group relative text-center rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden",
+    base: "group relative text-center rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-300 overflow-hidden",
     padding: "p-8 md:p-10",
-    gradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+    gradient: "absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-primary/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
     icon: {
-      container: "inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-110",
+      container: "inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-105",
       size: "w-7 h-7",
     },
     title: "text-xl md:text-2xl font-semibold mb-3 text-foreground",
@@ -420,13 +420,14 @@ export const RECRUITMENT_STYLES = {
     },
     stepCard: {
       base: "rounded-3xl border transition-all duration-300 shadow-sm h-[220px] flex flex-col relative overflow-hidden",
-      active: "bg-black/70 backdrop-blur-2xl border-primary/50 shadow-lg shadow-primary/20 hover:border-white/20",
+      active: "bg-black/80 backdrop-blur-2xl border-primary/30 shadow-lg shadow-primary/10 hover:border-primary/40",
       inactive: "bg-black/70 backdrop-blur-2xl border-white/10 hover:border-white/20",
       padding: {
         desktop: "p-6 md:p-8",
         mobile: "p-6",
       },
-      gradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-3xl",
+      gradient: "absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 rounded-3xl opacity-0 transition-opacity duration-300",
+      gradientActive: "opacity-100",
     },
     indicator: {
       base: {
@@ -540,13 +541,13 @@ export const CURRICULUM_INFO = {
 개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 기초를 탄탄히 다지고, 팀 단위로 토이프로젝트를 진행합니다.`,
   advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구해요.
 자연어처리, 컴퓨터비전, 데이터분석 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고 실전 프로젝트까지 완성합니다.`,
-  basicTrackTitle: "기초 트랙",
+  basicTrackTitle: "기초 세션",
   basicTrackDescription: `방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
 이론과 실습을 통해 단계별로 실력을 쌓아갑니다.`,
   weeklySessionTitle: "주차별 세션 구성",
   mlSession: {
     title: "머신러닝 기초",
-    duration: "약 1시간 20분",
+    duration: "약 2시간",
     description: "머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 통해 체계적으로 학습합니다.",
     topics: ["지도학습", "비지도학습", "회귀/분류", "평가 지표", "실습 프로젝트"],
   },
@@ -995,6 +996,16 @@ export const APPLICATION_FORM_CONFIG = {
     },
   },
   
+  // 서류 접수 안내 메시지
+  applicationNotice: {
+    title: "서류 접수 안내",
+    description: "지원서는 제출 후 수정이 불가능하니 신중하게 작성해주세요.",
+  },
+  // 서류 합격자 발표 안내 메시지
+  announcementNotice: {
+    title: "서류 합격자 발표 안내",
+    description: "결과는 발표 일정에 맞춰 웹사이트에서 확인 가능합니다.",
+  },
   // OB 면접 안내 메시지
   obInterviewNotice: {
     title: "OB 면접 안내",

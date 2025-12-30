@@ -59,7 +59,7 @@ const RecruitingSection = () => {
 
   // 공통 그라데이션 배경 컴포넌트
   const GradientBackground = () => (
-    <div className={RECRUITMENT_STYLES.process.stepCard.gradient} />
+    <div className={cn(RECRUITMENT_STYLES.process.stepCard.gradient, RECRUITMENT_STYLES.process.stepCard.gradientActive)} />
   );
 
   // 스텝 카드 스타일 클래스 생성 함수
@@ -163,7 +163,11 @@ const RecruitingSection = () => {
   }) => {
     // 안내 메시지 결정
     let noticeMessage: string | null = null;
-    if (step.step === 3) {
+    if (step.step === 1) {
+      noticeMessage = APPLICATION_FORM_CONFIG.applicationNotice.description;
+    } else if (step.step === 2) {
+      noticeMessage = APPLICATION_FORM_CONFIG.announcementNotice.description;
+    } else if (step.step === 3) {
       noticeMessage = APPLICATION_FORM_CONFIG.obInterviewNotice.description;
     } else if (step.step === 4) {
       noticeMessage = RECRUITMENT_SCHEDULE.final.ot;
