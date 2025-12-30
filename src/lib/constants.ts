@@ -45,9 +45,7 @@ export interface FAQ {
 // API 설정
 // ============================================================================
 
-export const API_BASE_URL = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_BASE_URL || "https://api-khuda.gaeng02.com")
-  : (import.meta.env.VITE_API_BASE_URL || "");
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api-khuda.gaeng02.com";
 
 // ============================================================================
 // 라우트 경로
