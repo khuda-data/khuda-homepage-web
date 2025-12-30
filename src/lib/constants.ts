@@ -621,13 +621,13 @@ export const CURRICULUM_INFO = {
     },
     {
       id: "da",
-      label: "DA",
-      title: "데이터분석",
-      description: "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. 탐색적 데이터 분석, 통계적 분석, 시각화, 머신러닝 기반 예측 모델링까지 데이터 분석의 전 과정을 다룹니다.",
+      label: "DB",
+      title: "데이터비즈니스",
+      description: "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. ML/DL 모델의 예측 근거를 XAI로 해석하여 인공지능의 투명성과 신뢰성을 확보하는 기술을 학습합니다.",
       topics: [
-        { title: "EDA", color: "primary" as const },
-        { title: "시각화", color: "secondary" as const },
-        { title: "예측 모델링", color: "tertiary" as const },
+        { title: "비즈니스 인사이트", color: "primary" as const },
+        { title: "XAI", color: "secondary" as const },
+        { title: "신뢰성 확보", color: "tertiary" as const },
       ],
     },
     {

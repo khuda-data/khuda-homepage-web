@@ -8,7 +8,7 @@ const CurriculumSection = () => {
   const defaultSessionType = CURRICULUM_STYLES.sessionTypes[0];
   const defaultTrack = CURRICULUM_INFO.tracks[0];
   const tracksLength = CURRICULUM_INFO.tracks.length;
-  // 트랙 설명회 카드에 표시할 순서: DE → DA → NLP → CV → AIE → FIN
+  // 트랙 설명회 카드에 표시할 순서: DE → DB → NLP → CV → AIE → FIN
   const getTrackLabel = (id: string) => CURRICULUM_INFO.tracks.find(t => t.id === id)?.label || "";
   const trackLabels = [
     getTrackLabel("de"),
