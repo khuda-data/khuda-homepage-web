@@ -8,7 +8,15 @@ const CurriculumSection = () => {
   const defaultSessionType = CURRICULUM_STYLES.sessionTypes[0];
   const defaultTrack = CURRICULUM_INFO.tracks[0];
   const tracksLength = CURRICULUM_INFO.tracks.length;
-  const trackLabels = CURRICULUM_INFO.tracks.map(t => t.label).join(CURRICULUM_STYLES.separator.trackLabels);
+  // 트랙 설명회 카드에 표시할 순서: DE → DA → NLP/CV → AIE → FIN
+  const getTrackLabel = (id: string) => CURRICULUM_INFO.tracks.find(t => t.id === id)?.label || "";
+  const trackLabels = [
+    getTrackLabel("de"),
+    getTrackLabel("da"),
+    "NLP/CV",
+    getTrackLabel("aie"),
+    getTrackLabel("fin")
+  ].join(CURRICULUM_STYLES.separator.trackLabels);
   
   const [sessionType, setSessionType] = useState<"basic" | "advanced">(defaultSessionType);
   const [activeTrack, setActiveTrack] = useState(defaultTrack.id);
@@ -179,7 +187,7 @@ const CurriculumSection = () => {
 
               <div className={CURRICULUM_STYLES.spacing.sectionGap}>
                 <SectionHeader title={CURRICULUM_INFO.weeklySessionTitle} />
-                <div className={cn(CURRICULUM_STYLES.layout.grid2, CURRICULUM_STYLES.spacing.gridGap)}>
+                <div className="w-full">
                   {CURRICULUM_INFO.weeklySessions.map((session) => (
                     <div key={session.title} className={CURRICULUM_STYLES.card.withHover.medium}>
                       <div className={cn(CURRICULUM_STYLES.layout.flexItemsCenter, CURRICULUM_STYLES.spacing.contentGap)}>

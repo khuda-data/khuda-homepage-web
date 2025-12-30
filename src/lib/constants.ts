@@ -541,15 +541,9 @@ export const CURRICULUM_INFO = {
   advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구해요.
 자연어처리, 컴퓨터비전, 데이터분석 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고 실전 프로젝트까지 완성합니다.`,
   basicTrackTitle: "기초 트랙",
-  basicTrackDescription: `방학 기간 동안 파이썬 프로그래밍과 머신러닝 기초를 체계적으로 학습합니다.
-프로그래밍 기초부터 머신러닝 알고리즘까지, 단계별로 실력을 쌓아갑니다.`,
+  basicTrackDescription: `방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
+이론과 실습을 통해 단계별로 실력을 쌓아갑니다.`,
   weeklySessionTitle: "주차별 세션 구성",
-  pythonSession: {
-    title: "파이썬 프로그래밍",
-    duration: "약 1시간",
-    description: "파이썬 기초 문법부터 객체지향 프로그래밍까지, 실습 중심으로 프로그래밍 역량을 기릅니다.",
-    topics: ["변수/연산자", "자료구조", "제어문", "함수", "클래스/객체지향"],
-  },
   mlSession: {
     title: "머신러닝 기초",
     duration: "약 1시간 20분",
@@ -557,13 +551,13 @@ export const CURRICULUM_INFO = {
     topics: ["지도학습", "비지도학습", "회귀/분류", "평가 지표", "실습 프로젝트"],
   },
   get weeklySessions() {
-    return [this.pythonSession, this.mlSession];
+    return [this.mlSession];
   },
   detailActivitiesTitle: "세부 활동",
   activities: [
     {
       title: "개인 랜덤 발제",
-      description: "매주 랜덤으로 선정된 주제에 대해 발제하며, 발표 능력과 이해도를 향상시킵니다.",
+      description: "매주 랜덤으로 선택된 부원이 주제에 대해 발제하며, 발표 능력과 이해도를 향상시킵니다.",
     },
     {
       title: "퀴즈 및 해설",
