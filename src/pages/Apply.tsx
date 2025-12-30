@@ -1124,6 +1124,59 @@ const Apply = () => {
                 </SelectContent>
               </Select>
             </div>
+          ) : question.question.includes("심화 트랙") && isApplicationType("yb") ? (
+            <div className="space-y-4">
+              <Select
+                value={CURRICULUM_INFO.tracks.find(track => `${track.label} (${track.title})` === answer)?.id || ""}
+                onValueChange={(value) => {
+                  const selectedTrack = CURRICULUM_INFO.tracks.find(track => track.id === value);
+                  if (selectedTrack) {
+                    updateAnswer(question.id, `${selectedTrack.label} (${selectedTrack.title})`);
+                  }
+                }}
+                required={question.required}
+              >
+                <SelectTrigger 
+                  className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
+                    answer && answer !== "none"
+                      ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
+                      : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
+                  } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
+                >
+                  <div className="flex items-center gap-2.5 flex-1">
+                    {answer && answer !== "none" && (
+                      <div className="w-2 h-2 rounded-full bg-primary shrink-0 animate-in zoom-in-95 duration-200" />
+                    )}
+                    <SelectValue placeholder="심화 트랙을 선택해주세요" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent 
+                  className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[400px] p-2"
+                  position="popper"
+                >
+                  {CURRICULUM_INFO.tracks.map(track => ({
+                    value: track.id,
+                    label: `${track.label} (${track.title})`,
+                    description: track.description.split(".")[0] + ".",
+                  })).map((track) => (
+                    <SelectItem 
+                      key={track.value}
+                      value={track.value} 
+                      className="rounded-xl px-4 py-3 pl-4 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02] group [&>span:has(svg)]:hidden"
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-base font-medium">{track.label}</span>
+                        {track.description && (
+                          <span className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors">
+                            {track.description}
+                          </span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           ) : question.field_type === "text" && (
             <Input
               value={answer}
