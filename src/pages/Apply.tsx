@@ -1145,7 +1145,7 @@ const Apply = () => {
                 >
                   <div className="flex items-center gap-2.5 flex-1">
                     {answer && answer !== "none" && (
-                      <div className="w-2 h-2 rounded-full bg-primary shrink-0 animate-in zoom-in-95 duration-200" />
+                      <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
                     )}
                     <SelectValue placeholder="심화 트랙을 선택해주세요" />
                   </div>
