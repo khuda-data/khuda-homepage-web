@@ -1449,19 +1449,9 @@ const Apply = () => {
                       <Badge variant="default" className="text-xs font-semibold px-2 py-0.5">OB</Badge>
                       <span className="text-base font-bold text-foreground">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       {APPLICATION_FORM_CONFIG.applicationTypes.ob.description}
                     </p>
-                    <div className="pt-4 mt-4 border-t border-border/30">
-                      <div className="flex items-start gap-2.5">
-                        <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <Info className="w-2.5 h-2.5 text-primary" />
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {APPLICATION_FORM_CONFIG.obInterviewNotice.description}
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

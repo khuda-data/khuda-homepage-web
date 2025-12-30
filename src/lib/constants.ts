@@ -548,7 +548,7 @@ export const CURRICULUM_INFO = {
   mlSession: {
     title: "머신러닝 기초",
     duration: "약 2시간",
-    description: "머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 통해 체계적으로 학습합니다.",
+    description: "머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 통해 체계적으로 학습합니다. 방학 기간 매주 목요일 저녁 6시부터 8시까지 진행됩니다.",
     topics: ["지도학습", "비지도학습", "회귀/분류", "평가 지표", "실습 프로젝트"],
   },
   get weeklySessions() {
@@ -696,8 +696,8 @@ export const CURRICULUM_STYLES = {
   },
   sessionTypes: ["basic", "advanced"] as const,
   sessionLabels: {
-    basic: "기초 세션",
-    advanced: "심화 세션",
+    basic: "기초 세션 (방학)",
+    advanced: "심화 세션 (학기)",
   },
   card: {
     base: "bg-white/10 backdrop-blur-sm rounded-xl border border-white/10",
@@ -1005,11 +1005,6 @@ export const APPLICATION_FORM_CONFIG = {
   announcementNotice: {
     title: "서류 합격자 발표 안내",
     description: "결과는 발표 일정에 맞춰 웹사이트에서 확인 가능합니다.",
-  },
-  // OB 면접 안내 메시지
-  obInterviewNotice: {
-    title: "OB 면접 안내",
-    description: "OB 지원자는 면접 없이 서류 심사만 진행됩니다.",
   },
   
   // 페이지 제목 및 설명
