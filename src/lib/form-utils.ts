@@ -98,7 +98,7 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
  * @returns CSS 클래스 문자열
  */
 export const getCheckboxContainerClass = (isSelected: boolean): string => {
-  const baseClasses = "relative flex items-center space-x-3 p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform";
+  const baseClasses = "relative flex items-center space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform min-h-[44px]";
   const selectedClasses = "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg shadow-primary/10 scale-[1.02]";
   const unselectedClasses = "border-border/50 hover:border-primary/30 hover:bg-secondary/20 hover:scale-[1.01] active:scale-[0.99]";
   
@@ -124,7 +124,7 @@ export const getCheckboxIconClass = (isSelected: boolean): string => {
  * @returns CSS 클래스 문자열
  */
 export const getRadioButtonClass = (isSelected: boolean): string => {
-  const baseClasses = "relative flex items-center space-x-3 p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform";
+  const baseClasses = "relative flex items-center space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform min-h-[44px]";
   const selectedClasses = "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg shadow-primary/10 scale-[1.02]";
   const unselectedClasses = "border-border/50 hover:border-primary/50 hover:bg-primary/5 hover:scale-[1.01] active:scale-[0.99]";
   
@@ -137,7 +137,7 @@ export const getRadioButtonClass = (isSelected: boolean): string => {
  * @returns CSS 클래스 문자열
  */
 export const getInterviewTimeButtonClass = (isSelected: boolean): string => {
-  const baseClasses = "group relative flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out transform";
+  const baseClasses = "group relative flex items-center justify-center p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out transform min-h-[44px]";
   const selectedClasses = "border-primary bg-primary/10 shadow-md shadow-primary/10 scale-[1.05]";
   const unselectedClasses = "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20 hover:scale-[1.02] active:scale-[0.98]";
   

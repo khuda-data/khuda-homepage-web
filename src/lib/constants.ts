@@ -163,35 +163,35 @@ export const HEADER_STYLES = {
     base: "flex items-center justify-between",
   },
   logo: {
-    container: "flex items-center justify-center transition-all duration-300 ease-out hover:scale-[1.02] hover:opacity-90 -ml-6 md:-ml-8",
-    height: "h-[100px] md:h-[120px]",
+    container: "flex items-center justify-center transition-all duration-300 ease-out hover:scale-[1.02] hover:opacity-90 -ml-2 sm:-ml-4 md:-ml-6 lg:-ml-8",
+    height: "h-[70px] sm:h-[85px] md:h-[100px] lg:h-[120px]",
     width: "w-auto",
-    image: "object-contain object-center max-h-full max-w-[320px] md:max-w-[380px] drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
+    image: "object-contain object-center max-h-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
   },
   height: {
-    base: "h-28 md:h-32",
-    mobileMenuOffset: "top-28 md:top-32",
+    base: "h-20 sm:h-24 md:h-28 lg:h-32",
+    mobileMenuOffset: "top-20 sm:top-24 md:top-28 lg:top-32",
   },
   nav: {
     desktop: {
-      container: "hidden md:flex items-center gap-6 lg:gap-10",
-      link: "nav-link text-[15px] font-medium tracking-[-0.01em] px-3 py-2 rounded-xl transition-all duration-300 ease-out hover:bg-gradient-to-b hover:from-foreground/8 hover:to-foreground/4 hover:scale-[1.02] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
+      container: "hidden md:flex items-center gap-4 lg:gap-6 xl:gap-10",
+      link: "nav-link text-sm md:text-[15px] font-medium tracking-[-0.01em] px-3 py-2 rounded-xl transition-all duration-300 ease-out hover:bg-gradient-to-b hover:from-foreground/8 hover:to-foreground/4 hover:scale-[1.02] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
     },
     mobile: {
       container: "md:hidden absolute left-0 right-0 bg-background/98 backdrop-blur-2xl border-b border-border/40 animate-fade-in shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
-      menu: "flex flex-col py-6 px-6 gap-1",
-      link: "text-left py-3.5 px-4 text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-foreground/8 hover:to-foreground/4 rounded-xl transition-all duration-300 ease-out font-medium",
+      menu: "flex flex-col py-4 sm:py-6 px-4 sm:px-6 gap-1",
+      link: "text-left py-3 sm:py-3.5 px-3 sm:px-4 text-sm sm:text-base text-muted-foreground hover:text-foreground hover:bg-gradient-to-r hover:from-foreground/8 hover:to-foreground/4 rounded-xl transition-all duration-300 ease-out font-medium min-h-[44px] flex items-center",
       applyLink: "mt-2",
     },
   },
   button: {
     desktop: {
       container: "hidden md:flex items-center gap-4",
-      apply: "rounded-full px-8 py-3.5 font-semibold text-[15px] tracking-[-0.01em] bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_2px_8px_rgba(0,100%,25%,0.2)] hover:shadow-[0_4px_16px_rgba(0,100%,25%,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-out",
+      apply: "rounded-full px-6 lg:px-8 py-2.5 lg:py-3.5 font-semibold text-sm lg:text-[15px] tracking-[-0.01em] bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_2px_8px_rgba(0,100%,25%,0.2)] hover:shadow-[0_4px_16px_rgba(0,100%,25%,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-out",
     },
     mobile: {
-      menuToggle: "md:hidden p-2.5 rounded-xl hover:bg-foreground/8 transition-all duration-300 ease-out active:scale-95",
-      apply: "text-left py-3.5 px-4 text-foreground hover:bg-foreground/8 rounded-xl transition-all duration-200 ease-out w-full font-semibold",
+      menuToggle: "md:hidden p-2.5 sm:p-3 rounded-xl hover:bg-foreground/8 transition-all duration-300 ease-out active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center",
+      apply: "text-left py-3 sm:py-3.5 px-3 sm:px-4 text-sm sm:text-base text-foreground hover:bg-foreground/8 rounded-xl transition-all duration-200 ease-out w-full font-semibold min-h-[44px] flex items-center justify-center",
     },
   },
   icon: {
@@ -241,7 +241,7 @@ export const HERO_STYLES = {
   },
   container: {
     base: "container mx-auto relative z-10",
-    padding: "px-6 md:px-12",
+    padding: "px-4 sm:px-6 md:px-12",
     maxWidth: "max-w-3xl",
   },
   colorBendsWrapper: {
@@ -251,23 +251,23 @@ export const HERO_STYLES = {
     base: "absolute inset-0 w-full h-full",
   },
   title: {
-    base: "text-4xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4 md:mb-6 opacity-0 animate-fade-up",
+    base: "text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight mb-4 sm:mb-5 md:mb-6 opacity-0 animate-fade-up",
     prefix: "block bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent",
-    wordContainer: "block mt-2",
-    wordWrapper: "inline-block min-w-[240px] md:min-w-[320px] relative",
-    word: "inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-4 border-white/50 pb-2 transition-all duration-700",
-    dot: "text-white/60 ml-2",
+    wordContainer: "block mt-1 sm:mt-2",
+    wordWrapper: "inline-block min-w-[200px] sm:min-w-[240px] md:min-w-[320px] relative",
+    word: "inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-2 sm:border-b-4 border-white/50 pb-1 sm:pb-2 transition-all duration-700",
+    dot: "text-white/60 ml-1 sm:ml-2",
   },
   subtitle: {
-    base: "text-base md:text-xl text-white mb-3 md:mb-4 opacity-0 animate-fade-up animation-delay-200",
+    base: "text-sm sm:text-base md:text-lg lg:text-xl text-white mb-2 sm:mb-3 md:mb-4 opacity-0 animate-fade-up animation-delay-200",
   },
   description: {
-    base: "text-sm md:text-lg text-white/90 max-w-xl mb-8 md:mb-12 opacity-0 animate-fade-up animation-delay-400 leading-relaxed",
+    base: "text-xs sm:text-sm md:text-base lg:text-lg text-white/90 max-w-xl mb-6 sm:mb-8 md:mb-12 opacity-0 animate-fade-up animation-delay-400 leading-relaxed",
     sub: "text-white/70",
   },
   buttons: {
-    container: "flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-up animation-delay-600",
-    base: "w-full sm:w-auto rounded-md",
+    container: "flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0 animate-fade-up animation-delay-600",
+    base: "w-full sm:w-auto rounded-md text-sm sm:text-base min-h-[44px]",
   },
   scrollIndicator: {
     container: "absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 animate-fade-in animation-delay-600 z-10",
@@ -287,36 +287,36 @@ export const HERO_STYLES = {
 export const FOOTER_STYLES = {
   footer: {
     base: "bg-secondary/50 border-t border-border",
-    padding: "py-12 md:py-16",
+    padding: "py-8 sm:py-10 md:py-12 lg:py-16",
   },
   container: {
     base: "container mx-auto",
-    padding: "px-6 md:px-12",
+    padding: "px-4 sm:px-6 md:px-12",
   },
   grid: {
-    base: "grid md:grid-cols-3",
-    gap: "gap-8 md:gap-12",
+    base: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
+    gap: "gap-6 sm:gap-8 md:gap-10 lg:gap-12",
   },
   layout: {
     flexCol: "flex flex-col",
   },
   section: {
-    header: "font-semibold mb-4 text-sm uppercase tracking-wider text-foreground",
+    header: "font-semibold mb-3 sm:mb-4 text-xs sm:text-sm uppercase tracking-wider text-foreground",
     text: {
-      base: "text-muted-foreground text-sm",
-      small: "text-muted-foreground/60 text-xs",
+      base: "text-muted-foreground text-xs sm:text-sm",
+      small: "text-muted-foreground/60 text-[10px] sm:text-xs",
     },
     spacing: {
-      marginBottom: "mb-4",
-      marginTop: "mt-6",
-      itemGap: "space-y-3",
+      marginBottom: "mb-3 sm:mb-4",
+      marginTop: "mt-4 sm:mt-6",
+      itemGap: "space-y-2 sm:space-y-3",
     },
   },
   socialLink: {
-    base: "flex items-center gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group",
-    iconContainer: "w-8 h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors",
-    icon: "w-4 h-4 group-hover:text-primary transition-colors",
-    label: "text-sm",
+    base: "flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group min-h-[44px]",
+    iconContainer: "w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0",
+    icon: "w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:text-primary transition-colors",
+    label: "text-xs sm:text-sm",
   },
 };
 
@@ -400,29 +400,29 @@ export const RECRUITMENT_STYLES = {
     },
   },
   infoCard: {
-    base: "group relative text-center rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-300 overflow-hidden",
-    padding: "p-8 md:p-10",
-    gradient: "absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-primary/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+    base: "group relative text-center rounded-2xl sm:rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-300 overflow-hidden",
+    padding: "p-5 sm:p-6 md:p-8 lg:p-10",
+    gradient: "absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-primary/5 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
     icon: {
-      container: "inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-105",
-      size: "w-7 h-7",
+      container: "inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-105",
+      size: "w-6 h-6 sm:w-7 sm:h-7",
     },
-    title: "text-xl md:text-2xl font-semibold mb-3 text-foreground",
-    description: "text-base md:text-lg font-medium mb-2 text-foreground leading-relaxed",
-    details: "text-sm text-muted-foreground leading-relaxed",
+    title: "text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-foreground",
+    description: "text-sm sm:text-base md:text-lg font-medium mb-2 text-foreground leading-relaxed",
+    details: "text-xs sm:text-sm text-muted-foreground leading-relaxed",
   },
   process: {
     container: "mb-20",
     grid: {
-      desktop: "grid md:grid-cols-3 gap-4 md:gap-6 mb-16",
+      desktop: "grid md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-10 sm:mb-12 md:mb-16",
     },
     stepCard: {
-      base: "rounded-3xl border transition-all duration-300 shadow-sm h-[220px] flex flex-col relative overflow-hidden",
+      base: "rounded-2xl sm:rounded-3xl border transition-all duration-300 shadow-sm min-h-[180px] sm:h-[200px] md:h-[220px] flex flex-col relative overflow-hidden",
       active: "bg-black/80 backdrop-blur-2xl border-primary/30 shadow-lg shadow-primary/10 hover:border-primary/40",
       inactive: "bg-black/70 backdrop-blur-2xl border-white/10 hover:border-white/20",
       padding: {
-        desktop: "p-6 md:p-8",
-        mobile: "p-6",
+        desktop: "p-4 sm:p-6 md:p-8",
+        mobile: "p-4 sm:p-6",
       },
       gradient: "absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 rounded-3xl opacity-0 transition-opacity duration-300",
       gradientActive: "opacity-100",
@@ -456,25 +456,25 @@ export const RECRUITMENT_STYLES = {
     },
     content: {
       header: {
-        container: "flex items-center justify-between mb-3 gap-3",
+        container: "flex items-center justify-between mb-2 sm:mb-3 gap-2 sm:gap-3",
         title: {
-          base: "text-base md:text-lg font-semibold",
+          base: "text-sm sm:text-base md:text-lg font-semibold",
           active: "text-primary",
           inactive: "text-foreground",
         },
         date: {
-          base: "text-sm font-medium whitespace-nowrap",
+          base: "text-xs sm:text-sm font-medium whitespace-nowrap",
           active: "text-primary/80",
           inactive: "text-muted-foreground",
         },
       },
       fullDate: {
-        base: "text-xs md:text-sm leading-relaxed mt-auto",
+        base: "text-xs sm:text-sm leading-relaxed mt-auto",
         active: "text-foreground/90",
         inactive: "text-muted-foreground",
       },
       mobile: {
-        title: "text-base font-semibold",
+        title: "text-sm sm:text-base font-semibold",
         fullDate: "text-xs leading-relaxed mt-auto",
       },
     },
@@ -678,7 +678,7 @@ export const CURRICULUM_INFO = {
 
 export const CURRICULUM_STYLES = {
   section: {
-    padding: "py-12 md:py-20 px-6 md:px-12",
+    padding: "py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-12",
     base: "relative bg-background transition-all duration-1000",
   },
   gradient: {
@@ -718,57 +718,57 @@ export const CURRICULUM_STYLES = {
     advanced: "심화 세션 (학기)",
   },
   card: {
-    base: "bg-white/10 backdrop-blur-sm rounded-xl border border-white/10",
+    base: "bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/10",
     hover: "hover:bg-white/15 transition-all duration-200",
     padding: {
-      small: "p-5",
-      medium: "p-6",
+      small: "p-3 sm:p-4 md:p-5",
+      medium: "p-4 sm:p-5 md:p-6",
     },
     // 자주 사용되는 조합
     withHover: {
-      medium: "bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/15 transition-all duration-200 p-6",
-      small: "bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/15 transition-all duration-200 p-5",
+      medium: "bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/10 hover:bg-white/15 transition-all duration-200 p-4 sm:p-5 md:p-6",
+      small: "bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/10 hover:bg-white/15 transition-all duration-200 p-3 sm:p-4 md:p-5",
     },
   },
   container: {
-    base: "rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden",
-    padding: "p-8 md:p-10",
+    base: "rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden",
+    padding: "p-4 sm:p-6 md:p-8 lg:p-10",
   },
   tag: {
     base: "px-2 py-0.5 rounded text-xs bg-white/5 text-white/70 border border-white/10",
   },
   button: {
-    base: "px-6 py-3 rounded-lg text-base font-semibold transition-all duration-300",
+    base: "px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 min-h-[44px] flex items-center justify-center",
     active: "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105",
     inactive: "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 active:scale-95",
     track: {
-      base: "px-4 md:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300",
+      base: "px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 min-h-[40px] sm:min-h-[44px] flex items-center justify-center",
       active: "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105",
       inactive: "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-105 active:scale-95 border border-border/50",
     },
   },
   spacing: {
-    sectionGap: "mb-8",
-    contentGap: "mb-6",
-    titleGap: "mb-3 md:mb-4",
-    gridGap: "gap-4",
-    buttonGap: "gap-3",
-    trackGap: "gap-2",
-    largeGap: "mb-10",
-    smallGap: "mb-2",
-    mediumGap: "mb-4",
-    tagGap: "gap-1.5",
+    sectionGap: "mb-6 sm:mb-8",
+    contentGap: "mb-4 sm:mb-6",
+    titleGap: "mb-2 sm:mb-3 md:mb-4",
+    gridGap: "gap-3 sm:gap-4",
+    buttonGap: "gap-2 sm:gap-3",
+    trackGap: "gap-1.5 sm:gap-2",
+    largeGap: "mb-8 sm:mb-10",
+    smallGap: "mb-1.5 sm:mb-2",
+    mediumGap: "mb-3 sm:mb-4",
+    tagGap: "gap-1 sm:gap-1.5",
   },
   text: {
     title: {
-      large: "text-2xl md:text-3xl lg:text-4xl font-bold text-white",
-      medium: "text-lg font-semibold text-white",
-      small: "text-base font-semibold text-white",
+      large: "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white",
+      medium: "text-base sm:text-lg font-semibold text-white",
+      small: "text-sm sm:text-base font-semibold text-white",
     },
     body: {
-      large: "text-white/90 text-base md:text-lg leading-relaxed",
-      medium: "text-white/80 text-base md:text-lg leading-relaxed max-w-3xl",
-      small: "text-sm text-white/80 leading-relaxed",
+      large: "text-white/90 text-sm sm:text-base md:text-lg leading-relaxed",
+      medium: "text-white/80 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl",
+      small: "text-xs sm:text-sm text-white/80 leading-relaxed",
       tiny: "text-xs text-white/70 leading-relaxed",
       duration: "text-xs text-white/60 ml-auto",
     },
@@ -785,26 +785,26 @@ export const CURRICULUM_STYLES = {
     flexItemsCenter: "flex items-center gap-2",
     flexRow: "flex flex-col md:flex-row gap-8 md:gap-10 transition-all duration-300",
     flex1: "flex-1 flex flex-col justify-center",
-    grid2: "grid md:grid-cols-2",
-    grid3: "grid md:grid-cols-3",
+    grid2: "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4",
+    grid3: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4",
     relativeFlex: "relative flex items-center gap-4",
     relativeFlex1: "relative flex-1",
-    mobileNav: "md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-20",
-    desktopNav: "hidden md:flex w-12 h-12 flex-shrink-0 hover:scale-110",
-    mobileNavButton: "w-10 h-10",
+    mobileNav: "md:hidden absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-20",
+    desktopNav: "hidden md:flex w-10 h-10 md:w-12 md:h-12 flex-shrink-0 hover:scale-110 min-h-[44px]",
+    mobileNavButton: "w-9 h-9 sm:w-10 sm:h-10 min-h-[44px] min-w-[44px]",
   },
   badge: {
-    base: "inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-3",
+    base: "inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-white/20 text-white text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-2 sm:mb-3",
   },
   topicCard: {
-    base: "px-6 py-4 rounded-2xl text-left font-semibold text-sm shadow-xl backdrop-blur-sm",
+    base: "px-4 sm:px-5 md:px-6 py-3 sm:py-3.5 md:py-4 rounded-xl sm:rounded-2xl text-left font-semibold text-xs sm:text-sm shadow-xl backdrop-blur-sm",
   },
   icon: {
     white: "text-white",
   },
   header: {
-    title: "text-3xl md:text-5xl lg:text-6xl font-bold text-foreground",
-    subtitle: "text-sm md:text-lg text-foreground",
+    title: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground",
+    subtitle: "text-xs sm:text-sm md:text-base lg:text-lg text-foreground",
   },
   sectionId: "curriculum",
   index: {
@@ -854,13 +854,13 @@ export const FAQ_STYLES = {
       base: "border-0 rounded-2xl bg-card border border-border/50 overflow-hidden transition-all duration-200 hover:border-border",
     },
     trigger: {
-      base: "text-left hover:no-underline px-6 py-5 text-foreground font-medium transition-colors",
+      base: "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-sm sm:text-base text-foreground font-medium transition-colors min-h-[44px] flex items-center",
       iconContainer: "flex items-center gap-2",
       icon: "w-4 h-4 text-primary flex-shrink-0",
       iconComponent: HelpCircle,
     },
     content: {
-      base: "px-6 pb-5 text-muted-foreground leading-relaxed",
+      base: "px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-muted-foreground leading-relaxed",
     },
   },
 };
@@ -1169,7 +1169,7 @@ export const SCROLL_ANIMATION_CONFIG = {
 
 export const CTA_STYLES = {
   section: {
-    padding: "py-12 md:py-20 px-6 md:px-12",
+    padding: "py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-12",
     base: "relative bg-background transition-all duration-1000 overflow-hidden",
   },
   contentWrapper: {
@@ -1190,11 +1190,11 @@ export const CTA_STYLES = {
     unit: {
       container: "flex flex-col items-center animate-in fade-in zoom-in-95",
       value: {
-        base: "text-2xl md:text-4xl lg:text-5xl font-bold text-primary mb-0.5 md:mb-1 transition-all duration-300 animate-in zoom-in-95 fade-in",
+        base: "text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-primary mb-0.5 sm:mb-1 transition-all duration-300 animate-in zoom-in-95 fade-in",
       },
-      label: "text-xs text-muted-foreground font-medium",
+      label: "text-[10px] sm:text-xs text-muted-foreground font-medium",
     },
-    separator: "text-xl md:text-3xl font-bold text-muted-foreground pb-3 md:pb-4 animate-pulse",
+    separator: "text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-muted-foreground pb-2 sm:pb-3 md:pb-4 animate-pulse",
   },
   gradient: {
     vertical: "absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background pointer-events-none",
@@ -1211,9 +1211,9 @@ export const CTA_STYLES = {
 
 export const SECTION_STYLES = {
   header: {
-    container: "text-center mb-10",
-    title: "text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6",
-    subtitle: "text-base md:text-lg text-muted-foreground",
+    container: "text-center mb-6 sm:mb-8 md:mb-10",
+    title: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6",
+    subtitle: "text-sm sm:text-base md:text-lg text-muted-foreground",
   },
   maxWidth: {
     narrow: "max-w-3xl mx-auto",

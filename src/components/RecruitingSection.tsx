@@ -247,12 +247,12 @@ const RecruitingSection = () => {
         </div>
 
         {/* YB/OB 안내 버튼 */}
-        <div className="flex gap-3 mb-12 mt-8">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-8 sm:mb-12 mt-6 sm:mt-8">
           <Button
             type="button"
             variant="outline"
             onClick={() => setIsYBDialogOpen(true)}
-            className="flex-1 rounded-xl h-12 text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200"
+            className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200 min-h-[44px]"
           >
             YB 수료 조건 안내
           </Button>
@@ -260,7 +260,7 @@ const RecruitingSection = () => {
             type="button"
             variant="outline"
             onClick={() => setIsOBDialogOpen(true)}
-            className="flex-1 rounded-xl h-12 text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200"
+            className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200 min-h-[44px]"
           >
             OB 혜택 안내
           </Button>

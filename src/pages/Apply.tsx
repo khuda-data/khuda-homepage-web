@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, CheckCircle, Calendar, Users, Mail, Phone, MapPin, Code, BookOpen, Award, Clock, FileText, Instagram, Copy, UserCircle, Layers, Info, Activity, Heart, Circle, Check, HelpCircle, ExternalLink, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { 
   copyToClipboard,
   getCheckboxContainerClass,
@@ -360,7 +361,7 @@ const Apply = () => {
     if (isApplicationType("yb") && interviewDatesQuestion && question.id === interviewDatesQuestion.id) {
         return (
           <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50 pointer-events-none"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl flex items-center gap-3">
                 <Clock className="w-5 h-5 text-primary" />
@@ -387,44 +388,56 @@ const Apply = () => {
                     <div className="w-1 h-4 bg-primary rounded-full" />
                     <h3 className="text-sm font-semibold text-foreground">면접 가능 날짜</h3>
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    {interviewSchedule.dates.map((date) => (
-                      <div
-                        key={date.value}
-                        data-interview-select="true"
-                        className={`group relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
-                          formData.interviewDates.includes(date.value)
-                            ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                            : "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          const isSelected = formData.interviewDates.includes(date.value);
-                          setFormData((prev) => ({
-                            ...prev,
-                            interviewDates: isSelected
-                              ? prev.interviewDates.filter((d) => d !== date.value)
-                              : [...prev.interviewDates, date.value],
-                            selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate,
-                          }));
-                        }}
-                      >
-                        <div className="cursor-pointer w-full flex flex-col items-center gap-1.5">
-                          <span className={`text-base font-semibold ${
-                            formData.interviewDates.includes(date.value) ? "text-primary" : "text-foreground"
-                          }`}>
-                            {date.label}
-                          </span>
-                          <span className="text-xs text-muted-foreground">{date.subLabel}</span>
-                          {formData.interviewDates.includes(date.value) && (
-                            <div className="mt-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
-                              <CheckCircle className="w-4 h-4 text-primary-foreground" />
-                            </div>
-                          )}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                    {interviewSchedule.dates.map((date) => {
+                      const handleDateClick = (e: React.MouseEvent) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const isSelected = formData.interviewDates.includes(date.value);
+                        setFormData((prev) => ({
+                          ...prev,
+                          interviewDates: isSelected
+                            ? prev.interviewDates.filter((d) => d !== date.value)
+                            : [...prev.interviewDates, date.value],
+                          selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate === date.value ? "" : prev.selectedInterviewDate,
+                        }));
+                      };
+                      
+                      return (
+                        <div
+                          key={date.value}
+                          data-interview-select="true"
+                          role="button"
+                          tabIndex={0}
+                          className={`group relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 cursor-pointer transition-all duration-200 min-h-[80px] sm:min-h-[100px] select-none ${
+                            formData.interviewDates.includes(date.value)
+                              ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                              : "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20 active:scale-[0.98]"
+                          }`}
+                          onClick={handleDateClick}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              handleDateClick(e as any);
+                            }
+                          }}
+                        >
+                          <div className="pointer-events-none w-full flex flex-col items-center gap-1 sm:gap-1.5">
+                            <span className={`text-sm sm:text-base font-semibold ${
+                              formData.interviewDates.includes(date.value) ? "text-primary" : "text-foreground"
+                            }`}>
+                              {date.label}
+                            </span>
+                            <span className="text-[10px] sm:text-xs text-muted-foreground">{date.subLabel}</span>
+                            {formData.interviewDates.includes(date.value) && (
+                              <div className="mt-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
+                                <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -439,7 +452,7 @@ const Apply = () => {
                         </span>
                       </h3>
                     </div>
-                    <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2.5">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-2.5">
                       {interviewSchedule.times.map((time) => {
                         const currentTimes = formData.interviewTimesByDate[formData.selectedInterviewDate] || [];
                         const isSelected = currentTimes.includes(time);
@@ -447,7 +460,7 @@ const Apply = () => {
                           <div
                             key={time}
                             data-interview-select="true"
-                            className={getInterviewTimeButtonClass(isSelected)}
+                            className={cn(getInterviewTimeButtonClass(isSelected), "min-h-[44px] sm:min-h-[48px]")}
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -464,7 +477,7 @@ const Apply = () => {
                               }));
                             }}
                           >
-                            <div className="cursor-pointer w-full flex flex-col items-center gap-1">
+                            <div className="pointer-events-none w-full flex flex-col items-center gap-1">
                               <span className={`text-sm font-medium ${
                                 isSelected ? "text-primary" : "text-foreground"
                               }`}>
@@ -603,7 +616,7 @@ const Apply = () => {
             placeholder={getPlaceholder(question.question)}
             required={question.required}
             maxLength={question.max_len || undefined}
-            className="h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
+            className="h-11 sm:h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 text-sm sm:text-base min-h-[44px]"
           />
           {isPhoneField && (
             <p className="text-xs text-muted-foreground">하이픈(-)을 포함하여 입력해주세요. 예: 010-1234-5678</p>
@@ -884,7 +897,7 @@ const Apply = () => {
                 }}
                 required={question.required}
                 maxLength={maxLen || undefined}
-                className={`min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 ${
+                className={`min-h-[140px] sm:min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-16 sm:pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 text-sm sm:text-base ${
                   maxLen && answer.length >= maxLen * 0.9 ? "border-orange-500/50" : ""
                 }`}
                 placeholder="답변을 작성해주세요..."
@@ -1196,7 +1209,7 @@ const Apply = () => {
               disabled={isStudyDisabled}
               maxLength={question.max_len || undefined}
               rows={question.question.includes("기타 활동") ? 5 : 5}
-              className={`min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out ${
+              className={`min-h-[100px] sm:min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out text-sm sm:text-base ${
                 isStudyDisabled 
                   ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
                   : "bg-secondary/30 focus:border-primary/60 focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
@@ -1287,10 +1300,10 @@ const Apply = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10">
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 md:px-12 py-4">
+        <div className="container mx-auto px-4 sm:px-6 md:px-12 py-3 sm:py-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium min-h-[44px]"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>메인으로</span>
@@ -1298,17 +1311,17 @@ const Apply = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 md:px-12 py-12 md:py-16">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-6 mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              <div className="space-y-3">
+      <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+          <div className="text-center space-y-4 sm:space-y-6 mb-8 sm:mb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+              <div className="space-y-2 sm:space-y-3">
                 {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
                   <div key={i}>{line}</div>
                 ))}
               </div>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
               {APPLICATION_FORM_CONFIG.pageDescription}
             </p>
           </div>
@@ -1323,23 +1336,23 @@ const Apply = () => {
                 <CardTitle className="text-xl">{APPLICATION_FORM_CONFIG.sections.schedule}</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6 relative z-10">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 모집기간</p>
-                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.application.full}</p>
+            <CardContent className="space-y-4 sm:space-y-6 relative z-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+                <div className="space-y-2 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 모집기간</p>
+                  <p className="text-sm sm:text-base md:text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.application.full}</p>
                 </div>
-                <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 합격자 발표</p>
-                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.announcement.full}</p>
+                <div className="space-y-2 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 합격자 발표</p>
+                  <p className="text-sm sm:text-base md:text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.announcement.full}</p>
                 </div>
-                <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">면접</p>
-                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.interview.full}</p>
+                <div className="space-y-2 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide">면접</p>
+                  <p className="text-sm sm:text-base md:text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.interview.full}</p>
                 </div>
-                <div className="space-y-2 p-5 rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">최종 합격자 발표</p>
-                  <p className="text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.final.full}</p>
+                <div className="space-y-2 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
+                  <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide">최종 합격자 발표</p>
+                  <p className="text-sm sm:text-base md:text-lg font-semibold leading-relaxed">{RECRUITMENT_SCHEDULE.final.full}</p>
                 </div>
               </div>
               <div className="pt-4 border-t border-border/50">
@@ -1570,7 +1583,7 @@ const Apply = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="relative z-10">
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {commonQuestions
                       .filter(q => {
                         // 개인정보 동의 질문 제외
@@ -1666,12 +1679,12 @@ const Apply = () => {
               .filter(question => question.applicant_type !== "common")
               .map(question => renderQuestion(question))}
 
-            <div className="sticky bottom-0 pb-8 pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-6 md:-mx-12 px-6 md:px-12">
+            <div className="sticky bottom-0 pb-4 sm:pb-6 md:pb-8 pt-3 sm:pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-4 sm:-mx-6 md:-mx-12 px-4 sm:px-6 md:px-12">
               <Button
                 type="submit"
                 variant="hero"
                 size="xl"
-                className="w-full rounded-xl h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full rounded-xl h-12 sm:h-14 text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] min-h-[44px]"
                 disabled={isSubmitting || questions.length === 0}
               >
                 {isSubmitting ? "제출 중..." : "지원서 제출하기"}
