@@ -280,8 +280,7 @@ const CurriculumSection = () => {
                           key={`${currentTrack.id}-${index}`}
                           className={cn(
                             CURRICULUM_STYLES.topicCard.base,
-                            CURRICULUM_INFO.topicColors[topic.color],
-                            CURRICULUM_STYLES.layout.borderWhite20
+                            CURRICULUM_INFO.topicColors[topic.color]
                           )}
                         >
                           {topic.title}

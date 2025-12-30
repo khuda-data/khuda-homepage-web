@@ -582,9 +582,9 @@ export const CURRICULUM_INFO = {
   },
   // 트랙 색상 클래스
   topicColors: {
-    primary: "bg-amber-400 text-gray-900 hover:bg-amber-500",
-    secondary: "bg-blue-500 text-white hover:bg-blue-600",
-    tertiary: "bg-violet-500 text-white hover:bg-violet-600",
+    primary: "bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 text-gray-900 shadow-[0_4px_20px_rgba(255,255,255,0.15)]",
+    secondary: "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-600 text-white shadow-[0_4px_20px_rgba(37,99,235,0.3)]",
+    tertiary: "bg-gradient-to-br from-red-600 via-red-700 to-red-600 text-white shadow-[0_4px_20px_rgba(220,38,38,0.3)]",
   } as const,
   // 트랙 정보
   tracks: [
@@ -592,22 +592,22 @@ export const CURRICULUM_INFO = {
       id: "nlp",
       label: "NLP",
       title: "자연어처리",
-      description: "텍스트 데이터를 이해하고 처리하는 기술을 학습합니다. 토큰화, 임베딩, 언어 모델 등 자연어처리의 핵심 개념부터 BERT, GPT 같은 최신 모델까지 다룹니다.",
+      description: "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 뉴스/댓글/문서 같은 실제 데이터를 기반으로 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 NLP 파이프라인을 경험합니다.",
       topics: [
-        { title: "텍스트 전처리", color: "primary" as const },
-        { title: "언어 모델", color: "secondary" as const },
-        { title: "Fine-tuning", color: "tertiary" as const },
+        { title: "분류/요약", color: "primary" as const },
+        { title: "검색/챗봇", color: "secondary" as const },
+        { title: "NLP 파이프라인", color: "tertiary" as const },
       ],
     },
     {
       id: "cv",
       label: "CV",
       title: "컴퓨터비전",
-      description: "이미지와 비디오 데이터를 분석하고 이해하는 기술을 학습합니다. CNN 아키텍처부터 객체 탐지, 이미지 분할, 생성 모델까지 컴퓨터비전의 전반적인 내용을 다룹니다.",
+      description: "Computer Vision은 기계로 하여금 이미지와 비디오에서 의미 있는 데이터를 해석하고 분석하며 추출할 수 있게 합니다. 딥러닝과 신경망 등 다양한 기술이 사용되며, 이를 통해 기계가 사물을 인식하거나, 상황을 인지하고, 심지어 새로운 이미지를 생성하기도 합니다. 다시 말해, Computer Vision이란 인간의 시각과 시각 데이터를 해석하는 인지 능력을 복제하는 것입니다.",
       topics: [
-        { title: "이미지 처리", color: "primary" as const },
-        { title: "객체 탐지", color: "secondary" as const },
-        { title: "생성 모델", color: "tertiary" as const },
+        { title: "사물 인식", color: "primary" as const },
+        { title: "상황 인지", color: "secondary" as const },
+        { title: "이미지 생성", color: "tertiary" as const },
       ],
     },
     {
@@ -636,22 +636,22 @@ export const CURRICULUM_INFO = {
       id: "aie",
       label: "AIE",
       title: "AI엔지니어링",
-      description: "머신러닝 모델을 실제 서비스로 배포하고 운영하는 기술을 학습합니다. MLOps 파이프라인 구축, 모델 서빙, 모니터링, A/B 테스트 등 프로덕션 환경에서의 AI 시스템 운영을 다룹니다.",
+      description: "파운데이션 모델을 실제 애플리케이션에 작용하기 위한 AI 엔지니어링 과정을 다룹니다. 모델 이해와 평가에서 출발하여 프롬프트 설계와 컨텍스트 관리, RAG와 에이전트 설계, 파인튜닝과 데이터 추론, 성능 최적화와 피드백 루프까지 이어지는 전 과정을 통해 운영 환경에서 마주하는 실제 개발 과제를 안정적으로 해결하기 위한 판단 기준과 설계 원리를 학습합니다.",
       topics: [
-        { title: "MLOps", color: "primary" as const },
-        { title: "모델 서빙", color: "secondary" as const },
-        { title: "모니터링", color: "tertiary" as const },
+        { title: "프롬프트 설계", color: "primary" as const },
+        { title: "RAG/에이전트", color: "secondary" as const },
+        { title: "파인튜닝/최적화", color: "tertiary" as const },
       ],
     },
     {
       id: "fin",
       label: "FIN",
       title: "금융",
-      description: "금융 데이터 분석과 시장 인사이트 도출을 학습합니다. 금융 데이터 전처리, 시계열 분석, 리스크 분석, 포트폴리오 분석 등 금융 분야의 데이터 분석 기법을 다룹니다.",
+      description: "검증된 오픈소스를 활용하여 기업 부도 예측(ML), 주가 수익률 예측(DL), 뉴스 감성 분석(NLP) 등 3가지 미니프로젝트를 수행하며 실전 데이터 파이프라인을 직접 구축합니다. 이를 통해 축적된 경험을 바탕으로 실제 시장에 적용 가능한 AI 모델을 최종 완성하는 인터랙티브한 커리큘럼으로 운영됩니다.",
       topics: [
-        { title: "금융 데이터 분석", color: "primary" as const },
-        { title: "시계열 분석", color: "secondary" as const },
-        { title: "리스크 분석", color: "tertiary" as const },
+        { title: "부도 예측(ML)", color: "primary" as const },
+        { title: "주가 예측(DL)", color: "secondary" as const },
+        { title: "감성 분석(NLP)", color: "tertiary" as const },
       ],
     },
   ],
@@ -778,7 +778,7 @@ export const CURRICULUM_STYLES = {
     base: "inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-3",
   },
   topicCard: {
-    base: "px-5 py-3 rounded-xl text-left font-semibold text-sm transition-all duration-200 hover:scale-[1.02] border",
+    base: "px-6 py-4 rounded-2xl text-left font-semibold text-sm shadow-xl backdrop-blur-sm",
   },
   icon: {
     white: "text-white",
