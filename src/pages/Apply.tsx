@@ -938,7 +938,7 @@ const Apply = () => {
         <CardHeader className="relative z-10">
           <CardTitle className="text-xl flex items-center gap-3">
             {questionIcon}
-            {question.question.includes("일정") && !question.question.includes("면접") ? "2026년도 1학기 활동 일정을 작성해주세요." : question.question}
+            {question.question}
             {question.required && (
               <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
                 {APPLICATION_FORM_CONFIG.commonTexts.required}
@@ -972,12 +972,12 @@ const Apply = () => {
             <CardDescription>
               KHUDA는 스터디 및 소모임을 적극 권장하고 있으며, KHUDA 9기에서는 더욱 강조하여 활성화할 생각입니다. (산학협력 프로젝트, SQL 스터디, 공모전 스터디 등이 예정되어 있습니다)
             </CardDescription>
-          ) : question.question.includes("기타 활동") || question.question.includes("활동") ? (
-            <CardDescription>데이터 분석과 관련이 없더라도 괜찮습니다.</CardDescription>
           ) : question.question.includes("일정") && !question.question.includes("면접") ? (
             <CardDescription>
-              여기에 타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
+              타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.
             </CardDescription>
+          ) : question.question.includes("기타 활동") || question.question.includes("활동") ? (
+            <CardDescription>데이터 분석과 관련이 없더라도 괜찮습니다.</CardDescription>
           ) : question.question.includes("자격증") || question.question.includes("수상") ? (
             <CardDescription>해당 사항이 없는 경우 작성하지 않으셔도 됩니다.</CardDescription>
           ) : null}
@@ -1102,23 +1102,15 @@ const Apply = () => {
                     ...CURRICULUM_INFO.tracks.map(track => ({
                       value: track.id,
                       label: `${track.label} (${track.title})`,
-                      description: track.description.split(".")[0] + ".",
                     })),
                     ...APPLICATION_FORM_CONFIG.trackSelectOptions,
                   ].map((track) => (
                     <SelectItem 
                       key={track.value}
                       value={track.value} 
-                      className="rounded-xl px-4 py-3 pl-4 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02] group [&>span:has(svg)]:hidden"
+                      className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
                     >
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-base font-medium">{track.label}</span>
-                        {track.description && (
-                          <span className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors">
-                            {track.description}
-                          </span>
-                        )}
-                      </div>
+                      {track.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -1157,21 +1149,13 @@ const Apply = () => {
                   {CURRICULUM_INFO.tracks.map(track => ({
                     value: track.id,
                     label: `${track.label} (${track.title})`,
-                    description: track.description.split(".")[0] + ".",
                   })).map((track) => (
                     <SelectItem 
                       key={track.value}
                       value={track.value} 
-                      className="rounded-xl px-4 py-3 pl-4 cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02] group [&>span:has(svg)]:hidden"
+                      className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
                     >
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-base font-medium">{track.label}</span>
-                        {track.description && (
-                          <span className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors">
-                            {track.description}
-                          </span>
-                        )}
-                      </div>
+                      {track.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -1475,103 +1459,103 @@ const Apply = () => {
               }
             }}
           >
-            <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-              <CardHeader className="relative z-10">
-                  <CardTitle className="text-xl flex items-center gap-3">
-                  <FileText className="w-5 h-5 text-primary" />
-                  {APPLICATION_FORM_CONFIG.sections.privacy}
-                  <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
-                    필수
-                  </Badge>
-                </CardTitle>
-                <CardDescription>개인정보 수집 및 이용에 동의해주세요.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6 relative z-10">
-                <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
-                  <h3 className="text-lg font-semibold mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
-                  <div className="space-y-4 text-sm leading-relaxed">
-                    <div>
-                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
-                      <p className="mb-2 text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
-                      <p className="mb-2"><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.purpose}</strong></p>
-                      <p><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.items}</strong></p>
-                    </div>
-                    <div>
-                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section2.title}</p>
-                      <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section2.description}</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section3.title}</p>
-                      <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section3.description}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {(() => {
-                    const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
-                    if (!privacyQuestion) return null;
-                    const privacyAnswer = formData.answers[privacyQuestion.id.toString()] || "";
-                    return (
-                      <>
-                        <div 
-                          className={getCheckboxContainerClass(privacyAnswer === "agree")}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            updateAnswer(privacyQuestion.id, privacyAnswer === "agree" ? "" : "agree");
-                          }}
-                        >
-                          <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                            privacyAnswer === "agree"
-                              ? "border-primary bg-primary"
-                              : "border-border"
-                          }`}>
-                            {privacyAnswer === "agree" && (
-                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                            <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
-                            {privacyAnswer === "agree" && (
-                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                                선택됨
-                              </Badge>
-                            )}
-                          </div>
+            {(() => {
+              const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
+              if (!privacyQuestion) return null;
+              const privacyAnswer = formData.answers[privacyQuestion.id.toString()] || "";
+              
+              return (
+                <Card key={privacyQuestion.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+                  <CardHeader className="relative z-10">
+                    <CardTitle className="text-xl flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-primary" />
+                      {privacyQuestion.question}
+                      {privacyQuestion.required && (
+                        <Badge variant="destructive" className="text-xs px-2 py-0.5 rounded-md">
+                          {APPLICATION_FORM_CONFIG.commonTexts.required}
+                        </Badge>
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6 relative z-10">
+                    <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
+                      <h3 className="text-lg font-semibold mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
+                      <div className="space-y-4 text-sm leading-relaxed">
+                        <div>
+                          <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
+                          <p className="mb-2 text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
+                          <p className="mb-2"><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.purpose}</strong></p>
+                          <p><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.items}</strong></p>
                         </div>
-                        <div 
-                          className={getCheckboxContainerClass(privacyAnswer === "disagree")}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            updateAnswer(privacyQuestion.id, privacyAnswer === "disagree" ? "" : "disagree");
-                          }}
-                        >
-                          <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                            privacyAnswer === "disagree"
-                              ? "border-primary bg-primary"
-                              : "border-border"
-                          }`}>
-                            {privacyAnswer === "disagree" && (
-                              <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
-                            )}
-                          </div>
-                          <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-                            <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
-                            {privacyAnswer === "disagree" && (
-                              <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                                선택됨
-                              </Badge>
-                            )}
-                          </div>
+                        <div>
+                          <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section2.title}</p>
+                          <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section2.description}</p>
                         </div>
-                      </>
-                    );
-                  })()}
-                </div>
-              </CardContent>
-            </Card>
+                        <div>
+                          <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section3.title}</p>
+                          <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section3.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div 
+                        className={getCheckboxContainerClass(privacyAnswer === "agree")}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          updateAnswer(privacyQuestion.id, privacyAnswer === "agree" ? "" : "agree");
+                        }}
+                      >
+                        <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                          privacyAnswer === "agree"
+                            ? "border-primary bg-primary"
+                            : "border-border"
+                        }`}>
+                          {privacyAnswer === "agree" && (
+                            <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                          )}
+                        </div>
+                        <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
+                          <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
+                          {privacyAnswer === "agree" && (
+                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                              선택됨
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                      <div 
+                        className={getCheckboxContainerClass(privacyAnswer === "disagree")}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          updateAnswer(privacyQuestion.id, privacyAnswer === "disagree" ? "" : "disagree");
+                        }}
+                      >
+                        <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                          privacyAnswer === "disagree"
+                            ? "border-primary bg-primary"
+                            : "border-border"
+                        }`}>
+                          {privacyAnswer === "disagree" && (
+                            <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                          )}
+                        </div>
+                        <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
+                          <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
+                          {privacyAnswer === "disagree" && (
+                            <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                              선택됨
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })()}
 
             {commonQuestions.filter(q => !q.question.includes("개인정보") && !q.question.includes("동의")).length > 0 && (
               <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
