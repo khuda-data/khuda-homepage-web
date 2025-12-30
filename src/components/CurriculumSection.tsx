@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, Presentation, Award, Info, ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { CURRICULUM_INFO, CURRICULUM_STYLES, SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 
@@ -297,6 +297,90 @@ const CurriculumSection = () => {
               </ContainerWithGradient>
 
               <NavigationButton direction={CURRICULUM_STYLES.navigation.direction.next} className={CURRICULUM_STYLES.layout.desktopNav} />
+            </div>
+
+            {/* 정기 학술제 섹션 */}
+            <div className="mt-12">
+              {/* 연결선 효과 */}
+              <div className="w-0.5 h-16 bg-gradient-to-b from-transparent via-white/50 to-white/40 mx-auto mb-8"></div>
+              
+              {/* 심화 트랙 카드와 동일한 레이아웃 구조 사용 */}
+              <div className={CURRICULUM_STYLES.layout.relativeFlex}>
+                {/* 왼쪽 네비게이션 버튼 공간 (보이지 않지만 레이아웃 맞추기) */}
+                <div className="hidden md:flex w-12 h-12 flex-shrink-0"></div>
+
+                <ContainerWithGradient className={CURRICULUM_STYLES.layout.relativeFlex1}>
+                  <div className="space-y-6">
+                    {/* 헤더 */}
+                    <div className="flex flex-col items-center text-center space-y-4 pb-2 w-full">
+                      <div className="flex items-center gap-2 text-white/70">
+                        <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30"></div>
+                        <span className="text-xs font-medium uppercase tracking-wider">학기 말 최종 프로젝트</span>
+                        <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/30"></div>
+                      </div>
+                      <h3 className={cn(CURRICULUM_STYLES.text.title.large, "bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent w-full")}>
+                        {CURRICULUM_INFO.academicFestival.title}
+                      </h3>
+                      <p className={cn(CURRICULUM_STYLES.text.body.medium, "text-muted-foreground w-full")}>
+                        {CURRICULUM_INFO.academicFestival.subtitle}
+                      </p>
+                      <p className={cn(CURRICULUM_STYLES.text.body.small, "text-foreground/80 leading-relaxed w-full max-w-3xl")}>
+                        {CURRICULUM_INFO.academicFestival.description}
+                      </p>
+                    </div>
+
+                    {/* 참여 인원 카드 */}
+                    <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover)}>
+                      <div>
+                        <h4 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.smallGap, "text-white")}>
+                          {CURRICULUM_INFO.academicFestival.participation.title}
+                        </h4>
+                        <p className="text-sm text-white/95 leading-relaxed">
+                          {CURRICULUM_INFO.academicFestival.participation.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 발표 형식 카드들 */}
+                    <div className={cn(CURRICULUM_STYLES.layout.grid2, "gap-4 md:gap-6")}>
+                      {/* 포스터 발표 */}
+                      <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover, "h-full flex flex-col")}>
+                        <h4 className={cn(CURRICULUM_STYLES.text.title.small, "mb-4 text-white")}>
+                          {CURRICULUM_INFO.academicFestival.posterPresentation.title}
+                        </h4>
+                        <p className={cn("text-sm text-white/95 leading-relaxed flex-1 mb-4", CURRICULUM_STYLES.spacing.mediumGap)}>
+                          {CURRICULUM_INFO.academicFestival.posterPresentation.description}
+                        </p>
+                        <div className="flex items-start gap-2 p-3 rounded-lg bg-blue-950/30 border border-blue-500/30 mt-auto">
+                          <Info className="w-4 h-4 text-blue-300 mt-0.5 shrink-0" />
+                          <p className="text-xs text-blue-100 leading-relaxed">
+                            {CURRICULUM_INFO.academicFestival.posterPresentation.purpose}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* 정식 발표 */}
+                      <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover, "h-full flex flex-col")}>
+                        <h4 className={cn(CURRICULUM_STYLES.text.title.small, "mb-4 text-white")}>
+                          {CURRICULUM_INFO.academicFestival.formalPresentation.title}
+                        </h4>
+                        <p className={cn("text-sm text-white/95 leading-relaxed flex-1 mb-4", CURRICULUM_STYLES.spacing.mediumGap)}>
+                          {CURRICULUM_INFO.academicFestival.formalPresentation.description}
+                        </p>
+                        <div className="flex items-start gap-2 p-3 rounded-lg bg-primary/20 border border-primary/30 mt-auto">
+                          <Info className="w-4 h-4 text-primary/90 mt-0.5 shrink-0" />
+                          <p className="text-xs text-white/90 leading-relaxed">
+                            {CURRICULUM_INFO.academicFestival.formalPresentation.purpose}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ContainerWithGradient>
+
+                {/* 오른쪽 네비게이션 버튼 공간 (보이지 않지만 레이아웃 맞추기) */}
+                <div className="hidden md:flex w-12 h-12 flex-shrink-0"></div>
+              </div>
             </div>
           </>
         )}

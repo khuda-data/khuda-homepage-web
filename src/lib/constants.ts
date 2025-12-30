@@ -539,8 +539,8 @@ export const CURRICULUM_INFO = {
   advancedSessionTitle: (trackCount: number) => `${trackCount}가지 심화트랙 중에서 선택할 수 있어요`,
   basicSessionDescription: `방학 동안 파이썬 실습과 머신러닝 기초를 함께 배워요.
 개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 기초를 탄탄히 다지고, 팀 단위로 토이프로젝트를 진행합니다.`,
-  advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구해요.
-자연어처리, 컴퓨터비전, 데이터분석 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고 실전 프로젝트까지 완성합니다.`,
+  advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구합니다.
+자연어처리, 컴퓨터비전, 데이터엔지니어링 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고, 학기 말 정기 학술제를 진행합니다.`,
   basicTrackTitle: "기초 세션",
   basicTrackDescription: `방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
 이론과 실습을 통해 단계별로 실력을 쌓아갑니다.`,
@@ -656,6 +656,28 @@ export const CURRICULUM_INFO = {
       ],
     },
   ],
+  // 정기 학술제 정보
+  academicFestival: {
+    title: "정기 학술제",
+    subtitle: "심화 트랙의 마지막을 장식하는 프로젝트 데모데이",
+    description: "한 학기 동안 심화 트랙에서 쌓은 지식과 경험을 바탕으로 완성한 프로젝트를 발표하는 자리입니다. 포스터 발표와 정식 발표를 통해 동료들과 전문가들로부터 피드백을 받으며, 프로젝트의 완성도를 높여갑니다.",
+    participation: {
+      title: "참여 인원",
+      description: "각 트랙별 4-6명 기준 한 팀 (트랙당 최대 2팀)",
+    },
+    posterPresentation: {
+      title: "포스터 발표",
+      contribution: "최종 상장 기여 10%",
+      description: "참가 팀이 자신의 프로젝트를 포스터로 만들어 이를 발표하는 자리입니다. KHUDA 부원들 간의 상호 평가로 최종 점수의 50%가 반영됩니다.",
+      purpose: "부원들 간 프로젝트 피드백을 받기 어려웠다는 점을 개선하기 위해 도입되었습니다.",
+    },
+    formalPresentation: {
+      title: "정식 발표",
+      contribution: "최종 상장 기여 90%",
+      description: "심사위원분들을 모셔서 진행하는 기존과 동일한 프로젝트 발표입니다.",
+      purpose: "심사위원 코멘트를 듣는 것이 목적이며, 심사위원분들은 교수님을 비롯해 현직자 섭외 예정입니다.",
+    },
+  },
 };
 
 export const CURRICULUM_STYLES = {
@@ -786,7 +808,7 @@ export const CURRICULUM_STYLES = {
   },
   header: {
     title: "text-3xl md:text-5xl lg:text-6xl font-bold text-foreground",
-    subtitle: "text-sm md:text-lg text-foreground max-w-3xl",
+    subtitle: "text-sm md:text-lg text-foreground",
   },
   sectionId: "curriculum",
   index: {
@@ -1005,6 +1027,11 @@ export const APPLICATION_FORM_CONFIG = {
   announcementNotice: {
     title: "서류 합격자 발표 안내",
     description: "결과는 발표 일정에 맞춰 웹사이트에서 확인 가능합니다.",
+  },
+  // 면접 안내 메시지
+  interviewNotice: {
+    title: "면접 안내",
+    description: "OB 지원자는 면접 없이 서류만 심사됩니다.",
   },
   
   // 페이지 제목 및 설명

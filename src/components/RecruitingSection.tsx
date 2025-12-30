@@ -167,6 +167,8 @@ const RecruitingSection = () => {
       noticeMessage = APPLICATION_FORM_CONFIG.applicationNotice.description;
     } else if (step.step === 2) {
       noticeMessage = APPLICATION_FORM_CONFIG.announcementNotice.description;
+    } else if (step.step === 3) {
+      noticeMessage = APPLICATION_FORM_CONFIG.interviewNotice.description;
     } else if (step.step === 4) {
       noticeMessage = RECRUITMENT_SCHEDULE.final.ot;
     }
