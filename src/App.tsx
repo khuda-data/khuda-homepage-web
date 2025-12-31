@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { initGA, trackPageView, trackGTMPageView } from "./utils/analytics";
+import { trackPageView } from "./utils/analytics";
 import Index from "./pages/Index";
 import Apply from "./pages/Apply";
 import NotFound from "./pages/NotFound";
@@ -15,13 +15,8 @@ const PageTracker = () => {
   const location = useLocation();
 
   useEffect(() => {
-    initGA();
-  }, []);
-
-  useEffect(() => {
     const path = location.pathname + location.search;
     trackPageView(path);
-    trackGTMPageView(path);
   }, [location]);
 
   return null;
