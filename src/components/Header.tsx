@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { scrollToSection, IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import UnifiedActionButton from "./UnifiedActionButton";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,11 +66,7 @@ const Header = () => {
           </nav>
 
           <div className={HEADER_STYLES.button.desktop.container}>
-            <Link to={ROUTES.apply}>
-              <Button variant="default" size="default" className={HEADER_STYLES.button.desktop.apply}>
-                {HEADER_CONFIG.applyButton.desktop}
-              </Button>
-            </Link>
+            <UnifiedActionButton size="md" disabled={true} />
           </div>
 
           <button
@@ -91,11 +87,9 @@ const Header = () => {
                   className={HEADER_STYLES.nav.mobile.link}
                 />
               ))}
-              <Link to={ROUTES.apply} className={HEADER_STYLES.nav.mobile.applyLink}>
-                <Button variant="nav" size="default" className={HEADER_STYLES.button.mobile.apply}>
-                  {HEADER_CONFIG.applyButton.mobile}
-                </Button>
-              </Link>
+              <div className={HEADER_STYLES.nav.mobile.applyLink}>
+                <UnifiedActionButton size="sm" disabled={true} className="w-full" />
+              </div>
             </nav>
           </div>
         )}

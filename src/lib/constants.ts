@@ -54,6 +54,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api-kh
 export const ROUTES = {
   home: "/",
   apply: "/apply",
+  applicationResult: "/application-result",
 } as const;
 
 // ============================================================================

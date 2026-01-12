@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect, type ReactNode } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
@@ -10,12 +8,11 @@ import {
   TIME_SEPARATOR,
   ANIMATION_CONFIG,
   CTA_STYLES,
-  ROUTES,
   SECTION_STYLES,
-  BUTTON_CONFIG,
   SCROLL_ANIMATION_CONFIG
 } from "@/lib/constants";
 import { calculateTimeLeft, type TimeLeft, TIME_CONSTANTS } from "@/lib/date-utils";
+import UnifiedActionButton from "./UnifiedActionButton";
 
 // 상수 정의
 const APPLICATION_DEADLINE = import.meta.env.VITE_APPLICATION_DEADLINE || RECRUITMENT_SCHEDULE.application.deadlineISO;
@@ -72,13 +69,6 @@ const ApplicationCTA = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Button 공통 props
-  const commonButtonProps = {
-    variant: BUTTON_CONFIG.variant.hero,
-    size: BUTTON_CONFIG.size.xl,
-  } as const;
-
-  const buttonText = APPLICATION_CTA_MESSAGES.buttonText;
 
   return (
     <section 
@@ -103,13 +93,9 @@ const ApplicationCTA = () => {
                   {APPLICATION_CTA_MESSAGES.deadlineExpired.subtitle}
                 </p>
               </MessageWrapper>
-              <Button 
-                {...commonButtonProps}
-                disabled
-                className={ANIMATION_CONFIG.button.disabled}
-              >
-                {buttonText}
-              </Button>
+              <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
+                <UnifiedActionButton size="lg" disabled={true} />
+              </div>
             </>
           ) : (
             <>
@@ -134,14 +120,9 @@ const ApplicationCTA = () => {
                   ))}
                 </div>
               </MessageWrapper>
-              <Link to={ROUTES.apply} className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
-                <Button 
-                  {...commonButtonProps}
-                  className={ANIMATION_CONFIG.button.active}
-                >
-                  {buttonText}
-                </Button>
-              </Link>
+              <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
+                <UnifiedActionButton size="lg" disabled={true} />
+              </div>
             </>
           )}
         </div>

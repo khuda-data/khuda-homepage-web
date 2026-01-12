@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { trackPageView } from "./utils/analytics";
 import Index from "./pages/Index";
 import Apply from "./pages/Apply";
+import ApplicationResult from "./pages/ApplicationResult";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/apply" element={<Apply />} />
+          <Route path="/application-result" element={<ApplicationResult />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

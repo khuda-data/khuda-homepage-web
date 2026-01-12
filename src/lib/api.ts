@@ -37,6 +37,18 @@ export interface InterviewSchedule {
   times: string[];
 }
 
+export interface ApplicationResultRequest {
+  student_id: string;
+  phone_number: string;
+  name: string;
+}
+
+export interface ApplicationResultResponse {
+  student_id: string;
+  name: string;
+  status: string;
+}
+
 // ============================================================================
 // 상수
 // ============================================================================
@@ -45,6 +57,7 @@ const REQUEST_TIMEOUT = 30000; // 30초
 const API_ENDPOINTS = {
   QUESTIONS: (type: ApplicantType) => `/api/questions/${type}`,
   APPLICATIONS: "/api/applications",
+  APPLICATION_RESULT: "/api/application_result",
 } as const;
 
 // ============================================================================
@@ -222,6 +235,22 @@ const validateApplicationResponse = (data: unknown): ApplicationResponse => {
   throw new ApiError("응답 데이터 형식이 올바르지 않습니다.");
 };
 
+const validateApplicationResultResponse = (data: unknown): ApplicationResultResponse => {
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "student_id" in data &&
+    typeof (data as { student_id: unknown }).student_id === "string" &&
+    "name" in data &&
+    typeof (data as { name: unknown }).name === "string" &&
+    "status" in data &&
+    typeof (data as { status: unknown }).status === "string"
+  ) {
+    return data as ApplicationResultResponse;
+  }
+  throw new ApiError("응답 데이터 형식이 올바르지 않습니다.");
+};
+
 /**
  * 공통 API 호출 함수
  */
@@ -297,6 +326,31 @@ export async function submitApplication(
     },
     validateApplicationResponse,
     "지원서 제출에"
+  );
+}
+
+/**
+ * 합격자 결과 조회
+ */
+export async function getApplicationResult(
+  request: ApplicationResultRequest
+): Promise<ApplicationResultResponse> {
+  const url = `${API_BASE_URL}${API_ENDPOINTS.APPLICATION_RESULT}`;
+  return apiCall(
+    url,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        student_id: request.student_id,
+        phone_number: request.phone_number,
+        name: request.name,
+      }),
+    },
+    validateApplicationResultResponse,
+    "합격자 결과 조회에"
   );
 }
 

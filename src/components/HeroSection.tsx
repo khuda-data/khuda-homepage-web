@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ColorBends from "./ColorBends";
 import { useEffect, useState } from "react";
-import { scrollToSection, HERO_CONFIG, HERO_STYLES, ROUTES, CURRICULUM_STYLES } from "@/lib/constants";
+import { scrollToSection, HERO_CONFIG, HERO_STYLES, CURRICULUM_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import UnifiedActionButton from "./UnifiedActionButton";
 
 const HeroSection = () => {
   const [currentWord, setCurrentWord] = useState(0);
@@ -57,11 +57,7 @@ const HeroSection = () => {
           </p>
 
           <div className={HERO_STYLES.buttons.container}>
-            <Link to={ROUTES.apply}>
-              <Button variant="hero" className={HERO_STYLES.buttons.base}>
-                {HERO_CONFIG.buttons.apply}
-              </Button>
-            </Link>
+            <UnifiedActionButton size="md" disabled={true} />
             <Button
               variant="heroOutline"
               className={HERO_STYLES.buttons.base}

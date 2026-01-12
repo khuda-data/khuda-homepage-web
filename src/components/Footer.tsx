@@ -1,4 +1,5 @@
-import { LOCATION, FOOTER_INFO, FOOTER_STYLES, EXTERNAL_LINK_PROPS } from "@/lib/constants";
+import { Link } from "react-router-dom";
+import { LOCATION, FOOTER_INFO, FOOTER_STYLES, EXTERNAL_LINK_PROPS, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const Footer = () => {
