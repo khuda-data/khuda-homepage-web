@@ -13,9 +13,13 @@ import { ROUTES, COMMON_STYLES, CONTACT_PHONE } from "@/lib/constants";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
+// 합격자 조회 오픈 시간: 2026년 1월 12일 오후 6시 (한국 시간, KST)
+const OPEN_TIME = new Date("2026-01-12T18:00:00+09:00");
+
 const ApplicationResult = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [result, setResult] = useState<{
     student_id: string;
     name: string;
@@ -67,6 +71,19 @@ const ApplicationResult = () => {
       setErrors((prev) => ({ ...prev, name: undefined }));
     }
   };
+
+  // 오픈 시간 체크
+  useEffect(() => {
+    const checkOpenTime = () => {
+      const now = new Date();
+      setIsOpen(now >= OPEN_TIME);
+    };
+
+    checkOpenTime();
+    const interval = setInterval(checkOpenTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // 결과 카드로 스크롤
   useEffect(() => {
@@ -333,13 +350,18 @@ const ApplicationResult = () => {
 
                 <Button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || !isOpen}
                   className="w-full min-h-[48px] sm:min-h-[44px] text-base sm:text-sm bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
                 >
                   {isLoading ? (
                     <>
                       <Clock className="w-4 h-4 sm:w-3.5 sm:h-3.5 mr-2 animate-spin" />
                       조회 중...
+                    </>
+                  ) : !isOpen ? (
+                    <>
+                      <Clock className="w-4 h-4 sm:w-3.5 sm:h-3.5 mr-2" />
+                      2026년 1월 12일 오후 6시부터 조회 가능
                     </>
                   ) : (
                     "결과 조회"
@@ -462,12 +484,12 @@ const ApplicationResult = () => {
                       <div className="bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 border border-border/50 space-y-2 sm:space-y-3">
                         <div className="text-center space-y-1.5 sm:space-y-2">
                           <p className="text-sm sm:text-base md:text-lg text-foreground font-semibold">
-                            지원해주셔서 감사합니다
+                            지원해주셔서 감사합니다.
                           </p>
                           <div className="space-y-1 sm:space-y-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                             <p>이번 기수에는 아쉽게도 선발되지 못하셨습니다.</p>
-                            <p>하지만 지원 과정에서 보여주신 열정과 노력은 충분히 인정받았습니다.</p>
-                            <p className="pt-0.5 sm:pt-1">다음 기수에도 많은 관심과 지원 부탁드립니다.</p>
+                            <p>하지만 지원서에서 느껴진 진심과 준비는 분명했고, 얼마나 애써왔는지 저희도 알고 있습니다. 이번 결과 하나로 흔들리지 않으셨으면 합니다.</p>
+                            <p className="pt-0.5 sm:pt-1">다음 기수에도 꼭 다시 지원해 주세요. 감사합니다.</p>
                           </div>
                         </div>
                       </div>
@@ -499,7 +521,7 @@ const ApplicationResult = () => {
                       <div className="bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 border border-border/50">
                         <p className="text-xs sm:text-sm md:text-base text-foreground text-center font-medium leading-relaxed">
                           합격을 진심으로 축하드립니다!<br />
-                          곧 카카오톡 방에 초대될 예정이며,<br />
+                          곧 카카오톡 공지방에 초대될 예정이며,<br />
                           OT에 대한 자세한 공지가 있을 예정입니다.
                         </p>
                       </div>
