@@ -970,7 +970,7 @@ export const APPLICATION_FORM_CONFIG = {
   
   // 공통 텍스트
   commonTexts: {
-    required: "필수",
+    required: "*",
     thankYouMessage: "좋은 의견 감사합니다",
     selectRegion: "지역을 선택해주세요",
     defaultPlaceholder: "답변을 입력해주세요",

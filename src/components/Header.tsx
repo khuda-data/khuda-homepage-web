@@ -66,7 +66,7 @@ const Header = () => {
           </nav>
 
           <div className={HEADER_STYLES.button.desktop.container}>
-            <UnifiedActionButton size="md" disabled={true} />
+            <UnifiedActionButton size="md" />
           </div>
 
           <button
@@ -88,7 +88,7 @@ const Header = () => {
                 />
               ))}
               <div className={HEADER_STYLES.nav.mobile.applyLink}>
-                <UnifiedActionButton size="sm" disabled={true} className="w-full" />
+                <UnifiedActionButton size="sm" className="w-full" />
               </div>
             </nav>
           </div>

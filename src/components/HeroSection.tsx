@@ -57,7 +57,7 @@ const HeroSection = () => {
           </p>
 
           <div className={HERO_STYLES.buttons.container}>
-            <UnifiedActionButton size="md" disabled={true} />
+            <UnifiedActionButton size="md" />
             <Button
               variant="heroOutline"
               className={HERO_STYLES.buttons.base}

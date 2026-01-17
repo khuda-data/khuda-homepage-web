@@ -94,7 +94,7 @@ const ApplicationCTA = () => {
                 </p>
               </MessageWrapper>
               <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
-                <UnifiedActionButton size="lg" disabled={true} />
+                <UnifiedActionButton size="lg" />
               </div>
             </>
           ) : (
@@ -121,7 +121,7 @@ const ApplicationCTA = () => {
                 </div>
               </MessageWrapper>
               <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
-                <UnifiedActionButton size="lg" disabled={true} />
+                <UnifiedActionButton size="lg" />
               </div>
             </>
           )}

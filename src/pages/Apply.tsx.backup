@@ -1,0 +1,75 @@
+import { Button } from "@/components/ui/button";
+import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
+import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
+import { useApplicationForm } from "@/hooks/useApplicationForm";
+import { ApplicationHeader } from "@/components/apply/ApplicationHeader";
+import { ScheduleCard } from "@/components/apply/ScheduleCard";
+import { FAQCard } from "@/components/apply/FAQCard";
+import { ApplicationTypeSelector } from "@/components/apply/ApplicationTypeSelector";
+import { SubmissionSuccess } from "@/components/apply/SubmissionSuccess";
+import { PrivacyConsentCard } from "@/components/apply/PrivacyConsentCard";
+import { BasicInfoCard } from "@/components/apply/BasicInfoCard";
+import { InterviewDateSelector } from "@/components/apply/InterviewDateSelector";
+import type { Question } from "@/lib/api";
+
+// renderQuestion 함수는 원본에서 가져옴 (복잡하므로 나중에 분리)
+// 여기서는 원본 Apply.tsx의 renderQuestion을 그대로 사용하기 위해
+// 필요한 부분만 import하고 나머지는 원본 코드를 유지
+
+// 원본 Apply.tsx에서 renderQuestion 함수를 가져오기 위해
+// 일단 원본 코드를 최대한 유지하면서 컴포넌트만 분리
+
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Code, BookOpen, Award, Clock, FileText, Users, Layers, Info, Activity, Heart, Circle, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { 
+  getCheckboxContainerClass,
+  getCheckboxIconClass,
+  getInterviewTimeButtonClass
+} from "@/lib/form-utils";
+import { 
+  APPLICATION_FORM_CONFIG as APP_CONFIG,
+  CURRICULUM_INFO,
+  COMMON_STYLES,
+} from "@/lib/constants";
+
+const Apply = () => {
+  // 질문 로드
+  const { questions, commonQuestions, typeQuestions } = useApplicationQuestions("");
+  
+  // 폼 관리 - questions는 나중에 설정
+  const {
+    formData,
+    setFormData,
+    isSubmitted,
+    isSubmitting,
+    interviewSchedule,
+    updateAnswer,
+    handleCheckboxChange,
+    handleSubmit,
+    findQuestionByKeywords,
+    findInterviewQuestion,
+    isApplicationType,
+    getAnswer,
+    getArrayAnswer,
+  } = useApplicationForm([]);
+
+  // applicationType 변경 시 questions 다시 로드
+  const { questions: questionsWithType } = useApplicationQuestions(formData.applicationType);
+
+  // questions 업데이트를 위해 useApplicationForm을 다시 호출할 수 없으므로
+  // 일단 원본 구조를 유지하면서 컴포넌트만 분리하는 방식으로 진행
+
+  // 원본 코드를 최대한 유지하면서 컴포넌트만 분리하는 것이 안전
+  // 따라서 원본 Apply.tsx를 참고하여 필요한 부분만 수정
+
+  return null; // 임시
+};
+
+export default Apply;
