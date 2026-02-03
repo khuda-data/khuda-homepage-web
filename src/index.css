@@ -107,7 +107,7 @@
 
 @layer components {
   .nav-link {
-    @apply relative text-muted-foreground hover:text-foreground transition-all duration-300 ease-out;
+    @apply relative text-white/90 hover:text-white transition-all duration-300 ease-out;
     font-feature-settings: 'kern' 1, 'liga' 1;
   }
 
@@ -130,7 +130,7 @@
   }
 
   .nav-link:hover {
-    @apply text-foreground;
+    @apply text-white;
     transform: translateY(-1px);
   }
 

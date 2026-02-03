@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { scrollToSection, IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import UnifiedActionButton from "./UnifiedActionButton";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,26 +17,63 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleScrollToSection = (href: string) => {
-    scrollToSection(href);
+  useEffect(() => {
+    // 홈 페이지로 이동할 때 맨 위로 스크롤
+    if (location.pathname === ROUTES.home) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location.pathname]);
+
+  const handleNavClick = (href: string, e?: React.MouseEvent) => {
+    if (href === ROUTES.about) {
+      if (location.pathname === ROUTES.home) {
+        e?.preventDefault();
+        scrollToSection("#about");
+      } else {
+        setTimeout(() => scrollToSection("#about"), 100);
+      }
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (location.pathname === ROUTES.home) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
     setIsMobileMenuOpen(false);
   };
 
   // 네비게이션 링크 렌더링 컴포넌트
-  const NavLinkButton = ({ 
+  const NavLink = ({ 
     link, 
     className 
   }: { 
     link: typeof HEADER_CONFIG.navLinks[0]; 
     className?: string;
-  }) => (
-    <button
-      onClick={() => handleScrollToSection(link.href)}
-      className={className}
-    >
-      {link.label}
-    </button>
-  );
+  }) => {
+    if (link.href === ROUTES.about) {
+      return (
+        <Link
+          to={ROUTES.home}
+          onClick={(e) => handleNavClick(link.href, e)}
+          className={className}
+        >
+          {link.label}
+        </Link>
+      );
+    }
+    
+    return (
+      <Link
+        to={link.href}
+        onClick={() => handleNavClick(link.href)}
+        className={className}
+      >
+        {link.label}
+      </Link>
+    );
+  };
 
   return (
     <header
@@ -46,8 +83,8 @@ const Header = () => {
       )}
     >
       <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
-        <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base)}>
-          <Link to={ROUTES.home} className={HEADER_STYLES.logo.container}>
+        <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base, "relative")}>
+          <Link to={ROUTES.home} onClick={handleLogoClick} className={HEADER_STYLES.logo.container}>
             <img 
               src={IMAGE_PATHS.logo} 
               alt={HEADER_CONFIG.logo.alt} 
@@ -57,7 +94,7 @@ const Header = () => {
 
           <nav className={HEADER_STYLES.nav.desktop.container}>
             {HEADER_CONFIG.navLinks.map((link) => (
-              <NavLinkButton
+              <NavLink
                 key={link.label}
                 link={link}
                 className={HEADER_STYLES.nav.desktop.link}
@@ -65,12 +102,8 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className={HEADER_STYLES.button.desktop.container}>
-            <UnifiedActionButton size="md" />
-          </div>
-
           <button
-            className={HEADER_STYLES.button.mobile.menuToggle}
+            className={cn(HEADER_STYLES.button.mobile.menuToggle, "ml-auto")}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={HEADER_STYLES.icon.size} /> : <Menu size={HEADER_STYLES.icon.size} />}
@@ -81,15 +114,12 @@ const Header = () => {
           <div className={cn(HEADER_STYLES.height.mobileMenuOffset, HEADER_STYLES.nav.mobile.container)}>
             <nav className={HEADER_STYLES.nav.mobile.menu}>
               {HEADER_CONFIG.navLinks.map((link) => (
-                <NavLinkButton
+                <NavLink
                   key={link.label}
                   link={link}
                   className={HEADER_STYLES.nav.mobile.link}
                 />
               ))}
-              <div className={HEADER_STYLES.nav.mobile.applyLink}>
-                <UnifiedActionButton size="sm" className="w-full" />
-              </div>
             </nav>
           </div>
         )}
