@@ -107,12 +107,16 @@ export const EXTERNAL_LINK_PROPS = {
 } as const;
 
 export const FOOTER_INFO = {
-  organization: "경희대학교 데이터분석/AI 학회",
+  organization: "경희대학교 데이터분석/AI 학회 KHUDA",
   description: "데이터와 AI로 미래를 만들어가는 KHUDA와 함께하세요.",
   copyright: (year: number) => `Copyright © ${year} KHUDA. All Rights Reserved.`,
   sections: {
-    contact: "Contact Us",
     location: "Location",
+    contact: "Contact",
+  },
+  location: {
+    address: "경기도 용인시 기흥구 덕영대로 1732",
+    building: "경희대학교 국제캠퍼스",
   },
   socialLinks: [
     {
@@ -296,21 +300,22 @@ export const HERO_STYLES = {
 export const FOOTER_STYLES = {
   footer: {
     base: "bg-secondary/50 border-t border-border",
-    padding: "py-8 sm:py-10 md:py-12 lg:py-16",
+    padding: "py-8 sm:py-10 md:py-12",
   },
   container: {
     base: "container mx-auto",
     padding: "px-4 sm:px-6 md:px-12",
   },
   grid: {
-    base: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
-    gap: "gap-6 sm:gap-8 md:gap-10 lg:gap-12",
+    base: "flex flex-col md:flex-row md:items-start md:justify-between",
+    gap: "gap-8 md:gap-0",
   },
   layout: {
     flexCol: "flex flex-col",
   },
   section: {
-    header: "font-semibold mb-3 sm:mb-4 text-xs sm:text-sm uppercase tracking-wider text-foreground",
+    header: "font-semibold mb-4 sm:mb-5 text-sm sm:text-base text-foreground",
+    organization: "font-bold text-base sm:text-lg text-foreground",
     text: {
       base: "text-muted-foreground text-xs sm:text-sm",
       small: "text-muted-foreground/60 text-[10px] sm:text-xs",
@@ -321,11 +326,19 @@ export const FOOTER_STYLES = {
       itemGap: "space-y-2 sm:space-y-3",
     },
   },
-  socialLink: {
-    base: "flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-foreground transition-all duration-200 group min-h-[44px]",
-    iconContainer: "w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0",
-    icon: "w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:text-primary transition-colors",
-    label: "text-xs sm:text-sm",
+  middleSection: {
+    container: "flex flex-col",
+  },
+  rightSection: {
+    container: "flex flex-col",
+  },
+  rightGroup: {
+    container: "flex flex-col gap-8 md:flex-row md:items-start md:justify-end md:gap-12 lg:gap-16",
+  },
+  socialLinks: {
+    container: "flex items-center gap-3 sm:gap-4",
+    link: "w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-muted/30 border border-border/50 flex items-center justify-center text-foreground hover:bg-muted/50 hover:border-foreground/30 transition-all duration-200 group",
+    icon: "w-5 h-5 sm:w-6 sm:h-6 stroke-[1.5] group-hover:stroke-2 transition-all",
   },
 };
 
