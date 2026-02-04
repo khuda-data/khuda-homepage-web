@@ -2,16 +2,16 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-const AboutSection = () => {
+const ProjectsSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
 
   return (
     <section 
-      id="about" 
+      id="projects" 
       ref={ref}
       className={cn(
         SECTION_STYLES.section.base,
-        "scroll-mt-12 sm:scroll-mt-16 md:scroll-mt-18 lg:scroll-mt-20",
+        "pt-20 sm:pt-24 md:pt-28 lg:pt-32",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
@@ -19,18 +19,15 @@ const AboutSection = () => {
         <div className={SECTION_STYLES.maxWidth.narrow}>
           <div className={SECTION_STYLES.header.container}>
             <h2 className={SECTION_STYLES.header.title}>
-              소개
+              프로젝트
             </h2>
             <p className={SECTION_STYLES.header.subtitle}>
-              경희대학교 데이터분석/AI 학회 KHUDA를 소개합니다
+              KHUDA 회원들이 진행한 프로젝트를 확인해보세요
             </p>
           </div>
-          <div className="space-y-4 text-muted-foreground">
-            <p className="text-sm sm:text-base md:text-lg leading-relaxed">
-              KHUDA는 경희대학교 데이터분석/AI 학회로, 데이터와 AI 기술을 통해 미래를 만들어가는 학회입니다.
-            </p>
-            <p className="text-sm sm:text-base md:text-lg leading-relaxed">
-              함께 성장하고, 함께 도전하며, 새로운 가능성을 만들어갑니다.
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg">
+              프로젝트 정보가 곧 업데이트될 예정입니다.
             </p>
           </div>
         </div>
@@ -39,4 +36,4 @@ const AboutSection = () => {
   );
 };
 
-export default AboutSection;
+export default ProjectsSection;

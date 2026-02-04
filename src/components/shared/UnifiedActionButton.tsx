@@ -22,9 +22,12 @@ const UnifiedActionButton = ({
   const baseClasses = "relative inline-flex items-center justify-center rounded-full font-semibold overflow-hidden transition-all duration-300 group shadow-lg hover:shadow-xl whitespace-nowrap";
   
   return (
-    <div className={cn(baseClasses, sizeClasses[size], className)}>
+    <div className={cn(baseClasses, sizeClasses[size], className, disabled && "opacity-60")}>
       {/* 통합 배경 그라데이션*/}
-      <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-white/30 to-blue-600 opacity-100 group-hover:opacity-90 transition-opacity" />
+      <div className={cn(
+        "absolute inset-0 bg-gradient-to-r from-red-600 via-white/30 to-blue-600 transition-opacity",
+        disabled ? "opacity-50" : "opacity-100 group-hover:opacity-90"
+      )} />
       
       {/* 내부 링크들 */}
       <div className="relative z-10 flex items-center w-full h-full gap-1 sm:gap-2">
@@ -33,8 +36,8 @@ const UnifiedActionButton = ({
           className={cn(
             "flex-1 h-full flex items-center justify-center transition-all duration-300",
             "px-2 sm:px-3",
-            "hover:bg-red-500/20",
-            disabled && "pointer-events-none opacity-50 cursor-not-allowed"
+            !disabled && "hover:bg-red-500/20",
+            disabled && "pointer-events-none cursor-not-allowed"
           )}
           onClick={(e) => disabled && e.preventDefault()}
         >
@@ -49,8 +52,10 @@ const UnifiedActionButton = ({
           className={cn(
             "flex-1 h-full flex items-center justify-center transition-all duration-300",
             "px-2 sm:px-3",
-            "hover:bg-blue-500/20"
+            !disabled && "hover:bg-blue-500/20",
+            disabled && "pointer-events-none cursor-not-allowed"
           )}
+          onClick={(e) => disabled && e.preventDefault()}
         >
           <span className="text-white font-semibold whitespace-nowrap">합격자 조회</span>
         </Link>

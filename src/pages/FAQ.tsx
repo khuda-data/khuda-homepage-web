@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
-import FAQSection from "@/components/FAQSection";
-import Footer from "@/components/Footer";
+import Header from "@/components/shared/Header";
+import FAQSection from "@/components/shared/FAQSection";
+import Footer from "@/components/shared/Footer";
 
 const FAQ = () => {
   return (

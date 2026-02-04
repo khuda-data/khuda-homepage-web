@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
-import CurriculumSection from "@/components/CurriculumSection";
-import Footer from "@/components/Footer";
+import Header from "@/components/shared/Header";
+import CurriculumSection from "@/components/pages/Activities/CurriculumSection";
+import Footer from "@/components/shared/Footer";
 import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ const Activities = () => {
           ref={ref}
           className={cn(
             SECTION_STYLES.section.base,
+            "pt-20 sm:pt-24 md:pt-28 lg:pt-32",
             isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
           )}
         >

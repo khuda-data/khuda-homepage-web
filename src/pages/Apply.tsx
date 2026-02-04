@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
-import { ApplicationHeader } from "@/components/apply/ApplicationHeader";
-import { ScheduleCard } from "@/components/apply/ScheduleCard";
-import { FAQCard } from "@/components/apply/FAQCard";
-import { ApplicationTypeSelector } from "@/components/apply/ApplicationTypeSelector";
-import { SubmissionSuccess } from "@/components/apply/SubmissionSuccess";
-import { PrivacyConsentCard } from "@/components/apply/PrivacyConsentCard";
-import { BasicInfoCard } from "@/components/apply/BasicInfoCard";
-import { QuestionRenderer } from "@/components/apply/QuestionRenderer";
+import { ApplicationHeader } from "@/components/pages/Apply/ApplicationHeader";
+import { ScheduleCard } from "@/components/pages/Apply/ScheduleCard";
+import { FAQCard } from "@/components/pages/Apply/FAQCard";
+import { ApplicationTypeSelector } from "@/components/pages/Apply/ApplicationTypeSelector";
+import { SubmissionSuccess } from "@/components/pages/Apply/SubmissionSuccess";
+import { PrivacyConsentCard } from "@/components/pages/Apply/PrivacyConsentCard";
+import { BasicInfoCard } from "@/components/pages/Apply/BasicInfoCard";
+import { QuestionRenderer } from "@/components/pages/Apply/QuestionRenderer";
 import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 
@@ -75,7 +75,7 @@ const Apply = () => {
       <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">
         <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
           <div className="text-center space-y-4 sm:space-y-6 mb-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
               <div className="space-y-2 sm:space-y-3">
                 {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
                   <div key={i}>{line}</div>

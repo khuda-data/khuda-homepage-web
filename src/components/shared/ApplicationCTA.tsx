@@ -12,7 +12,6 @@ import {
   SCROLL_ANIMATION_CONFIG
 } from "@/lib/constants";
 import { calculateTimeLeft, type TimeLeft, TIME_CONSTANTS } from "@/lib/date-utils";
-import UnifiedActionButton from "./UnifiedActionButton";
 
 // 상수 정의
 const APPLICATION_DEADLINE = import.meta.env.VITE_APPLICATION_DEADLINE || RECRUITMENT_SCHEDULE.application.deadlineISO;
@@ -93,9 +92,6 @@ const ApplicationCTA = () => {
                   {APPLICATION_CTA_MESSAGES.deadlineExpired.subtitle}
                 </p>
               </MessageWrapper>
-              <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
-                <UnifiedActionButton size="lg" />
-              </div>
             </>
           ) : (
             <>
@@ -120,9 +116,6 @@ const ApplicationCTA = () => {
                   ))}
                 </div>
               </MessageWrapper>
-              <div className={cn(CTA_STYLES.link.wrapper, ANIMATION_CONFIG.fadeIn, ANIMATION_CONFIG.linkDelay)}>
-                <UnifiedActionButton size="lg" />
-              </div>
             </>
           )}
         </div>
