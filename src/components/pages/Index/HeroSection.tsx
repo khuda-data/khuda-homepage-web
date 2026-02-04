@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
 import ColorBends from "./ColorBends";
 import { useEffect, useState } from "react";
-import { scrollToSection, HERO_CONFIG, HERO_STYLES, CURRICULUM_STYLES } from "@/lib/constants";
+import { HERO_CONFIG, HERO_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import UnifiedActionButton from "./UnifiedActionButton";
 
 const HeroSection = () => {
   const [currentWord, setCurrentWord] = useState(0);
@@ -56,16 +54,6 @@ const HeroSection = () => {
             <span className={HERO_STYLES.description.sub}>{HERO_CONFIG.description.sub}</span>
           </p>
 
-          <div className={HERO_STYLES.buttons.container}>
-            <UnifiedActionButton size="md" />
-            <Button
-              variant="heroOutline"
-              className={HERO_STYLES.buttons.base}
-              onClick={() => scrollToSection(`#${CURRICULUM_STYLES.sectionId}`)}
-            >
-              {HERO_CONFIG.buttons.viewActivities}
-            </Button>
-          </div>
         </div>
       </div>
 

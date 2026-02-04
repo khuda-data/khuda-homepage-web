@@ -4,9 +4,9 @@ import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getApplicationResult, ApiError, NetworkError } from "@/lib/api";
 import { ROUTES } from "@/lib/constants";
-import Footer from "@/components/Footer";
-import { ResultQueryForm } from "@/components/applicationResult/ResultQueryForm";
-import { ResultCard } from "@/components/applicationResult/ResultCard";
+import Footer from "@/components/shared/Footer";
+import { ResultQueryForm } from "@/components/pages/ApplicationResult/ResultQueryForm";
+import { ResultCard } from "@/components/pages/ApplicationResult/ResultCard";
 
 // 합격자 조회 오픈 시간: 2026년 1월 12일 오후 6시 (한국 시간, KST)
 const OPEN_TIME = new Date("2026-01-12T18:00:00+09:00");

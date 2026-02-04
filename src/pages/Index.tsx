@@ -1,9 +1,7 @@
-import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import SponsorSection from "@/components/SponsorSection";
-import ApplicationCTA from "@/components/ApplicationCTA";
-import Footer from "@/components/Footer";
+import Header from "@/components/shared/Header";
+import HeroSection from "@/components/pages/Index/HeroSection";
+import AboutSection from "@/components/pages/Index/AboutSection";
+import Footer from "@/components/shared/Footer";
 
 const Index = () => {
   return (
@@ -12,8 +10,6 @@ const Index = () => {
       <main>
         <HeroSection />
         <AboutSection />
-        <SponsorSection />
-        <ApplicationCTA />
       </main>
       <Footer />
     </div>

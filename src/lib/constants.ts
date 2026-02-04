@@ -825,7 +825,7 @@ export const CURRICULUM_STYLES = {
     white: "text-white",
   },
   header: {
-    title: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground",
+    title: "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground",
     subtitle: "text-xs sm:text-sm md:text-base lg:text-lg text-foreground",
   },
   sectionId: "curriculum",
@@ -1234,7 +1234,7 @@ export const CTA_STYLES = {
 export const SECTION_STYLES = {
   header: {
     container: "text-center mb-6 sm:mb-8 md:mb-10",
-    title: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6",
+    title: "text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 md:mb-6",
     subtitle: "text-sm sm:text-base md:text-lg text-muted-foreground",
   },
   maxWidth: {
@@ -1311,11 +1311,12 @@ export const SPONSOR_DATA: GenerationSponsors[] = [
 
 export const SPONSOR_PAGE_CONFIG = {
   title: "후원사",
-  subtitle: "KHUDA를 후원해주시는 기업 및 기관을 소개합니다",
+  subtitle: "KHUDA를 후원해주시는 기업 및 기관을 소개합니다.",
+  description: [],
   googleFormButton: {
-    text: "후원사 문의 신청",
+    text: "후원하기",
     href: "#", // TODO: 구글폼 링크로 교체 필요
-    disabled: true,
+    disabled: false,
     disabledText: "준비 중입니다",
   },
   noSponsorsMessage: "해당 기수에는 후원사 정보가 없습니다.",
@@ -1327,9 +1328,9 @@ export const SPONSOR_PAGE_STYLES = {
     container: "container mx-auto max-w-6xl",
   },
   header: {
-    container: "text-center mb-12 sm:mb-16",
-    title: "text-3xl sm:text-4xl md:text-5xl font-bold mb-4",
-    subtitle: "text-sm sm:text-base md:text-lg text-muted-foreground",
+    container: "text-center mb-8 sm:mb-12",
+    title: "text-2xl sm:text-3xl md:text-4xl font-bold mb-3",
+    subtitle: "text-sm sm:text-base text-muted-foreground",
   },
   generationSection: {
     container: "mb-12 sm:mb-16 last:mb-0",

@@ -40,6 +40,8 @@ const Header = () => {
     if (location.pathname === ROUTES.home) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
+      // 카운트업 재시작 이벤트 발생
+      window.dispatchEvent(new CustomEvent('countup-reset'));
     }
     setIsMobileMenuOpen(false);
   };

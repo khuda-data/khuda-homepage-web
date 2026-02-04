@@ -1,6 +1,6 @@
-import Header from "@/components/Header";
-import ProjectsSection from "@/components/ProjectsSection";
-import Footer from "@/components/Footer";
+import Header from "@/components/shared/Header";
+import ProjectsSection from "@/components/pages/Projects/ProjectsSection";
+import Footer from "@/components/shared/Footer";
 
 const Projects = () => {
   return (

@@ -1,14 +1,14 @@
 import type { Question, InterviewSchedule } from "@/lib/api";
-import { InterviewDateSelector } from "@/components/apply/InterviewDateSelector";
-import { ResidenceSelector } from "@/components/apply/ResidenceSelector";
-import { PythonLevelSelector } from "@/components/apply/PythonLevelSelector";
-import { DataAnalysisFieldSelector } from "@/components/apply/DataAnalysisFieldSelector";
-import { LongTextQuestion } from "@/components/apply/LongTextQuestion";
-import { StudyCreationSelector } from "@/components/apply/StudyCreationSelector";
-import { TrackSelector } from "@/components/apply/TrackSelector";
-import { QuestionCard } from "@/components/apply/QuestionCard";
-import { QuestionField } from "@/components/apply/QuestionField";
-import { TextInputField } from "@/components/apply/TextInputField";
+import { InterviewDateSelector } from "@/components/pages/Apply/InterviewDateSelector";
+import { ResidenceSelector } from "@/components/pages/Apply/ResidenceSelector";
+import { PythonLevelSelector } from "@/components/pages/Apply/PythonLevelSelector";
+import { DataAnalysisFieldSelector } from "@/components/pages/Apply/DataAnalysisFieldSelector";
+import { LongTextQuestion } from "@/components/pages/Apply/LongTextQuestion";
+import { StudyCreationSelector } from "@/components/pages/Apply/StudyCreationSelector";
+import { TrackSelector } from "@/components/pages/Apply/TrackSelector";
+import { QuestionCard } from "@/components/pages/Apply/QuestionCard";
+import { QuestionField } from "@/components/pages/Apply/QuestionField";
+import { TextInputField } from "@/components/pages/Apply/TextInputField";
 import { getQuestionNumber } from "@/lib/questionUtils";
 
 interface QuestionRendererProps {
