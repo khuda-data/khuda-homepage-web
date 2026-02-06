@@ -217,18 +217,15 @@ export const HEADER_STYLES = {
 // ============================================================================
 
 export const HERO_CONFIG = {
-  words: ["Data Skills", "AI Skills"] as const,
+  words: ["Data", "AI"] as const,
   wordRotationInterval: 2000, // ms
   title: {
-    prefix: "Build Your",
+    prefix: "Dive into",
     dot: ".",
   },
-  subtitle: "Since 2021",
-  description: {
-    main: "KHUDA는 경희대학교 데이터분석/AI 학회입니다.",
-    sub: "함께 성장하고, 함께 도전하며, 새로운 가능성을 만들어갑니다.",
-    lineBreak: true,
-  },
+  subtitle: "KHUDA 9th",
+  tagline: "경희대학교 데이터·AI 학회",
+  taglineSub: " | KHUDA",
   buttons: {
     apply: "지원하기",
     viewActivities: "활동 보기",
@@ -253,10 +250,10 @@ export const HERO_STYLES = {
     base: "relative min-h-screen flex items-center overflow-hidden",
   },
   container: {
-    base: "container mx-auto relative z-10",
-    padding: "px-4 sm:px-6 md:px-12",
-    maxWidth: "max-w-3xl",
+    base: "relative z-10 w-full",
+    padding: "px-6 sm:px-8 md:px-16 lg:px-20",
   },
+  topRow: "flex items-start justify-between mt-6 sm:mt-8 md:mt-10 mb-2 sm:mb-3 md:mb-4 opacity-0 animate-fade-up",
   colorBendsWrapper: {
     base: "absolute inset-0 z-0 w-full h-full",
   },
@@ -264,20 +261,18 @@ export const HERO_STYLES = {
     base: "absolute inset-0 w-full h-full",
   },
   title: {
-    base: "text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight mb-4 sm:mb-5 md:mb-6 opacity-0 animate-fade-up",
-    prefix: "block bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent",
-    wordContainer: "block mt-1 sm:mt-2",
-    wordWrapper: "inline-block min-w-[200px] sm:min-w-[240px] md:min-w-[320px] relative",
-    word: "inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-2 sm:border-b-4 border-white/50 pb-1 sm:pb-2 transition-all duration-700",
-    dot: "text-white/60 ml-1 sm:ml-2",
+    base: "text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none -mt-6 sm:-mt-8 md:-mt-10 opacity-0 animate-fade-up animation-delay-200",
+    prefix: "inline-block bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+    wordContainer: "inline-block",
+    wordWrapper: "inline-block min-w-[80px] sm:min-w-[100px] md:min-w-[160px] relative",
+    word: "inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-2 sm:border-b-4 border-white/40 pb-1 sm:pb-2 transition-all duration-700 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+    dot: "text-white/50 ml-0.5 sm:ml-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
   },
   subtitle: {
-    base: "text-sm sm:text-base md:text-lg lg:text-xl text-white mb-2 sm:mb-3 md:mb-4 opacity-0 animate-fade-up animation-delay-200",
+    base: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ml-0 sm:ml-0.5 md:ml-1 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent",
   },
-  description: {
-    base: "text-xs sm:text-sm md:text-base lg:text-lg text-white/90 max-w-xl mb-6 sm:mb-8 md:mb-12 opacity-0 animate-fade-up animation-delay-400 leading-relaxed",
-    sub: "text-white/70",
-  },
+  tagline: "text-xs sm:text-sm md:text-base text-white/70 tracking-wide mt-4 sm:mt-5 md:mt-6 -ml-1 sm:ml-0 md:ml-1 opacity-0 animate-fade-up animation-delay-400",
+  taglineSub: "text-white/60",
   buttons: {
     container: "flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0 animate-fade-up animation-delay-600",
     base: "w-full sm:w-auto rounded-md text-sm sm:text-base min-h-[44px]",

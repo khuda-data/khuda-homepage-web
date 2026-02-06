@@ -97,16 +97,15 @@ export default function CountUp({
     };
   }, [hasStarted, from, to, duration, delay]);
 
-  const formatValue = (value: number) => {
-    const formatted = separator
+  const formatNumber = (value: number) => {
+    return separator
       ? value.toLocaleString('en-US').replace(/,/g, separator)
       : value.toString();
-    return suffix ? `${formatted}${suffix}` : formatted;
   };
 
   return (
     <span ref={ref} className={className}>
-      {formatValue(count)}
+      {formatNumber(count)}{suffix && <span className="suffix">{suffix}</span>}
     </span>
   );
 }
