@@ -13,7 +13,7 @@ const RecruitCTASection = () => {
 
   return (
     <section className="relative w-full overflow-hidden pb-8 sm:pb-12 md:pb-16">
-      <div style={{ height: "80px", position: "relative" }}>
+      <div className="relative h-16 sm:h-20">
         <FlowingMenu
           items={menuItems}
           speed={15}

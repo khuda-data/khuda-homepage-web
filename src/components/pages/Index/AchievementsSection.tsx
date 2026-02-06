@@ -44,10 +44,10 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
           {achievements.map((achievement, index) => (
             <div
               key={achievement.label}
-              className="flex flex-col items-center justify-center py-6 sm:py-8 md:py-10 lg:py-12 transition-all duration-700 ease-out"
+              className="flex flex-col items-center justify-center py-5 sm:py-8 md:py-10 lg:py-12 transition-all duration-700 ease-out"
               style={{ transitionDelay: `${index * 80}ms` }}
             >
-              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter mb-2 sm:mb-3">
+              <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter mb-2 sm:mb-3">
                 <CountUp
                   from={0}
                   to={achievement.value}

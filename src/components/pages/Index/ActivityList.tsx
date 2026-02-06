@@ -21,7 +21,7 @@ const ActivityList = ({ features, activeIndex, onIndexChange }: ActivityListProp
           >
             <h3
               className={cn(
-                "text-base sm:text-lg md:text-xl font-bold leading-tight transition-all duration-300 flex items-center gap-2",
+                "text-base sm:text-lg md:text-xl font-bold leading-snug sm:leading-tight transition-all duration-300 flex items-center gap-2",
                 isActive
                   ? "text-white"
                   : "text-white/30 group-hover/item:text-white/50"
@@ -32,7 +32,7 @@ const ActivityList = ({ features, activeIndex, onIndexChange }: ActivityListProp
             </h3>
             <p
               className={cn(
-                "mt-1.5 text-xs sm:text-sm leading-relaxed transition-all duration-300",
+                "mt-1.5 text-xs sm:text-sm leading-relaxed sm:leading-relaxed transition-all duration-300",
                 isActive
                   ? "text-white/70"
                   : "text-white/25 group-hover/item:text-white/40"

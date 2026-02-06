@@ -37,7 +37,7 @@ const SponsorShowcase = () => {
     >
       {/* 헤더 */}
       <div className="mb-10 sm:mb-14 md:mb-16">
-        <div className="flex items-start gap-4 sm:gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
           <div className="flex-1">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.15] tracking-tight">
               SPONSOR
@@ -48,7 +48,7 @@ const SponsorShowcase = () => {
           </div>
           <Link
             to={ROUTES.sponsor}
-            className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-2 sm:mt-3"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-1 sm:mt-3 self-start"
           >
             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-black transition-colors duration-300" />
           </Link>
@@ -58,7 +58,7 @@ const SponsorShowcase = () => {
       {/* 후원사 로고 루프 */}
       {sponsorLogos.length > 0 && (
         <div className="py-6 sm:py-8">
-          <div className="w-full" style={{ height: "120px", position: "relative", overflow: "hidden" }}>
+          <div className="w-full h-[90px] sm:h-[120px] relative overflow-hidden">
             <LogoLoop
               logos={sponsorLogos}
               speed={100}
