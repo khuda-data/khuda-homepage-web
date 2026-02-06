@@ -214,7 +214,7 @@ const RecruitingSection = () => {
       ref={ref}
       className={cn(
         SECTION_STYLES.section.base,
-        "pt-20 sm:pt-24 md:pt-28 lg:pt-32",
+        "pt-12 sm:pt-16 md:pt-20 lg:pt-24",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
