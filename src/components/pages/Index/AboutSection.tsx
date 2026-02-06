@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AchievementsSection, { type AchievementInfo } from "./AchievementsSection";
 import FeatureShowcase, { type FeatureInfo } from "./FeatureShowcase";
 import TrackShowcase from "./TrackShowcase";
+import ProfessorShowcase from "./ProfessorShowcase";
 import SponsorShowcase from "./SponsorShowcase";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 
@@ -89,6 +90,13 @@ const AboutSection = () => {
       <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <TrackShowcase />
+        </div>
+      </section>
+
+      {/* 지도교수 소개 섹션 */}
+      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
+          <ProfessorShowcase />
         </div>
       </section>
 

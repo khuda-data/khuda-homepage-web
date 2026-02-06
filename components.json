@@ -15,6 +15,7 @@
     "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
+    "react-bits": "@/components/react-bits",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },

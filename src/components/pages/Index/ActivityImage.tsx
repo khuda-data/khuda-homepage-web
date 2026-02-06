@@ -10,7 +10,7 @@ interface ActivityImageProps {
 
 const ActivityImage = ({ features, activeIndex, onIndexChange }: ActivityImageProps) => {
   return (
-    <div className="w-full md:w-[55%] aspect-[4/3] sm:aspect-[3/2] rounded-xl shrink-0 overflow-hidden relative shadow-xl">
+    <div className="w-full md:w-[55%] aspect-[16/10] sm:aspect-[4/3] md:aspect-[3/2] rounded-xl shrink-0 overflow-hidden relative shadow-xl">
       {/* 이미지 레이어들 (crossfade) */}
       {features.map((feature, index) => {
         const visual = featureVisuals[index] || featureVisuals[0];

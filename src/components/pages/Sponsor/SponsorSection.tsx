@@ -9,7 +9,6 @@ import {
   EXTERNAL_LINK_PROPS
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import LogoLoop from "./LogoLoop";
 
 const SponsorSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
@@ -24,18 +23,6 @@ const SponsorSection = () => {
     const generationData = SPONSOR_DATA.find((item) => item.generation === activeGeneration);
     return generationData?.sponsors ?? [];
   }, [activeGeneration]);
-
-  const sponsorLogos = useMemo(() => (
-    SPONSOR_DATA.flatMap((generationData) =>
-      generationData.sponsors
-        .filter((sponsor) => sponsor.logo)
-        .map((sponsor) => ({
-          src: sponsor.logo!,
-          alt: sponsor.name,
-          href: sponsor.website,
-        }))
-    )
-  ), []);
 
   const handleGenerationChange = (generation: string) => {
     if (generation === activeGeneration || isTransitioning) return;
@@ -52,7 +39,7 @@ const SponsorSection = () => {
       ref={ref}
       className={cn(
         SECTION_STYLES.section.base,
-        "pt-20 sm:pt-24 md:pt-28 lg:pt-32",
+        "pt-12 sm:pt-16 md:pt-20 lg:pt-24",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
@@ -74,25 +61,6 @@ const SponsorSection = () => {
                   {text}
                 </p>
               ))}
-            </div>
-          )}
-
-          {sponsorLogos.length > 0 && (
-            <div className="py-6 sm:py-8 mb-10 sm:mb-12">
-              <div className="max-w-5xl mx-auto" style={{ height: "120px", position: "relative", overflow: "hidden" }}>
-                <LogoLoop
-                  logos={sponsorLogos}
-                  speed={100}
-                  direction="left"
-                  logoHeight={56}
-                  gap={56}
-                  hoverSpeed={0}
-                  scaleOnHover
-                  fadeOut
-                  fadeOutColor="hsl(var(--background))"
-                  ariaLabel="후원사 로고"
-                />
-              </div>
             </div>
           )}
 

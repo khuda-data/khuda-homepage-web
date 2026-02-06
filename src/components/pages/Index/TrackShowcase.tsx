@@ -156,9 +156,9 @@ const TrackShowcase = () => {
     >
       {/* 헤더 */}
       <div className="mb-10 sm:mb-14 md:mb-16">
-        <div className="flex items-start gap-4 sm:gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
           <div className="flex-1">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.15] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight sm:leading-[1.15] tracking-tight">
               IN
               <br />
               <span className="bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
@@ -167,13 +167,14 @@ const TrackShowcase = () => {
             </h2>
             <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base md:text-lg text-white/60 leading-relaxed max-w-xl">
               각 분야의 열정 넘치는 동료들과 함께 깊이 있는 학습을 경험하세요.
+              <br className="sm:hidden" />
               <br className="hidden sm:block" />
               6가지 심화트랙에서 전문성을 키워갑니다.
             </p>
           </div>
           <Link
             to={ROUTES.activities}
-            className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-2 sm:mt-3"
+            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-1 sm:mt-3 self-start"
           >
             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-black transition-colors duration-300" />
           </Link>
@@ -181,13 +182,13 @@ const TrackShowcase = () => {
       </div>
 
       {/* 트랙 탭 */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12">
+      <div className="flex items-center gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12 -mx-2 px-2 overflow-x-auto md:overflow-visible flex-nowrap md:flex-wrap">
         {tracks.map((track) => (
           <button
             key={track.id}
             onClick={() => handleTrackChange(track.id)}
             className={cn(
-              "px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 whitespace-nowrap",
+              "px-3 sm:px-5 md:px-6 py-1.5 sm:py-2.5 rounded-full text-[11px] sm:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0",
               activeTrack === track.id
                 ? "bg-gradient-to-r from-red-500 to-purple-500 text-white border-transparent shadow-lg shadow-purple-500/20"
                 : "bg-transparent text-white/80 border-2 border-white hover:border-white hover:text-white"
@@ -204,7 +205,7 @@ const TrackShowcase = () => {
           <div
             key={`${activeTrack}-${index}`}
             className={cn(
-              "rounded-2xl p-6 sm:p-7 md:p-8 min-h-[220px] sm:min-h-[260px] flex flex-col justify-between transition-all duration-500 ease-out",
+              "rounded-2xl p-5 sm:p-7 md:p-8 min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex flex-col justify-between transition-all duration-500 ease-out",
               card.type === "cta"
                 ? "bg-gradient-to-br from-red-500 via-purple-500 to-blue-500 text-white cursor-pointer hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30"
                 : "bg-white/[0.04] border border-white/10 text-white hover:bg-white/[0.07] hover:border-white/15"
