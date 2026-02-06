@@ -18,6 +18,7 @@ const FAQSection = () => {
       ref={ref}
       className={cn(
         SECTION_STYLES.section.base,
+        "py-16 sm:py-20 md:py-28 lg:py-32",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
