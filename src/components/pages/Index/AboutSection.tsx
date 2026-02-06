@@ -1,128 +1,10 @@
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
-import { cn } from "@/lib/utils";
-import CountUp from "./CountUp";
-import { useEffect, useState, type ReactNode } from "react";
-
-const SCROLL_REVEAL_OPTIONS = {
-  threshold: SCROLL_ANIMATION_CONFIG.threshold,
-  rootMargin: "0px 0px -80px 0px",
-};
-
-interface ScrollRevealProps {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-}
-
-const ScrollReveal = ({ children, className, delay = 0 }: ScrollRevealProps) => {
-  const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "transition-all duration-700 ease-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-        className
-      )}
-      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface FeatureInfo {
-  title: string;
-  description: string;
-  details: string;
-}
-
-interface AchievementInfo {
-  value: number;
-  label: string;
-  suffix: string;
-}
-
-interface FeatureBlockProps {
-  feature: FeatureInfo;
-}
-
-const FeatureBlock = ({ feature }: FeatureBlockProps) => {
-  const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "transition-all duration-700 ease-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-        "border-t border-border/20 pt-10 sm:pt-12 md:pt-14"
-      )}
-    >
-      <div className={SECTION_STYLES.maxWidth.narrow}>
-        <div className="flex flex-col gap-4 sm:gap-6">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground leading-tight">
-            {feature.title}
-          </h3>
-          <div className="space-y-3 sm:space-y-4">
-            <p className="text-sm sm:text-base md:text-lg text-foreground/90 leading-relaxed">
-              {feature.description}
-            </p>
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed">
-              {feature.details}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-interface AchievementsSectionProps {
-  achievements: AchievementInfo[];
-  resetKey: number;
-}
-
-const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProps) => {
-  const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "border-t border-border/20 pt-10 sm:pt-12 md:pt-14 transition-all duration-700 ease-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-      )}
-    >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
-        {achievements.map((achievement, index) => (
-          <div
-            key={achievement.label}
-            className="text-center transition-all duration-700 ease-out"
-            style={{ transitionDelay: `${index * 80}ms` }}
-          >
-            <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-2">
-              <CountUp
-                from={0}
-                to={achievement.value}
-                duration={2}
-                delay={index * 0.1}
-                suffix={achievement.suffix}
-                startWhen={isVisible}
-                resetKey={resetKey}
-              />
-            </div>
-            <div className="text-xs sm:text-sm md:text-base text-muted-foreground">
-              {achievement.label}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import { SECTION_STYLES } from "@/lib/constants";
+import { useEffect, useState } from "react";
+import AchievementsSection, { type AchievementInfo } from "./AchievementsSection";
+import FeatureShowcase, { type FeatureInfo } from "./FeatureShowcase";
+import TrackShowcase from "./TrackShowcase";
+import SponsorShowcase from "./SponsorShowcase";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 
 const AboutSection = () => {
   const [resetKey, setResetKey] = useState(0);
@@ -138,25 +20,35 @@ const AboutSection = () => {
     };
   }, []);
 
-  const features = [
+  const features: FeatureInfo[] = [
     {
-      title: "체계적으로 성장하다",
-      description: "KHUDA는 학습과 실천 사이를 잇는 독자적인 성장 구조를 설계합니다.",
-      details: "이론에 머무르지 않고, 경험으로 완성되는 성장을 제공합니다.",
+      title: "ML 세션",
+      description: "머신러닝 기초를 체계적으로 다지는 시간입니다. 파이썬 실습부터 머신러닝 핵심 개념까지, 데이터 분석의 기초를 탄탄히 쌓아갑니다.",
+      details: "개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 이론과 실습을 함께 학습합니다.",
     },
     {
-      title: "연결이 기회를 만듭니다",
-      description: "사람과 아이디어, 배움과 실행을 연결합니다.",
-      details: "KHUDA의 네트워크는 당신의 성장을 더 빠르게 움직이게 합니다.",
+      title: "토이 프로젝트 컨퍼런스",
+      description: "방학 세션에서 배운 내용을 바탕으로 팀 단위로 진행한 토이 프로젝트를 발표하는 자리입니다.",
+      details: "첫 프로젝트 경험을 통해 협업과 발표의 기초를 다집니다.",
     },
     {
-      title: "깊이 몰입하다, 함께 성장하다",
-      description: "우리는 함께 배우고, 서로를 자극하며 더 깊이 파고듭니다.",
-      details: "KHUDA의 프로젝트는 사고력, 팀워크, 리더십을 동시에 성장시키는 경험입니다.",
+      title: "파티룸",
+      description: "네트워킹과 레크레이션을 통해 동아리원들과의 유대감을 형성하는 시간입니다.",
+      details: "함께하는 즐거움을 통해 더욱 긴밀한 협업의 기반을 만듭니다.",
+    },
+    {
+      title: "정규 세션",
+      description: "심화 트랙에서 선택한 분야를 깊이 있게 공부하는 시간입니다. CV, NLP, Finance 등 전문 분야를 집중적으로 학습합니다.",
+      details: "트랙별 심화 커리큘럼을 통해 전문성을 키워갑니다.",
+    },
+    {
+      title: "정기 학술제 & 심화 프로젝트 컨퍼런스",
+      description: "한 학기 동안 심화 트랙에서 완성한 프로젝트를 발표하는 학회의 대표 행사입니다.",
+      details: "포스터 발표와 정식 발표를 통해 전문가들로부터 피드백을 받으며 프로젝트를 완성도 높게 발전시킵니다.",
     },
   ];
 
-  const achievements = [
+  const achievements: AchievementInfo[] = [
     { value: 200, label: "수료생", suffix: "+" },
     { value: 150, label: "아이디어 제출", suffix: "+" },
     { value: 80, label: "프로젝트 완료", suffix: "+" },
@@ -164,63 +56,50 @@ const AboutSection = () => {
   ];
 
   return (
-    <section
-      id="about"
-      className={cn(
-        SECTION_STYLES.section.base,
-        "scroll-mt-12 sm:scroll-mt-16 md:scroll-mt-18 lg:scroll-mt-20"
-      )}
-    >
-      <div className={SECTION_STYLES.container.base}>
-        {/* 히어로 섹션 */}
-        <div className="mb-16 sm:mb-20 md:mb-24">
-          <div className={SECTION_STYLES.maxWidth.narrow}>
-            <div className="text-center space-y-3 sm:space-y-4">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight text-foreground">
-                당신의 비전은 무엇인가요?
-              </h2>
-              <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
-                지금 이 순간, 목표를 향해 나아갈 준비가 되었나요?
-              </p>
-              <p className="text-xs sm:text-sm md:text-base text-foreground/90 leading-relaxed pt-1">
-                경희대학교의 이름으로,
-                <br />
-                우리는 성장의 출발점이 됩니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-12 sm:space-y-16 md:space-y-20">
-          {/* 성과 섹션 */}
+    <>
+      {/* 성과 섹션 + 소개 텍스트 */}
+      <section className="relative bg-background py-8 sm:py-12 md:py-16">
+        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <AchievementsSection achievements={achievements} resetKey={resetKey} />
-
-          {/* 특징 섹션 */}
-          <div className="space-y-12 sm:space-y-16 md:space-y-20">
-            {features.map((feature) => (
-              <FeatureBlock key={feature.title} feature={feature} />
-            ))}
+          
+          {/* 소개 텍스트 */}
+          <div className="mt-6 sm:mt-8 md:mt-10">
+            <ScrollReveal className="text-center">
+              <div className={SECTION_STYLES.maxWidth.narrow}>
+                <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed">
+                  많은 경희대 학우들이 KHUDA에서 시작했습니다.
+                </p>
+                <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed mt-2">
+                  데이터와 AI의 세계로 첫걸음을 내딛고, 함께 성장하며 새로운 가능성을 만들어갑니다.
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
-
-          {/* CTA 섹션 */}
-          <ScrollReveal className="border-t border-border/20 pt-12 sm:pt-16 md:pt-20 text-center">
-            <div className={SECTION_STYLES.maxWidth.narrow}>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-3 leading-tight">
-                도전하기로 한 결정
-              </h3>
-              <p className="text-sm sm:text-base text-foreground/90 leading-relaxed mb-2">
-                한 걸음 더 나아가기로 한 선택,
-                <br />
-                그 선택이 새로운 가능성을 엽니다.
-              </p>
-              <p className="text-sm sm:text-base md:text-lg text-foreground font-semibold mt-4 sm:mt-6">
-                지금, KHUDA와 함께 도전하세요.
-              </p>
-            </div>
-          </ScrollReveal>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* 특징 쇼케이스 섹션 */}
+      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
+          <FeatureShowcase features={features} />
+        </div>
+      </section>
+
+      {/* 트랙 소개 섹션 */}
+      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
+          <TrackShowcase />
+        </div>
+      </section>
+
+      {/* 후원사 섹션 */}
+      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
+          <SponsorShowcase />
+        </div>
+      </section>
+
+    </>
   );
 };
 
