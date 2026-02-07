@@ -349,10 +349,22 @@ export const RECRUITMENT_INFO = {
   trackCapacityText: "트랙별 6~8명",
   totalCapacityText: "총 40명 내외",
   generation: "9기",
-  sectionTitle: "모집 안내",
+  sectionLabel: "Target",
+  sectionTitle: "모집 대상",
   sectionSubtitle: (generation: string) => `KHUDA와 함께 성장할 ${generation} 멤버를 모집합니다.`,
   processTitle: "지원 절차",
   deadlineLabel: "서류 마감:",
+  targetCards: [
+    {
+      description: "활동 내 대학생 신분을 유지하는 분\n(졸업 유예자, 휴학생, 수료생 포함)",
+    },
+    {
+      description: "방학 중 매주 목요일 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
+    },
+    {
+      description: "활동 기간 동안 학회 활동에\n적극적으로 참여 가능한 분",
+    },
+  ],
   infoItems: {
     target: {
       title: "모집 대상",

@@ -19,7 +19,7 @@ const UnifiedActionButton = ({
     lg: "text-sm sm:text-base px-4 sm:px-6 py-2.5 sm:py-3 min-h-[40px] sm:min-h-[44px]",
   };
 
-  const baseClasses = "relative inline-flex items-center justify-center rounded-full font-semibold overflow-hidden transition-all duration-300 group shadow-lg hover:shadow-xl whitespace-nowrap";
+  const baseClasses = "relative flex items-center justify-center rounded-full font-semibold overflow-hidden transition-all duration-300 group shadow-lg hover:shadow-xl whitespace-nowrap";
   
   return (
     <div className={cn(baseClasses, sizeClasses[size], className, disabled && "opacity-60")}>

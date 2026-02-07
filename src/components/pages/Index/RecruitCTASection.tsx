@@ -12,7 +12,7 @@ const RecruitCTASection = () => {
   ];
 
   return (
-    <section className="relative w-full overflow-hidden pb-8 sm:pb-12 md:pb-16">
+    <section className="relative w-full overflow-hidden py-12 sm:py-16 md:py-20 lg:py-24">
       <div className="relative h-16 sm:h-20">
         <FlowingMenu
           items={menuItems}

@@ -1,7 +1,20 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { cn } from '@/lib/utils';
 import './ColorBends.css';
+
+// WebGL 지원 여부를 확인하는 유틸리티 함수
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    );
+  } catch {
+    return false;
+  }
+}
 
 const MAX_COLORS = 8;
 
@@ -188,6 +201,7 @@ export default function ColorBends({
 }: ColorBendsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const [webglFailed, setWebglFailed] = useState(false);
   const rafRef = useRef<number | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
@@ -210,6 +224,13 @@ export default function ColorBends({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    // WebGL 지원 여부 확인
+    if (!isWebGLAvailable()) {
+      console.warn('ColorBends: WebGL이 지원되지 않는 환경입니다. CSS 폴백을 사용합니다.');
+      setWebglFailed(true);
+      return;
+    }
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(
@@ -257,11 +278,20 @@ export default function ColorBends({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: RENDERER_CONFIG.antialias,
-      powerPreference: RENDERER_CONFIG.powerPreference,
-      alpha: RENDERER_CONFIG.alpha
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: RENDERER_CONFIG.antialias,
+        powerPreference: RENDERER_CONFIG.powerPreference,
+        alpha: RENDERER_CONFIG.alpha
+      });
+    } catch (e) {
+      console.warn('ColorBends: WebGL 컨텍스트 생성에 실패했습니다. CSS 폴백을 사용합니다.', e);
+      geometry.dispose();
+      material.dispose();
+      setWebglFailed(true);
+      return;
+    }
 
     rendererRef.current = renderer;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -403,6 +433,21 @@ export default function ColorBends({
       container.removeEventListener('pointermove', handlePointerMove);
     };
   }, []);
+
+  // WebGL 실패 시 CSS 그라데이션 폴백
+  if (webglFailed) {
+    const fallbackColors = (colors && colors.length > 0) ? colors : ['#0066cc', '#0099ff', '#cc0000'];
+    const gradientStops = fallbackColors.join(', ');
+    return (
+      <div
+        className={cn('color-bends-container', className)}
+        style={{
+          ...style,
+          background: `linear-gradient(${rotation}deg, ${gradientStops})`,
+        }}
+      />
+    );
+  }
 
   return <div ref={containerRef} className={cn('color-bends-container', className)} style={style} />;
 }

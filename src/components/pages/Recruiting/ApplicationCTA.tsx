@@ -24,15 +24,17 @@ const ApplicationCTA = () => {
   }, []);
 
   return (
-    <section className={cn(SECTION_STYLES.section.base, "py-16 sm:py-20 md:py-28 lg:py-32")}>
+    <section className={cn(SECTION_STYLES.section.base, "py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24")}>
       <div className={SECTION_STYLES.container.base}>
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
           {!isApplicationPeriod && (
-            <p className="text-sm sm:text-base text-muted-foreground text-center">
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground text-center px-4">
               아직 모집기간이 아니에요! 다음 기수에 지원해주세요😊.
             </p>
           )}
-          <UnifiedActionButton size="lg" disabled={!isApplicationPeriod} />
+          <div className="flex justify-center w-full">
+            <UnifiedActionButton size="lg" disabled={!isApplicationPeriod} className="mx-auto" />
+          </div>
         </div>
       </div>
     </section>
