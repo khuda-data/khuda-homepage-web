@@ -1,7 +1,10 @@
-import { CheckCircle, Info } from "lucide-react";
+import { useState, type CSSProperties } from "react";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { getStepStatus, type ProcessStep } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
-import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, RECRUITMENT_STYLES, APPLICATION_FORM_CONFIG } from "@/lib/constants";
+import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, APPLICATION_FORM_CONFIG, SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { Info } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 
 // 프로세스 스텝 배열 (상수)
 const PROCESS_STEPS: ProcessStep[] = [
@@ -31,183 +34,222 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
-const RecruitmentProcess = () => {
-  // 공통 그라데이션 배경 컴포넌트
-  const GradientBackground = () => (
-    <div className={cn(RECRUITMENT_STYLES.process.stepCard.gradient, RECRUITMENT_STYLES.process.stepCard.gradientActive)} />
-  );
+// 그라데이션 색상 배열
+const GRADIENT_COLORS = [
+  "from-blue-500 to-blue-600",
+  "from-indigo-500 to-purple-600",
+  "from-purple-500 to-pink-600",
+  "from-pink-500 to-red-500",
+] as const;
 
-  // 스텝 카드 스타일 클래스 생성 함수
-  const getStepCardClass = (status: ReturnType<typeof getStepStatus>) => {
-    const baseClass = RECRUITMENT_STYLES.process.stepCard.base;
-    if (status === 'active' || status === 'completed') {
-      return cn(baseClass, RECRUITMENT_STYLES.process.stepCard.active);
-    }
-    return cn(baseClass, RECRUITMENT_STYLES.process.stepCard.inactive);
+// 안내 메시지 가져오기
+const getNoticeMessage = (step: ProcessStep): string | null => {
+  const noticeMap: Record<number, string> = {
+    1: APPLICATION_FORM_CONFIG.applicationNotice.description,
+    2: APPLICATION_FORM_CONFIG.announcementNotice.description,
+    3: APPLICATION_FORM_CONFIG.interviewNotice.description,
+    4: RECRUITMENT_SCHEDULE.final.ot,
   };
+  return noticeMap[step.step] || null;
+};
 
-  // 스텝 인디케이터 스타일 클래스 생성 함수
-  const getStepIndicatorClass = (status: ReturnType<typeof getStepStatus>, isMobile = false) => {
-    const baseClass = isMobile 
-      ? RECRUITMENT_STYLES.process.indicator.base.mobile
-      : RECRUITMENT_STYLES.process.indicator.base.desktop;
+// 날짜 포맷 압축 (원 안에서 보기 좋게)
+const formatDateForCircle = (fullDate: string): string[] => {
+  // 날짜 범위 처리: "2025년 12월 31일 (수) ~ 2026년 1월 4일 (일) 23:59"
+  if (fullDate.includes(" ~ ")) {
+    const [startPart, endPart] = fullDate.split(" ~ ");
+    const startDate = startPart
+      .replace(/년/g, ".")
+      .replace(/월/g, ".")
+      .replace(/일.*$/, "");
+    const endDate = endPart
+      .replace(/년/g, ".")
+      .replace(/월/g, ".")
+      .replace(/일.*$/, "")
+      .trim();
+    const timePart = endPart.match(/\d{1,2}:\d{2}/)?.[0];
+    if (timePart) {
+      return [`${startDate} ~ ${endDate}`, timePart];
+    }
+    return [`${startDate} ~ ${endDate}`];
+  }
+  
+  // 단일 날짜 처리
+  const dateMatch = fullDate.match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일 \(([^)]+)\)/);
+  if (dateMatch) {
+    const [, year, month, day, weekday] = dateMatch;
+    const dateStr = `${year}.${month}.${day} (${weekday})`;
+    const timeMatch = fullDate.match(/(\d{1,2}:\d{2})/);
+    const extraInfo = fullDate.includes("개별 안내") 
+      ? fullDate.match(/18:00 이후 개별 안내/)?.[0] || "개별 안내"
+      : fullDate.includes("온라인") 
+      ? "온라인 비대면"
+      : "";
     
-    if (status === 'completed') {
-      return cn(baseClass, RECRUITMENT_STYLES.process.indicator.completed);
-    } else if (status === 'active') {
-      return cn(baseClass, RECRUITMENT_STYLES.process.indicator.active);
+    if (timeMatch && extraInfo) {
+      return [dateStr, extraInfo];
     }
-    return cn(baseClass, RECRUITMENT_STYLES.process.indicator.inactive);
-  };
-
-  // 스텝 상태 계산 함수 (중복 제거)
-  const getStepStatuses = (index: number) => {
-    const status = getStepStatus(PROCESS_STEPS[index]);
-    const nextStatus = index < PROCESS_STEPS.length - 1 ? getStepStatus(PROCESS_STEPS[index + 1]) : null;
-    const isCompleted = status === 'completed' || nextStatus === 'completed';
-    const isActive = status === 'active' || status === 'completed';
-    return { status, nextStatus, isCompleted, isActive };
-  };
-
-  // 스텝 인디케이터 렌더링 컴포넌트 (중복 제거)
-  const StepIndicator = ({ 
-    status, 
-    stepNumber, 
-    isMobile = false 
-  }: { 
-    status: ReturnType<typeof getStepStatus>; 
-    stepNumber: number; 
-    isMobile?: boolean;
-  }) => (
-    <div className={cn(
-      isMobile ? RECRUITMENT_STYLES.layout.mobileProcess.indicatorWrapper : RECRUITMENT_STYLES.layout.desktopProcess.indicatorWrapper,
-      getStepIndicatorClass(status, isMobile)
-    )}>
-      {status === 'completed' ? (
-        <CheckCircle className={cn(
-          isMobile ? RECRUITMENT_STYLES.process.indicator.icon.mobile : RECRUITMENT_STYLES.process.indicator.icon.desktop,
-          RECRUITMENT_STYLES.colors.primaryForeground
-        )} />
-      ) : isMobile ? (
-        <div className={cn(
-          RECRUITMENT_STYLES.process.indicator.dot.mobile,
-          status === 'active' ? RECRUITMENT_STYLES.colors.bgPrimaryForeground : RECRUITMENT_STYLES.colors.bgMutedForeground
-        )} />
-      ) : (
-        <span className={cn(
-          RECRUITMENT_STYLES.text.stepNumber,
-          status === 'active' ? RECRUITMENT_STYLES.text.stepNumberActive : RECRUITMENT_STYLES.text.stepNumberInactive
-        )}>{stepNumber}</span>
-      )}
-    </div>
-  );
-
-  // 안내 메시지 렌더링 컴포넌트 (공통)
-  const NoticeMessage = ({ 
-    message, 
-    isActive, 
-    isMobile = false 
-  }: { 
-    message: string; 
-    isActive: boolean; 
-    isMobile?: boolean;
-  }) => (
-    <div className="mt-3 pt-3 border-t border-border/30">
-      <div className="flex items-start gap-2">
-        <Info className="w-3.5 h-3.5 text-primary/70 mt-0.5 shrink-0" />
-        <p className={cn(
-          isMobile ? "text-xs" : "text-xs md:text-sm",
-          "leading-relaxed",
-          isActive ? RECRUITMENT_STYLES.process.content.fullDate.active : RECRUITMENT_STYLES.process.content.fullDate.inactive
-        )}>
-          {message}
-        </p>
-      </div>
-    </div>
-  );
-
-  // 스텝 콘텐츠 렌더링 컴포넌트 (중복 제거)
-  const StepContent = ({ 
-    step, 
-    isActive, 
-    isMobile = false 
-  }: { 
-    step: ProcessStep; 
-    isActive: boolean; 
-    isMobile?: boolean;
-  }) => {
-    // 안내 메시지 결정
-    let noticeMessage: string | null = null;
-    if (step.step === 1) {
-      noticeMessage = APPLICATION_FORM_CONFIG.applicationNotice.description;
-    } else if (step.step === 2) {
-      noticeMessage = APPLICATION_FORM_CONFIG.announcementNotice.description;
-    } else if (step.step === 3) {
-      noticeMessage = APPLICATION_FORM_CONFIG.interviewNotice.description;
-    } else if (step.step === 4) {
-      noticeMessage = RECRUITMENT_SCHEDULE.final.ot;
+    if (timeMatch) {
+      return [dateStr, timeMatch[1]];
     }
+    if (extraInfo) {
+      return [dateStr, extraInfo];
+    }
+    return [dateStr];
+  }
+  
+  return [fullDate];
+};
 
-    return (
-      <>
-        {isActive && <GradientBackground />}
-        <div className={isMobile ? RECRUITMENT_STYLES.layout.mobileProcess.contentWrapper : RECRUITMENT_STYLES.layout.desktopProcess.contentWrapper}>
-          <div className={RECRUITMENT_STYLES.process.content.header.container}>
-            <h4 className={cn(
-              isMobile ? RECRUITMENT_STYLES.process.content.mobile.title : RECRUITMENT_STYLES.process.content.header.title.base,
-              isActive ? RECRUITMENT_STYLES.process.content.header.title.active : RECRUITMENT_STYLES.process.content.header.title.inactive
-            )}>{step.title}</h4>
-            <p className={cn(
-              RECRUITMENT_STYLES.process.content.header.date.base,
-              isActive ? RECRUITMENT_STYLES.process.content.header.date.active : RECRUITMENT_STYLES.process.content.header.date.inactive
-            )}>{step.date}</p>
-          </div>
-          <p className={cn(
-            isMobile ? RECRUITMENT_STYLES.process.content.mobile.fullDate : RECRUITMENT_STYLES.process.content.fullDate.base,
-            isActive ? RECRUITMENT_STYLES.process.content.fullDate.active : RECRUITMENT_STYLES.process.content.fullDate.inactive
-          )}>{step.fullDate}</p>
-          {noticeMessage && (
-            <NoticeMessage 
-              message={noticeMessage} 
-              isActive={isActive} 
-              isMobile={isMobile} 
-            />
-          )}
-        </div>
-      </>
-    );
-  };
+interface StepCircleProps {
+  step: ProcessStep;
+  index: number;
+  isOpen: boolean;
+  isActive: boolean;
+  isCompleted: boolean;
+  onToggle: () => void;
+}
+
+const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: StepCircleProps) => {
+  const noticeMessage = getNoticeMessage(step);
+  const gradientColor = GRADIENT_COLORS[index % GRADIENT_COLORS.length];
+  const dateParts = formatDateForCircle(step.fullDate);
 
   return (
-    <div className={RECRUITMENT_STYLES.process.container}>
-      <h3 className={RECRUITMENT_STYLES.section.header.title}>
-        {RECRUITMENT_INFO.processTitle}
-      </h3>
-      <div className={RECRUITMENT_STYLES.layout.relative}>
-        <div className={RECRUITMENT_STYLES.layout.desktopProcess.wrapper}>
-          <div className={RECRUITMENT_STYLES.layout.desktopProcess.inner}>
-            <div className={RECRUITMENT_STYLES.process.line.desktop.horizontal} />
-            
-            <div className={cn(RECRUITMENT_STYLES.layout.desktopProcess.steps, RECRUITMENT_STYLES.spacing.gap.large)}>
+    <button
+      onClick={onToggle}
+      className={cn(
+        "rounded-full flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden",
+        "bg-gradient-to-br " + gradientColor,
+        isActive || isCompleted ? "shadow-lg shadow-primary/20" : "opacity-90",
+        isOpen && "ring-4 ring-primary/30"
+      )}
+      style={{ width: "var(--circle-size)", height: "var(--circle-size)" }}
+      aria-expanded={isOpen}
+    >
+      {/* 닫힌 상태 */}
+      <div
+        className={cn(
+          "absolute inset-0 flex flex-col items-center justify-center text-center px-3 z-10 transition-all duration-300",
+          isOpen ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100"
+        )}
+      >
+        <p className="text-sm sm:text-base md:text-lg font-bold text-white leading-tight">
+          {step.title}
+        </p>
+        <p className="text-xs sm:text-sm text-white/90 mt-1.5 leading-tight">
+          {step.date}
+        </p>
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+
+      {/* 열린 상태 */}
+      <div
+        className={cn(
+          "absolute inset-0 flex flex-col items-center justify-center text-center px-3 py-2 z-10 transition-all duration-300",
+          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+        )}
+      >
+        <div className="space-y-1">
+          {dateParts.map((part, i) => (
+            <p
+              key={i}
+              className={cn(
+                "text-[10px] sm:text-xs text-white/90 leading-tight transition-all duration-300",
+                isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+              )}
+              style={{ transitionDelay: isOpen ? `${i * 50}ms` : "0ms" }}
+            >
+              {part}
+            </p>
+          ))}
+        </div>
+        {noticeMessage && (
+          <div
+            className={cn(
+              "pt-2.5 mt-2.5 border-t border-white/30 transition-all duration-300",
+              isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            )}
+            style={{ transitionDelay: isOpen ? `${dateParts.length * 50}ms` : "0ms" }}
+          >
+            <div className="flex items-start gap-1.5 justify-center">
+              <Info className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/80 mt-0.5 shrink-0" />
+              <p className="text-[9px] sm:text-[10px] text-white/80 leading-tight text-center">
+                {noticeMessage}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </button>
+  );
+};
+
+const RecruitmentProcess = () => {
+  const [openSteps, setOpenSteps] = useState<Set<number>>(new Set());
+  const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
+
+  const toggleStep = (stepNumber: number) => {
+    setOpenSteps(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(stepNumber)) {
+        newSet.delete(stepNumber);
+      } else {
+        newSet.add(stepNumber);
+      }
+      return newSet;
+    });
+  };
+
+  const getStepStatuses = (index: number) => {
+    const status = getStepStatus(PROCESS_STEPS[index]);
+    const isCompleted = status === 'completed';
+    const isActive = status === 'active' || status === 'completed';
+    return { isCompleted, isActive };
+  };
+
+  const circleStyle = {
+    "--circle-size": "clamp(9.5rem, 13vw, 12.5rem)",
+  } as CSSProperties;
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "w-full py-12 sm:py-16 md:py-20 lg:py-24 mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 ease-out",
+        isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
+      )}
+    >
+      {/* 헤더 */}
+      <SectionHeader label="Step" title="지원 절차" />
+
+      {/* 데스크톱 버전 */}
+      <div className="hidden md:block max-w-7xl mx-auto">
+        <div className="relative" style={circleStyle}>
+          {/* 연결선 */}
+          <div
+            className="absolute h-0.5 bg-gradient-to-r from-blue-500/50 via-purple-500/50 to-red-500/50 -z-10"
+            style={{
+              top: "calc(var(--circle-size) / 2)",
+              left: "calc(var(--circle-size) / 2)",
+              right: "calc(var(--circle-size) / 2)",
+            }}
+          />
+
+          {/* 스텝들 */}
+          <div className="relative flex items-start justify-between gap-6">
               {PROCESS_STEPS.map((step, index) => {
-                const { status, isCompleted, isActive } = getStepStatuses(index);
-                
+              const { isCompleted, isActive } = getStepStatuses(index);
                 return (
-                  <div key={index} className={RECRUITMENT_STYLES.layout.desktopProcess.stepCard}>
-                    <StepIndicator status={status} stepNumber={step.step} isMobile={false} />
-                    
-                    {index < PROCESS_STEPS.length - 1 && (
-                      <div className={RECRUITMENT_STYLES.process.line.desktop.connector}>
-                        <div className={cn(
-                          RECRUITMENT_STYLES.layout.desktopProcess.connector,
-                          isCompleted ? RECRUITMENT_STYLES.process.line.active : RECRUITMENT_STYLES.process.line.inactive
-                        )} />
-                      </div>
-                    )}
-                    
-                    <div className={cn(RECRUITMENT_STYLES.layout.fullWidth, RECRUITMENT_STYLES.process.stepCard.padding.desktop, getStepCardClass(status))}>
-                      <StepContent step={step} isActive={isActive} isMobile={false} />
-                    </div>
+                <div key={index} className="flex-1 flex flex-col items-center relative z-10">
+                  <StepCircle
+                    step={step}
+                    index={index}
+                    isOpen={openSteps.has(step.step)}
+                    isActive={isActive}
+                    isCompleted={isCompleted}
+                    onToggle={() => toggleStep(step.step)}
+                  />
                   </div>
                 );
               })}
@@ -215,28 +257,26 @@ const RecruitmentProcess = () => {
           </div>
         </div>
         
-        <div className={RECRUITMENT_STYLES.layout.mobileProcess.wrapper}>
+      {/* 모바일 버전 */}
+      <div className="md:hidden space-y-6" style={circleStyle}>
           {PROCESS_STEPS.map((step, index) => {
-            const { status, isCompleted, isActive } = getStepStatuses(index);
-            
+          const { isCompleted, isActive } = getStepStatuses(index);
             return (
-              <div key={index} className={RECRUITMENT_STYLES.spacing.gap.mobile}>
-                <div className={RECRUITMENT_STYLES.layout.mobileProcess.stepContainer}>
-                  <StepIndicator status={status} stepNumber={step.step} isMobile={true} />
+            <div key={index} className="flex flex-col items-center">
+              <StepCircle
+                step={step}
+                index={index}
+                isOpen={openSteps.has(step.step)}
+                isActive={isActive}
+                isCompleted={isCompleted}
+                onToggle={() => toggleStep(step.step)}
+              />
                   {index < PROCESS_STEPS.length - 1 && (
-                    <div className={cn(
-                      RECRUITMENT_STYLES.process.line.mobile.vertical,
-                      isCompleted ? RECRUITMENT_STYLES.process.line.active : RECRUITMENT_STYLES.colors.bgBorder
-                    )} />
+                <div className="w-0.5 h-8 bg-gradient-to-b from-purple-500/40 to-red-500/40 mt-4" />
                   )}
-                </div>
-                <div className={cn(RECRUITMENT_STYLES.layout.mobileProcess.stepCard, RECRUITMENT_STYLES.process.stepCard.padding.mobile, getStepCardClass(status))}>
-                  <StepContent step={step} isActive={isActive} isMobile={true} />
-                </div>
               </div>
             );
           })}
-        </div>
       </div>
     </div>
   );

@@ -7,31 +7,26 @@ import {
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { FAQ_DATA, FAQ_MESSAGES, SECTION_STYLES, FAQ_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import SectionHeader from "@/components/shared/SectionHeader";
 
 const FAQSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
   const IconComponent = FAQ_STYLES.accordion.trigger.iconComponent;
 
   return (
-    <section 
+    <div 
       id={FAQ_STYLES.sectionId} 
       ref={ref}
       className={cn(
-        SECTION_STYLES.section.base,
-        "py-16 sm:py-20 md:py-28 lg:py-32",
+        "w-full py-12 sm:py-16 md:py-20 lg:py-24 mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 ease-out",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
       <div className={SECTION_STYLES.container.base}>
         <div className={SECTION_STYLES.maxWidth.narrow}>
-          <div className={SECTION_STYLES.header.container}>
-            <h2 className={SECTION_STYLES.header.title}>
-              {FAQ_MESSAGES.title}
-            </h2>
-            <p className={SECTION_STYLES.header.subtitle}>
-              {FAQ_MESSAGES.subtitle}
-            </p>
-          </div>
+          {/* 헤더 */}
+          <SectionHeader label="FAQ" title={FAQ_MESSAGES.title} />
+          
           <Accordion 
             type={FAQ_STYLES.accordion.type} 
             collapsible={FAQ_STYLES.accordion.collapsible} 
@@ -41,15 +36,19 @@ const FAQSection = () => {
               <AccordionItem 
                 key={faq.question} 
                 value={faq.question} 
-                className={FAQ_STYLES.accordion.item.base}
+                className={cn(
+                  "border-0 rounded-2xl bg-[#1a1a1a] border border-white/10 overflow-hidden transition-all duration-200 hover:border-white/20"
+                )}
               >
-                <AccordionTrigger className={FAQ_STYLES.accordion.trigger.base}>
-                  <div className={FAQ_STYLES.accordion.trigger.iconContainer}>
-                    <IconComponent className={FAQ_STYLES.accordion.trigger.icon} />
-                    {faq.question}
+                <AccordionTrigger className={cn(
+                  "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-sm sm:text-base text-white font-medium transition-colors min-h-[44px] flex items-center hover:bg-white/[0.02]"
+                )}>
+                  <div className="flex items-center gap-2">
+                    <IconComponent className="w-4 h-4 text-white/70 flex-shrink-0" />
+                    <span className="text-white">{faq.question}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className={FAQ_STYLES.accordion.content.base}>
+                <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-white/80 leading-relaxed">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -57,7 +56,7 @@ const FAQSection = () => {
           </Accordion>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

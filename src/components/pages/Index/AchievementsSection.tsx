@@ -12,6 +12,9 @@ export interface AchievementInfo {
   value: number;
   label: string;
   suffix: string;
+  from?: number;
+  isStatic?: boolean;
+  staticText?: string;
 }
 
 interface AchievementsSectionProps {
@@ -47,21 +50,34 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
               className="flex flex-col items-center justify-center py-5 sm:py-8 md:py-10 lg:py-12 transition-all duration-700 ease-out"
               style={{ transitionDelay: `${index * 80}ms` }}
             >
-              <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter mb-2 sm:mb-3">
-                <CountUp
-                  from={0}
-                  to={achievement.value}
-                  duration={2}
-                  delay={index * 0.1}
-                  suffix={achievement.suffix}
-                  className="[&>.suffix]:text-base [&>.suffix]:sm:text-lg [&>.suffix]:md:text-xl [&>.suffix]:font-medium [&>.suffix]:align-super [&>.suffix]:ml-0.5"
-                  startWhen={isVisible}
-                  resetKey={resetKey}
-                />
-              </div>
-              <div className="text-xs sm:text-sm md:text-base text-white/50 tracking-wide">
-                {achievement.label}
-              </div>
+              {achievement.isStatic ? (
+                <>
+                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent tracking-tighter mb-2 sm:mb-3">
+                    {achievement.staticText}
+                  </div>
+                  <div className="text-xs sm:text-sm md:text-base text-white/50 tracking-wide">
+                    {achievement.label}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter mb-2 sm:mb-3">
+                    <CountUp
+                      from={achievement.from ?? 0}
+                      to={achievement.value}
+                      duration={2}
+                      delay={index * 0.1}
+                      suffix={achievement.suffix}
+                      className="[&>.suffix]:text-base [&>.suffix]:sm:text-lg [&>.suffix]:md:text-xl [&>.suffix]:font-medium [&>.suffix]:align-super [&>.suffix]:ml-0.5"
+                      startWhen={isVisible}
+                      resetKey={resetKey}
+                    />
+                  </div>
+                  <div className="text-xs sm:text-sm md:text-base text-white/50 tracking-wide">
+                    {achievement.label}
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>

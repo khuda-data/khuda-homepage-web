@@ -52,14 +52,14 @@ const AboutSection = () => {
   const achievements: AchievementInfo[] = [
     { value: 200, label: "수료생", suffix: "+" },
     { value: 150, label: "아이디어 제출", suffix: "+" },
-    { value: 80, label: "프로젝트 완료", suffix: "+" },
-    { value: 50, label: "협업 기업", suffix: "+" },
+    { value: 9, label: "기수", suffix: "기", from: 1 },
+    { value: 0, label: "", suffix: "", isStatic: true, staticText: "SINCE 2021" },
   ];
 
   return (
     <>
       {/* 성과 섹션 + 소개 텍스트 */}
-      <section className="relative bg-background py-8 sm:py-12 md:py-16">
+      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <AchievementsSection achievements={achievements} resetKey={resetKey} />
           
@@ -80,28 +80,28 @@ const AboutSection = () => {
       </section>
 
       {/* 특징 쇼케이스 섹션 */}
-      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <FeatureShowcase features={features} />
         </div>
       </section>
 
       {/* 트랙 소개 섹션 */}
-      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <TrackShowcase />
         </div>
       </section>
 
       {/* 지도교수 소개 섹션 */}
-      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <ProfessorShowcase />
         </div>
       </section>
 
       {/* 후원사 섹션 */}
-      <section className="relative bg-background py-16 sm:py-20 md:py-28 lg:py-32">
+      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <SponsorShowcase />
         </div>

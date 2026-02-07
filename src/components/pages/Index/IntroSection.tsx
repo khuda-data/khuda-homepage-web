@@ -11,7 +11,7 @@ const IntroSection = () => {
     <section
       id="about"
       ref={ref}
-      className="relative min-h-[40vh] sm:min-h-[55vh] flex items-center justify-center overflow-hidden bg-background scroll-mt-16"
+      className="relative min-h-[40vh] sm:min-h-[55vh] flex items-center justify-center overflow-hidden bg-background scroll-mt-16 py-12 sm:py-16 md:py-20 lg:py-24"
     >
       <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20 text-center">
         <h2
@@ -35,7 +35,7 @@ const IntroSection = () => {
             )}
             style={{ transitionDelay: isVisible ? "300ms" : "0ms" }}
           >
-            <span className="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
               KHUDA
             </span>
             <span className="text-foreground">를 소개합니다</span>

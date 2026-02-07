@@ -1,5 +1,5 @@
-// import ColorBends from "./ColorBends";
-import Grainient from "@/components/Grainient";
+import ColorBends from "./ColorBends";
+// import Grainient from "@/components/Grainient";
 import { useEffect, useState } from "react";
 import { HERO_CONFIG, HERO_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -17,18 +17,21 @@ const HeroSection = () => {
   return (
     <section className={HERO_STYLES.section.base}>
       <div className={HERO_STYLES.colorBendsWrapper.base}>
-        {/* 기존 ColorBends 배경 애니메이션 - 주석 처리 */}
-        {/* <ColorBends
+        {/* 기존 ColorBends 배경 애니메이션 */}
+        <ColorBends
           {...HERO_CONFIG.colorBends}
           className={HERO_STYLES.colorBends.base}
-        /> */}
+        />
         
-        {/* Grainient 배경 애니메이션 */}
-        <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
+        {/* 그라데이션 배경 - 주석 처리 */}
+        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FF9FFC] via-[#5227FF] to-[#B19EEF] opacity-80" /> */}
+        
+        {/* Grainient 배경 애니메이션 - 주석 처리 */}
+        {/* <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
           <Grainient
-            color1="#4a7bc8"
-            color2="#2d2d2d"
-            color3="#a83d3d"
+            color1="#FF9FFC"
+            color2="#5227FF"
+            color3="#B19EEF"
             timeSpeed={0.25}
             colorBalance={0}
             warpStrength={1}
@@ -42,14 +45,14 @@ const HeroSection = () => {
             grainAmount={0.1}
             grainScale={2}
             grainAnimated={false}
-            contrast={1.2}
-            gamma={0.9}
-            saturation={1.2}
+            contrast={1.5}
+            gamma={1}
+            saturation={1}
             centerX={0}
             centerY={0}
             zoom={0.9}
           />
-        </div>
+        </div> */}
         
         <div className={HERO_STYLES.gradient.overlay} />
       </div>
