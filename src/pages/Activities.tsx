@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
-import Beams from "@/components/pages/Activities/Beams";
+import Beams from "@/components/shared/Beams";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
