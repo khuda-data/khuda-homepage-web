@@ -6,13 +6,13 @@ interface ProfessorProfileCardProps {
 
 const ProfessorProfileCard = ({ professor }: ProfessorProfileCardProps) => {
   return (
-    <div className="lg:col-span-2 rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center hover:bg-white/[0.06] hover:border-white/[0.14] transition-all duration-300">
-      {/* 이니셜 아바타 */}
-      <div className="relative mb-6 sm:mb-8">
+    <div className="lg:col-span-2 rounded-2xl bg-white/[0.04] border border-white/10 p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center text-center hover:bg-white/[0.06] hover:border-white/[0.14] transition-all duration-300 min-h-[400px] sm:min-h-[500px] md:min-h-[600px]">
+      {/* 프로필 이미지 영역 */}
+      <div className="relative mb-6 sm:mb-8 w-full flex-1 flex items-center justify-center">
         <div className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-blue-500/8 via-purple-500/6 to-red-500/8 blur-2xl" />
-        <div className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center">
-          <span className="text-5xl sm:text-6xl md:text-7xl font-bold text-white/40 select-none">
-            {professor.nameInitial}
+        <div className="relative w-full h-full max-w-[500px] max-h-[500px] rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center p-8 sm:p-12 md:p-16">
+          <span className="text-lg sm:text-xl md:text-2xl font-medium text-white/60 select-none leading-relaxed">
+            프로필 이미지
           </span>
         </div>
       </div>

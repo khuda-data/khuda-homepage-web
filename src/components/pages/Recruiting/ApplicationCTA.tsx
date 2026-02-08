@@ -24,12 +24,12 @@ const ApplicationCTA = () => {
   }, []);
 
   return (
-    <section className={cn(SECTION_STYLES.section.base, "py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24")}>
+    <section className={cn(SECTION_STYLES.section.base, "pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24")}>
       <div className={SECTION_STYLES.container.base}>
         <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
           {!isApplicationPeriod && (
             <p className="text-xs sm:text-sm md:text-base text-muted-foreground text-center px-4">
-              아직 모집기간이 아니에요! 다음 기수에 지원해주세요😊.
+              아직 모집기간이 아니에요!<br className="sm:hidden" /> 다음 기수에 지원해주세요😊.
             </p>
           )}
           <div className="flex justify-center w-full">

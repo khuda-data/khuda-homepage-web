@@ -52,7 +52,7 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
             >
               {achievement.isStatic ? (
                 <>
-                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent tracking-tighter mb-2 sm:mb-3">
+                  <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent tracking-tighter mb-2 sm:mb-3 whitespace-pre-line text-center">
                     {achievement.staticText}
                   </div>
                   <div className="text-xs sm:text-sm md:text-base text-white/50 tracking-wide">

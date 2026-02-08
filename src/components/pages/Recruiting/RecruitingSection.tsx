@@ -16,7 +16,7 @@ const RecruitingSection = () => {
       id={RECRUITMENT_STYLES.sectionId} 
       className={cn(
         SECTION_STYLES.section.base,
-        "pt-0"
+        "pt-0 -mt-4 sm:-mt-6 md:-mt-8 lg:-mt-10 xl:-mt-14"
       )}
     >
       <div className={SECTION_STYLES.container.base}>

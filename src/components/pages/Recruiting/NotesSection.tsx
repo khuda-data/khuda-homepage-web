@@ -17,17 +17,17 @@ const NotesSection = memo(() => {
     <div 
       ref={ref}
       className={cn(
-        "w-full py-12 sm:py-16 md:py-20 lg:py-24 mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 ease-out",
+        "w-full py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 transition-all duration-1000 ease-out",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
       {/* 헤더 */}
       <SectionHeader label="Note" title="유의 사항" />
 
-      {/* 상단 2열 - 페이지 분리 형식 */}
-      <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10 lg:mb-12">
+      {/* 상단 3열 - 모바일에서는 1열, 데스크톱에서는 2열 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 max-w-6xl mx-auto mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 px-4 sm:px-6 md:px-8">
         {/* 활동 기간 */}
-        <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 md:gap-8">
+        <div className="bg-[#1a1a1a] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 xl:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           <div className="flex-1">
             <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
               활동 기간
@@ -55,7 +55,7 @@ const NotesSection = memo(() => {
         </div>
 
         {/* 행사 참여 */}
-        <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 md:gap-8">
+        <div className="bg-[#1a1a1a] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 xl:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 md:gap-6 lg:gap-8">
           <div className="flex-1">
             <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
               행사 참여
@@ -84,40 +84,40 @@ const NotesSection = memo(() => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 하단 전체 너비 - 정기 학술제 */}
-      <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 sm:gap-8 md:gap-10 lg:gap-12 max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10 lg:mb-12">
-        <div className="flex-1 w-full">
-          <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
-            정기 학술제 참여
-          </h3>
-          <p className="text-xs sm:text-sm md:text-base text-white/90 leading-relaxed mb-4 sm:mb-5 md:mb-6">
-            KHUDA 정기 학술제에
-            <br />
-            필수적으로 참여해야 해요.
-          </p>
-          <a
-            href={ROUTES.activities}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 hover:from-red-500 hover:via-purple-500 hover:to-blue-500 text-white text-xs sm:text-sm md:text-base font-semibold px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-full transition-all duration-200"
-          >
-            자세히 보기
-            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-          </a>
-        </div>
-        <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 relative flex items-center justify-center self-center md:self-auto">
-          {/* 학술제 일러스트 */}
-          <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-24 lg:h-24 bg-white/[0.04] rounded-xl sm:rounded-2xl flex flex-col items-center justify-center relative border border-white/10">
-            <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white/80" />
+        {/* 정기 학술제 - 모바일에서는 그리드에 포함, 데스크톱에서는 전체 너비 */}
+        <div className="bg-[#1a1a1a] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 xl:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 md:gap-6 lg:gap-8 md:col-span-2">
+          <div className="flex-1 w-full">
+            <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
+              정기 학술제 참여
+            </h3>
+            <p className="text-xs sm:text-sm md:text-base text-white/90 leading-relaxed mb-3 sm:mb-4 md:mb-5 lg:mb-6">
+              KHUDA 정기 학술제에
+              <br />
+              필수적으로 참여해야 해요.
+            </p>
+            <a
+              href={ROUTES.activities}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 hover:from-red-500 hover:via-purple-500 hover:to-blue-500 text-white text-xs sm:text-sm md:text-base font-semibold px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-full transition-all duration-200"
+            >
+              자세히 보기
+              <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+            </a>
           </div>
-          {/* 상장 아이콘 */}
-          <Award className="absolute -right-0.5 sm:-right-1 top-1.5 sm:top-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400 fill-yellow-400" />
-          <Award className="absolute -right-2 sm:-right-3 bottom-3 sm:bottom-4 w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-purple-400 fill-purple-400" />
+          <div className="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 relative flex items-center justify-center self-center sm:self-auto">
+            {/* 학술제 일러스트 */}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-24 lg:h-24 bg-white/[0.04] rounded-xl sm:rounded-2xl flex flex-col items-center justify-center relative border border-white/10">
+              <GraduationCap className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white/80" />
+            </div>
+            {/* 상장 아이콘 */}
+            <Award className="absolute -right-0.5 sm:-right-1 top-1.5 sm:top-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400 fill-yellow-400" />
+            <Award className="absolute -right-2 sm:-right-3 bottom-3 sm:bottom-4 w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-purple-400 fill-purple-400" />
+          </div>
         </div>
       </div>
 
       {/* YB 수료 조건 & OB 혜택 - 아코디언 */}
-      <div className="grid md:grid-cols-2 items-start gap-4 sm:gap-6 md:gap-8 lg:gap-10 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-4 sm:gap-6 md:gap-8 lg:gap-10 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
         <AccordionCard
           title="YB 수료 조건"
           isOpen={isYBOpen}

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { type FeatureInfo } from "./FeatureShowcase";
-import { featureVisuals } from "./featureVisuals";
+import { Image } from "lucide-react";
 
 interface ActivityImageProps {
   features: FeatureInfo[];
@@ -13,7 +13,6 @@ const ActivityImage = ({ features, activeIndex, onIndexChange }: ActivityImagePr
     <div className="w-full md:w-[55%] aspect-[16/10] sm:aspect-[4/3] md:aspect-[3/2] rounded-xl shrink-0 overflow-hidden relative shadow-xl">
       {/* 이미지 레이어들 (crossfade) */}
       {features.map((feature, index) => {
-        const visual = featureVisuals[index] || featureVisuals[0];
         const isActive = index === activeIndex;
         return (
           <div
@@ -23,22 +22,10 @@ const ActivityImage = ({ features, activeIndex, onIndexChange }: ActivityImagePr
               isActive ? "opacity-100 z-10" : "opacity-0 z-0"
             )}
           >
-            {feature.image ? (
-              <img
-                src={feature.image}
-                alt={feature.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className={cn("w-full h-full bg-gradient-to-br", visual.gradient, "flex flex-col items-center justify-center gap-3 border border-white/10")}>
-                <div className="p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  {visual.icon}
-                </div>
-                <span className="text-white/40 text-[10px] sm:text-xs font-medium tracking-wider uppercase">
-                  {visual.label}
-                </span>
-              </div>
-            )}
+            <div className="w-full h-full bg-black flex flex-col items-center justify-center gap-3">
+              <Image className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-gray-500" />
+              <p className="text-gray-500 text-xs sm:text-sm">이미지 준비 중</p>
+            </div>
           </div>
         );
       })}
