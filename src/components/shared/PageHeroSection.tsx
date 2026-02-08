@@ -3,19 +3,32 @@ import { cn } from "@/lib/utils";
 interface PageHeroSectionProps {
   title: string;
   subtitle: string;
+  backgroundImage?: string;
 }
 
-const PageHeroSection = ({ title, subtitle }: PageHeroSectionProps) => {
+const PageHeroSection = ({ title, subtitle, backgroundImage }: PageHeroSectionProps) => {
   return (
     <section className="relative overflow-hidden bg-black">
-      {/* 빨강-파랑 그라데이션 배경 */}
+      {/* 배경 이미지 또는 그라데이션 배경 */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-red-800/70 via-red-700/60 to-blue-800/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/60" />
-        {/* 빨강 글로우 효과 */}
-        <div className="absolute top-0 right-1/4 w-[300px] h-[200px] bg-red-600/25 rounded-full blur-[80px]" />
-        {/* 파랑 글로우 효과 */}
-        <div className="absolute bottom-0 left-1/3 w-[250px] h-[180px] bg-blue-600/25 rounded-full blur-[70px]" />
+        {backgroundImage ? (
+          <>
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${backgroundImage})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-red-800/70 via-red-700/60 to-blue-800/70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/60" />
+            {/* 빨강 글로우 효과 */}
+            <div className="absolute top-0 right-1/4 w-[300px] h-[200px] bg-red-600/25 rounded-full blur-[80px]" />
+            {/* 파랑 글로우 효과 */}
+            <div className="absolute bottom-0 left-1/3 w-[250px] h-[180px] bg-blue-600/25 rounded-full blur-[70px]" />
+          </>
+        )}
       </div>
 
       {/* 하단 경계선 - 아래 콘텐츠와 명확한 구분 */}
