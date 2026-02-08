@@ -18,7 +18,7 @@ const FAQSection = () => {
       id={FAQ_STYLES.sectionId} 
       ref={ref}
       className={cn(
-        "w-full py-12 sm:py-16 md:py-20 lg:py-24 mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 ease-out",
+        "w-full py-12 sm:py-16 md:py-20 lg:py-24 transition-all duration-1000 ease-out",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
@@ -41,14 +41,14 @@ const FAQSection = () => {
                 )}
               >
                 <AccordionTrigger className={cn(
-                  "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-sm sm:text-base text-white font-medium transition-colors min-h-[44px] flex items-center hover:bg-white/[0.02]"
+                  "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-xs sm:text-base text-white font-medium transition-colors min-h-[44px] flex items-center hover:bg-white/[0.02]"
                 )}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <IconComponent className="w-4 h-4 text-white/70 flex-shrink-0" />
-                    <span className="text-white">{faq.question}</span>
+                    <span className="text-white break-words sm:break-normal">{faq.question}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-white/80 leading-relaxed">
+                <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-white/80 leading-relaxed break-words whitespace-pre-line">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

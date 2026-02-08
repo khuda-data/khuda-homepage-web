@@ -6,17 +6,17 @@ const TARGET_ICONS = [BookOpen, CalendarClock, Trophy] as const;
 
 const TargetCards = memo(() => {
   return (
-    <div className="grid md:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 max-w-6xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
       {RECRUITMENT_INFO.targetCards.map((card, index) => {
         const Icon = TARGET_ICONS[index];
         return (
           <div
             key={index}
-            className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-10 text-center flex flex-col items-center"
+            className="bg-[#1a1a1a] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 xl:p-10 text-center flex flex-col items-center"
           >
             {/* Icon */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-red-400/20 via-purple-400/20 to-blue-400/20 border border-white/10 flex items-center justify-center mb-4 sm:mb-6 md:mb-8">
-              <Icon className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-purple-400" />
+            <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-gradient-to-br from-red-400/20 via-purple-400/20 to-blue-400/20 border border-white/10 flex items-center justify-center mb-3 sm:mb-4 md:mb-6 lg:mb-8">
+              <Icon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 text-purple-400" />
             </div>
             {/* Description */}
             <p className="text-xs sm:text-sm md:text-[15px] lg:text-base text-white/90 leading-relaxed whitespace-pre-line break-words font-medium w-full">

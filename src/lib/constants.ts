@@ -1298,6 +1298,7 @@ export interface Sponsor {
   logo?: string;
   website?: string;
   description?: string;
+  year: number;
 }
 
 export interface GenerationSponsors {
@@ -1305,13 +1306,24 @@ export interface GenerationSponsors {
   sponsors: Sponsor[];
 }
 
-// 기수별 역대 후원사 데이터
+// 년도별 후원사 데이터 (년도 내림차순 정렬)
+export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
+  { name: "현대모비스", year: 2024 },
+  { name: "LOVABLE AI", year: 2025 },
+  { name: "Perplexity", year: 2025 },
+  { name: "경희대학교 중앙동아리연합회", year: 2025 },
+  { name: "김성민커피", year: 2025 },
+  { name: "블레이버스", year: 2025 },
+];
+
+// 기수별 역대 후원사 데이터 (하위 호환성 유지)
 export const SPONSOR_DATA: GenerationSponsors[] = [
   {
     generation: "8기",
     sponsors: [
-      { name: "Lovable", logo: "/images/lovable-color.png", website: "https://lovable.dev" },
-      { name: "Perplexity", logo: "/images/perplexity-color.png", website: "https://www.perplexity.ai" },
+      { name: "Lovable", logo: "/images/lovable-color.png", website: "https://lovable.dev", year: 2025 },
+      { name: "Perplexity", logo: "/images/perplexity-color.png", website: "https://www.perplexity.ai", year: 2025 },
+      { name: "경희대학교", logo: "/images/univ-color.png", website: "https://www.khu.ac.kr", year: 2025 },
     ],
   },
 ];
@@ -1321,7 +1333,7 @@ export const SPONSOR_PAGE_CONFIG = {
   subtitle: "KHUDA를 후원해주시는 기업 및 기관을 소개합니다.",
   description: [],
   googleFormButton: {
-    text: "후원하기",
+    text: "후원 문의",
     href: "#", // TODO: 구글폼 링크로 교체 필요
     disabled: false,
     disabledText: "준비 중입니다",

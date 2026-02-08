@@ -10,7 +10,7 @@ const Sponsor = () => {
       <main>
         <PageHeroSection
           title="함께 성장하는 파트너, KHUDA의 후원사"
-          subtitle="KHUDA와 함께 데이터·AI 생태계를 만들어가는 소중한 후원사들이에요."
+          subtitle="KHUDA는 다양한 기업과 기관의 후원을 통해 구성원의 성장과 프로젝트를 지원받고 있습니다."
         />
         <SponsorSection />
       </main>

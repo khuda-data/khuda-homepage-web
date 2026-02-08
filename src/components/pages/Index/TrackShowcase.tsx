@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import LogoLoop from "@/components/pages/Sponsor/LogoLoop";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -22,6 +23,8 @@ interface TrackCardInfo {
   type: "description" | "cta" | "info";
   content: string;
   subContent?: string;
+  trackId?: string;
+  trackLabel?: string;
 }
 
 const tracks: TrackInfo[] = [
@@ -101,49 +104,27 @@ const getCardsForTrack = (track: TrackInfo): TrackCardInfo[] => {
 const TrackShowcase = () => {
   const [activeTrack, setActiveTrack] = useState(tracks[0].id);
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isUserInteractingRef = useRef(false);
 
+  // 선택한 트랙의 카드만 가져오기
   const currentTrack = tracks.find((t) => t.id === activeTrack) || tracks[0];
-  const cards = getCardsForTrack(currentTrack);
+  const cards = useMemo(() => {
+    return getCardsForTrack(currentTrack).map((card) => ({
+      ...card,
+      trackId: currentTrack.id,
+      trackLabel: currentTrack.label,
+    }));
+  }, [currentTrack]);
 
-  // 자동 루프 기능
-  useEffect(() => {
-    if (!isVisible) return;
-
-    const startAutoLoop = () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-
-      intervalRef.current = setInterval(() => {
-        if (!isUserInteractingRef.current) {
-          setActiveTrack((prev) => {
-            const currentIndex = tracks.findIndex((t) => t.id === prev);
-            const nextIndex = (currentIndex + 1) % tracks.length;
-            return tracks[nextIndex].id;
-          });
-        }
-      }, 4000); // 4초마다 자동 전환
-    };
-
-    startAutoLoop();
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [isVisible]);
+  // LogoLoop용 로고 아이템 배열 생성 (선택한 트랙의 카드만)
+  const logoItems = useMemo(() => {
+    return cards.map((card, index) => ({
+      node: undefined, // renderItem에서 처리
+      ariaLabel: `트랙 카드 ${index + 1}`,
+    }));
+  }, [cards]);
 
   const handleTrackChange = (trackId: string) => {
     setActiveTrack(trackId);
-    isUserInteractingRef.current = true;
-    
-    // 사용자 상호작용 후 10초 뒤에 다시 자동 루프 활성화
-    setTimeout(() => {
-      isUserInteractingRef.current = false;
-    }, 10000);
   };
 
   return (
@@ -155,40 +136,50 @@ const TrackShowcase = () => {
       )}
     >
       {/* 헤더 */}
-      <div className="mb-10 sm:mb-14 md:mb-16">
+      <div className="mb-8 sm:mb-10 md:mb-14 lg:mb-16">
         <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
           <div className="flex-1">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight sm:leading-[1.15] tracking-tight">
-              IN
-              <br />
-              <span className="bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                KHUDA
-              </span>
-            </h2>
-            <p className="mt-4 sm:mt-5 md:mt-6 text-sm sm:text-base md:text-lg text-white/60 leading-relaxed max-w-xl">
+            <div className="flex items-center gap-2.5 sm:gap-0 sm:items-start">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight sm:leading-[1.15] tracking-tight">
+                IN
+                <br />
+                <span className="bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  KHUDA
+                </span>
+              </h2>
+              {/* 모바일에서만 글씨 옆 중간 높이에 화살표 표시 */}
+              <Link
+                to={ROUTES.activities}
+                className="flex-shrink-0 w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group sm:hidden"
+              >
+                <ArrowRight className="w-3.5 h-3.5 text-white group-hover:text-black transition-colors duration-300" />
+              </Link>
+            </div>
+            <p className="mt-3 sm:mt-5 md:mt-6 text-xs sm:text-sm md:text-base lg:text-lg text-white/60 leading-relaxed max-w-xl">
               각 분야의 열정 넘치는 동료들과 함께 깊이 있는 학습을 경험하세요.
               <br className="sm:hidden" />
               <br className="hidden sm:block" />
               6가지 심화트랙에서 전문성을 키워갑니다.
             </p>
           </div>
+          {/* 데스크톱에서만 오른쪽에 화살표 표시 */}
           <Link
             to={ROUTES.activities}
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-white flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-1 sm:mt-3 self-start"
+            className="hidden sm:flex flex-shrink-0 w-12 sm:w-12 md:w-14 md:h-14 rounded-full border-2 border-white items-center justify-center hover:bg-white hover:text-black transition-all duration-300 group mt-3 self-start"
           >
-            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:text-black transition-colors duration-300" />
+            <ArrowRight className="w-6 sm:w-6 text-white group-hover:text-black transition-colors duration-300" />
           </Link>
         </div>
       </div>
 
       {/* 트랙 탭 */}
-      <div className="flex items-center gap-2 sm:gap-3 mb-8 sm:mb-10 md:mb-12 -mx-2 px-2 overflow-x-auto md:overflow-visible flex-nowrap md:flex-wrap">
+      <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10 lg:mb-12 -mx-2 px-2 overflow-x-auto md:overflow-visible flex-nowrap md:flex-wrap scrollbar-hide">
         {tracks.map((track) => (
           <button
             key={track.id}
             onClick={() => handleTrackChange(track.id)}
             className={cn(
-              "px-3 sm:px-5 md:px-6 py-1.5 sm:py-2.5 rounded-full text-[11px] sm:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0",
+              "px-3 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 rounded-full text-[10px] sm:text-xs md:text-sm font-medium transition-all duration-300 whitespace-nowrap shrink-0",
               activeTrack === track.id
                 ? "bg-gradient-to-r from-red-500 to-purple-500 text-white border-transparent shadow-lg shadow-purple-500/20"
                 : "bg-transparent text-white/80 border-2 border-white hover:border-white hover:text-white"
@@ -199,46 +190,65 @@ const TrackShowcase = () => {
         ))}
       </div>
 
-      {/* 카드 그리드 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {cards.map((card, index) => (
-          <div
-            key={`${activeTrack}-${index}`}
-            className={cn(
-              "rounded-2xl p-5 sm:p-7 md:p-8 min-h-[180px] sm:min-h-[220px] md:min-h-[260px] flex flex-col justify-between transition-all duration-500 ease-out",
-              card.type === "cta"
-                ? "bg-gradient-to-br from-red-500 via-purple-500 to-blue-500 text-white cursor-pointer hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30"
-                : "bg-white/[0.04] border border-white/10 text-white hover:bg-white/[0.07] hover:border-white/15"
-            )}
-            style={{
-              animationDelay: `${index * 80}ms`,
-            }}
-          >
-            {card.type === "cta" ? (
-              <Link to={ROUTES.activities} className="flex flex-col justify-between h-full">
-                <p className="text-lg sm:text-xl md:text-2xl font-bold leading-snug whitespace-pre-line">
-                  {card.content}
-                </p>
-                <div className="mt-4 flex items-center gap-2">
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-              </Link>
-            ) : (
-              <>
-                <p
+      {/* 가로 루프 카드 */}
+      <div className="relative overflow-hidden -mx-6 sm:-mx-8 md:-mx-16 lg:-mx-20 px-6 sm:px-8 md:px-16 lg:px-20">
+        <div className="h-[280px] sm:h-[320px] md:h-[360px] lg:h-[400px] relative">
+          <LogoLoop
+            logos={logoItems}
+            speed={80}
+            direction="left"
+            gap={16}
+            pauseOnHover={true}
+            hoverSpeed={0}
+            fadeOut={false}
+            ariaLabel="트랙 소개 카드"
+            renderItem={useCallback((item, key) => {
+              // key 형식: "copyIndex-itemIndex"
+              const parts = key.split('-');
+              const itemIndex = parts.length > 1 ? parseInt(parts[1], 10) : parseInt(parts[0], 10);
+              const card = cards[itemIndex];
+              if (!card) return null;
+
+              return (
+                <div
                   className={cn(
-                    "leading-relaxed whitespace-pre-line",
-                    card.type === "info"
-                      ? "text-xs sm:text-sm text-white/60"
-                      : "text-base sm:text-lg md:text-xl font-semibold text-white/90"
+                    "rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-7 lg:p-8 min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] w-[280px] sm:w-[320px] md:w-[360px] lg:w-[400px] flex flex-col justify-between transition-all duration-500 ease-out",
+                    card.type === "cta"
+                      ? "bg-gradient-to-br from-red-500 via-purple-500 to-blue-500 text-white cursor-pointer hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/30"
+                      : "bg-white/[0.04] border border-white/10 text-white hover:bg-white/[0.07] hover:border-white/15"
                   )}
                 >
-                  {card.content}
-                </p>
-              </>
-            )}
-          </div>
-        ))}
+                  {/* 트랙 라벨 표시 */}
+                  <div className="mb-2 text-xs sm:text-sm text-white/40 font-medium">
+                    {card.trackLabel}
+                  </div>
+
+                  {card.type === "cta" ? (
+                    <Link to={ROUTES.activities} className="flex flex-col justify-between h-full">
+                      <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-snug whitespace-pre-line">
+                        {card.content}
+                      </p>
+                      <div className="mt-3 sm:mt-4 flex items-center gap-2">
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                      </div>
+                    </Link>
+                  ) : (
+                    <p
+                      className={cn(
+                        "leading-relaxed whitespace-pre-line",
+                        card.type === "info"
+                          ? "text-[11px] sm:text-xs md:text-sm text-white/60"
+                          : "text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white/90"
+                      )}
+                    >
+                      {card.content}
+                    </p>
+                  )}
+                </div>
+              );
+            }, [cards])}
+          />
+        </div>
       </div>
     </div>
   );

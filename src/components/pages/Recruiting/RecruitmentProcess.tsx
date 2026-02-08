@@ -216,7 +216,7 @@ const RecruitmentProcess = () => {
     <div
       ref={ref}
       className={cn(
-        "w-full py-12 sm:py-16 md:py-20 lg:py-24 mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 ease-out",
+        "w-full py-12 sm:py-16 md:py-20 lg:py-24 transition-all duration-1000 ease-out",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
