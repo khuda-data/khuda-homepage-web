@@ -22,9 +22,9 @@ const ActivityImage = ({ features, activeIndex, onIndexChange }: ActivityImagePr
               isActive ? "opacity-100 z-10" : "opacity-0 z-0"
             )}
           >
-            <div className="w-full h-full bg-black flex flex-col items-center justify-center gap-3">
-              <Image className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-gray-500" />
-              <p className="text-gray-500 text-xs sm:text-sm">이미지 준비 중</p>
+            <div className="w-full h-full bg-gray-100 flex flex-col items-center justify-center gap-3">
+              <Image className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-gray-400" />
+              <p className="text-gray-400 text-xs sm:text-sm">이미지 준비 중</p>
             </div>
           </div>
         );
@@ -39,8 +39,8 @@ const ActivityImage = ({ features, activeIndex, onIndexChange }: ActivityImagePr
             className={cn(
               "transition-all duration-300 rounded-full",
               index === activeIndex
-                ? "w-6 h-1.5 bg-white"
-                : "w-1.5 h-1.5 bg-white/40 hover:bg-white/60"
+                ? "w-6 h-1.5 bg-blue-700"
+                : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400"
             )}
             aria-label={`Go to feature ${index + 1}`}
           />

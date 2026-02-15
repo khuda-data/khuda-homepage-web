@@ -66,12 +66,16 @@ const Header = () => {
     link: typeof HEADER_CONFIG.navLinks[0]; 
     className?: string;
   }) => {
+    const isActive = link.href === ROUTES.about 
+      ? location.pathname === ROUTES.home
+      : location.pathname === link.href;
+    
     if (link.href === ROUTES.about) {
       return (
         <Link
           to={ROUTES.home}
           onClick={(e) => handleNavClick(link.href, e)}
-          className={className}
+          className={cn(className, isActive && "nav-link-active")}
         >
           {link.label}
         </Link>
@@ -82,7 +86,7 @@ const Header = () => {
       <Link
         to={link.href}
         onClick={() => handleNavClick(link.href)}
-        className={className}
+        className={cn(className, isActive && "nav-link-active")}
       >
         {link.label}
       </Link>

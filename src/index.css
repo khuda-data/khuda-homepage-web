@@ -1,4 +1,21 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'Cafe24Decobox';
+  src: url('/fonts/Cafe24Decobox.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Paperlogy-9Black';
+  src: url('/fonts/Paperlogy-9Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -6,48 +23,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 210 55% 96%;
+    --foreground: 0 0% 9%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
 
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
 
     --primary: 0 100% 25%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
     --accent: 0 100% 25%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 0 0% 9%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
     --ring: 0 100% 25%;
 
     --radius: 0.5rem;
 
-    --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(0 100% 25% / 0.3), transparent);
-    --gradient-hero: radial-gradient(circle at 70% 50%, hsl(0 100% 25% / 0.15), transparent 50%);
-    --shadow-glow: 0 0 60px hsl(0 100% 25% / 0.3);
+    --gradient-glow: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(0 100% 25% / 0.1), transparent);
+    --gradient-hero: radial-gradient(circle at 70% 50%, hsl(0 100% 25% / 0.06), transparent 50%);
+    --shadow-glow: 0 0 60px hsl(0 100% 25% / 0.15);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 0 0% 5%;
-    --sidebar-foreground: 0 0% 100%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 9%;
     --sidebar-primary: 0 100% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 20%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 9%;
+    --sidebar-border: 0 0% 90%;
     --sidebar-ring: 0 100% 25%;
   }
 }
@@ -107,22 +124,13 @@
 
 @layer components {
   .nav-link {
-    @apply relative text-white/90 hover:text-white transition-all duration-300 ease-out;
+    @apply relative text-zinc-900/80 hover:text-zinc-900 transition-all duration-300 ease-out;
     font-feature-settings: 'kern' 1, 'liga' 1;
-  }
-
-  .nav-link::before {
-    content: '';
-    @apply absolute inset-0 rounded-xl bg-gradient-to-b from-primary/10 to-transparent opacity-0 transition-opacity duration-300 ease-out;
   }
 
   .nav-link::after {
     content: '';
-    @apply absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent transition-all duration-500 ease-out rounded-full;
-  }
-
-  .nav-link:hover::before {
-    @apply opacity-100;
+    @apply absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-0 h-[2px] bg-primary transition-all duration-500 ease-out rounded-full;
   }
 
   .nav-link:hover::after {
@@ -130,12 +138,19 @@
   }
 
   .nav-link:hover {
-    @apply text-white;
-    transform: translateY(-1px);
+    @apply text-zinc-900;
   }
 
-  .nav-link:active {
-    @apply scale-[0.98];
+  .nav-link-active::after {
+    @apply w-4/5;
+  }
+
+  .nav-link:focus {
+    @apply outline-none;
+  }
+
+  .nav-link:focus-visible {
+    @apply outline-none;
   }
 
   .btn-primary {

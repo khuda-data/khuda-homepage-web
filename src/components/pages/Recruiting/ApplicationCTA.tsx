@@ -28,7 +28,7 @@ const ApplicationCTA = () => {
       <div className={SECTION_STYLES.container.base}>
         <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
           {!isApplicationPeriod && (
-            <p className="text-xs sm:text-sm md:text-base text-muted-foreground text-center px-4">
+            <p className="text-xs sm:text-sm md:text-base text-white/70 text-center px-4">
               아직 모집기간이 아니에요!<br className="sm:hidden" /> 다음 기수에 지원해주세요😊.
             </p>
           )}

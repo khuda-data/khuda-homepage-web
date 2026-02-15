@@ -1,7 +1,6 @@
 import { lazy, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { SECTION_STYLES, RECRUITMENT_STYLES } from "@/lib/constants";
-import HeroSection from "./HeroSection";
 import ApplicationCTA from "./ApplicationCTA";
 import TargetSection from "./TargetSection";
 import NotesSection from "./NotesSection";
@@ -16,13 +15,10 @@ const RecruitingSection = () => {
       id={RECRUITMENT_STYLES.sectionId} 
       className={cn(
         SECTION_STYLES.section.base,
-        "pt-0 -mt-4 sm:-mt-6 md:-mt-8 lg:-mt-10 xl:-mt-14"
+        "pt-0"
       )}
     >
       <div className={SECTION_STYLES.container.base}>
-        {/* WELCOME 히어로 섹션 */}
-        <HeroSection />
-
         {/* 모집 대상 (Target) 섹션 */}
         <TargetSection />
 

@@ -1,99 +1,43 @@
-import ColorBends from "./ColorBends";
-// import Grainient from "@/components/Grainient";
-import { useEffect, useState } from "react";
 import { HERO_CONFIG, HERO_STYLES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const HeroSection = () => {
-  const [currentWord, setCurrentWord] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWord((prev) => (prev + 1) % HERO_CONFIG.words.length);
-    }, HERO_CONFIG.wordRotationInterval);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section className={HERO_STYLES.section.base}>
-      <div className={HERO_STYLES.colorBendsWrapper.base}>
-        {/* 기존 ColorBends 배경 애니메이션 */}
-        <ColorBends
-          {...HERO_CONFIG.colorBends}
-          className={HERO_STYLES.colorBends.base}
+      <div className="absolute inset-0 z-0 w-full h-full">
+        {/* 배경 이미지 */}
+        <img
+          src="/images/hello.png"
+          alt=""
+          className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto min-w-full object-cover"
         />
-        
-        {/* 그라데이션 배경 - 주석 처리 */}
-        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FF9FFC] via-[#5227FF] to-[#B19EEF] opacity-80" /> */}
-        
-        {/* Grainient 배경 애니메이션 - 주석 처리 */}
-        {/* <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
-          <Grainient
-            color1="#FF9FFC"
-            color2="#5227FF"
-            color3="#B19EEF"
-            timeSpeed={0.25}
-            colorBalance={0}
-            warpStrength={1}
-            warpFrequency={5}
-            warpSpeed={2}
-            warpAmplitude={50}
-            blendAngle={0}
-            blendSoftness={0.05}
-            rotationAmount={500}
-            noiseScale={2}
-            grainAmount={0.1}
-            grainScale={2}
-            grainAnimated={false}
-            contrast={1.5}
-            gamma={1}
-            saturation={1}
-            centerX={0}
-            centerY={0}
-            zoom={0.9}
-          />
-        </div> */}
-        
-        <div className={HERO_STYLES.gradient.overlay} />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/30 to-white/50 pointer-events-none" />
       </div>
       
-      <div className={HERO_STYLES.gradient.bottom} />
+      <div className="absolute bottom-0 left-0 right-0 h-60 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none z-20" />
 
       <div className={cn(HERO_STYLES.container.base, HERO_STYLES.container.padding)}>
-        <div className={HERO_STYLES.topRow}>
-          <p className={HERO_STYLES.subtitle.base}>
-            {HERO_CONFIG.subtitle}
-          </p>
-        </div>
-
-        <h1 className={HERO_STYLES.title.base}>
-          <span className={HERO_STYLES.title.prefix}>
-            {HERO_CONFIG.title.prefix}
-          </span>{" "}
-          <span className={HERO_STYLES.title.wordContainer}>
-            <span className={HERO_STYLES.title.wordWrapper}>
-              <span 
-                key={currentWord}
-                className={HERO_STYLES.title.word}
-              >
-                {HERO_CONFIG.words[currentWord]}
-              </span>
-              <span className={HERO_STYLES.title.dot}>{HERO_CONFIG.title.dot}</span>
-            </span>
+        {/* DIVE INTO KHUDA */}
+        <h1 className="flex flex-col sm:flex-row items-start sm:items-baseline gap-0 sm:gap-3 md:gap-4 opacity-0 animate-fade-up animation-delay-200 mb-3 sm:mb-5 md:mb-6">
+          <span className="font-display text-2xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-medium text-gray-900 tracking-wide drop-shadow-[0_2px_4px_rgba(255,255,255,0.8),0_0_8px_rgba(255,255,255,0.4)]">
+            DIVE INTO
+          </span>
+          <span className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold text-gray-900 tracking-wider drop-shadow-[0_2px_4px_rgba(255,255,255,0.8),0_0_8px_rgba(255,255,255,0.4)]">
+            KH<span className="bg-gradient-to-r from-[#1a56db] to-[#e02424] bg-clip-text text-transparent drop-shadow-none">U</span>DA
           </span>
         </h1>
 
-        <p className={HERO_STYLES.tagline}>
-          {HERO_CONFIG.tagline}
-          <span className={HERO_STYLES.taglineSub}>{HERO_CONFIG.taglineSub}</span>
+        {/* 서브: 경희대학교 데이터·AI 학회 | KHUDA 9th */}
+        <p className="font-paperlogy text-[11px] sm:text-base md:text-lg lg:text-xl font-semibold text-gray-800 tracking-[0.1em] sm:tracking-[0.15em] uppercase opacity-0 animate-fade-up animation-delay-400 drop-shadow-[0_1px_3px_rgba(255,255,255,0.7),0_0_6px_rgba(255,255,255,0.3)]">
+          {HERO_CONFIG.tagline} <span className="text-gray-600 mx-1 sm:mx-2.5">|</span> <span className="font-bold">{HERO_CONFIG.subtitle}</span>
         </p>
       </div>
 
       <div className={HERO_STYLES.scrollIndicator.container}>
-        <span className={HERO_STYLES.scrollIndicator.text}>
+        <span className="text-xs sm:text-sm text-gray-800 font-semibold tracking-widest uppercase drop-shadow-[0_2px_6px_rgba(255,255,255,0.9),0_0_12px_rgba(255,255,255,0.5)]">
           {HERO_CONFIG.scrollIndicator}
         </span>
-        <div className={HERO_STYLES.scrollIndicator.line} />
+        <div className="w-px h-6 sm:h-12 bg-gradient-to-b from-gray-700/60 to-transparent" />
       </div>
     </section>
   );

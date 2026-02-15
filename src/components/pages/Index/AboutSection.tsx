@@ -1,11 +1,8 @@
-import { SECTION_STYLES } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import AchievementsSection, { type AchievementInfo } from "./AchievementsSection";
 import FeatureShowcase, { type FeatureInfo } from "./FeatureShowcase";
 import TrackShowcase from "./TrackShowcase";
-import ProfessorShowcase from "./ProfessorShowcase";
 import SponsorShowcase from "./SponsorShowcase";
-import ScrollReveal from "@/components/shared/ScrollReveal";
 
 const AboutSection = () => {
   const [resetKey, setResetKey] = useState(0);
@@ -23,37 +20,36 @@ const AboutSection = () => {
 
   const features: FeatureInfo[] = [
     {
-      title: "ML 세션",
-      description: "머신러닝 기초를 체계적으로 다지는 시간입니다. 파이썬 실습부터 머신러닝 핵심 개념까지, 데이터 분석의 기초를 탄탄히 쌓아갑니다.",
-      details: "개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 이론과 실습을 함께 학습합니다.",
+      title: "ML 기초 & 토이",
+      label: "학습",
+      description: "머신러닝 기초부터 토이 프로젝트까지, 데이터 사이언스의 첫걸음을 함께 시작합니다.",
+      details: "파이썬 실습, ML 핵심 개념 학습, 그리고 팀 단위 토이 프로젝트를 통해 이론과 실전을 동시에 경험합니다.",
     },
     {
-      title: "토이 프로젝트 컨퍼런스",
-      description: "방학 세션에서 배운 내용을 바탕으로 팀 단위로 진행한 토이 프로젝트를 발표하는 자리입니다.",
-      details: "첫 프로젝트 경험을 통해 협업과 발표의 기초를 다집니다.",
+      title: "정규 & 심화 컨퍼런스",
+      label: "성장",
+      description: "심화 트랙에서 선택한 분야를 깊이 있게 공부하고, 프로젝트 결과를 발표합니다.",
+      details: "CV, NLP, Finance 등 전문 분야의 심화 커리큘럼과 컨퍼런스를 통해 전문성을 키워갑니다.",
     },
     {
-      title: "파티룸",
-      description: "네트워킹과 레크레이션을 통해 동아리원들과의 유대감을 형성하는 시간입니다.",
-      details: "함께하는 즐거움을 통해 더욱 긴밀한 협업의 기반을 만듭니다.",
+      title: "정기 학술제",
+      label: "성과",
+      description: "한 학기 동안 완성한 프로젝트를 발표하는 KHUDA의 대표 학술 행사입니다.",
+      details: "포스터 발표와 정식 발표를 통해 전문가들로부터 피드백을 받으며 프로젝트의 완성도를 높입니다.",
     },
     {
-      title: "정규 세션",
-      description: "심화 트랙에서 선택한 분야를 깊이 있게 공부하는 시간입니다. CV, NLP, Finance 등 전문 분야를 집중적으로 학습합니다.",
-      details: "트랙별 심화 커리큘럼을 통해 전문성을 키워갑니다.",
-    },
-    {
-      title: "정기 학술제 & 심화 프로젝트 컨퍼런스",
-      description: "한 학기 동안 심화 트랙에서 완성한 프로젝트를 발표하는 학회의 대표 행사입니다.",
-      details: "포스터 발표와 정식 발표를 통해 전문가들로부터 피드백을 받으며 프로젝트를 완성도 높게 발전시킵니다.",
+      title: "네트워킹",
+      label: "교류",
+      description: "동아리원들과의 유대감을 형성하고 새로운 인연을 만드는 시간입니다.",
+      details: "파티룸, 레크레이션, MT 등 다양한 네트워킹 활동을 통해 함께 성장하는 커뮤니티를 만들어갑니다.",
     },
   ];
 
   const achievements: AchievementInfo[] = [
-    { value: 200, label: "수료생", suffix: "+" },
-    { value: 150, label: "아이디어 제출", suffix: "+" },
-    { value: 9, label: "기수", suffix: "기", from: 1 },
-    { value: 0, label: "중앙동아리연합회 선정", suffix: "", isStatic: true, staticText: "경희대학교\n2025 최우수 동아리" },
+    { value: 9, label: "기수", suffix: "기", from: 1, emoji: "🚀", variant: "accent" },
+    { value: 150, label: "아이디어 제출", suffix: "+", emoji: "💡", variant: "accent" },
+    { value: 200, label: "수료생", suffix: "+", emoji: "🎓", variant: "accent" },
+    { value: 0, label: "중앙동아리연합회 선정", suffix: "", isStatic: true, staticText: "경희대학교\n2025 최우수 동아리", emoji: "🏆", variant: "primary" },
   ];
 
   return (
@@ -62,20 +58,6 @@ const AboutSection = () => {
       <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <AchievementsSection achievements={achievements} resetKey={resetKey} />
-          
-          {/* 소개 텍스트 */}
-          <div className="mt-6 sm:mt-8 md:mt-10">
-            <ScrollReveal className="text-center">
-              <div className={SECTION_STYLES.maxWidth.narrow}>
-                <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed">
-                  많은 경희대 학우들이 KHUDA에서 시작했습니다.
-                </p>
-                <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed mt-2">
-                  데이터와 AI의 세계로 첫걸음을 내딛고, 함께 성장하며 새로운 가능성을 만들어갑니다.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
         </div>
       </section>
 
@@ -90,13 +72,6 @@ const AboutSection = () => {
       <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
           <TrackShowcase />
-        </div>
-      </section>
-
-      {/* 지도교수 소개 섹션 */}
-      <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
-        <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
-          <ProfessorShowcase />
         </div>
       </section>
 
