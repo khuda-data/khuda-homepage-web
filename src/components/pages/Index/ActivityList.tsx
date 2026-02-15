@@ -23,19 +23,19 @@ const ActivityList = ({ features, activeIndex, onIndexChange }: ActivityListProp
               className={cn(
                 "text-base sm:text-lg md:text-xl font-bold leading-snug sm:leading-tight transition-all duration-300 flex items-center gap-2",
                 isActive
-                  ? "text-white"
-                  : "text-white/30 group-hover/item:text-white/50"
+                  ? "text-gray-900"
+                  : "text-gray-300 group-hover/item:text-gray-500"
               )}
             >
               {feature.title}
-              {isActive && <span className="text-white ml-1">»</span>}
+              {isActive && <span className="text-blue-700 ml-1">»</span>}
             </h3>
             <p
               className={cn(
                 "mt-1.5 text-xs sm:text-sm leading-relaxed sm:leading-relaxed transition-all duration-300",
                 isActive
-                  ? "text-white/70"
-                  : "text-white/25 group-hover/item:text-white/40"
+                  ? "text-gray-600"
+                  : "text-gray-300 group-hover/item:text-gray-400"
               )}
             >
               {feature.description}

@@ -69,7 +69,8 @@ export const ROUTES = {
 // ============================================================================
 
 export const IMAGE_PATHS = {
-  logo: "/images/khuda-logo.png",
+  //logo: "/images/khuda-logo.png",
+  logo: "/images/khuda-logo-white.png",
 };
 
 // ============================================================================
@@ -165,7 +166,7 @@ export const HEADER_CONFIG = {
 export const HEADER_STYLES = {
   header: {
     base: "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out",
-    scrolled: "bg-background/98 backdrop-blur-2xl border-b border-border/40 shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
+    scrolled: "bg-white border-b border-border/40 shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
     transparent: "bg-transparent",
   },
   container: {
@@ -188,7 +189,7 @@ export const HEADER_STYLES = {
   nav: {
     desktop: {
       container: "hidden md:flex items-center gap-4 lg:gap-6 xl:gap-10",
-      link: "nav-link text-sm md:text-[15px] font-medium tracking-[-0.01em] px-3 py-2 rounded-xl transition-all duration-300 ease-out hover:bg-gradient-to-b hover:from-foreground/8 hover:to-foreground/4 hover:scale-[1.02] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]",
+      link: "nav-link text-sm md:text-[15px] font-medium tracking-[-0.01em] text-black px-3 py-2 transition-all duration-300 ease-out",
     },
     mobile: {
       container: "md:hidden absolute left-0 right-0 bg-background/98 backdrop-blur-2xl border-b border-border/40 animate-fade-in shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
@@ -231,60 +232,42 @@ export const HERO_CONFIG = {
     viewActivities: "활동 보기",
   },
   scrollIndicator: "Scroll",
-  colorBends: {
-    colors: ["#0066cc", "#0099ff", "#cc0000"],
-    rotation: 45,
-    speed: 0.2,
-    scale: 1,
-    frequency: 1,
-    warpStrength: 1,
-    mouseInfluence: 1.5,
-    parallax: 0.8,
-    noise: 0.1,
-    transparent: true,
-  },
 };
 
 export const HERO_STYLES = {
   section: {
-    base: "relative min-h-[100svh] min-h-screen flex items-center overflow-hidden",
+    base: "relative min-h-[100svh] min-h-screen flex items-end overflow-hidden",
   },
   container: {
     base: "relative z-10 w-full",
-    padding: "px-6 sm:px-8 md:px-16 lg:px-20",
+    padding: "px-5 sm:px-8 md:px-16 lg:px-20 pb-20 sm:pb-32 md:pb-36 lg:pb-40",
   },
-  topRow: "flex items-start justify-between mt-6 sm:mt-8 md:mt-10 mb-2 sm:mb-3 md:mb-4 opacity-0 animate-fade-up",
-  colorBendsWrapper: {
-    base: "absolute inset-0 z-0 w-full h-full",
-  },
-  colorBends: {
-    base: "absolute inset-0 w-full h-full",
-  },
+  topRow: "flex items-start justify-between mb-2 sm:mb-3 md:mb-4 opacity-0 animate-fade-up",
   title: {
-    base: "text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none -mt-4 sm:-mt-8 md:-mt-10 opacity-0 animate-fade-up animation-delay-200",
-    prefix: "inline-block bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent tracking-tight text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+    base: "text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none opacity-0 animate-fade-up animation-delay-200",
+    prefix: "block text-white tracking-tight text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl drop-shadow-lg",
     wordContainer: "inline-block",
     wordWrapper: "inline-block min-w-[72px] sm:min-w-[100px] md:min-w-[160px] relative",
-    word: "inline-block bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent border-b-2 sm:border-b-4 border-white/40 pb-1 sm:pb-2 transition-all duration-700 text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
-    dot: "text-white/50 ml-0.5 sm:ml-1 text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
+    word: "inline-block text-white border-b-2 sm:border-b-4 border-white/40 pb-1 sm:pb-2 transition-all duration-700 text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl drop-shadow-lg",
+    dot: "text-white/60 ml-0.5 sm:ml-1 text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl",
   },
   subtitle: {
-    base: "text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ml-0 sm:ml-0.5 md:ml-1 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent",
+    base: "text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold ml-0 sm:ml-0.5 md:ml-1 text-white drop-shadow-lg",
   },
-  tagline: "text-xs sm:text-sm md:text-base text-white/70 tracking-wide mt-4 sm:mt-5 md:mt-6 -ml-1 sm:ml-0 md:ml-1 opacity-0 animate-fade-up animation-delay-400",
+  tagline: "text-xs sm:text-sm md:text-base text-white/80 tracking-wide mt-4 sm:mt-5 md:mt-6 -ml-1 sm:ml-0 md:ml-1 opacity-0 animate-fade-up animation-delay-400 drop-shadow-md",
   taglineSub: "text-white/60",
   buttons: {
     container: "flex flex-col sm:flex-row gap-3 sm:gap-4 opacity-0 animate-fade-up animation-delay-600",
     base: "w-full sm:w-auto rounded-md text-sm sm:text-base min-h-[44px]",
   },
   scrollIndicator: {
-    container: "absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 animate-fade-in animation-delay-600 z-10",
-    text: "text-xs text-muted-foreground tracking-widest uppercase",
-    line: "w-px h-12 bg-gradient-to-b from-foreground/50 to-transparent",
+    container: "absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 sm:gap-2 opacity-0 animate-fade-in animation-delay-600 z-30",
+    text: "text-xs sm:text-sm text-white font-semibold tracking-widest uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8),0_0_20px_rgba(255,255,255,0.5),0_0_30px_rgba(255,255,255,0.3)]",
+    line: "w-px h-6 sm:h-12 bg-gradient-to-b from-white/50 to-transparent",
   },
   gradient: {
-    overlay: "absolute inset-0 bg-gradient-to-b from-background via-background/99 to-background/98 pointer-events-none",
-    bottom: "absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none z-20",
+    overlay: "absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/35 pointer-events-none",
+    bottom: "absolute bottom-0 left-0 right-0 h-60 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none z-20",
   },
 };
 
@@ -309,11 +292,11 @@ export const FOOTER_STYLES = {
     flexCol: "flex flex-col",
   },
   section: {
-    header: "font-semibold mb-4 sm:mb-5 text-sm sm:text-base text-foreground",
-    organization: "font-bold text-base sm:text-lg text-foreground",
+    header: "font-semibold mb-4 sm:mb-5 text-sm sm:text-base text-black",
+    organization: "font-bold text-base sm:text-lg text-black",
     text: {
-      base: "text-muted-foreground text-xs sm:text-sm",
-      small: "text-muted-foreground/60 text-[10px] sm:text-xs",
+      base: "text-black text-xs sm:text-sm",
+      small: "text-black text-[10px] sm:text-xs",
     },
     spacing: {
       marginBottom: "mb-3 sm:mb-4",
@@ -425,7 +408,7 @@ export const RECRUITMENT_STYLES = {
   section: {
     header: {
       container: "text-center mb-20",
-      title: "text-2xl font-bold text-center mb-16 text-foreground",
+      title: "text-2xl font-bold text-center mb-16 text-white",
     },
   },
   infoCard: {
@@ -436,9 +419,9 @@ export const RECRUITMENT_STYLES = {
       container: "inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-105",
       size: "w-6 h-6 sm:w-7 sm:h-7",
     },
-    title: "text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-foreground",
-    description: "text-sm sm:text-base md:text-lg font-medium mb-2 text-foreground leading-relaxed",
-    details: "text-xs sm:text-sm text-muted-foreground leading-relaxed",
+    title: "text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-white",
+    description: "text-sm sm:text-base md:text-lg font-medium mb-2 text-white leading-relaxed",
+    details: "text-xs sm:text-sm text-white/70 leading-relaxed",
   },
   process: {
     container: "mb-20",
@@ -489,18 +472,18 @@ export const RECRUITMENT_STYLES = {
         title: {
           base: "text-sm sm:text-base md:text-lg font-semibold",
           active: "text-primary",
-          inactive: "text-foreground",
+          inactive: "text-white",
         },
         date: {
           base: "text-xs sm:text-sm font-medium whitespace-nowrap",
           active: "text-primary/80",
-          inactive: "text-muted-foreground",
+          inactive: "text-white/70",
         },
       },
       fullDate: {
         base: "text-xs sm:text-sm leading-relaxed mt-auto",
-        active: "text-foreground/90",
-        inactive: "text-muted-foreground",
+        active: "text-white/90",
+        inactive: "text-white/70",
       },
       mobile: {
         title: "text-sm sm:text-base font-semibold",
@@ -545,11 +528,11 @@ export const RECRUITMENT_STYLES = {
   text: {
     stepNumber: "text-xs font-semibold",
     stepNumberActive: "text-primary-foreground",
-    stepNumberInactive: "text-foreground",
+    stepNumberInactive: "text-white",
   },
   colors: {
     primaryForeground: "text-primary-foreground",
-    foreground: "text-foreground",
+    foreground: "text-white",
     bgPrimaryForeground: "bg-primary-foreground",
     bgMutedForeground: "bg-muted-foreground/30",
     bgBorder: "bg-border",
