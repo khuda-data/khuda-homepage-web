@@ -42,6 +42,25 @@ export interface FAQ {
   answer: string;
 }
 
+export interface ExecutiveProfile {
+  name: string;
+  role: string;
+  department?: string;
+  year?: string;
+  image?: string;
+  description?: string;
+  motto?: string;
+  affiliation?: string;
+  email?: string;
+  linkedin?: string;
+  github?: string;
+}
+
+export interface GenerationExecutives {
+  generation: string;
+  executives: ExecutiveProfile[];
+}
+
 // ============================================================================
 // API 설정
 // ============================================================================
@@ -1363,3 +1382,179 @@ export const SPONSOR_PAGE_STYLES = {
     },
   },
 };
+
+// ============================================================================
+// 운영진 프로필 데이터
+// ============================================================================
+
+export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
+  {
+    generation: "9기",
+    executives: [
+      {
+        name: "운영진 이름 1",
+        role: "회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2024",
+        motto: "함께 성장하며 한계를 뛰어넘는 여정",
+        email: "example1@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example1",
+      },
+      {
+        name: "운영진 이름 2",
+        role: "부회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2024",
+        motto: "데이터와 AI로 미래를 만들어갑니다",
+        email: "example2@khu.ac.kr",
+        github: "https://github.com/example2",
+      },
+      {
+        name: "운영진 이름 3",
+        role: "총무",
+        department: "전자공학과",
+        affiliation: "경희대학교, 전자공학과",
+        year: "2024",
+        motto: "서로의 빛이 모여 더 반짝이도록",
+        email: "example3@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example3",
+      },
+      {
+        name: "운영진 이름 4",
+        role: "기획",
+        department: "산업경영공학과",
+        affiliation: "경희대학교, 산업경영공학과",
+        year: "2024",
+        motto: "더 높이 도약할 KHUDA를 만드는 일",
+        email: "example4@khu.ac.kr",
+        github: "https://github.com/example4",
+      },
+      {
+        name: "운영진 이름 5",
+        role: "홍보",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2024",
+        motto: "KHUDA니까, KHUDA답게!",
+        email: "example5@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example5",
+        github: "https://github.com/example5",
+      },
+      // TODO: 실제 운영진 정보로 교체 필요
+    ],
+  },
+  {
+    generation: "8기",
+    executives: [
+      {
+        name: "운영진 이름 1",
+        role: "회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2023",
+        motto: "함께 성장하며 한계를 뛰어넘는 여정",
+        email: "example1@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example1",
+      },
+      {
+        name: "운영진 이름 2",
+        role: "부회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2023",
+        motto: "데이터와 AI로 미래를 만들어갑니다",
+        email: "example2@khu.ac.kr",
+        github: "https://github.com/example2",
+      },
+      {
+        name: "운영진 이름 3",
+        role: "총무",
+        department: "전자공학과",
+        affiliation: "경희대학교, 전자공학과",
+        year: "2023",
+        motto: "서로의 빛이 모여 더 반짝이도록",
+        email: "example3@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example3",
+      },
+      {
+        name: "운영진 이름 4",
+        role: "기획",
+        department: "산업경영공학과",
+        affiliation: "경희대학교, 산업경영공학과",
+        year: "2023",
+        motto: "더 높이 도약할 KHUDA를 만드는 일",
+        email: "example4@khu.ac.kr",
+        github: "https://github.com/example4",
+      },
+      {
+        name: "운영진 이름 5",
+        role: "홍보",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2023",
+        motto: "KHUDA니까, KHUDA답게!",
+        email: "example5@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example5",
+      },
+      // TODO: 실제 운영진 정보로 교체 필요
+    ],
+  },
+  {
+    generation: "7기",
+    executives: [
+      {
+        name: "운영진 이름 1",
+        role: "회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2022",
+        motto: "함께 성장하며 한계를 뛰어넘는 여정",
+        email: "example1@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example1",
+      },
+      {
+        name: "운영진 이름 2",
+        role: "부회장",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2022",
+        motto: "데이터와 AI로 미래를 만들어갑니다",
+        email: "example2@khu.ac.kr",
+        github: "https://github.com/example2",
+      },
+      {
+        name: "운영진 이름 3",
+        role: "총무",
+        department: "전자공학과",
+        affiliation: "경희대학교, 전자공학과",
+        year: "2022",
+        motto: "서로의 빛이 모여 더 반짝이도록",
+        email: "example3@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example3",
+      },
+      {
+        name: "운영진 이름 4",
+        role: "기획",
+        department: "산업경영공학과",
+        affiliation: "경희대학교, 산업경영공학과",
+        year: "2022",
+        motto: "더 높이 도약할 KHUDA를 만드는 일",
+        email: "example4@khu.ac.kr",
+        github: "https://github.com/example4",
+      },
+      {
+        name: "운영진 이름 5",
+        role: "홍보",
+        department: "컴퓨터공학과",
+        affiliation: "경희대학교, 컴퓨터공학과",
+        year: "2022",
+        motto: "KHUDA니까, KHUDA답게!",
+        email: "example5@khu.ac.kr",
+        linkedin: "https://linkedin.com/in/example5",
+      },
+      // TODO: 실제 운영진 정보로 교체 필요
+    ],
+  },
+];

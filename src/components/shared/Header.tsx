@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { scrollToSection, IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
+import { IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const Header = () => {
@@ -36,15 +36,7 @@ const Header = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = (href: string, e?: React.MouseEvent) => {
-    if (href === ROUTES.about) {
-      if (location.pathname === ROUTES.home) {
-        e?.preventDefault();
-        scrollToSection("#about");
-      } else {
-        setTimeout(() => scrollToSection("#about"), 100);
-      }
-    }
+  const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
   };
 
@@ -66,21 +58,7 @@ const Header = () => {
     link: typeof HEADER_CONFIG.navLinks[0]; 
     className?: string;
   }) => {
-    const isActive = link.href === ROUTES.about 
-      ? location.pathname === ROUTES.home
-      : location.pathname === link.href;
-    
-    if (link.href === ROUTES.about) {
-      return (
-        <Link
-          to={ROUTES.home}
-          onClick={(e) => handleNavClick(link.href, e)}
-          className={cn(className, isActive && "nav-link-active")}
-        >
-          {link.label}
-        </Link>
-      );
-    }
+    const isActive = location.pathname === link.href;
     
     return (
       <Link

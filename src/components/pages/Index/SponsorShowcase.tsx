@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import LogoLoop from "@/components/pages/Sponsor/LogoLoop";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -13,6 +14,7 @@ const SCROLL_REVEAL_OPTIONS = {
 
 const SponsorShowcase = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
+  const isMobile = useIsMobile();
 
   // 모든 기수의 후원사 로고를 수집 (LogoLoop용)
   const sponsorLogos = useMemo(() => {
@@ -58,13 +60,13 @@ const SponsorShowcase = () => {
       {/* 후원사 로고 루프 */}
       {sponsorLogos.length > 0 && (
         <div className="py-6 sm:py-8">
-          <div className="w-full h-[90px] sm:h-[120px] relative overflow-hidden">
+          <div className="w-full h-[60px] sm:h-[120px] relative overflow-hidden">
             <LogoLoop
               logos={sponsorLogos}
-              speed={100}
+              speed={isMobile ? 60 : 100}
               direction="left"
-              logoHeight={56}
-              gap={56}
+              logoHeight={isMobile ? 32 : 56}
+              gap={isMobile ? 28 : 56}
               hoverSpeed={0}
               scaleOnHover
               fadeOut={false}
