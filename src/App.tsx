@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { trackPageView } from "./utils/analytics";
 import Index from "./pages/Index";
+import About from "./pages/About";
 import Activities from "./pages/Activities";
 import Projects from "./pages/Projects";
 import Sponsor from "./pages/Sponsor";
@@ -48,6 +49,7 @@ const App = () => (
         <PageTracker />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/sponsor" element={<Sponsor />} />

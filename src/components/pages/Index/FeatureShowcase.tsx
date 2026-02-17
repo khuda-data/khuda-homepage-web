@@ -100,7 +100,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               onMouseEnter={() => handleHover(index)}
             >
               {/* 배경 이미지 / 플레이스홀더 */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
+              <div className="absolute inset-0 bg-blue-200/70">
                 {feature.image ? (
                   <img
                     src={feature.image}
@@ -109,8 +109,8 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                    <Image className="w-14 h-14 lg:w-16 lg:h-16 text-gray-600" />
-                    <p className="text-gray-500 text-sm">이미지 준비 중</p>
+                    <Image className="w-14 h-14 lg:w-16 lg:h-16 text-gray-700" />
+                    <p className="text-gray-600 text-sm">이미지 준비 중</p>
                   </div>
                 )}
               </div>
@@ -120,15 +120,15 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 className={cn(
                   "absolute inset-0 transition-all duration-700",
                   isActive
-                    ? "bg-gradient-to-t from-black/80 via-black/30 to-transparent"
-                    : "bg-black/50"
+                    ? "bg-gradient-to-t from-black/20 via-transparent to-transparent"
+                    : "bg-transparent"
                 )}
               />
 
               {/* 활성 카드: 타이틀 + 설명 */}
               <div
                 className={cn(
-                  "absolute bottom-0 left-0 right-0 p-5 lg:p-6 xl:p-7 text-white transition-all duration-500",
+                  "absolute bottom-0 left-0 right-0 p-5 lg:p-6 xl:p-7 text-gray-900 transition-all duration-500",
                   isActive
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-4 pointer-events-none"
@@ -137,7 +137,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 <h3 className="text-xl lg:text-2xl xl:text-3xl font-bold mb-1.5 lg:mb-2 leading-tight">
                   {feature.title}
                 </h3>
-                <p className="text-xs lg:text-sm text-white/80 leading-relaxed max-w-lg">
+                <p className="text-xs lg:text-sm text-gray-700 leading-relaxed max-w-lg">
                   {feature.details}
                 </p>
               </div>
@@ -145,18 +145,15 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               {/* 비활성 카드: 라벨 */}
               <div
                 className={cn(
-                  "absolute inset-0 flex items-center justify-center transition-all duration-500",
+                  "absolute top-4 left-4 lg:top-5 lg:left-5 xl:top-6 xl:left-6 transition-all duration-500",
                   isActive
                     ? "opacity-0 scale-90"
                     : "opacity-100 scale-100"
                 )}
               >
-                <div className="relative">
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 lg:w-5 lg:h-5 bg-blue-500 rounded-full opacity-80" />
-                  <span className="relative text-white text-xl lg:text-2xl xl:text-3xl font-bold drop-shadow-lg">
-                    {feature.label}
-                  </span>
-                </div>
+                <span className="text-gray-900 text-base lg:text-lg xl:text-xl font-bold">
+                  {feature.label}
+                </span>
               </div>
             </div>
           );
@@ -177,7 +174,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               onClick={() => handleTap(index)}
             >
               {/* 배경 */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900">
+              <div className="absolute inset-0 bg-blue-200/70">
                 {feature.image ? (
                   <img
                     src={feature.image}
@@ -187,10 +184,10 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center gap-1.5 sm:gap-2">
                     <Image className={cn(
-                      "text-gray-600 transition-all duration-500",
+                      "text-gray-700 transition-all duration-500",
                       isActive ? "w-10 h-10 sm:w-12 sm:h-12" : "w-6 h-6 sm:w-8 sm:h-8"
                     )} />
-                    {isActive && <p className="text-gray-500 text-[10px] sm:text-xs">이미지 준비 중</p>}
+                    {isActive && <p className="text-gray-600 text-[10px] sm:text-xs">이미지 준비 중</p>}
                   </div>
                 )}
               </div>
@@ -200,18 +197,18 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 className={cn(
                   "absolute inset-0 transition-all duration-500",
                   isActive
-                    ? "bg-gradient-to-t from-black/80 via-black/30 to-transparent"
-                    : "bg-black/50"
+                    ? "bg-gradient-to-t from-black/20 via-transparent to-transparent"
+                    : "bg-transparent"
                 )}
               />
 
               {/* 활성 카드: 내용 */}
               {isActive && (
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 md:p-6 text-gray-900">
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-1.5 leading-tight">
                     {feature.title}
                   </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-white/80 leading-relaxed line-clamp-3">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed line-clamp-3">
                     {feature.details}
                   </p>
                 </div>
@@ -219,16 +216,10 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
 
               {/* 비활성 카드: 라벨 */}
               {!isActive && (
-                <div className="absolute inset-0 flex items-center px-4 sm:px-5 md:px-6">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-blue-500 rounded-full opacity-80 flex-shrink-0" />
-                    <span className="text-white text-sm sm:text-base md:text-lg font-bold truncate">
-                      {feature.label}
-                    </span>
-                    <span className="text-white/50 text-xs sm:text-sm font-medium truncate hidden sm:inline">
-                      {feature.title}
-                    </span>
-                  </div>
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                  <span className="text-gray-900 text-xs sm:text-sm font-bold">
+                    {feature.label}
+                  </span>
                 </div>
               )}
             </div>

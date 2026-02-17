@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -72,6 +72,7 @@ const tracks: TrackInfo[] = [
 const TrackShowcase = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
   const [flippedId, setFlippedId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handlePointerEnter = (e: React.PointerEvent, id: string) => {
     if (e.pointerType === "mouse") setFlippedId(id);
@@ -85,6 +86,10 @@ const TrackShowcase = () => {
     if (e.pointerType !== "mouse") {
       setFlippedId((prev) => (prev === id ? null : id));
     }
+  };
+
+  const handleCardClick = () => {
+    navigate(ROUTES.activities);
   };
 
   return (
@@ -142,6 +147,7 @@ const TrackShowcase = () => {
               onPointerEnter={(e) => handlePointerEnter(e, track.id)}
               onPointerLeave={handlePointerLeave}
               onPointerUp={(e) => handlePointerUp(e, track.id)}
+              onClick={handleCardClick}
             >
               <div
                 className={cn(
@@ -150,33 +156,45 @@ const TrackShowcase = () => {
                 )}
               >
                 {/* 앞면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-gray-900 text-white">
-                  <div>
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-blue-300/50 text-gray-900 overflow-hidden">
+                  {/* NLP 카드 배경 이미지 */}
+                  {track.id === "nlp" && (
+                    <>
+                      <img
+                        src="/images/nlp.jpg"
+                        alt="NLP"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-blue-300/30" />
+                    </>
+                  )}
+                  
+                  <div className="relative z-10">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">
                       {track.label}
                     </h3>
-                    <p className="text-[11px] sm:text-xs mt-0.5 sm:mt-1 text-white/50">
+                    <p className="text-[11px] sm:text-xs mt-0.5 sm:mt-1 text-gray-600">
                       {track.title}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1.5">
+                  <div className="relative z-10 flex items-center gap-1.5">
                     <span className="text-xs sm:text-sm font-semibold">
                       자세히 보기
                     </span>
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/15 flex items-center justify-center">
-                      <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" />
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-900/20 flex items-center justify-center">
+                      <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-900" />
                     </div>
                   </div>
                 </div>
 
                 {/* 뒷면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gray-800 text-white overflow-hidden">
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] [transform:rotateY(180deg)] bg-blue-300/50 text-gray-900 overflow-hidden">
                   <div className="min-h-0 overflow-hidden">
                     <h3 className="text-xs sm:text-base font-bold mb-1 sm:mb-2">
                       {track.label}
                     </h3>
-                    <p className="text-[10px] sm:text-xs md:text-sm leading-relaxed line-clamp-3 sm:line-clamp-5 text-white/80">
+                    <p className="text-[10px] sm:text-xs md:text-sm leading-relaxed line-clamp-3 sm:line-clamp-5 text-gray-700">
                       {track.description}
                     </p>
                   </div>
@@ -185,7 +203,7 @@ const TrackShowcase = () => {
                     {track.topics.map((topic) => (
                       <span
                         key={topic}
-                        className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-medium bg-white/10 text-white/80"
+                        className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-medium bg-gray-900/20 text-gray-700"
                       >
                         {topic}
                       </span>
