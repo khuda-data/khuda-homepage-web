@@ -8,22 +8,14 @@ import { Search, ChevronDown, X, Github, ChevronLeft, ChevronRight } from "lucid
 // 타입 정의
 // ============================================================================
 
-interface Contributor {
-  name: string;
-  role: string; // 전공 또는 역할
-  github?: string;
-}
-
 interface Project {
   title: string;
-  description: string;
+  members: string;
   longDescription: string;
   generation: string;
   track: string;
-  tags: string[];
   thumbnail: string;
   slides: string[];
-  contributors: Contributor[];
   githubUrl?: string;
 }
 
@@ -33,183 +25,92 @@ interface Project {
 
 const projectsData: Project[] = [
   {
-    title: "StockMind",
-    description: "AI 기반 주가 예측 및 포트폴리오 추천 서비스",
+    title: "데이터 기반 이륜차 사고위험지수 개발 및 최적 단속지점 제안",
+    members: "이재용, 김서윤, 박도현, 정하은",
     longDescription:
-      "StockMind는 LSTM과 Transformer 기반의 딥러닝 모델을 활용해 주가 변동을 예측하고, 사용자의 투자 성향에 맞춘 포트폴리오를 자동으로 추천하는 서비스입니다. 한국거래소 실시간 데이터와 뉴스 감성 분석을 결합하여 보다 정확한 예측을 목표로 합니다. 백테스팅을 통해 모델 성능을 검증하였으며, 실제 투자 시뮬레이션 환경을 제공합니다.",
+      "배달 플랫폼 성장으로 이륜차 운행이 급증하며 관련 사고가 사회적 문제로 대두되고 있습니다. 사고 다발지 데이터를 바탕으로 이륜차 사고 위험 지수를 개발하고, 사고를 효과적으로 줄일 수 있는 단속 및 안전 인프라 설치 우선순위를 제안합니다. 잠재적 위험 지역을 찾아내어 선제적으로 예방할 수 있는 데이터 기반 접근방식의 솔루션을 제공합니다.",
     generation: "8기",
-    track: "금융",
-    tags: ["Finance", "AI", "Portfolio"],
-    thumbnail: "https://picsum.photos/seed/stockmind/600/400",
-    slides: [
-      "https://picsum.photos/seed/stock-s1/1920/1080",
-      "https://picsum.photos/seed/stock-s2/1920/1080",
-      "https://picsum.photos/seed/stock-s3/1920/1080",
-    ],
-    contributors: [
-      { name: "김데이터", role: "컴퓨터공학", github: "https://github.com/example1" },
-      { name: "이금융", role: "경영학", github: "https://github.com/example2" },
-      { name: "박분석", role: "통계학" },
-    ],
-    githubUrl: "https://github.com/khuda-data/stockmind",
+    track: "ML 풀코스",
+    thumbnail: "/images/projects/motorcycle-safety.png",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-MLFull-RIDER",
   },
   {
-    title: "Sentimo",
-    description: "감성 분석 일기장",
+    title: "카드 소비 데이터 기반 소비 취약군 식별 및 맞춤형 정책 제안",
+    members: "한지민, 오태양, 송예린, 윤성호",
     longDescription:
-      "Sentimo는 사용자가 작성한 일기의 텍스트를 BERT 기반 감성 분석 모델로 분석하여 감정 상태를 시각화하는 서비스입니다. 일별/주별/월별 감정 추이를 그래프로 확인할 수 있으며, 감정 패턴을 기반으로 맞춤형 콘텐츠를 추천합니다.",
-    generation: "7기",
-    track: "NLP",
-    tags: ["NLP", "Diary", "Emotion"],
-    thumbnail: "https://picsum.photos/seed/sentimo/600/400",
-    slides: [
-      "https://picsum.photos/seed/sent-s1/1920/1080",
-      "https://picsum.photos/seed/sent-s2/1920/1080",
-    ],
-    contributors: [
-      { name: "강자연", role: "컴퓨터공학", github: "https://github.com/example3" },
-      { name: "윤처리", role: "언어학" },
-    ],
-    githubUrl: "https://github.com/khuda-data/sentimo",
+      "수원시 카드 소비 데이터를 활용하여 기존 복지·금융 지표로는 포착하기 어려운 소비 취약 집단을 식별하고, 데이터 기반 맞춤형 정책 방향을 제안합니다. Isolation Forest와 군집 분석을 결합한 2단계 분석 프레임워크를 적용해 서로 다른 원인을 가진 소비 취약군을 도출하였습니다.",
+    generation: "8기",
+    track: "ML 풀코스",
+    thumbnail: "https://picsum.photos/seed/alchemy/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-MLFull-CardBasedSugg",
   },
   {
-    title: "ScanIt",
-    description: "상품 인식 및 자동 결제 솔루션",
+    title: "CCTV 영상 기반 보행 특성 분석을 통한 장애인 전용 주차구역 부정 이용 탐지",
+    members: "최민준, 강수빈, 임현우, 배지연, 조은서",
     longDescription:
-      "ScanIt은 YOLOv8 기반의 실시간 객체 탐지 모델을 활용하여 매장 내 상품을 자동으로 인식하고, 결제까지 원스톱으로 처리하는 무인 결제 솔루션입니다. 다양한 상품 카테고리를 학습시켜 높은 인식률을 달성하였습니다.",
-    generation: "6기",
+      "CCTV 영상에서 장애인 전용 주차구역에 주차된 차량에서 하차하는 사람의 보행 특성(Gait)을 분석하여, 보행상 장애 이용자가 실제로 탑승했을 가능성을 비식별적으로 추정하는 컴퓨터 비전 기반 프로토타입 시스템입니다. YOLO 기반 객체 탐지와 BoT-SORT 기반 Multi-object Tracking을 결합하였습니다.",
+    generation: "8기",
     track: "CV",
-    tags: ["Computer Vision", "Retail", "Automation"],
-    thumbnail: "https://picsum.photos/seed/scanit/600/400",
-    slides: [
-      "https://picsum.photos/seed/scan-s1/1920/1080",
-      "https://picsum.photos/seed/scan-s2/1920/1080",
-      "https://picsum.photos/seed/scan-s3/1920/1080",
-      "https://picsum.photos/seed/scan-s4/1920/1080",
-    ],
-    contributors: [
-      { name: "임비전", role: "컴퓨터공학", github: "https://github.com/example4" },
-      { name: "장결제", role: "산업공학", github: "https://github.com/example5" },
-      { name: "정인식", role: "컴퓨터공학" },
-    ],
-    githubUrl: "https://github.com/khuda-data/scanit",
+    thumbnail: "https://picsum.photos/seed/parking/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-CV-DisabledParkingGuard",
   },
   {
-    title: "BizInsite",
-    description: "데이터 기반 비즈니스 인사이트 대시보드",
+    title: "Grad-CAM과 Gemini를 결합한 제조 결함 하이브리드 검출 시스템",
+    members: "유준혁, 김나연, 이동현, 박소율",
     longDescription:
-      "BizInsite는 기업의 매출, 고객 행동, 마케팅 성과 등 다양한 비즈니스 데이터를 통합 분석하여 시각적 대시보드로 제공합니다. XAI 기법을 적용하여 모델의 예측 근거를 투명하게 설명하며, 의사결정자가 데이터 기반으로 전략을 수립할 수 있도록 지원합니다.",
-    generation: "5기",
+      "ResNet-34의 Grad-CAM 시각화 결과를 Gemini API가 분석하여, 기존 딥러닝 모델이 놓치던 미세 결함(False Negative)을 언어적 추론으로 찾아내는 하이브리드 검출 시스템입니다. 재학습 없이도 미검출 결함 탐지율을 개선합니다.",
+    generation: "8기",
     track: "데이터비즈니스",
-    tags: ["Data Analysis", "Business", "Dashboard"],
-    thumbnail: "https://picsum.photos/seed/bizinsite/600/400",
-    slides: [
-      "https://picsum.photos/seed/biz-s1/1920/1080",
-      "https://picsum.photos/seed/biz-s2/1920/1080",
-    ],
-    contributors: [
-      { name: "한비즈", role: "경영학", github: "https://github.com/example6" },
-      { name: "오인사이트", role: "통계학" },
-    ],
+    thumbnail: "https://picsum.photos/seed/refocus/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-DB-Refocus",
   },
   {
-    title: "AssetFlow",
-    description: "MZ세대를 위한 자산 관리 플랫폼",
+    title: "Steam 게임 쾌적도 지수(GCI) — 실시간 동접자 기반 매칭 품질 지표화",
+    members: "장시우, 권다은, 신재민, 홍유진",
     longDescription:
-      "AssetFlow는 MZ세대의 투자 패턴과 소비 습관을 분석하여 맞춤형 자산 관리 전략을 제공하는 플랫폼입니다. 머신러닝 기반 리스크 분석과 포트폴리오 최적화를 통해 개인화된 재무 솔루션을 제공합니다.",
-    generation: "4기",
-    track: "금융",
-    tags: ["Fintech", "Asset", "MZ"],
-    thumbnail: "https://picsum.photos/seed/assetflow/600/400",
-    slides: [
-      "https://picsum.photos/seed/asset-s1/1920/1080",
-      "https://picsum.photos/seed/asset-s2/1920/1080",
-      "https://picsum.photos/seed/asset-s3/1920/1080",
-    ],
-    contributors: [
-      { name: "배자산", role: "경영학", github: "https://github.com/example7" },
-      { name: "서관리", role: "통계학", github: "https://github.com/example8" },
-    ],
-    githubUrl: "https://github.com/khuda-data/assetflow",
-  },
-  {
-    title: "TextSummarizer",
-    description: "긴 글을 3줄 요약해주는 크롬 익스텐션",
-    longDescription:
-      "TextSummarizer는 웹 페이지의 긴 글을 3줄로 요약해주는 크롬 익스텐션입니다. KoBART 기반의 추출적/생성적 요약 모델을 결합하여 한국어 텍스트에 최적화된 요약 성능을 제공합니다. 뉴스, 블로그, 논문 등 다양한 텍스트 유형을 지원합니다.",
-    generation: "3기",
-    track: "NLP",
-    tags: ["NLP", "Productivity", "Chrome"],
-    thumbnail: "https://picsum.photos/seed/textsumm/600/400",
-    slides: [
-      "https://picsum.photos/seed/text-s1/1920/1080",
-      "https://picsum.photos/seed/text-s2/1920/1080",
-    ],
-    contributors: [
-      { name: "홍생성", role: "컴퓨터공학", github: "https://github.com/example9" },
-      { name: "고언어", role: "언어학" },
-    ],
-    githubUrl: "https://github.com/khuda-data/textsummarizer",
-  },
-  {
-    title: "DeepFashion",
-    description: "딥러닝 기반 패션 스타일 추천 시스템",
-    longDescription:
-      "DeepFashion은 사용자의 옷 사진을 분석하여 스타일을 분류하고, 체형과 취향에 맞는 패션 아이템을 추천하는 시스템입니다. ResNet 기반 분류 모델과 협업 필터링을 결합하여 개인화된 패션 추천을 제공합니다.",
+      "실시간 동시 접속자 수(PCCU)와 매칭 필터 알고리즘을 결합하여 게임 서비스 상태 및 유저 체감 품질을 지표화한 데이터 엔지니어링 프로젝트입니다. Steam API와 커뮤니티 여론 데이터를 수집하고, 독자적인 '적합 유저 유입 속도' 수식을 적용하여 유저에게 최적의 플레이 타이밍을 제안합니다.",
     generation: "8기",
-    track: "CV",
-    tags: ["Deep Learning", "Fashion", "Recommendation"],
-    thumbnail: "https://picsum.photos/seed/deepfashion/600/400",
-    slides: [
-      "https://picsum.photos/seed/fashion-s1/1920/1080",
-      "https://picsum.photos/seed/fashion-s2/1920/1080",
-      "https://picsum.photos/seed/fashion-s3/1920/1080",
-    ],
-    contributors: [
-      { name: "최패션", role: "컴퓨터공학", github: "https://github.com/example10" },
-      { name: "김스타일", role: "산업디자인" },
-      { name: "이추천", role: "통계학", github: "https://github.com/example11" },
-    ],
-    githubUrl: "https://github.com/khuda-data/deepfashion",
-  },
-  {
-    title: "DataFlow",
-    description: "실시간 데이터 파이프라인 모니터링 대시보드",
-    longDescription:
-      "DataFlow는 Apache Kafka와 Spark를 활용한 실시간 데이터 파이프라인의 상태를 모니터링하고, 이상 징후를 자동 감지하는 대시보드입니다. 파이프라인의 처리량, 지연 시간, 에러율을 실시간으로 시각화하며, 알림 시스템을 통해 즉각적인 대응이 가능합니다.",
-    generation: "7기",
     track: "데이터엔지니어링",
-    tags: ["Data Pipeline", "Monitoring", "Dashboard"],
-    thumbnail: "https://picsum.photos/seed/dataflow/600/400",
-    slides: [
-      "https://picsum.photos/seed/flow-s1/1920/1080",
-      "https://picsum.photos/seed/flow-s2/1920/1080",
-    ],
-    contributors: [
-      { name: "송스트림", role: "컴퓨터공학", github: "https://github.com/example12" },
-      { name: "유파이프", role: "산업공학" },
-    ],
-    githubUrl: "https://github.com/khuda-data/dataflow",
+    thumbnail: "https://picsum.photos/seed/steamgci/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-DE-SteamQueue",
   },
   {
-    title: "ChatBot Pro",
-    description: "RAG 기반 맞춤형 고객 상담 챗봇",
+    title: "자소서 텍스트에서 검증 가능한 주장(Claim) 추출 및 즉석 후속 질문 검증 시스템",
+    members: "정승우, 김하율, 이서준, 박민지, 조현아",
     longDescription:
-      "ChatBot Pro는 RAG(Retrieval-Augmented Generation) 아키텍처를 기반으로 기업 내부 문서를 학습하여 정확한 답변을 제공하는 맞춤형 고객 상담 챗봇입니다. 벡터 DB와 LLM을 결합하여 환각(hallucination)을 최소화하고, 출처 기반의 신뢰할 수 있는 답변을 생성합니다.",
-    generation: "9기",
-    track: "AI엔지니어링",
-    tags: ["RAG", "Chatbot", "LLM"],
-    thumbnail: "https://picsum.photos/seed/chatbotpro/600/400",
-    slides: [
-      "https://picsum.photos/seed/chat-s1/1920/1080",
-      "https://picsum.photos/seed/chat-s2/1920/1080",
-      "https://picsum.photos/seed/chat-s3/1920/1080",
-    ],
-    contributors: [
-      { name: "정에이전트", role: "컴퓨터공학", github: "https://github.com/example13" },
-      { name: "박엘엘엠", role: "AI학과", github: "https://github.com/example14" },
-    ],
-    githubUrl: "https://github.com/khuda-data/chatbotpro",
+      "자소서 텍스트에서 검증 가능한 주장(Claim)을 추출하고, 즉석 후속 질문을 통해 검증하는 시스템입니다. BERT 계열 모델로 Claim을 파싱하고 LLM으로 질문을 생성하며, FastAPI + PostgreSQL + FAISS로 전체 파이프라인을 구축하였습니다.",
+    generation: "8기",
+    track: "NLP",
+    thumbnail: "https://picsum.photos/seed/coverletter/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-NLP-CoverLetter",
+  },
+  {
+    title: "사이버펑크 2077 출시 전후 여론 변화 시뮬레이션 — Multi-Agent RAG",
+    members: "안도윤, 서지원, 문태호, 황수아",
+    longDescription:
+      "사이버펑크 2077의 출시 전후 여론 변화를 시뮬레이션하기 위해, 3가지 다른 방법론을 비교 분석하는 프로젝트입니다. 공통된 평가 스크립트와 공통 페르소나 모듈을 사용하여 실험의 일관성을 유지하며, 에이전트 기반 시뮬레이션을 통해 시간에 따른 동적 변화를 모델링합니다.",
+    generation: "8기",
+    track: "NLP",
+    thumbnail: "https://picsum.photos/seed/persona/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-NLP-Persona",
+  },
+  {
+    title: "AI 말하기 평가 — 국회 회의록 요약, 그림 기반 문장 생성, 일상 대화 연결",
+    members: "노건우, 양하린, 백준서, 구민채",
+    longDescription:
+      "국회 회의록 요약, 그림 기반 문장 생성, 한국어 일상 대화 연결의 3가지 NLP 태스크를 수행하는 프로젝트입니다. 각 팀이 독립적으로 개발 브랜치에서 작업하며, 공통된 평가 프레임워크를 통해 성능을 비교합니다.",
+    generation: "8기",
+    track: "NLP",
+    thumbnail: "https://picsum.photos/seed/malpyeong/600/400",
+    slides: [],
+    githubUrl: "https://github.com/khuda-data/8th-NLP-malpyeong",
   },
 ];
 
@@ -218,19 +119,18 @@ const projectsData: Project[] = [
 // ============================================================================
 
 const generations = ["모든 기수", "9기", "8기", "7기", "6기", "5기", "4기", "3기", "2기", "1기"];
-const trackOptions = ["모든 트랙", "CV", "NLP", "금융", "데이터비즈니스", "데이터엔지니어링", "AI엔지니어링"];
+const trackOptions = ["모든 트랙", "ML 풀코스", "CV", "NLP", "데이터비즈니스", "데이터엔지니어링"];
 
 // ============================================================================
 // 트랙 색상 매핑
 // ============================================================================
 
-const trackColorMap: Record<string, string> = {
-  CV: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-  NLP: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  "금융": "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-  "데이터비즈니스": "bg-amber-500/20 text-amber-300 border-amber-500/30",
-  "데이터엔지니어링": "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
-  "AI엔지니어링": "bg-rose-500/20 text-rose-300 border-rose-500/30",
+const trackAccentMap: Record<string, string> = {
+  "ML 풀코스": "text-indigo-500",
+  CV: "text-purple-500",
+  NLP: "text-blue-500",
+  "데이터비즈니스": "text-amber-500",
+  "데이터엔지니어링": "text-cyan-500",
 };
 
 // ============================================================================
@@ -253,18 +153,18 @@ const CustomSelect = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         onBlur={() => setTimeout(() => setIsOpen(false), 150)}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-200 text-sm text-white/90 min-w-[120px]"
+        className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border hover:border-foreground/20 transition-all duration-200 text-sm text-foreground min-w-[120px]"
       >
         <span>{value}</span>
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-white/50 transition-transform duration-200 ml-auto",
+            "w-4 h-4 text-muted-foreground transition-transform duration-200 ml-auto",
             isOpen && "rotate-180"
           )}
         />
       </button>
       {isOpen && (
-        <div className="absolute top-full mt-1 left-0 min-w-full bg-zinc-900 border border-white/10 rounded-lg shadow-xl z-50 py-1 max-h-60 overflow-y-auto">
+        <div className="absolute top-full mt-1 left-0 min-w-full bg-card border border-border rounded-lg shadow-xl z-50 py-1 max-h-60 overflow-y-auto">
           {options.map((option) => (
             <button
               key={option}
@@ -273,8 +173,8 @@ const CustomSelect = ({
                 setIsOpen(false);
               }}
               className={cn(
-                "w-full text-left px-4 py-2 text-sm transition-colors duration-150 hover:bg-white/10",
-                value === option ? "text-white bg-white/5" : "text-white/70"
+                "w-full text-left px-4 py-2 text-sm transition-colors duration-150 hover:bg-muted",
+                value === option ? "text-foreground bg-muted/50" : "text-muted-foreground"
               )}
             >
               {option}
@@ -297,16 +197,17 @@ const SlideCarousel = ({ slides, title }: { slides: string[]; title: string }) =
 
   return (
     <div className="relative group/carousel">
-      <div className="relative aspect-[16/9] rounded-lg overflow-hidden bg-black/50 max-w-[85%] mx-auto">
+      <div className="relative aspect-[2/1] rounded-lg overflow-hidden bg-muted">
         <img
           src={slides[currentIndex]}
-          alt={`${title} 장표 ${currentIndex + 1}`}
-          className="w-full h-full object-contain"
+          alt={`${title} ${currentIndex + 1}`}
+          className="w-full h-full object-cover"
         />
-        {/* 슬라이드 카운터 */}
-        <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/60 text-xs text-white/80 backdrop-blur-sm">
-          {currentIndex + 1} / {slides.length}
-        </div>
+        {slides.length > 1 && (
+          <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/60 text-xs text-white/80 backdrop-blur-sm">
+            {currentIndex + 1} / {slides.length}
+          </div>
+        )}
       </div>
       {/* 이전/다음 버튼 */}
       {slides.length > 1 && (
@@ -340,7 +241,7 @@ const ProjectModal = ({
   project: Project;
   onClose: () => void;
 }) => {
-  const trackColor = trackColorMap[project.track] || "bg-white/10 text-white/70 border-white/20";
+  const accentColor = trackAccentMap[project.track] || "text-muted-foreground";
 
   // ESC 키로 닫기
   useEffect(() => {
@@ -359,113 +260,64 @@ const ProjectModal = ({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       {/* 배경 오버레이 */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={onClose}
       />
 
       {/* 모달 본체 */}
-      <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-zinc-900 border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[780px] max-h-[85vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         {/* 닫기 버튼 */}
         <button
           onClick={onClose}
-          className="sticky top-4 float-right mr-4 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all"
+          className="sticky top-5 float-right mr-8 z-10 w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-all"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        <div className="p-6 sm:p-8">
-          {/* 뱃지 + 제목 */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-white/10 text-white/80 border border-white/10">
-              {project.generation}
-            </span>
-            <span className={cn("px-2.5 py-1 rounded-md text-xs font-semibold border", trackColor)}>
-              {project.track}
-            </span>
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-            {project.title}
-          </h2>
-
-          <p className="text-sm text-white/50 mb-2">
-            {project.description}
-          </p>
-
-          {/* 태그 */}
-          <div className="flex flex-wrap gap-1.5 mb-6">
-            {project.tags.map((tag, index) => (
-              <span key={index} className="text-xs text-white/40">
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-          {/* 프로젝트 소개 (긴 버전) */}
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wider mb-3">
-              프로젝트 소개
-            </h3>
-            <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-5">
-              {project.longDescription}
-            </p>
-            {project.slides.length > 0 && (
-              <SlideCarousel slides={project.slides} title={project.title} />
+        <div className="px-10 sm:px-14 pt-12 sm:pt-14 pb-10 sm:pb-12">
+          {/* 트랙 · 기수 · GitHub */}
+          <div className="flex items-center gap-1.5 mb-4 text-sm font-semibold">
+            <span className={accentColor}>{project.track}</span>
+            <span className="text-muted-foreground/40">·</span>
+            <span className="text-foreground/60">{project.generation}</span>
+            {project.githubUrl && (
+              <>
+                <span className="text-muted-foreground/40">·</span>
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Github className="w-3.5 h-3.5" />
+                  <span>GitHub</span>
+                </a>
+              </>
             )}
           </div>
 
-          {/* GitHub 링크 */}
-          {project.githubUrl && (
-            <div className="mb-8">
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 hover:border-white/25 hover:bg-white/10 transition-all duration-200 text-sm text-white/80 hover:text-white"
-              >
-                <Github className="w-4 h-4" />
-                <span>GitHub Repository</span>
-              </a>
-            </div>
-          )}
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-2.5">
+            {project.title}
+          </h2>
 
-          {/* 컨트리뷰터 */}
+          <p className="text-sm text-muted-foreground mb-8">
+            {project.members}
+          </p>
+
+          {/* 이미지 캐러셀 */}
+          <div className="mb-8">
+            <SlideCarousel
+              slides={project.slides.length > 0 ? project.slides : [project.thumbnail]}
+              title={project.title}
+            />
+          </div>
+
+          {/* 프로젝트 소개 */}
           <div>
-            <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wider mb-3">
-              Contributors
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {project.contributors.map((contributor, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]"
-                >
-                  {/* 아바타 플레이스홀더 */}
-                  <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/50 text-sm font-semibold flex-shrink-0">
-                    {contributor.name.charAt(0)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white/90 truncate">
-                      {contributor.name}
-                    </p>
-                    <p className="text-xs text-white/40 truncate">
-                      {contributor.role}
-                    </p>
-                  </div>
-                  {contributor.github && (
-                    <a
-                      href={contributor.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/30 hover:text-white/70 transition-colors flex-shrink-0"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
+            <p className="text-[15px] text-foreground/65 leading-[1.8]">
+              {project.longDescription}
+            </p>
           </div>
         </div>
       </div>
@@ -484,12 +336,12 @@ const ProjectCard = ({
   project: Project;
   onClick: () => void;
 }) => {
-  const trackColor = trackColorMap[project.track] || "bg-white/10 text-white/70 border-white/20";
+  const accentColor = trackAccentMap[project.track] || "text-muted-foreground";
 
   return (
     <div
       onClick={onClick}
-      className="group rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/15 transition-all duration-300 overflow-hidden hover:bg-white/[0.05] cursor-pointer"
+      className="group rounded-xl sm:rounded-2xl bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-lg cursor-pointer"
     >
       {/* 썸네일 이미지 */}
       <div className="relative aspect-[16/10] overflow-hidden">
@@ -499,37 +351,22 @@ const ProjectCard = ({
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* 카드 콘텐츠 */}
       <div className="p-4 sm:p-5">
-        {/* 뱃지 */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-white/10 text-white/80 border border-white/10">
-            {project.generation}
-          </span>
-          <span className={cn("px-2.5 py-1 rounded-md text-xs font-semibold border", trackColor)}>
-            {project.track}
-          </span>
-        </div>
+        {/* 트랙 · 기수 */}
+        <p className="text-sm font-semibold mb-2">
+          <span className={accentColor}>{project.track}</span>
+          <span className="text-muted-foreground/40 mx-1.5">·</span>
+          <span className="text-foreground/60">{project.generation}</span>
+        </p>
 
         {/* 제목 */}
-        <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 group-hover:text-white/90 transition-colors">
+        <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug group-hover:text-foreground/80 transition-colors line-clamp-2">
           {project.title}
         </h3>
-
-        {/* 한줄 소개 */}
-        <p className="text-sm text-white/50 mb-3 line-clamp-1">{project.description}</p>
-
-        {/* 태그 */}
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((tag, index) => (
-            <span key={index} className="text-xs text-white/40 hover:text-white/60 transition-colors">
-              #{tag}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -555,8 +392,7 @@ const ProjectsSection = () => {
       const matchesSearch =
         searchQuery === "" ||
         project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description.includes(searchQuery) ||
-        project.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+        project.members.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesGeneration && matchesTrack && matchesSearch;
     });
   }, [selectedGeneration, selectedTrack, searchQuery]);
@@ -585,26 +421,26 @@ const ProjectsSection = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
             <div className="flex items-center gap-3">
               <CustomSelect
-                value={selectedGeneration}
-                onChange={setSelectedGeneration}
-                options={generations}
-              />
-              <CustomSelect
                 value={selectedTrack}
                 onChange={setSelectedTrack}
                 options={trackOptions}
+              />
+              <CustomSelect
+                value={selectedGeneration}
+                onChange={setSelectedGeneration}
+                options={generations}
               />
             </div>
 
             {/* 검색 */}
             <div className="relative flex-1 w-full sm:w-auto sm:max-w-xs sm:ml-auto">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="프로젝트 검색 (제목, 태그..)"
+                placeholder="프로젝트 검색 (제목, 팀명..)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-white/5 border border-white/10 hover:border-white/20 focus:border-white/30 focus:outline-none text-sm text-white/90 placeholder:text-white/30 transition-colors duration-200"
+                className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-card border border-border hover:border-foreground/20 focus:border-foreground/30 focus:outline-none text-sm text-foreground placeholder:text-muted-foreground transition-colors duration-200"
               />
             </div>
           </div>
@@ -622,7 +458,7 @@ const ProjectsSection = () => {
             </div>
           ) : (
             <div className="text-center py-16 sm:py-24">
-              <p className="text-white/40 text-sm sm:text-base">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 조건에 맞는 프로젝트가 없습니다.
               </p>
             </div>

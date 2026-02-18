@@ -1,93 +1,257 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "@/components/shared/Header";
 import PageHeroSection from "@/components/shared/PageHeroSection";
 import Footer from "@/components/shared/Footer";
 import { cn } from "@/lib/utils";
 
-// 탭 타입
-type TabType = "curriculum" | "datathon" | "conference";
+type VersionType = "v1" | "v2";
+
+const timelineSteps = [
+  { id: "ml-session", label: "ML 세션", number: "01", image: "/images/activities/ml-session-2.jpeg", hasContent: true },
+  { id: "toy-project", label: "토이 프로젝트", number: "02", image: "/images/activities/toy-project-1.jpeg", hasContent: true },
+  { id: "track-session", label: "심화 세션", number: "03", image: "/images/activities/track-session.jpg", hasContent: true },
+  { id: "datathon", label: "데이터톤", number: "04", image: "/images/activities/datathon-1.jpg", hasContent: true },
+  { id: "academic-festival", label: "정기 학술제", number: "05", image: "/images/activities/festival-group.png", hasContent: true },
+];
+
+const tracks = [
+  { name: "CV", fullName: "컴퓨터비전" },
+  { name: "NLP", fullName: "자연어처리" },
+  { name: "Finance", fullName: "금융" },
+  { name: "Data Business", fullName: "데이터비즈니스" },
+  { name: "Data Engineering", fullName: "데이터엔지니어링" },
+  { name: "AI Engineering", fullName: "AI엔지니어링" },
+];
+
+// ============================================================================
+// 섹션 콘텐츠 컴포넌트
+// ============================================================================
+
+const MLSessionContent = () => (
+  <div className="max-w-3xl mx-auto text-center">
+    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">01 · Session</p>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      기초 세션 (ML Session)
+    </h3>
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mx-auto mb-8">
+      방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.
+      주차별 교재 기반으로 핵심 개념 발제 및 코드 중심 학습,
+      이론·코드 퀴즈 및 해설 세션, 팀 단위 주제 토의를 통해
+      개념을 설명하고 질문할 수 있는 수준까지 도달하는 것을 목표로 합니다.
+    </p>
+
+    <div className="flex gap-3 justify-center">
+      {[
+        { src: "/images/activities/ml-session-1.jpeg", alt: "ML 세션 1" },
+        { src: "/images/activities/ml-session-2.jpeg", alt: "ML 세션 2" },
+        { src: "/images/activities/ml-session-3.jpeg", alt: "ML 세션 3" },
+      ].map((img) => (
+        <img key={img.src} src={img.src} alt={img.alt} className="rounded-xl h-56 sm:h-64 w-auto object-cover" />
+      ))}
+    </div>
+
+    <div className="grid sm:grid-cols-3 gap-8 mt-8">
+      {[
+        { title: "개인 랜덤 발제", desc: "매주 랜덤으로 선택된 부원이 주제에 대해 발제하며, 발표 능력과 이해도를 향상시킵니다." },
+        { title: "퀴즈 및 해설", desc: "학습한 내용을 퀴즈로 점검하고, 해설을 통해 복습하며 이해도를 높입니다." },
+        { title: "팀별 토의", desc: "팀 단위로 주제를 토의하며 다양한 관점을 공유하고 협업 능력을 기릅니다." },
+      ].map((item, index) => (
+        <div key={item.title} className={index > 0 ? "pl-4 border-l border-border" : "pl-4"}>
+          <h5 className="text-sm font-semibold text-foreground mb-1.5">{item.title}</h5>
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ToyProjectContent = () => (
+  <div className="max-w-3xl mx-auto text-center">
+    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">02 · Project</p>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      토이 프로젝트
+    </h3>
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mx-auto mb-8">
+      학습한 파이썬 프로그래밍과 머신러닝 기초 지식을 바탕으로
+      문제 정의부터 구현까지 전 과정을 경험합니다.
+      프로젝트 주제 기획, 데이터 수집 및 전처리, 모델 설계 및 구현, 결과 정리 및 공유를 통해
+      학습한 내용을 "아는 것"에서 끝내지 않고 직접 만들어보는 경험으로 연결합니다.
+    </p>
+
+    <div className="flex gap-3 justify-center">
+      {[
+        { src: "/images/activities/toy-project-1.jpeg", alt: "토이 프로젝트 1" },
+        { src: "/images/activities/toy-project-2.jpeg", alt: "토이 프로젝트 2" },
+      ].map((img) => (
+        <img key={img.src} src={img.src} alt={img.alt} className="rounded-xl h-56 sm:h-64 w-auto object-cover" />
+      ))}
+    </div>
+  </div>
+);
+
+const TrackSessionContent = () => (
+  <div className="max-w-3xl mx-auto text-center">
+    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">03 · Session</p>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      심화 세션 (Track Session)
+    </h3>
+    <div className="flex flex-wrap gap-2 mb-6 justify-center">
+        {tracks.map((track) => (
+          <span
+            key={track.name}
+            className="px-3 py-1.5 rounded-full bg-muted text-foreground/70 text-xs sm:text-sm font-medium"
+          >
+            {track.name}
+          </span>
+        ))}
+      </div>
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mx-auto mb-8">
+      학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.
+      트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해
+      같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
+    </p>
+
+    <div className="flex justify-center">
+      <img src="/images/activities/track-session.jpg" alt="심화 세션" className="rounded-xl h-56 sm:h-64 w-auto object-cover" />
+    </div>
+  </div>
+);
+
+const DatathonContent = () => (
+  <div className="max-w-3xl mx-auto text-center">
+    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">04 · Datathon</p>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      데이터톤
+    </h3>
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mx-auto mb-8">
+      트랙 구분 없이 팀을 구성해 주어진 데이터셋과 문제를 해결하는 대회입니다.
+      데이터 전처리부터 모델링, 결과 해석까지 전 과정을 제한된 시간 내에 수행하며,
+      실전 경험과 팀워크를 동시에 쌓을 수 있는 KHUDA의 핵심 행사 중 하나입니다.
+    </p>
+
+    <div className="flex gap-3 justify-center">
+      {[
+        { src: "/images/activities/datathon-2.jpg", alt: "데이터톤 단체사진" },
+        { src: "/images/activities/datathon-1.jpg", alt: "데이터톤 발표" },
+        { src: "/images/activities/datathon-3.jpg", alt: "데이터톤 현장" },
+      ].map((img) => (
+        <img key={img.src} src={img.src} alt={img.alt} className="rounded-xl h-56 sm:h-64 w-auto object-cover" />
+      ))}
+    </div>
+  </div>
+);
+
+const AcademicFestivalContent = () => (
+  <div className="max-w-3xl mx-auto text-center">
+    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">05 · Conference</p>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      정기 학술제
+    </h3>
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mx-auto mb-8">
+      트랙별 1–2팀을 구성해 팀 단위 프로젝트를 수행하고,
+      학술 포스터 제작과 프로젝트 발표를 진행합니다.
+      프로젝트를 공유하고 설명하는 경험을 통해
+      사고의 깊이와 표현력을 함께 성장시킵니다.
+    </p>
+
+    <div className="flex justify-center">
+      <img src="/images/activities/festival-group.png" alt="정기 학술제" className="rounded-xl h-56 sm:h-64 w-auto object-cover" />
+    </div>
+
+    <div className="grid sm:grid-cols-2 gap-8 mt-8">
+      {[
+        {
+          title: "포스터 발표",
+          desc: "참가 팀이 자신의 프로젝트를 포스터로 만들어 발표하는 자리입니다. KHUDA 부원들 간의 상호 평가를 통해 피드백을 받습니다.",
+        },
+        {
+          title: "정식 발표",
+          desc: "심사위원분들을 모셔서 진행하는 프로젝트 발표입니다. 교수님을 비롯해 현직자 분들이 심사위원으로 참여합니다.",
+        },
+      ].map((item, index) => (
+        <div key={item.title} className={index > 0 ? "pl-4 border-l border-border" : "pl-4"}>
+          <h5 className="text-sm font-semibold text-foreground mb-1.5">{item.title}</h5>
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const sectionComponents: Record<string, React.FC> = {
+  "ml-session": MLSessionContent,
+  "toy-project": ToyProjectContent,
+  "datathon": DatathonContent,
+  "track-session": TrackSessionContent,
+  "academic-festival": AcademicFestivalContent,
+};
+
+// ============================================================================
+// 메인 컴포넌트
+// ============================================================================
 
 const Activities = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("curriculum");
-  const [selectedDatathonIndex, setSelectedDatathonIndex] = useState(1);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [toyConferenceImageIndex, setToyConferenceImageIndex] = useState(0);
-  const [academicConferenceImageIndex, setAcademicConferenceImageIndex] = useState(0);
+  const [version, setVersion] = useState<VersionType>("v1");
+  const [activeSection, setActiveSection] = useState("ml-session");
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  // Conference 이미지 데이터
-  const toyConferenceImages = [
-    "/images/conference/toy-1.jpg",
-    "/images/conference/toy-2.jpg",
-    "/images/conference/toy-3.jpg",
-    "/images/conference/toy-4.jpg",
-    "/images/conference/toy-5.jpg",
-    "/images/conference/toy-6.jpg",
-  ];
+  const setSectionRef = useCallback((id: string) => (el: HTMLElement | null) => {
+    sectionRefs.current[id] = el;
+  }, []);
 
-  const academicConferenceImages = [
-    "/images/conference/academic-1.jpg",
-    "/images/conference/academic-2.jpg",
-    "/images/conference/academic-3.jpg",
-    "/images/conference/academic-4.jpg",
-    "/images/conference/academic-5.jpg",
-    "/images/conference/academic-6.jpg",
-  ];
+  useEffect(() => {
+    if (version !== "v2") return;
 
-  // 탭 데이터
-  const tabs = [
-    { id: "curriculum" as TabType, label: "커리큘럼" },
-    { id: "datathon" as TabType, label: "데이터톤" },
-    { id: "conference" as TabType, label: "컨퍼런스" },
-  ];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px" }
+    );
 
-  // 트랙 데이터
-  const tracks = [
-    { id: "cv", name: "CV", fullName: "컴퓨터비전" },
-    { id: "nlp", name: "NLP", fullName: "자연어처리" },
-    { id: "fin", name: "Finance", fullName: "금융" },
-    { id: "db", name: "Data Business", fullName: "데이터비즈니스" },
-    { id: "de", name: "Data Engineering", fullName: "데이터엔지니어링" },
-    { id: "aie", name: "AI Engineering", fullName: "AI엔지니어링" },
-  ];
+    timelineSteps.forEach((step) => {
+      const el = sectionRefs.current[step.id];
+      if (el) observer.observe(el);
+    });
 
-  // 데이터톤 히스토리
-  const datathonHistory = [
-    { 
-      number: "제1회", 
-      title: "제1회 KHU'DATA 데이터톤",
-      theme: "", 
-      description: "",
-      images: [
-        "/images/datathon/1-1.jpg",
-        "/images/datathon/1-2.jpg",
-        "/images/datathon/1-3.jpg",
-        "/images/datathon/1-4.jpg",
-        "/images/datathon/1-5.jpg",
-        "/images/datathon/1-6.jpg",
-      ],
-    },
-    { 
-      number: "제2회", 
-      title: "제2회 KHU'DATA 데이터톤",
-      theme: "", 
-      description: "",
-      images: [
-        "/images/datathon/2-1.jpg",
-        "/images/datathon/2-2.jpg",
-        "/images/datathon/2-3.jpg",
-        "/images/datathon/2-4.jpg",
-        "/images/datathon/2-5.jpg",
-        "/images/datathon/2-6.jpg",
-      ],
-    },
-  ];
+    return () => observer.disconnect();
+  }, [version]);
 
-  const selectedDatathon = datathonHistory[selectedDatathonIndex];
+  useEffect(() => {
+    const fadeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const fadeEls = document.querySelectorAll(".fade-up");
+    fadeEls.forEach((el) => fadeObserver.observe(el));
+
+    return () => fadeObserver.disconnect();
+  }, [version]);
+
+  const scrollToSection = (id: string) => {
+    const el = sectionRefs.current[id];
+    if (el) {
+      const offset = 100;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
-      
+
       <main>
         <PageHeroSection
           title="Experience Structured Growth"
@@ -96,525 +260,226 @@ const Activities = () => {
           heroImage="/images/activity.png"
         />
 
-        {/* 섹션 제목 & 탭 버튼 - 기존 CurriculumSection 스타일 */}
-        <section className="py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-12 relative bg-background">
-          <div className="container mx-auto relative z-10">
-            {/* 섹션 제목 */}
-            <div className="mb-6 sm:mb-8">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3 md:mb-4">
-                {activeTab === "curriculum" && "방학세션으로 시작해요"}
-                {activeTab === "datathon" && "KHU'DATA — KHUDA 데이터톤"}
-                {activeTab === "conference" && "컨퍼런스"}
-              </h2>
-              <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
-                {activeTab === "curriculum" && "방학 동안 파이썬 실습과 머신러닝 기초를 함께 배워요. 개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 기초를 탄탄히 다지고, 팀 단위로 토이프로젝트를 진행합니다."}
-                {activeTab === "datathon" && <>KHU'DATA는 KHUDA가 주관하는 실전형 데이터 분석 대회입니다. 데이터를 기반으로 사회·산업 전반의 문제를 탐구하고 창의적인 데이터 기반 솔루션을 제시하는 것을 목표로 합니다.<br />실제 데이터 기반 문제 제시, 팀 단위 분석 및 모델링, 인사이트 도출 및 결과 발표를 통해 데이터 분석을 성과물로 완성해보는 경험을 제공합니다.</>}
-                {activeTab === "conference" && "프로젝트를 공유하고 설명하는 경험을 통해 사고의 깊이와 표현력을 함께 성장시킵니다."}
-              </p>
-            </div>
+        {/* 버전 토글 */}
+        <div className="flex justify-center items-center gap-10 sm:gap-14 py-5 sm:py-6 bg-background/95 backdrop-blur-sm sticky top-12 sm:top-16 md:top-18 lg:top-20 z-30 mt-2 sm:mt-4">
+          {[
+            { key: "v1" as VersionType, label: "Overview" },
+            { key: "v2" as VersionType, label: "Detail" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setVersion(tab.key)}
+              className={cn(
+                "relative text-base sm:text-lg font-semibold transition-all duration-200 pb-2",
+                version === tab.key
+                  ? "text-foreground"
+                  : "text-muted-foreground/50 hover:text-muted-foreground"
+              )}
+            >
+              {tab.label}
+              {version === tab.key && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-foreground rounded-full" />
+              )}
+            </button>
+          ))}
+        </div>
 
-            {/* 탭 버튼 - 기존 버튼 스타일 */}
-            <div className="flex gap-2 sm:gap-3 mb-6 sm:mb-8">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={cn(
-                    "px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 min-h-[44px] flex items-center justify-center",
-                    activeTab === tab.id
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                      : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground active:scale-95"
-                  )}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Content Area */}
-            {/* Curriculum Tab */}
-            {activeTab === "curriculum" && (
-              <div className="space-y-8 sm:space-y-12">
-                {/* 기초 세션 (ML Session) */}
-                <div className="rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden p-6 sm:p-8 md:p-10 lg:p-12">
-                  {/* 그라데이션 배경 */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-blue-950/25 to-primary/15 rounded-3xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-tl from-primary/12 via-transparent to-transparent rounded-3xl pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    {/* 섹션 헤더 */}
-                    <div className="mb-5 sm:mb-6">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">
-                        기초 세션 (ML Session)
-                      </h3>
-                      <p className="text-sm sm:text-base text-white/70 leading-relaxed">
-                        방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
-                      </p>
-                    </div>
-
-                    {/* Session 카드 - 텍스트 왼쪽, 이미지 오른쪽 */}
-                    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-14 mb-8">
-                      <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                        <div>
-                          <h4 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 text-white">Session</h4>
-                          <p className="text-sm text-white/50 mb-4">Foundations of Data & Machine Learning</p>
-                          <div className="text-sm sm:text-base text-white/80 leading-relaxed space-y-5">
-                            <p>
-                              머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.
-                            </p>
-                            <p>
-                              주차별 교재(현재: 파이썬 머신러닝 완벽가이드) 기반으로 핵심 개념 발제 및 코드 중심 학습,
-                              이론·코드 퀴즈 및 해설 세션, 팀 단위 주제 토의를 통해 개념을 설명하고 질문할 수 있는 수준까지 도달하는 것을 목표로 합니다.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="bg-white/5 rounded-xl aspect-video flex items-center justify-center border border-white/10">
-                          <span className="text-white/30 text-sm">이미지 영역</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Project 카드 - 이미지 왼쪽, 텍스트 오른쪽 */}
-                    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-14">
-                      <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                        <div className="order-2 md:order-1 bg-white/5 rounded-xl aspect-video flex items-center justify-center border border-white/10">
-                          <span className="text-white/30 text-sm">이미지 영역</span>
-                        </div>
-                        <div className="order-1 md:order-2">
-                          <h4 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 text-white">Project</h4>
-                          <p className="text-sm text-white/50 mb-4">Toy Project (Team-based)</p>
-                          <div className="text-sm sm:text-base text-white/80 leading-relaxed space-y-5">
-                            <p>
-                              방학 세션 동안 팀을 구성해 진행하는 프로젝트로, 학습한 파이썬 프로그래밍과 머신러닝 기초 지식을 바탕으로
-                              문제 정의부터 구현까지 전 과정을 경험합니다.
-                            </p>
-                            <p>
-                              프로젝트 주제 기획, 데이터 수집 및 전처리, 모델 설계 및 구현, 결과 정리 및 공유를 통해
-                              학습한 내용을 "아는 것"에서 끝내지 않고 직접 만들어보는 경험으로 연결합니다.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        {/* ================================================================ */}
+        {/* Version 1: 가로 타임라인 + 수직 콘텐츠 */}
+        {/* ================================================================ */}
+        {version === "v1" && (
+          <section className="py-10 sm:py-16 px-3 sm:px-4 md:px-8 bg-background">
+            <div className="mx-auto max-w-6xl">
+              {/* 가로 타임라인 (사진 위아래 교차) */}
+              <div className="relative mb-12 sm:mb-20 hidden sm:block max-w-4xl mx-auto">
+                {/* 중앙 가로선 */}
+                <div className="absolute top-1/2 left-[8%] right-[8%] -translate-y-1/2">
+                  <div className="h-px bg-border" />
                 </div>
 
-                {/* 심화 세션 (Track Session) */}
-                <div className="rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden p-6 sm:p-8 md:p-10 lg:p-12">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-blue-950/25 to-primary/15 rounded-3xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-tl from-primary/12 via-transparent to-transparent rounded-3xl pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    {/* 섹션 헤더 */}
-                    <div className="mb-5 sm:mb-6">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">
-                        심화 세션 (Track Session)
-                      </h3>
-                      <p className="text-sm sm:text-base text-white/70 leading-relaxed">
-                        학기 중에는 관심 분야에 따라 트랙을 선택해 보다 전문적인 주제와 실제 적용 사례를 다룹니다.
-                      </p>
-                      {/* Track Tags */}
-                      <div className="flex flex-wrap gap-2 mt-6">
-                        {tracks.map((track) => (
-                          <span 
-                            key={track.id}
-                            className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-primary/20 text-primary text-xs sm:text-sm font-medium border border-primary/30"
-                          >
-                            {track.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                <div className="grid grid-cols-5">
+                  {timelineSteps.map((step, index) => {
+                    const isTop = index % 2 === 0;
+                    return (
+                      <button
+                        key={step.id}
+                        onClick={() => {
+                          const el = document.getElementById(`v1-${step.id}`);
+                          if (el) {
+                            const offset = 100;
+                            const top = el.getBoundingClientRect().top + window.scrollY - offset;
+                            window.scrollTo({ top, behavior: "smooth" });
+                          }
+                        }}
+                        className="group relative flex flex-col items-center"
+                      >
+                        {/* 위쪽 콘텐츠 (짝수 인덱스) */}
+                        <div className={cn("w-28 lg:w-36 mb-3", isTop ? "opacity-100" : "opacity-0 pointer-events-none")}>
+                          <img
+                            src={step.image}
+                            alt={step.label}
+                            className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300"
+                          />
+                          <p className="mt-2.5 text-xs lg:text-sm font-semibold text-foreground/80 group-hover:text-foreground text-center transition-colors">{step.label}</p>
+                        </div>
 
-                    {/* Session 카드 - 텍스트 왼쪽, 이미지 오른쪽 */}
-                    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-14 mb-8">
-                      <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                        <div>
-                          <h4 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 text-white">Session</h4>
-                          <p className="text-sm text-white/50 mb-4">Advanced Track-based Learning</p>
-                          <div className="text-sm sm:text-base text-white/80 leading-relaxed space-y-5">
-                            <p>
-                              CV, NLP, Finance, Data Business, Data Engineering, AI Engineering 등 6개 트랙 중 선택하여
-                              트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해
-                              같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="bg-white/5 rounded-xl aspect-video flex items-center justify-center border border-white/10">
-                          <span className="text-white/30 text-sm">이미지 영역</span>
-                        </div>
-                      </div>
-                    </div>
+                        {/* 연결선 (위) */}
+                        <div className={cn("w-px h-5 bg-border", isTop ? "" : "order-first")} />
 
-                    {/* Project 카드 1 - 이미지 왼쪽, 텍스트 오른쪽 */}
-                    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-14 mb-8">
-                      <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                        <div className="order-2 md:order-1 bg-white/5 rounded-xl aspect-video flex items-center justify-center border border-white/10">
-                          <span className="text-white/30 text-sm">이미지 영역</span>
+                        {/* 도트 */}
+                        <div className="relative z-10 w-9 h-9 rounded-full bg-background border-2 border-primary/30 text-primary flex items-center justify-center text-xs font-bold group-hover:border-primary group-hover:bg-primary group-hover:text-background transition-all duration-300 my-0.5">
+                          {step.number}
                         </div>
-                        <div className="order-1 md:order-2">
-                          <h4 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 text-white">Project</h4>
-                          <p className="text-sm text-white/50 mb-4">Individual Project & Report</p>
-                          <div className="text-sm sm:text-base text-white/80 leading-relaxed space-y-5">
-                            <p>
-                              정규 학기 기준 약 9주차에 걸쳐 자유 주제로 개인 프로젝트를 수행하고, 문제 정의부터 결과 해석까지를 정리한 개인 보고서를 작성합니다.
-                            </p>
-                            <p>
-                              개인 관심사 기반 주제 선정, 독립적인 프로젝트 수행 경험, 논리적 사고와 문제 해결 과정 정리를 통해 결과보다 중요한 것은 '어떻게 접근했고, 무엇을 배웠는지 설명할 수 있는가'입니다.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Project 카드 2 - 텍스트 왼쪽, 이미지 오른쪽 */}
-                    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-white/10 px-6 sm:px-8 md:px-12 py-8 sm:py-10 md:py-14">
-                      <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                        <div>
-                          <h4 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 text-white">Project</h4>
-                          <p className="text-sm text-white/50 mb-4">Regular Academic Festival</p>
-                          <div className="text-sm sm:text-base text-white/80 leading-relaxed space-y-5">
-                            <p>
-                              트랙별 1–2팀을 구성해 팀 단위 프로젝트를 수행하고, 학술 포스터 제작과 프로젝트 발표를 진행하는 KHUDA의 대표적인 학술 행사입니다.
-                            </p>
-                            <p>
-                              트랙별 심화 주제 기반 프로젝트, 학술 포스터 제작, 프로젝트 발표 및 질의응답을 통해 프로젝트를 공유하고 설명하는 경험을 통해 사고의 깊이와 표현력을 함께 성장시킵니다.
-                            </p>
-                          </div>
+                        {/* 연결선 (아래) */}
+                        <div className={cn("w-px h-5 bg-border", !isTop ? "" : "order-last")} />
+
+                        {/* 아래쪽 콘텐츠 (홀수 인덱스) */}
+                        <div className={cn("w-28 lg:w-36 mt-3", !isTop ? "opacity-100" : "opacity-0 pointer-events-none")}>
+                          <img
+                            src={step.image}
+                            alt={step.label}
+                            className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300"
+                          />
+                          <p className="mt-2.5 text-xs lg:text-sm font-semibold text-foreground/80 group-hover:text-foreground text-center transition-colors">{step.label}</p>
                         </div>
-                        <div className="bg-white/5 rounded-xl aspect-video flex items-center justify-center border border-white/10">
-                          <span className="text-white/30 text-sm">이미지 영역</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
 
-            {/* Datathon Tab */}
-            {activeTab === "datathon" && (
-              <div className="space-y-8 sm:space-y-12">
-                <div className="rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden p-6 sm:p-8 md:p-10 lg:p-12">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-blue-950/25 to-primary/15 rounded-3xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-tl from-primary/12 via-transparent to-transparent rounded-3xl pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    {/* 회차 선택 탭 */}
-                    <div className="flex gap-2 mb-8 border-b border-white/10 pb-4">
-                      {datathonHistory.map((datathon, index) => (
+              {/* 모바일 타임라인 */}
+              <div className="sm:hidden mb-10">
+                <div className="flex justify-between items-center px-4">
+                  {timelineSteps.map((step) => (
+                    <button
+                      key={step.id}
+                      onClick={() => {
+                        const el = document.getElementById(`v1-${step.id}`);
+                        if (el) {
+                          const offset = 100;
+                          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+                          window.scrollTo({ top, behavior: "smooth" });
+                        }
+                      }}
+                      className="flex flex-col items-center group"
+                    >
+                      <div className="w-9 h-9 rounded-full bg-background border-2 border-primary/30 text-primary flex items-center justify-center text-xs font-bold group-hover:border-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
+                        {step.number}
+                      </div>
+                      <span className="mt-2 text-[11px] font-medium text-foreground/70 text-center leading-tight">
+                        {step.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 콘텐츠 섹션 */}
+              <div className="space-y-20 sm:space-y-28">
+                {timelineSteps.filter((s) => s.hasContent).map((step) => {
+                  const Content = sectionComponents[step.id];
+                  if (!Content) return null;
+                  return (
+                    <div key={step.id} id={`v1-${step.id}`} className="fade-up">
+                      <Content />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ================================================================ */}
+        {/* Version 2: 세로 sticky 타임라인 + 수직 콘텐츠 */}
+        {/* ================================================================ */}
+        {version === "v2" && (
+          <section className="py-10 sm:py-16 px-3 sm:px-4 md:px-8 bg-background">
+            <div className="mx-auto max-w-7xl">
+              <div className="flex gap-6 lg:gap-10">
+                {/* Sticky 세로 타임라인 (데스크톱) */}
+                <nav className="hidden md:block w-44 lg:w-52 flex-shrink-0">
+                  <div className="sticky top-36 lg:top-40">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-5">
+                      커리큘럼
+                    </p>
+                    <div className="relative pl-5">
+                      {/* 세로 라인 */}
+                      <div className="absolute left-[5px] top-1 bottom-1 w-px bg-border" />
+
+                      {timelineSteps.filter((s) => s.hasContent).map((step) => (
                         <button
-                          key={index}
-                          onClick={() => {
-                            setSelectedDatathonIndex(index);
-                            setSelectedImageIndex(0);
-                          }}
+                          key={step.id}
+                          onClick={() => scrollToSection(step.id)}
                           className={cn(
-                            "px-4 sm:px-6 py-2 sm:py-3 font-semibold transition-all duration-300 rounded-lg text-sm sm:text-base",
-                            selectedDatathonIndex === index
-                              ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                              : "text-white/60 hover:text-white hover:bg-white/10"
+                            "relative flex items-center w-full text-left py-3 transition-all duration-200",
+                            activeSection === step.id
+                              ? "text-foreground"
+                              : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          {datathon.number}
+                          {/* 도트 */}
+                          <div
+                            className={cn(
+                              "absolute -left-5 w-[11px] h-[11px] rounded-full border-2 transition-all duration-200",
+                              activeSection === step.id
+                                ? "border-primary bg-primary scale-125"
+                                : "border-border bg-background"
+                            )}
+                          />
+                          <span className={cn(
+                            "text-sm transition-all duration-200",
+                            activeSection === step.id ? "font-semibold" : "font-medium"
+                          )}>
+                            {step.label}
+                          </span>
                         </button>
                       ))}
                     </div>
-
-                    {/* 선택된 회차 내용 */}
-                    <div>
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">{selectedDatathon.title}</h3>
-                      {selectedDatathon.theme && (
-                        <p className="text-base sm:text-lg text-primary mb-4">{selectedDatathon.theme}</p>
-                      )}
-
-                      {selectedDatathon.description ? (
-                        <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-8">{selectedDatathon.description}</p>
-                      ) : (
-                        <p className="text-sm sm:text-base text-white/50 mb-8">상세 정보 준비 중입니다.</p>
-                      )}
-
-                      {/* 썸네일 갤러리 */}
-                      <div className="space-y-4 max-w-3xl mx-auto">
-                        {/* 메인 이미지 */}
-                        <div className="relative bg-white/5 rounded-xl overflow-hidden border border-white/10 aspect-[16/9]">
-                          {selectedDatathon.images && selectedDatathon.images.length > 0 ? (
-                            <>
-                              <img
-                                src={selectedDatathon.images[selectedImageIndex]}
-                                alt={`${selectedDatathon.title} 이미지 ${selectedImageIndex + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                                }}
-                              />
-                              <div className="hidden absolute inset-0 flex items-center justify-center bg-white/5">
-                                <span className="text-white/40 text-sm">이미지 준비 중</span>
-                              </div>
-                              {/* 이미지 카운터 */}
-                              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-white/80 text-xs sm:text-sm">
-                                {selectedImageIndex + 1} / {selectedDatathon.images.length}
-                              </div>
-                              {/* 좌우 네비게이션 버튼 */}
-                              {selectedDatathon.images.length > 1 && (
-                                <>
-                                  <button
-                                    onClick={() => setSelectedImageIndex(prev => 
-                                      prev === 0 ? selectedDatathon.images.length - 1 : prev - 1
-                                    )}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                  >
-                                    ‹
-                                  </button>
-                                  <button
-                                    onClick={() => setSelectedImageIndex(prev => 
-                                      prev === selectedDatathon.images.length - 1 ? 0 : prev + 1
-                                    )}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                  >
-                                    ›
-                                  </button>
-                                </>
-                              )}
-                            </>
-                          ) : (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-white/40 text-sm">이미지 준비 중</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* 썸네일 목록 */}
-                        {selectedDatathon.images && selectedDatathon.images.length > 1 && (
-                          <div className="flex gap-2 justify-center pb-2">
-                            {selectedDatathon.images.map((image, index) => (
-                              <button
-                                key={index}
-                                onClick={() => setSelectedImageIndex(index)}
-                                className={cn(
-                                  "flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 md:w-24 md:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200",
-                                  selectedImageIndex === index
-                                    ? "border-primary ring-2 ring-primary/30"
-                                    : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
-                                )}
-                              >
-                                <img
-                                  src={image}
-                                  alt={`썸네일 ${index + 1}`}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                  }}
-                                />
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
                   </div>
+                </nav>
+
+                {/* 모바일 가로 네비 */}
+                <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 bg-card/95 backdrop-blur-md border border-border rounded-full px-2 py-1.5 shadow-lg">
+                  {timelineSteps.filter((s) => s.hasContent).map((step) => (
+                    <button
+                      key={step.id}
+                      onClick={() => scrollToSection(step.id)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                        activeSection === step.id
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {step.number}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 콘텐츠 영역 */}
+                <div className="flex-1 min-w-0 space-y-20 sm:space-y-28">
+                  {timelineSteps.filter((s) => s.hasContent).map((step) => {
+                    const Content = sectionComponents[step.id];
+                    if (!Content) return null;
+                    return (
+                      <div
+                        key={step.id}
+                        id={step.id}
+                        ref={setSectionRef(step.id)}
+                        className="fade-up [&>div]:text-left [&>div]:mx-0 [&>div]:max-w-none [&_p]:mx-0 [&_.flex]:justify-start [&_.grid]:text-left [&_.grid>div]:border-l [&_.grid>div]:border-border"
+                      >
+                        <Content />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            )}
-
-            {/* Conference Tab */}
-            {activeTab === "conference" && (
-              <div className="space-y-8 sm:space-y-12">
-                {/* Toy Project Conference */}
-                <div className="rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden p-6 sm:p-8 md:p-10 lg:p-12">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-blue-950/25 to-primary/15 rounded-3xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-tl from-primary/12 via-transparent to-transparent rounded-3xl pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">토이 프로젝트 컨퍼런스</h3>
-
-                    <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6 sm:mb-8">
-                      방학 세션 동안 진행한 팀 프로젝트를 공유하는 컨퍼런스입니다.
-                      프로젝트 기획 배경, 문제 해결 접근 방식, 구현 결과 및 인사이트 공유를 통해
-                      결과를 발표하는 것이 아니라 사고의 흐름을 설명하는 자리입니다.
-                    </p>
-
-                    {/* 썸네일 갤러리 */}
-                    <div className="space-y-4 max-w-3xl mx-auto">
-                      {/* 메인 이미지 */}
-                      <div className="relative bg-white/5 rounded-xl overflow-hidden border border-white/10 aspect-[16/9]">
-                        {toyConferenceImages.length > 0 ? (
-                          <>
-                            <img
-                              src={toyConferenceImages[toyConferenceImageIndex]}
-                              alt={`토이 프로젝트 컨퍼런스 이미지 ${toyConferenceImageIndex + 1}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                              }}
-                            />
-                            <div className="hidden absolute inset-0 flex items-center justify-center bg-white/5">
-                              <span className="text-white/40 text-sm">이미지 준비 중</span>
-                            </div>
-                            {/* 이미지 카운터 */}
-                            <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-white/80 text-xs sm:text-sm">
-                              {toyConferenceImageIndex + 1} / {toyConferenceImages.length}
-                            </div>
-                            {/* 좌우 네비게이션 버튼 */}
-                            {toyConferenceImages.length > 1 && (
-                              <>
-                                <button
-                                  onClick={() => setToyConferenceImageIndex(prev => 
-                                    prev === 0 ? toyConferenceImages.length - 1 : prev - 1
-                                  )}
-                                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                >
-                                  ‹
-                                </button>
-                                <button
-                                  onClick={() => setToyConferenceImageIndex(prev => 
-                                    prev === toyConferenceImages.length - 1 ? 0 : prev + 1
-                                  )}
-                                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                >
-                                  ›
-                                </button>
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-white/40 text-sm">이미지 준비 중</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 썸네일 목록 */}
-                      {toyConferenceImages.length > 1 && (
-                        <div className="flex gap-2 justify-center pb-2">
-                          {toyConferenceImages.map((image, index) => (
-                            <button
-                              key={index}
-                              onClick={() => setToyConferenceImageIndex(index)}
-                              className={cn(
-                                "flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 md:w-24 md:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200",
-                                toyConferenceImageIndex === index
-                                  ? "border-primary ring-2 ring-primary/30"
-                                  : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
-                              )}
-                            >
-                              <img
-                                src={image}
-                                alt={`썸네일 ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Academic Conference */}
-                <div className="rounded-2xl sm:rounded-3xl bg-black/98 backdrop-blur-2xl border border-white/10 overflow-hidden p-6 sm:p-8 md:p-10 lg:p-12">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-blue-950/25 to-primary/15 rounded-3xl pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-tl from-primary/12 via-transparent to-transparent rounded-3xl pointer-events-none" />
-                  
-                  <div className="relative z-10">
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">정기 학술 컨퍼런스</h3>
-
-                    <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6 sm:mb-8">
-                      학기 중 트랙별 프로젝트 결과를 공유하는 KHUDA의 정기 학술 컨퍼런스입니다.
-                      트랙별 심화 주제 프로젝트, 학술 포스터 발표, 프로젝트 기반 토론 및 피드백을 통해
-                      학습 → 프로젝트 → 공유, 성장의 전 과정을 마무리하는 무대입니다.
-                    </p>
-
-                    {/* 썸네일 갤러리 */}
-                    <div className="space-y-4 max-w-3xl mx-auto">
-                      {/* 메인 이미지 */}
-                      <div className="relative bg-white/5 rounded-xl overflow-hidden border border-white/10 aspect-[16/9]">
-                        {academicConferenceImages.length > 0 ? (
-                          <>
-                            <img
-                              src={academicConferenceImages[academicConferenceImageIndex]}
-                              alt={`Academic Conference 이미지 ${academicConferenceImageIndex + 1}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                              }}
-                            />
-                            <div className="hidden absolute inset-0 flex items-center justify-center bg-white/5">
-                              <span className="text-white/40 text-sm">이미지 준비 중</span>
-                            </div>
-                            {/* 이미지 카운터 */}
-                            <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-white/80 text-xs sm:text-sm">
-                              {academicConferenceImageIndex + 1} / {academicConferenceImages.length}
-                            </div>
-                            {/* 좌우 네비게이션 버튼 */}
-                            {academicConferenceImages.length > 1 && (
-                              <>
-                                <button
-                                  onClick={() => setAcademicConferenceImageIndex(prev => 
-                                    prev === 0 ? academicConferenceImages.length - 1 : prev - 1
-                                  )}
-                                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                >
-                                  ‹
-                                </button>
-                                <button
-                                  onClick={() => setAcademicConferenceImageIndex(prev => 
-                                    prev === academicConferenceImages.length - 1 ? 0 : prev + 1
-                                  )}
-                                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/70 hover:text-white transition-all"
-                                >
-                                  ›
-                                </button>
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-white/40 text-sm">이미지 준비 중</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* 썸네일 목록 */}
-                      {academicConferenceImages.length > 1 && (
-                        <div className="flex gap-2 justify-center pb-2">
-                          {academicConferenceImages.map((image, index) => (
-                            <button
-                              key={index}
-                              onClick={() => setAcademicConferenceImageIndex(index)}
-                              className={cn(
-                                "flex-shrink-0 w-16 h-12 sm:w-20 sm:h-14 md:w-24 md:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200",
-                                academicConferenceImageIndex === index
-                                  ? "border-primary ring-2 ring-primary/30"
-                                  : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
-                              )}
-                            >
-                              <img
-                                src={image}
-                                alt={`썸네일 ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

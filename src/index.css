@@ -21,9 +21,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer base {
   :root {
-    --background: 210 55% 96%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 9%;
 
     --card: 0 0% 100%;
@@ -35,11 +54,11 @@
     --primary: 0 100% 25%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
+    --secondary: 0 0% 99%;
     --secondary-foreground: 0 0% 9%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 99%;
+    --muted-foreground: 0 0% 55%;
 
     --accent: 0 100% 25%;
     --accent-foreground: 0 0% 9%;
@@ -47,8 +66,8 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
+    --border: 0 0% 94%;
+    --input: 0 0% 94%;
     --ring: 0 100% 25%;
 
     --radius: 0.5rem;
