@@ -12,7 +12,7 @@ const MissionSection = () => {
 
   return (
     <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div
           ref={ref}
           className={cn(
@@ -20,24 +20,45 @@ const MissionSection = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           )}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 sm:gap-8 md:gap-12 lg:gap-16 xl:gap-20 items-start">
             {/* 왼쪽: 제목 */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-5">
+            <div className="order-2 lg:order-1">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight">
                 Our Mission
               </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-700 font-medium leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 font-medium leading-relaxed">
                 데이터로 세상을 이해하고,
-                <br />
+                <br className="hidden sm:block" />
+                <span className="sm:hidden"> </span>
                 협업으로 가치를 창출한다
               </p>
             </div>
             
             {/* 오른쪽: 본문 */}
-            <div>
+            <div className="space-y-3 sm:space-y-4 order-1 lg:order-2">
               <p className="text-sm sm:text-base text-gray-700 leading-relaxed break-keep">
-                KHUDA는 데이터 분석 및 AI 기술을 체계적으로 학습하고, 실제 문제 해결 경험을 통해 전문성과 실전 감각을 갖춘 데이터 인재로 성장할 수 있도록 돕습니다. 우리는 개인의 성장을 넘어 협업을 통해 더 큰 가치를 만들어내는 데이터 문화를 지향합니다.
+                KHUDA는 데이터 분석과 AI 기술을 체계적으로 학습하고, 실제 문제를 해결하는 경험을 통해 전문성을 키워나갑니다. 개인의 성장을 넘어 협업을 통해 더 큰 가치를 만들어내는 것이 우리의 목표입니다.
               </p>
+              <div className="pt-3 sm:pt-4 space-y-2.5 sm:space-y-3">
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                    <strong className="text-gray-900">체계적 학습</strong>: 기초부터 심화까지 단계별 커리큘럼으로 데이터와 AI의 핵심을 배워나갑니다.
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                    <strong className="text-gray-900">실전 경험</strong>: 토이 프로젝트부터 학술제까지, 실제 데이터로 문제를 해결하며 실무 역량을 키웁니다.
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 sm:gap-3">
+                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                    <strong className="text-gray-900">협업 문화</strong>: 팀 프로젝트와 스터디를 통해 함께 성장하며 데이터로 세상을 이해하는 인재로 거듭납니다.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
