@@ -173,7 +173,6 @@ export const HEADER_CONFIG = {
     { label: "활동", href: ROUTES.activities },
     { label: "프로젝트", href: ROUTES.projects },
     { label: "후원", href: ROUTES.sponsor },
-    { label: "리크루팅", href: ROUTES.recruiting },
   ] as NavLink[],
   applyButton: {
     desktop: "지원하기",
@@ -208,7 +207,7 @@ export const HEADER_STYLES = {
   nav: {
     desktop: {
       container: "hidden md:flex items-center gap-4 lg:gap-6 xl:gap-10",
-      link: "nav-link text-sm md:text-[15px] font-medium tracking-[-0.01em] text-black px-3 py-2 transition-all duration-300 ease-out",
+      link: "nav-link text-base md:text-base font-medium tracking-[-0.01em] text-black px-3 py-2 transition-all duration-300 ease-out",
     },
     mobile: {
       container: "md:hidden absolute left-0 right-0 bg-background/98 backdrop-blur-2xl border-b border-border/40 animate-fade-in shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
@@ -220,7 +219,7 @@ export const HEADER_STYLES = {
   button: {
     desktop: {
       container: "hidden md:flex items-center gap-4",
-      apply: "rounded-full px-6 lg:px-8 py-2.5 lg:py-3.5 font-semibold text-sm lg:text-[15px] tracking-[-0.01em] bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_2px_8px_rgba(0,100%,25%,0.2)] hover:shadow-[0_4px_16px_rgba(0,100%,25%,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ease-out",
+      apply: "relative rounded-md px-6 lg:px-8 py-1.5 lg:py-2 font-bold text-base lg:text-base tracking-[-0.01em] bg-transparent text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 ease-out group",
     },
     mobile: {
       menuToggle: "md:hidden p-2.5 sm:p-3 rounded-xl hover:bg-foreground/8 transition-all duration-300 ease-out active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center",
@@ -427,20 +426,20 @@ export const RECRUITMENT_STYLES = {
   section: {
     header: {
       container: "text-center mb-20",
-      title: "text-2xl font-bold text-center mb-16 text-white",
+      title: "text-2xl font-bold text-center mb-16 text-foreground",
     },
   },
   infoCard: {
-    base: "group relative text-center rounded-2xl sm:rounded-3xl bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-300 overflow-hidden",
+    base: "group relative text-center rounded-2xl sm:rounded-3xl bg-gray-100 border border-border hover:border-blue-600/30 transition-all duration-300 overflow-hidden",
     padding: "p-5 sm:p-6 md:p-8 lg:p-10",
-    gradient: "absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-primary/5 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+    gradient: "absolute inset-0 bg-gradient-to-br from-blue-600/8 via-transparent to-blue-600/5 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300",
     icon: {
-      container: "inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary/15 group-hover:scale-105",
+      container: "inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 bg-blue-100 text-blue-600 transition-all duration-300 group-hover:bg-blue-200 group-hover:scale-105",
       size: "w-6 h-6 sm:w-7 sm:h-7",
     },
-    title: "text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-white",
-    description: "text-sm sm:text-base md:text-lg font-medium mb-2 text-white leading-relaxed",
-    details: "text-xs sm:text-sm text-white/70 leading-relaxed",
+    title: "text-lg sm:text-xl md:text-2xl font-semibold mb-2 sm:mb-3 text-gray-900",
+    description: "text-sm sm:text-base md:text-lg font-medium mb-2 text-gray-900 leading-relaxed",
+    details: "text-xs sm:text-sm text-gray-700 leading-relaxed",
   },
   process: {
     container: "mb-20",
@@ -449,8 +448,8 @@ export const RECRUITMENT_STYLES = {
     },
     stepCard: {
       base: "rounded-2xl sm:rounded-3xl border transition-all duration-300 shadow-sm min-h-[180px] sm:h-[200px] md:h-[220px] flex flex-col relative overflow-hidden",
-      active: "bg-black/80 backdrop-blur-2xl border-primary/30 shadow-lg shadow-primary/10 hover:border-primary/40",
-      inactive: "bg-black/70 backdrop-blur-2xl border-white/10 hover:border-white/20",
+      active: "bg-card border-primary/30 shadow-lg shadow-primary/10 hover:border-primary/40",
+      inactive: "bg-card border-border hover:border-primary/20",
       padding: {
         desktop: "p-4 sm:p-6 md:p-8",
         mobile: "p-4 sm:p-6",
@@ -465,7 +464,7 @@ export const RECRUITMENT_STYLES = {
       },
       completed: "bg-primary border-2 border-primary",
       active: "bg-primary border-2 border-primary shadow-lg shadow-primary/30",
-      inactive: "bg-card border-2 border-border",
+      inactive: "bg-muted border-2 border-border",
       icon: {
         desktop: "w-5 h-5",
         mobile: "w-4 h-4",
@@ -491,18 +490,18 @@ export const RECRUITMENT_STYLES = {
         title: {
           base: "text-sm sm:text-base md:text-lg font-semibold",
           active: "text-primary",
-          inactive: "text-white",
+          inactive: "text-foreground",
         },
         date: {
           base: "text-xs sm:text-sm font-medium whitespace-nowrap",
           active: "text-primary/80",
-          inactive: "text-white/70",
+          inactive: "text-muted-foreground",
         },
       },
       fullDate: {
         base: "text-xs sm:text-sm leading-relaxed mt-auto",
-        active: "text-white/90",
-        inactive: "text-white/70",
+        active: "text-foreground",
+        inactive: "text-muted-foreground",
       },
       mobile: {
         title: "text-sm sm:text-base font-semibold",
@@ -547,11 +546,11 @@ export const RECRUITMENT_STYLES = {
   text: {
     stepNumber: "text-xs font-semibold",
     stepNumberActive: "text-primary-foreground",
-    stepNumberInactive: "text-white",
+    stepNumberInactive: "text-foreground",
   },
   colors: {
     primaryForeground: "text-primary-foreground",
-    foreground: "text-white",
+    foreground: "text-foreground",
     bgPrimaryForeground: "bg-primary-foreground",
     bgMutedForeground: "bg-muted-foreground/30",
     bgBorder: "bg-border",
@@ -880,18 +879,18 @@ export const FAQ_STYLES = {
   accordion: {
     type: "single" as const,
     collapsible: true,
-    container: "w-full space-y-3",
+    container: "w-full space-y-2 sm:space-y-3 md:space-y-4",
     item: {
-      base: "border-0 rounded-2xl bg-card border border-border/50 overflow-hidden transition-all duration-200 hover:border-border",
+      base: "border-0 rounded-lg sm:rounded-xl md:rounded-2xl bg-gray-100 border border-border/50 overflow-hidden transition-all duration-200 hover:border-border",
     },
     trigger: {
-      base: "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-sm sm:text-base text-foreground font-medium transition-colors min-h-[44px] flex items-center",
-      iconContainer: "flex items-center gap-2",
-      icon: "w-4 h-4 text-primary flex-shrink-0",
+      base: "text-left hover:no-underline px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-5 text-xs sm:text-sm md:text-base text-gray-900 font-medium transition-colors min-h-[44px] sm:min-h-[48px] flex items-center",
+      iconContainer: "flex items-center gap-1.5 sm:gap-2",
+      icon: "w-4 h-4 text-blue-600 flex-shrink-0",
       iconComponent: HelpCircle,
     },
     content: {
-      base: "px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-muted-foreground leading-relaxed",
+      base: "px-3 sm:px-4 md:px-6 pb-3 sm:pb-4 md:pb-5 text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed",
     },
   },
 };
@@ -1273,7 +1272,7 @@ export const BUTTON_CONFIG = {
 
 export const COMMON_STYLES = {
   cardGradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50",
-  cardBase: "relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden",
+  cardBase: "relative border border-border shadow-lg bg-card overflow-hidden",
 } as const;
 
 // ============================================================================

@@ -89,7 +89,7 @@ const Header = () => {
               />
             </Link>
 
-            <nav className={HEADER_STYLES.nav.desktop.container}>
+            <nav className={cn(HEADER_STYLES.nav.desktop.container, "ml-auto")}>
               {HEADER_CONFIG.navLinks.map((link) => (
                 <NavLink
                   key={link.label}
@@ -97,6 +97,12 @@ const Header = () => {
                   className={HEADER_STYLES.nav.desktop.link}
                 />
               ))}
+              <Link
+                to={ROUTES.recruiting}
+                className={HEADER_STYLES.button.desktop.apply}
+              >
+                {HEADER_CONFIG.applyButton.desktop}
+              </Link>
             </nav>
 
             <button
@@ -126,6 +132,13 @@ const Header = () => {
                 className="text-white text-2xl font-semibold tracking-wide hover:opacity-70 transition-opacity duration-300"
               />
             ))}
+            <Link
+              to={ROUTES.recruiting}
+              onClick={() => handleNavClick(ROUTES.recruiting)}
+              className="mt-4 px-8 py-2 bg-transparent text-white text-xl font-bold rounded-md border-2 border-blue-600 hover:bg-blue-600 transition-all duration-300 ease-out"
+            >
+              {HEADER_CONFIG.applyButton.desktop}
+            </Link>
           </nav>
         </div>
       )}

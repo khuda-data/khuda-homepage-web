@@ -11,24 +11,24 @@ interface AccordionCardProps {
 
 const AccordionCard = ({ title, isOpen, onToggle, children }: AccordionCardProps) => {
   return (
-    <div className="bg-[#1a1a1a] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden self-start">
+    <div className="bg-gray-100 border border-border rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden self-start">
       <button
         onClick={onToggle}
-        className="w-full p-3 sm:p-4 md:p-5 lg:p-6 flex items-center justify-between gap-2 sm:gap-3 hover:bg-white/[0.02] transition-colors"
+        className="w-full p-2.5 sm:p-3 md:p-4 lg:p-5 flex items-center justify-between gap-2 sm:gap-3 hover:bg-gray-200 transition-colors"
       >
-        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white text-left">
+        <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 text-left">
           {title}
         </h3>
         <ChevronDown
           className={cn(
-            "w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 text-white/70 transition-transform duration-200 flex-shrink-0",
+            "w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 text-muted-foreground transition-transform duration-200 flex-shrink-0",
             isOpen && "transform rotate-180"
           )}
         />
       </button>
       
       {isOpen && (
-        <div className="px-3 sm:px-4 md:px-5 lg:px-6 pb-3 sm:pb-4 md:pb-5 lg:pb-6 space-y-4 sm:space-y-5">
+        <div className="px-2.5 sm:px-3 md:px-4 lg:px-5 pb-2.5 sm:pb-3 md:pb-4 lg:pb-5 space-y-3 sm:space-y-4">
           {children}
         </div>
       )}

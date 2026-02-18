@@ -44,7 +44,7 @@ export const ResultCard = ({ result, onReset }: ResultCardProps) => {
     >
       <CardHeader className="px-4 sm:px-6 pb-3 sm:pb-4">
         <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-lg sm:text-xl md:text-2xl flex items-center gap-2">
+          <CardTitle className="text-lg sm:text-xl md:text-2xl text-foreground flex items-center gap-2">
             <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             조회 결과
           </CardTitle>

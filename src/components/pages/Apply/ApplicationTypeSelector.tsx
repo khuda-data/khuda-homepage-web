@@ -19,17 +19,16 @@ export const ApplicationTypeSelector = ({
   const isApplicationType = (type: "yb" | "ob") => applicationType === type;
 
   return (
-    <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+    <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
+      <CardHeader>
+        <CardTitle className="text-xl text-foreground flex items-center gap-3">
           <Users className="w-5 h-5 text-primary" />
           {APPLICATION_FORM_CONFIG.sections.applicationType}
           <span className="text-destructive">*</span>
         </CardTitle>
         <CardDescription>지원하실 분야를 선택해주세요.</CardDescription>
       </CardHeader>
-      <CardContent className="relative z-10">
+      <CardContent>
         <div className="space-y-3">
           <div 
             className={getRadioButtonClass(isApplicationType("yb"))}

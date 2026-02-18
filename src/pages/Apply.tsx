@@ -69,7 +69,7 @@ const Apply = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10">
+    <div className="min-h-screen bg-background">
       <ApplicationHeader />
 
       <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">

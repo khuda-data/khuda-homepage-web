@@ -32,7 +32,6 @@ const RecruitmentInfoCards = () => {
           key={index}
           className={cn(RECRUITMENT_STYLES.infoCard.base, RECRUITMENT_STYLES.infoCard.padding)}
         >
-          <div className={RECRUITMENT_STYLES.infoCard.gradient} />
           <div className={RECRUITMENT_STYLES.layout.infoCardContent}>
             <div className={RECRUITMENT_STYLES.infoCard.icon.container}>
               <info.icon className={RECRUITMENT_STYLES.infoCard.icon.size} />

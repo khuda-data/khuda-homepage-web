@@ -17,16 +17,15 @@ export const PrivacyConsentCard = ({
   onAnswerChange,
 }: PrivacyConsentCardProps) => {
   return (
-    <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+    <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
+      <CardHeader>
+        <CardTitle className="text-xl text-foreground flex items-center gap-3">
           <FileText className="w-5 h-5 text-primary" />
           {question.question}
           {question.required && <span className="text-destructive">*</span>}
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6 relative z-10">
+      <CardContent className="space-y-6">
         <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
           <h3 className="text-lg font-semibold mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
           <div className="space-y-4 text-sm leading-relaxed">

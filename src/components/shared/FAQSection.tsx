@@ -11,7 +11,6 @@ import SectionHeader from "@/components/shared/SectionHeader";
 
 const FAQSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
-  const IconComponent = FAQ_STYLES.accordion.trigger.iconComponent;
 
   return (
     <div 
@@ -23,9 +22,11 @@ const FAQSection = () => {
       )}
     >
       <div className={SECTION_STYLES.container.base}>
-        <div className={SECTION_STYLES.maxWidth.narrow}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
           {/* 헤더 */}
-          <SectionHeader label="FAQ" title={FAQ_MESSAGES.title} />
+          <div className="mb-6 sm:mb-8 md:mb-10">
+            <SectionHeader label="FAQ" title={FAQ_MESSAGES.title} />
+          </div>
           
           <Accordion 
             type={FAQ_STYLES.accordion.type} 
@@ -37,18 +38,22 @@ const FAQSection = () => {
                 key={faq.question} 
                 value={faq.question} 
                 className={cn(
-                  "border-0 rounded-2xl bg-[#1a1a1a] border border-white/10 overflow-hidden transition-all duration-200 hover:border-white/20"
+                  FAQ_STYLES.accordion.item.base
                 )}
               >
                 <AccordionTrigger className={cn(
-                  "text-left hover:no-underline px-4 sm:px-6 py-4 sm:py-5 text-xs sm:text-base text-white font-medium transition-colors min-h-[44px] flex items-center hover:bg-white/[0.02]"
+                  FAQ_STYLES.accordion.trigger.base,
+                  "hover:bg-gray-200"
                 )}>
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <IconComponent className="w-4 h-4 text-white/70 flex-shrink-0" />
-                    <span className="text-white break-words sm:break-normal">{faq.question}</span>
+                  <div className={FAQ_STYLES.accordion.trigger.iconContainer}>
+                    <span className="text-blue-600 font-bold flex-shrink-0 text-xs sm:text-sm md:text-base">Q.</span>
+                    <span className="break-words">{faq.question}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-5 text-sm sm:text-base text-white/80 leading-relaxed break-words whitespace-pre-line">
+                <AccordionContent className={cn(
+                  FAQ_STYLES.accordion.content.base,
+                  "break-words whitespace-pre-line"
+                )}>
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
