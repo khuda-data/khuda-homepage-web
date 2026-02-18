@@ -149,7 +149,7 @@
 
   .nav-link::after {
     content: '';
-    @apply absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-0 h-[2px] bg-blue-600 transition-all duration-500 ease-out rounded-full;
+    @apply absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-0 h-[2px] bg-primary transition-all duration-500 ease-out rounded-full;
   }
 
   .nav-link:hover::after {
