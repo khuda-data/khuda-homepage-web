@@ -32,10 +32,10 @@ const RecruitingSection = () => {
 
         {/* 자주 묻는 질문 섹션 */}
         <FAQSection />
-
-        {/* 지원하기 CTA */}
-        <ApplicationCTA />
       </div>
+      
+      {/* 지원하기 CTA - container 밖으로 이동하여 전체 너비 사용 */}
+      <ApplicationCTA />
     </section>
   );
 };

@@ -4,7 +4,7 @@ import RotatingText from "./RotatingText";
 const HeroSection = memo(() => {
   const rotatingTextProps = useMemo(() => ({
     texts: ["Networking", "Passion", "Beyond Limits"] as const,
-    mainClassName: "px-2 sm:px-2.5 md:px-3 lg:px-4 xl:px-5 bg-gradient-to-r from-red-400 via-purple-400 to-blue-400 text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black overflow-hidden py-1 sm:py-1.5 md:py-2 lg:py-2.5 xl:py-3 justify-start rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl leading-[0.95] sm:leading-[0.9] tracking-tighter",
+    mainClassName: "px-2 sm:px-2.5 md:px-3 lg:px-4 xl:px-5 bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400 text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black overflow-hidden py-1 sm:py-1.5 md:py-2 lg:py-2.5 xl:py-3 justify-start rounded-md sm:rounded-lg md:rounded-xl lg:rounded-2xl leading-[0.95] sm:leading-[0.9] tracking-tighter",
     staggerFrom: "last" as const,
     initial: { y: "100%" },
     animate: { y: 0 },

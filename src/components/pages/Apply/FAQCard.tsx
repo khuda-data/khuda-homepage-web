@@ -32,17 +32,16 @@ export const FAQCard = () => {
   };
 
   return (
-    <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-      <CardHeader className="pb-4 relative z-10">
+    <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
+      <CardHeader className="pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <HelpCircle className="w-5 h-5 text-primary" />
           </div>
-          <CardTitle className="text-xl">{APPLICATION_FORM_CONFIG.sections.faq}</CardTitle>
+          <CardTitle className="text-xl text-foreground">{APPLICATION_FORM_CONFIG.sections.faq}</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6 relative z-10">
+      <CardContent className="space-y-6">
         <div className="space-y-4 text-sm">
           <div className="p-4 rounded-xl bg-secondary/30 border border-border/50">
             <p className="font-semibold mb-2 flex items-center gap-2">

@@ -40,10 +40,9 @@ export const QuestionCard = ({ question, applicationType = "", isStudyDisabled =
   const answer = ""; // This will be passed from parent if needed for thank you message
 
   return (
-    <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+    <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
+      <CardHeader>
+        <CardTitle className="text-xl text-foreground flex items-center gap-3">
           {questionIcon}
           {question.question}
           {question.required && <span className="text-destructive">*</span>}
@@ -54,7 +53,7 @@ export const QuestionCard = ({ question, applicationType = "", isStudyDisabled =
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="space-y-4 relative z-10">
+      <CardContent className="space-y-4">
         {children}
       </CardContent>
     </Card>

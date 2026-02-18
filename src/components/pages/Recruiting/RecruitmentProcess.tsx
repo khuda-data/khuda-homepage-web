@@ -34,13 +34,8 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
-// 그라데이션 색상 배열
-const GRADIENT_COLORS = [
-  "from-blue-500 to-blue-600",
-  "from-indigo-500 to-purple-600",
-  "from-purple-500 to-pink-600",
-  "from-pink-500 to-red-500",
-] as const;
+// 단일 색상
+const STEP_COLOR = "bg-blue-500";
 
 // 안내 메시지 가져오기
 const getNoticeMessage = (step: ProcessStep): string | null => {
@@ -112,7 +107,6 @@ interface StepCircleProps {
 
 const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: StepCircleProps) => {
   const noticeMessage = getNoticeMessage(step);
-  const gradientColor = GRADIENT_COLORS[index % GRADIENT_COLORS.length];
   const dateParts = formatDateForCircle(step.fullDate);
 
   return (
@@ -120,9 +114,9 @@ const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: St
       onClick={onToggle}
       className={cn(
         "rounded-full flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden",
-        "bg-gradient-to-br " + gradientColor,
-        isActive || isCompleted ? "shadow-lg shadow-primary/20" : "opacity-90",
-        isOpen && "ring-4 ring-primary/30"
+        STEP_COLOR,
+        isActive || isCompleted ? "shadow-lg shadow-blue-500/20" : "opacity-90",
+        isOpen && "ring-4 ring-blue-500/30"
       )}
       style={{ width: "var(--circle-size)", height: "var(--circle-size)" }}
       aria-expanded={isOpen}
@@ -140,7 +134,7 @@ const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: St
         <p className="text-xs sm:text-sm text-white/90 mt-1.5 leading-tight">
           {step.date}
         </p>
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* 열린 상태 */}
@@ -228,7 +222,7 @@ const RecruitmentProcess = () => {
         <div className="relative" style={circleStyle}>
           {/* 연결선 */}
           <div
-            className="absolute h-0.5 bg-gradient-to-r from-blue-500/50 via-purple-500/50 to-red-500/50 -z-10"
+            className="absolute h-0.5 bg-blue-500/30 -z-10"
             style={{
               top: "calc(var(--circle-size) / 2)",
               left: "calc(var(--circle-size) / 2)",
@@ -272,7 +266,7 @@ const RecruitmentProcess = () => {
                 onToggle={() => toggleStep(step.step)}
               />
                   {index < PROCESS_STEPS.length - 1 && (
-                <div className="w-0.5 h-8 bg-gradient-to-b from-purple-500/40 to-red-500/40 mt-4" />
+                <div className="w-0.5 h-8 bg-blue-500/30 mt-4" />
                   )}
               </div>
             );

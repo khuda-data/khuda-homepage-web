@@ -254,10 +254,8 @@ const Activities = () => {
 
       <main>
         <PageHeroSection
-          title="Experience Structured Growth"
-          subtitle="KHUDA의 모든 활동은 '성장 경험'을 중심으로 설계됩니다."
-          backgroundImage="/images/activity.png"
-          heroImage="/images/activity.png"
+          title="KHUDA의 다양한 활동"
+          subtitle="세미나, 스터디, 해커톤 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요."
         />
 
         {/* 버전 토글 */}

@@ -15,7 +15,7 @@ const YBODialogs = () => {
           type="button"
           variant="outline"
           onClick={() => setIsYBDialogOpen(true)}
-          className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200 min-h-[44px]"
+          className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-blue-100 hover:border-blue-600/50 transition-all duration-200 min-h-[44px]"
         >
           YB 수료 조건 안내
         </Button>
@@ -23,7 +23,7 @@ const YBODialogs = () => {
           type="button"
           variant="outline"
           onClick={() => setIsOBDialogOpen(true)}
-          className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-primary/10 hover:border-primary/50 transition-all duration-200 min-h-[44px]"
+          className="flex-1 rounded-xl h-11 sm:h-12 text-xs sm:text-sm font-medium border-2 hover:bg-blue-100 hover:border-blue-600/50 transition-all duration-200 min-h-[44px]"
         >
           OB 혜택 안내
         </Button>
@@ -45,7 +45,7 @@ const YBODialogs = () => {
             {/* 수료 조건 */}
             <div className="space-y-4">
               {APPLICATION_FORM_CONFIG.ybCompletionRequirements.requirements.map((req, index) => (
-                <div key={index} className="border-l-4 border-primary pl-4 space-y-1">
+                <div key={index} className="border-l-4 border-blue-600 pl-4 space-y-1">
                   <h4 className="font-semibold text-base">{req.title}</h4>
                   {req.period && (
                     <p className="text-sm text-muted-foreground">기간: {req.period}</p>
@@ -59,7 +59,7 @@ const YBODialogs = () => {
             </div>
 
             {/* 안내사항 */}
-            <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
+            <div className="p-4 bg-blue-100 rounded-lg border border-blue-600/20">
               <p className="text-sm text-foreground">
                 {APPLICATION_FORM_CONFIG.ybCompletionRequirements.notice}
               </p>
@@ -101,7 +101,7 @@ const YBODialogs = () => {
             {/* 혜택 목록 */}
             <div className="space-y-4">
               {APPLICATION_FORM_CONFIG.obBenefits.benefits.map((benefit, index) => (
-                <div key={index} className="border-l-4 border-primary pl-4 space-y-1">
+                <div key={index} className="border-l-4 border-blue-600 pl-4 space-y-1">
                   <h4 className="font-semibold text-base">{benefit.title}</h4>
                   <p className="text-sm text-foreground">{benefit.description}</p>
                   {benefit.feature && (

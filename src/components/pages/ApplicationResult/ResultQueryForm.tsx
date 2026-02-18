@@ -42,7 +42,7 @@ export const ResultQueryForm = ({
   return (
     <Card className={cn(COMMON_STYLES.cardBase, "rounded-xl sm:rounded-2xl md:rounded-3xl")}>
       <CardHeader className="px-4 sm:px-6 pb-4 sm:pb-6">
-        <CardTitle className="text-lg sm:text-xl md:text-2xl">조회 정보 입력</CardTitle>
+        <CardTitle className="text-lg sm:text-xl md:text-2xl text-foreground">조회 정보 입력</CardTitle>
         <CardDescription className="text-xs sm:text-sm mt-1 sm:mt-2">
           지원 시 입력하신 정보를 정확히 입력해주세요.
         </CardDescription>

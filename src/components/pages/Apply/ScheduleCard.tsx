@@ -9,17 +9,16 @@ import {
 
 export const ScheduleCard = () => {
   return (
-    <Card className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
-      <CardHeader className="pb-6 relative z-10">
+    <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
+      <CardHeader className="pb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-primary" />
           </div>
-          <CardTitle className="text-xl">{APPLICATION_FORM_CONFIG.sections.schedule}</CardTitle>
+          <CardTitle className="text-xl text-foreground">{APPLICATION_FORM_CONFIG.sections.schedule}</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4 sm:space-y-6 relative z-10">
+      <CardContent className="space-y-4 sm:space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
           <div className="space-y-2 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-background to-muted/20 border border-border/50 hover:border-primary/30 transition-all duration-200">
             <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide">서류 모집기간</p>
