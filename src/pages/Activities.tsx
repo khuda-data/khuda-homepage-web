@@ -1,17 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "@/components/shared/Header";
-import PageHeroSection from "@/components/shared/PageHeroSection";
 import Footer from "@/components/shared/Footer";
 import { cn } from "@/lib/utils";
 
-type VersionType = "v1" | "v2";
-
 const timelineSteps = [
-  { id: "ml-session", label: "ML 세션", number: "01", image: "/images/activities/ml-session-2.jpeg", hasContent: true },
-  { id: "toy-project", label: "토이 프로젝트", number: "02", image: "/images/activities/toy-project-1.jpeg", hasContent: true },
-  { id: "track-session", label: "심화 세션", number: "03", image: "/images/activities/track-session.jpg", hasContent: true },
-  { id: "datathon", label: "데이터톤", number: "04", image: "/images/activities/datathon-1.jpg", hasContent: true },
-  { id: "academic-festival", label: "정기 학술제", number: "05", image: "/images/activities/festival-group.png", hasContent: true },
+  { id: "ml-session", label: "ML 세션", number: "01" },
+  { id: "toy-project", label: "토이 프로젝트", number: "02" },
+  { id: "track-session", label: "심화 세션", number: "03" },
+  { id: "datathon", label: "데이터톤", number: "04" },
+  { id: "academic-festival", label: "정기 학술제", number: "05" },
 ];
 
 const tracks = [
@@ -191,7 +188,6 @@ const sectionComponents: Record<string, React.FC> = {
 // ============================================================================
 
 const Activities = () => {
-  const [version, setVersion] = useState<VersionType>("v1");
   const [activeSection, setActiveSection] = useState("ml-session");
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
@@ -200,8 +196,6 @@ const Activities = () => {
   }, []);
 
   useEffect(() => {
-    if (version !== "v2") return;
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -219,7 +213,7 @@ const Activities = () => {
     });
 
     return () => observer.disconnect();
-  }, [version]);
+  }, []);
 
   useEffect(() => {
     const fadeObserver = new IntersectionObserver(
@@ -237,7 +231,7 @@ const Activities = () => {
     fadeEls.forEach((el) => fadeObserver.observe(el));
 
     return () => fadeObserver.disconnect();
-  }, [version]);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const el = sectionRefs.current[id];
@@ -253,231 +247,106 @@ const Activities = () => {
       <Header />
 
       <main>
-        <PageHeroSection
-          title="KHUDA의 다양한 활동"
-          subtitle="세미나, 스터디, 해커톤 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요."
-        />
+        <section className="relative overflow-hidden bg-black">
+          <div className="absolute inset-0 z-0">
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: "url(/images/hello.png)" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-black/25" />
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-[1]" />
+          <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 pt-28 sm:pt-36 md:pt-44 lg:pt-52 xl:pt-60 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-white leading-[1.3] text-left">
+              KHUDA의 다양한 활동
+            </h2>
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left">
+              세미나, 스터디, 해커톤 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요.
+            </p>
+          </div>
+        </section>
 
-        {/* 버전 토글 */}
-        <div className="flex justify-center items-center gap-10 sm:gap-14 py-5 sm:py-6 bg-background/95 backdrop-blur-sm sticky top-12 sm:top-16 md:top-18 lg:top-20 z-30 mt-2 sm:mt-4">
-          {[
-            { key: "v1" as VersionType, label: "Overview" },
-            { key: "v2" as VersionType, label: "Detail" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setVersion(tab.key)}
-              className={cn(
-                "relative text-base sm:text-lg font-semibold transition-all duration-200 pb-2",
-                version === tab.key
-                  ? "text-foreground"
-                  : "text-muted-foreground/50 hover:text-muted-foreground"
-              )}
-            >
-              {tab.label}
-              {version === tab.key && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-foreground rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
+        <section className="py-10 sm:py-16 px-3 sm:px-4 md:px-8 bg-background">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex gap-6 lg:gap-10">
+              {/* Sticky 세로 타임라인 (데스크톱) */}
+              <nav className="hidden md:block w-44 lg:w-52 flex-shrink-0">
+                <div className="sticky top-36 lg:top-40">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-5">
+                    커리큘럼
+                  </p>
+                  <div className="relative pl-5">
+                    <div className="absolute left-[5px] top-1 bottom-1 w-px bg-border" />
 
-        {/* ================================================================ */}
-        {/* Version 1: 가로 타임라인 + 수직 콘텐츠 */}
-        {/* ================================================================ */}
-        {version === "v1" && (
-          <section className="py-10 sm:py-16 px-3 sm:px-4 md:px-8 bg-background">
-            <div className="mx-auto max-w-6xl">
-              {/* 가로 타임라인 (사진 위아래 교차) */}
-              <div className="relative mb-12 sm:mb-20 hidden sm:block max-w-4xl mx-auto">
-                {/* 중앙 가로선 */}
-                <div className="absolute top-1/2 left-[8%] right-[8%] -translate-y-1/2">
-                  <div className="h-px bg-border" />
-                </div>
-
-                <div className="grid grid-cols-5">
-                  {timelineSteps.map((step, index) => {
-                    const isTop = index % 2 === 0;
-                    return (
+                    {timelineSteps.map((step) => (
                       <button
                         key={step.id}
-                        onClick={() => {
-                          const el = document.getElementById(`v1-${step.id}`);
-                          if (el) {
-                            const offset = 100;
-                            const top = el.getBoundingClientRect().top + window.scrollY - offset;
-                            window.scrollTo({ top, behavior: "smooth" });
-                          }
-                        }}
-                        className="group relative flex flex-col items-center"
+                        onClick={() => scrollToSection(step.id)}
+                        className={cn(
+                          "relative flex items-center w-full text-left py-3 transition-all duration-200",
+                          activeSection === step.id
+                            ? "text-foreground"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
                       >
-                        {/* 위쪽 콘텐츠 (짝수 인덱스) */}
-                        <div className={cn("w-28 lg:w-36 mb-3", isTop ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                          <img
-                            src={step.image}
-                            alt={step.label}
-                            className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300"
-                          />
-                          <p className="mt-2.5 text-xs lg:text-sm font-semibold text-foreground/80 group-hover:text-foreground text-center transition-colors">{step.label}</p>
-                        </div>
-
-                        {/* 연결선 (위) */}
-                        <div className={cn("w-px h-5 bg-border", isTop ? "" : "order-first")} />
-
-                        {/* 도트 */}
-                        <div className="relative z-10 w-9 h-9 rounded-full bg-background border-2 border-primary/30 text-primary flex items-center justify-center text-xs font-bold group-hover:border-primary group-hover:bg-primary group-hover:text-background transition-all duration-300 my-0.5">
-                          {step.number}
-                        </div>
-
-                        {/* 연결선 (아래) */}
-                        <div className={cn("w-px h-5 bg-border", !isTop ? "" : "order-last")} />
-
-                        {/* 아래쪽 콘텐츠 (홀수 인덱스) */}
-                        <div className={cn("w-28 lg:w-36 mt-3", !isTop ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                          <img
-                            src={step.image}
-                            alt={step.label}
-                            className="w-full aspect-[4/3] object-cover rounded-xl shadow-sm group-hover:shadow-md group-hover:-translate-y-1 transition-all duration-300"
-                          />
-                          <p className="mt-2.5 text-xs lg:text-sm font-semibold text-foreground/80 group-hover:text-foreground text-center transition-colors">{step.label}</p>
-                        </div>
+                        <div
+                          className={cn(
+                            "absolute -left-5 w-[11px] h-[11px] rounded-full border-2 transition-all duration-200",
+                            activeSection === step.id
+                              ? "border-primary bg-primary scale-125"
+                              : "border-border bg-background"
+                          )}
+                        />
+                        <span className={cn(
+                          "text-sm transition-all duration-200",
+                          activeSection === step.id ? "font-semibold" : "font-medium"
+                        )}>
+                          {step.label}
+                        </span>
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </nav>
 
-              {/* 모바일 타임라인 */}
-              <div className="sm:hidden mb-10">
-                <div className="flex justify-between items-center px-4">
-                  {timelineSteps.map((step) => (
+              {/* 모바일 가로 네비 */}
+              <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 bg-card/95 backdrop-blur-md border border-border rounded-full px-2 py-1.5 shadow-lg">
+{timelineSteps.map((step) => (
                     <button
                       key={step.id}
-                      onClick={() => {
-                        const el = document.getElementById(`v1-${step.id}`);
-                        if (el) {
-                          const offset = 100;
-                          const top = el.getBoundingClientRect().top + window.scrollY - offset;
-                          window.scrollTo({ top, behavior: "smooth" });
-                        }
-                      }}
-                      className="flex flex-col items-center group"
-                    >
-                      <div className="w-9 h-9 rounded-full bg-background border-2 border-primary/30 text-primary flex items-center justify-center text-xs font-bold group-hover:border-primary group-hover:bg-primary group-hover:text-background transition-all duration-300">
-                        {step.number}
-                      </div>
-                      <span className="mt-2 text-[11px] font-medium text-foreground/70 text-center leading-tight">
-                        {step.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                      onClick={() => scrollToSection(step.id)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
+                      activeSection === step.id
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {step.number}
+                  </button>
+                ))}
               </div>
 
-              {/* 콘텐츠 섹션 */}
-              <div className="space-y-20 sm:space-y-28">
-                {timelineSteps.filter((s) => s.hasContent).map((step) => {
+              {/* 콘텐츠 영역 */}
+              <div className="flex-1 min-w-0 space-y-20 sm:space-y-28">
+                {timelineSteps.map((step) => {
                   const Content = sectionComponents[step.id];
                   if (!Content) return null;
                   return (
-                    <div key={step.id} id={`v1-${step.id}`} className="fade-up">
+                    <div
+                      key={step.id}
+                      id={step.id}
+                      ref={setSectionRef(step.id)}
+                      className="fade-up [&>div]:text-left [&>div]:mx-0 [&>div]:max-w-none [&_p]:mx-0 [&_.flex]:justify-start [&_.grid]:text-left [&_.grid>div]:border-l [&_.grid>div]:border-border"
+                    >
                       <Content />
                     </div>
                   );
                 })}
               </div>
             </div>
-          </section>
-        )}
-
-        {/* ================================================================ */}
-        {/* Version 2: 세로 sticky 타임라인 + 수직 콘텐츠 */}
-        {/* ================================================================ */}
-        {version === "v2" && (
-          <section className="py-10 sm:py-16 px-3 sm:px-4 md:px-8 bg-background">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex gap-6 lg:gap-10">
-                {/* Sticky 세로 타임라인 (데스크톱) */}
-                <nav className="hidden md:block w-44 lg:w-52 flex-shrink-0">
-                  <div className="sticky top-36 lg:top-40">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-5">
-                      커리큘럼
-                    </p>
-                    <div className="relative pl-5">
-                      {/* 세로 라인 */}
-                      <div className="absolute left-[5px] top-1 bottom-1 w-px bg-border" />
-
-                      {timelineSteps.filter((s) => s.hasContent).map((step) => (
-                        <button
-                          key={step.id}
-                          onClick={() => scrollToSection(step.id)}
-                          className={cn(
-                            "relative flex items-center w-full text-left py-3 transition-all duration-200",
-                            activeSection === step.id
-                              ? "text-foreground"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          {/* 도트 */}
-                          <div
-                            className={cn(
-                              "absolute -left-5 w-[11px] h-[11px] rounded-full border-2 transition-all duration-200",
-                              activeSection === step.id
-                                ? "border-primary bg-primary scale-125"
-                                : "border-border bg-background"
-                            )}
-                          />
-                          <span className={cn(
-                            "text-sm transition-all duration-200",
-                            activeSection === step.id ? "font-semibold" : "font-medium"
-                          )}>
-                            {step.label}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </nav>
-
-                {/* 모바일 가로 네비 */}
-                <div className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 bg-card/95 backdrop-blur-md border border-border rounded-full px-2 py-1.5 shadow-lg">
-                  {timelineSteps.filter((s) => s.hasContent).map((step) => (
-                    <button
-                      key={step.id}
-                      onClick={() => scrollToSection(step.id)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
-                        activeSection === step.id
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground"
-                      )}
-                    >
-                      {step.number}
-                    </button>
-                  ))}
-                </div>
-
-                {/* 콘텐츠 영역 */}
-                <div className="flex-1 min-w-0 space-y-20 sm:space-y-28">
-                  {timelineSteps.filter((s) => s.hasContent).map((step) => {
-                    const Content = sectionComponents[step.id];
-                    if (!Content) return null;
-                    return (
-                      <div
-                        key={step.id}
-                        id={step.id}
-                        ref={setSectionRef(step.id)}
-                        className="fade-up [&>div]:text-left [&>div]:mx-0 [&>div]:max-w-none [&_p]:mx-0 [&_.flex]:justify-start [&_.grid]:text-left [&_.grid>div]:border-l [&_.grid>div]:border-border"
-                      >
-                        <Content />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
+          </div>
+        </section>
       </main>
 
       <Footer />

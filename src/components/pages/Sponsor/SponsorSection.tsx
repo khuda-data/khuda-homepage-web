@@ -80,11 +80,16 @@ const SponsorSection = () => {
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
-      <div className={SECTION_STYLES.container.base}>
-        <div className={SECTION_STYLES.maxWidth.narrow}>
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 md:px-12 relative z-10">
+        <div>
+          {/* 후원 문의 버튼 */}
+          <div className="mb-8 sm:mb-12">
+            <SponsorInquiryButton />
+          </div>
+
           {/* 후원사 그리드 */}
           {sortedSponsors.length > 0 ? (
-            <div className="relative mb-8 sm:mb-12 md:mb-16 px-2 sm:px-8 md:px-12 lg:px-16">
+            <div className="relative mb-8 sm:mb-12 md:mb-16">
               <NavigationArrow
                 direction="left"
                 onClick={handlePrev}
@@ -124,9 +129,6 @@ const SponsorSection = () => {
               </p>
             </div>
           )}
-
-          {/* 후원 문의 버튼 */}
-          <SponsorInquiryButton />
         </div>
       </div>
     </section>

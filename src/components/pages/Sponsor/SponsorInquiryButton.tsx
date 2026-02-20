@@ -1,12 +1,11 @@
+import { Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { SPONSOR_PAGE_CONFIG, SPONSOR_PAGE_STYLES } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 
 const SponsorInquiryButton = () => {
   const { toast } = useToast();
 
   return (
-    <div className={SPONSOR_PAGE_STYLES.ctaSection.container}>
+    <div className="flex justify-center">
       <button
         onClick={(e) => {
           e.preventDefault();
@@ -14,12 +13,10 @@ const SponsorInquiryButton = () => {
             description: "후원 문의 기능은 준비 중입니다.",
           });
         }}
-        className={cn(
-          SPONSOR_PAGE_STYLES.ctaSection.button.base,
-          "bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-        )}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-foreground text-background text-sm font-semibold hover:bg-foreground/90 transition-all duration-200 active:scale-[0.98] cursor-pointer"
       >
-        {SPONSOR_PAGE_CONFIG.googleFormButton.text}
+        <Mail className="w-4 h-4" />
+        후원 문의
       </button>
     </div>
   );

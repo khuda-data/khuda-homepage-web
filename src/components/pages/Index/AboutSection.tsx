@@ -20,7 +20,7 @@ const AboutSection = () => {
 
   const features: FeatureInfo[] = [
     {
-      title: "ML 기초 & 토이",
+      title: "ML 기초 & 토이프로젝트",
       label: "학습",
       description: "머신러닝 기초부터 토이 프로젝트까지, 데이터 사이언스의 첫걸음을 함께 시작합니다.",
       details: "파이썬 실습, ML 핵심 개념 학습, 그리고 팀 단위 토이 프로젝트를 통해 이론과 실전을 동시에 경험합니다.",
@@ -50,10 +50,10 @@ const AboutSection = () => {
   ];
 
   const achievements: AchievementInfo[] = [
-    { value: 9, label: "기수", suffix: "기", from: 1, emoji: "🚀", variant: "accent" },
-    { value: 150, label: "아이디어 제출", suffix: "+", emoji: "💡", variant: "accent" },
-    { value: 200, label: "수료생", suffix: "+", emoji: "🎓", variant: "accent" },
-    { value: 0, label: "중앙동아리연합회 선정", suffix: "", isStatic: true, staticText: "경희대학교\n2025 최우수 동아리", emoji: "🏆", variant: "primary" },
+    { value: 9, label: "기수", suffix: "기", from: 1, variant: "accent" },
+    { value: 150, label: "아이디어 제출", suffix: "+", variant: "accent" },
+    { value: 200, label: "수료생", suffix: "+", variant: "accent" },
+    { value: 0, label: "중앙동아리연합회 선정", suffix: "", isStatic: true, staticText: "경희대학교\n2025 최우수 동아리", variant: "primary" },
   ];
 
   return (
