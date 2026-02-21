@@ -175,7 +175,7 @@ export const HEADER_CONFIG = {
     { label: "후원", href: ROUTES.sponsor },
   ] as NavLink[],
   applyButton: {
-    desktop: "지원하기",
+    desktop: "리크루팅",
     mobile: "Apply",
   },
   scrollThreshold: 50,
