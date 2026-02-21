@@ -99,7 +99,7 @@ const Header = () => {
               ))}
               <Link
                 to={ROUTES.recruiting}
-                className={HEADER_STYLES.button.desktop.apply}
+                className={HEADER_STYLES.nav.desktop.link}
               >
                 {HEADER_CONFIG.applyButton.desktop}
               </Link>
