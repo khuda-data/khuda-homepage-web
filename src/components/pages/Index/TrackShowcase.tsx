@@ -157,18 +157,6 @@ const TrackShowcase = () => {
               >
                 {/* 앞면 */}
                 <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-blue-300/50 text-gray-900 overflow-hidden">
-                  {/* NLP 카드 배경 이미지 */}
-                  {track.id === "nlp" && (
-                    <>
-                      <img
-                        src="/images/nlp.jpg"
-                        alt="NLP"
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-blue-300/30" />
-                    </>
-                  )}
-                  
                   <div className="relative z-10">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">
                       {track.label}
