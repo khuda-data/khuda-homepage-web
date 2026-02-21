@@ -11,7 +11,7 @@ const YBContent = () => {
       {/* 수료 조건 */}
       <div className="space-y-4 sm:space-y-5 mb-5 sm:mb-6">
         {APPLICATION_FORM_CONFIG.ybCompletionRequirements.requirements.map((req, index) => (
-          <div key={index} className="border-l-2 border-blue-600/60 pl-4 sm:pl-5 py-1">
+          <div key={index} className="border-l-2 border-primary/60 pl-4 sm:pl-5 py-1">
             <h4 className="text-sm sm:text-[15px] font-semibold text-foreground mb-2">{req.title}</h4>
             {req.period && (
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">기간: {req.period}</p>
@@ -31,7 +31,7 @@ const YBContent = () => {
         </h4>
         <div className="space-y-4 sm:space-y-5">
           {APPLICATION_FORM_CONFIG.ybCompletionRequirements.benefits.items.map((item, index) => (
-            <div key={index} className="border-l-2 border-blue-600/40 pl-4 sm:pl-5 py-1">
+            <div key={index} className="border-l-2 border-primary/40 pl-4 sm:pl-5 py-1">
               <h5 className="text-xs sm:text-sm font-semibold text-foreground mb-2">{item.title}</h5>
               <p className="text-xs sm:text-sm text-foreground leading-relaxed mb-2">{item.description}</p>
               {item.benefit && (

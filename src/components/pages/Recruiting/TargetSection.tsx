@@ -16,7 +16,11 @@ const TargetSection = memo(() => {
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
-      <SectionHeader label={RECRUITMENT_INFO.sectionLabel} title={RECRUITMENT_INFO.sectionTitle} />
+      <SectionHeader
+        label={RECRUITMENT_INFO.sectionLabel}
+        title={RECRUITMENT_INFO.sectionTitle}
+        labelClassName="text-primary"
+      />
 
       <TargetCards />
     </div>

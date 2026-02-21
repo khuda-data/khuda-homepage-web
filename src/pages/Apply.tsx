@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
-import { ApplicationHeader } from "@/components/pages/Apply/ApplicationHeader";
+import Header from "@/components/shared/Header";
+import PageHeroSection from "@/components/shared/PageHeroSection";
+import Footer from "@/components/shared/Footer";
 import { ScheduleCard } from "@/components/pages/Apply/ScheduleCard";
 import { FAQCard } from "@/components/pages/Apply/FAQCard";
 import { ApplicationTypeSelector } from "@/components/pages/Apply/ApplicationTypeSelector";
@@ -69,23 +71,18 @@ const Apply = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <ApplicationHeader />
+    <div className="min-h-screen bg-background text-foreground">
+      <Header />
 
-      <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">
-        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
-          <div className="text-center space-y-4 sm:space-y-6 mb-8 sm:mb-12">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-              <div className="space-y-2 sm:space-y-3">
-                {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
-                  <div key={i}>{line}</div>
-                ))}
-              </div>
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
-              {APPLICATION_FORM_CONFIG.pageDescription}
-            </p>
-          </div>
+      <main>
+        <PageHeroSection
+          title={APPLICATION_FORM_CONFIG.pageTitle.replace(/\n/g, " ")}
+          subtitle={APPLICATION_FORM_CONFIG.pageDescription}
+          backgroundImage="/images/hello.png"
+        />
+
+        <section className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">
+          <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
 
           <ScheduleCard />
 
@@ -146,8 +143,11 @@ const Apply = () => {
               </Button>
             </div>
           </form>
-        </div>
+          </div>
+        </section>
       </main>
+
+      <Footer />
     </div>
   );
 };

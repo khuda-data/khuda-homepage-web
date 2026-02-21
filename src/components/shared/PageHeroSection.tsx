@@ -1,13 +1,15 @@
 import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 interface PageHeroSectionProps {
   title: string;
   subtitle: string;
   backgroundImage?: string;
   heroImage?: string;
+  actions?: ReactNode;
 }
 
-const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage }: PageHeroSectionProps) => {
+const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage, actions }: PageHeroSectionProps) => {
   return (
     <section className="relative overflow-hidden bg-black">
       {/* 배경 이미지 또는 그라데이션 배경 */}
@@ -23,7 +25,7 @@ const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage }: PageHe
         ) : (
           <>
             <div className="absolute inset-0 bg-gradient-to-br from-red-800/70 via-red-700/60 to-blue-800/70" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
             {/* 빨강 글로우 효과 */}
             <div className="absolute top-0 right-1/4 w-[300px] h-[200px] bg-red-600/25 rounded-full blur-[80px]" />
             {/* 파랑 글로우 효과 */}
@@ -45,6 +47,11 @@ const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage }: PageHe
             <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left">
               {subtitle}
             </p>
+            {actions && (
+              <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-3">
+                {actions}
+              </div>
+            )}
           </div>
           
           {/* 오른쪽: 히어로 이미지 */}

@@ -30,7 +30,7 @@ const projectsData: Project[] = [
     longDescription:
       "배달 플랫폼 성장으로 이륜차 운행이 급증하며 관련 사고가 사회적 문제로 대두되고 있습니다. 사고 다발지 데이터를 바탕으로 이륜차 사고 위험 지수를 개발하고, 사고를 효과적으로 줄일 수 있는 단속 및 안전 인프라 설치 우선순위를 제안합니다. 잠재적 위험 지역을 찾아내어 선제적으로 예방할 수 있는 데이터 기반 접근방식의 솔루션을 제공합니다.",
     generation: "8기",
-    track: "ML 풀코스",
+    track: "ML 심화",
     thumbnail: "/images/projects/motorcycle-safety.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-MLFull-RIDER",
@@ -41,8 +41,8 @@ const projectsData: Project[] = [
     longDescription:
       "수원시 카드 소비 데이터를 활용하여 기존 복지·금융 지표로는 포착하기 어려운 소비 취약 집단을 식별하고, 데이터 기반 맞춤형 정책 방향을 제안합니다. Isolation Forest와 군집 분석을 결합한 2단계 분석 프레임워크를 적용해 서로 다른 원인을 가진 소비 취약군을 도출하였습니다.",
     generation: "8기",
-    track: "ML 풀코스",
-    thumbnail: "https://picsum.photos/seed/alchemy/600/400",
+    track: "ML 심화",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-MLFull-CardBasedSugg",
   },
@@ -53,7 +53,7 @@ const projectsData: Project[] = [
       "CCTV 영상에서 장애인 전용 주차구역에 주차된 차량에서 하차하는 사람의 보행 특성(Gait)을 분석하여, 보행상 장애 이용자가 실제로 탑승했을 가능성을 비식별적으로 추정하는 컴퓨터 비전 기반 프로토타입 시스템입니다. YOLO 기반 객체 탐지와 BoT-SORT 기반 Multi-object Tracking을 결합하였습니다.",
     generation: "8기",
     track: "CV",
-    thumbnail: "https://picsum.photos/seed/parking/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-CV-DisabledParkingGuard",
   },
@@ -64,7 +64,7 @@ const projectsData: Project[] = [
       "ResNet-34의 Grad-CAM 시각화 결과를 Gemini API가 분석하여, 기존 딥러닝 모델이 놓치던 미세 결함(False Negative)을 언어적 추론으로 찾아내는 하이브리드 검출 시스템입니다. 재학습 없이도 미검출 결함 탐지율을 개선합니다.",
     generation: "8기",
     track: "데이터비즈니스",
-    thumbnail: "https://picsum.photos/seed/refocus/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DB-Refocus",
   },
@@ -75,7 +75,7 @@ const projectsData: Project[] = [
       "실시간 동시 접속자 수(PCCU)와 매칭 필터 알고리즘을 결합하여 게임 서비스 상태 및 유저 체감 품질을 지표화한 데이터 엔지니어링 프로젝트입니다. Steam API와 커뮤니티 여론 데이터를 수집하고, 독자적인 '적합 유저 유입 속도' 수식을 적용하여 유저에게 최적의 플레이 타이밍을 제안합니다.",
     generation: "8기",
     track: "데이터엔지니어링",
-    thumbnail: "https://picsum.photos/seed/steamgci/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DE-SteamQueue",
   },
@@ -86,7 +86,7 @@ const projectsData: Project[] = [
       "자소서 텍스트에서 검증 가능한 주장(Claim)을 추출하고, 즉석 후속 질문을 통해 검증하는 시스템입니다. BERT 계열 모델로 Claim을 파싱하고 LLM으로 질문을 생성하며, FastAPI + PostgreSQL + FAISS로 전체 파이프라인을 구축하였습니다.",
     generation: "8기",
     track: "NLP",
-    thumbnail: "https://picsum.photos/seed/coverletter/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-NLP-CoverLetter",
   },
@@ -97,7 +97,7 @@ const projectsData: Project[] = [
       "사이버펑크 2077의 출시 전후 여론 변화를 시뮬레이션하기 위해, 3가지 다른 방법론을 비교 분석하는 프로젝트입니다. 공통된 평가 스크립트와 공통 페르소나 모듈을 사용하여 실험의 일관성을 유지하며, 에이전트 기반 시뮬레이션을 통해 시간에 따른 동적 변화를 모델링합니다.",
     generation: "8기",
     track: "NLP",
-    thumbnail: "https://picsum.photos/seed/persona/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-NLP-Persona",
   },
@@ -108,7 +108,7 @@ const projectsData: Project[] = [
       "국회 회의록 요약, 그림 기반 문장 생성, 한국어 일상 대화 연결의 3가지 NLP 태스크를 수행하는 프로젝트입니다. 각 팀이 독립적으로 개발 브랜치에서 작업하며, 공통된 평가 프레임워크를 통해 성능을 비교합니다.",
     generation: "8기",
     track: "NLP",
-    thumbnail: "https://picsum.photos/seed/malpyeong/600/400",
+    thumbnail: "",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-NLP-malpyeong",
   },
@@ -119,14 +119,14 @@ const projectsData: Project[] = [
 // ============================================================================
 
 const generations = ["모든 기수", "9기", "8기", "7기", "6기", "5기", "4기", "3기", "2기", "1기"];
-const trackOptions = ["모든 트랙", "ML 풀코스", "CV", "NLP", "데이터비즈니스", "데이터엔지니어링"];
+const trackOptions = ["모든 트랙", "ML 심화", "CV", "NLP", "데이터비즈니스", "데이터엔지니어링"];
 
 // ============================================================================
 // 트랙 색상 매핑
 // ============================================================================
 
 const trackAccentMap: Record<string, string> = {
-  "ML 풀코스": "text-blue-500",
+  "ML 심화": "text-blue-500",
   CV: "text-blue-500",
   NLP: "text-blue-500",
   "데이터비즈니스": "text-blue-500",
@@ -195,18 +195,26 @@ const SlideCarousel = ({ slides, title }: { slides: string[]; title: string }) =
 
   if (slides.length === 0) return null;
 
+  const currentSlide = slides[currentIndex];
+
   return (
     <div className="relative group/carousel">
-      <div className="relative aspect-[2/1] rounded-lg overflow-hidden bg-muted">
-        <img
-          src={slides[currentIndex]}
-          alt={`${title} ${currentIndex + 1}`}
-          className="w-full h-full object-cover"
-        />
-        {slides.length > 1 && (
-          <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/60 text-xs text-white/80 backdrop-blur-sm">
-            {currentIndex + 1} / {slides.length}
-          </div>
+      <div className="relative aspect-[2/1] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+        {currentSlide ? (
+          <>
+            <img
+              src={currentSlide}
+              alt={`${title} ${currentIndex + 1}`}
+              className="w-full h-full object-cover"
+            />
+            {slides.length > 1 && (
+              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/60 text-xs text-white/80 backdrop-blur-sm">
+                {currentIndex + 1} / {slides.length}
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="text-muted-foreground text-sm">이미지 준비중</p>
         )}
       </div>
       {/* 이전/다음 버튼 */}
@@ -344,14 +352,20 @@ const ProjectCard = ({
       className="group rounded-xl sm:rounded-2xl bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-lg cursor-pointer"
     >
       {/* 썸네일 이미지 */}
-      <div className="relative aspect-[16/10] overflow-hidden">
-        <img
-          src={project.thumbnail}
-          alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="relative aspect-[16/10] overflow-hidden bg-muted flex items-center justify-center">
+        {project.thumbnail ? (
+          <>
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </>
+        ) : (
+          <p className="text-muted-foreground text-sm">이미지 준비중</p>
+        )}
       </div>
 
       {/* 카드 콘텐츠 */}

@@ -9,8 +9,14 @@ import { FAQ_DATA, FAQ_MESSAGES, SECTION_STYLES, FAQ_STYLES, SCROLL_ANIMATION_CO
 import { cn } from "@/lib/utils";
 import SectionHeader from "@/components/shared/SectionHeader";
 
-const FAQSection = () => {
+interface FAQSectionProps {
+  headerLabelClassName?: string;
+  accentClassName?: string;
+}
+
+const FAQSection = ({ headerLabelClassName, accentClassName }: FAQSectionProps) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
+  const qPrefixColorClassName = accentClassName ?? "text-blue-600";
 
   return (
     <div 
@@ -25,7 +31,7 @@ const FAQSection = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
           {/* 헤더 */}
           <div className="mb-6 sm:mb-8 md:mb-10">
-            <SectionHeader label="FAQ" title={FAQ_MESSAGES.title} />
+            <SectionHeader label="FAQ" title={FAQ_MESSAGES.title} labelClassName={headerLabelClassName} />
           </div>
           
           <Accordion 
@@ -46,7 +52,9 @@ const FAQSection = () => {
                   "hover:bg-gray-200"
                 )}>
                   <div className={FAQ_STYLES.accordion.trigger.iconContainer}>
-                    <span className="text-blue-600 font-bold flex-shrink-0 text-xs sm:text-sm md:text-base">Q.</span>
+                    <span className={cn(qPrefixColorClassName, "font-bold flex-shrink-0 text-xs sm:text-sm md:text-base")}>
+                      Q.
+                    </span>
                     <span className="break-words">{faq.question}</span>
                   </div>
                 </AccordionTrigger>

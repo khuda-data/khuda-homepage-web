@@ -76,7 +76,7 @@ const Header = () => {
       <header
         className={cn(
           HEADER_STYLES.header.base,
-          isMobileMenuOpen ? "bg-black" : HEADER_STYLES.header.scrolled
+          HEADER_STYLES.header.scrolled
         )}
       >
         <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
@@ -106,7 +106,11 @@ const Header = () => {
             </nav>
 
             <button
-              className={cn(HEADER_STYLES.button.mobile.menuToggle, "ml-auto")}
+              className={cn(
+                HEADER_STYLES.button.mobile.menuToggle,
+                "ml-auto",
+                "text-black"
+              )}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={HEADER_STYLES.icon.size} /> : <Menu size={HEADER_STYLES.icon.size} />}
@@ -135,7 +139,7 @@ const Header = () => {
             <Link
               to={ROUTES.recruiting}
               onClick={() => handleNavClick(ROUTES.recruiting)}
-              className="mt-4 px-8 py-2 bg-transparent text-white text-xl font-bold rounded-md border-2 border-primary hover:bg-primary transition-all duration-300 ease-out"
+              className="mt-4 px-8 py-2 bg-transparent text-white text-xl font-bold rounded-md hover:bg-primary transition-all duration-300 ease-out"
             >
               {HEADER_CONFIG.applyButton.desktop}
             </Link>

@@ -82,14 +82,14 @@ const SponsorSection = () => {
     >
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 md:px-12 relative z-10">
         <div>
-          {/* 후원 문의 버튼 */}
-          <div className="mb-8 sm:mb-12">
-            <SponsorInquiryButton />
+          {/* 후원 문의 버튼 - 로고 그리드 상단에 배치 (카드 형식) */}
+          <div className="mb-8 sm:mb-10 md:mb-12 px-8 sm:px-12 md:px-16">
+            <SponsorInquiryButton variant="card" className="px-6 sm:px-8 md:px-10 py-4 sm:py-5" />
           </div>
 
           {/* 후원사 그리드 */}
           {sortedSponsors.length > 0 ? (
-            <div className="relative mb-8 sm:mb-12 md:mb-16">
+            <div className="relative mb-8 sm:mb-12 md:mb-16 px-8 sm:px-12 md:px-16">
               <NavigationArrow
                 direction="left"
                 onClick={handlePrev}
@@ -102,7 +102,7 @@ const SponsorSection = () => {
               />
 
               {/* 후원사 그리드 */}
-              <div className="relative overflow-hidden px-8 sm:px-0">
+              <div className="relative overflow-hidden">
                 <div
                   className={cn(
                     "grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8 transition-transform duration-300 ease-in-out",

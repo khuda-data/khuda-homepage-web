@@ -30,7 +30,7 @@ const ExecutiveProfileSection = () => {
   };
 
   return (
-    <section className="relative bg-background pt-4 sm:pt-6 md:pt-8 pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+    <section className="relative bg-background pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-16 sm:pb-20 md:pb-24 lg:pb-28">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div
           ref={ref}
@@ -41,7 +41,7 @@ const ExecutiveProfileSection = () => {
         >
           {/* 섹션 제목 */}
           <div className="mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 leading-relaxed text-center">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight text-center px-2">
               KHUDA를 이끌어가는 운영진을 소개합니다
             </h2>
           </div>
@@ -52,14 +52,14 @@ const ExecutiveProfileSection = () => {
               {currentGeneration.generation}
             </h3>
             <div className="px-4 sm:px-6 md:px-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-6xl mx-auto w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
               {currentGeneration.executives.map((executive, index) => (
                 <div
                   key={index}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 md:p-6 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
+                  className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
                 >
                   {/* 프로필 이미지 영역 */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
                     {executive.image ? (
                       <img
                         src={executive.image}
@@ -68,30 +68,30 @@ const ExecutiveProfileSection = () => {
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-                        <User className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+                        <User className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                       </div>
                     )}
                   </div>
 
                   {/* 역할과 이름 */}
-                  <div className="text-center mb-3 sm:mb-4">
-                    <p className="text-xs sm:text-sm md:text-base text-gray-600 font-medium mb-1">
+                  <div className="text-center mb-2 sm:mb-3">
+                    <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 font-medium mb-0.5 sm:mb-1">
                       {executive.role === "트랙장" && executive.department
                         ? `${executive.department} ${executive.role}`
                         : executive.department && executive.role !== "트랙장"
                         ? `${executive.role} · ${executive.department} 트랙장`
                         : executive.role}
                     </p>
-                    <h4 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">
+                    <h4 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900">
                       {executive.name}
                     </h4>
                   </div>
 
                   {/* 소속 정보 */}
                   {(executive.affiliation || executive.department) && (
-                    <div className="text-center mb-3 sm:mb-4 flex items-center justify-center gap-1.5">
-                      <GraduationCap className="w-4 h-4 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0" />
-                      <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
+                      <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
+                      <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
                         {executive.affiliation || executive.department}
                       </p>
                     </div>
@@ -99,13 +99,13 @@ const ExecutiveProfileSection = () => {
 
                   {/* 이메일 링크 */}
                   {executive.email && (
-                    <div className="flex items-center justify-center pt-3 sm:pt-4 border-t border-gray-100 mt-auto">
+                    <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
                       <a
                         href={`mailto:${executive.email}`}
                         className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
                         aria-label="이메일"
                       >
-                        <Mail className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                        <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </a>
                     </div>
                   )}
@@ -150,14 +150,14 @@ const ExecutiveProfileSection = () => {
                       )}
                     >
                       <div className="px-4 sm:px-6 md:px-8 py-5 sm:py-6 md:py-8 border-t border-gray-200 bg-gray-50">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-6xl mx-auto w-full">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
                           {generation.executives.map((executive, index) => (
                             <div
                               key={index}
-                              className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 md:p-6 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
+                              className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
                             >
                               {/* 프로필 이미지 영역 */}
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
+                              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
                                 {executive.image ? (
                                   <img
                                     src={executive.image}
@@ -166,30 +166,30 @@ const ExecutiveProfileSection = () => {
                                   />
                                 ) : (
                                   <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-                                    <User className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
+                                    <User className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
                                   </div>
                                 )}
                               </div>
 
                               {/* 역할과 이름 */}
-                              <div className="text-center mb-3 sm:mb-4">
-                                <p className="text-xs sm:text-sm md:text-base text-gray-600 font-medium mb-1">
+                              <div className="text-center mb-2 sm:mb-3">
+                                <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 font-medium mb-0.5 sm:mb-1">
                                   {executive.role === "트랙장" && executive.department
                                     ? `${executive.department} ${executive.role}`
                                     : executive.department && executive.role !== "트랙장"
                                     ? `${executive.role} · ${executive.department} 트랙장`
                                     : executive.role}
                                 </p>
-                                <h4 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">
+                                <h4 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900">
                                   {executive.name}
                                 </h4>
                               </div>
 
                               {/* 소속 정보 */}
                               {(executive.affiliation || executive.department) && (
-                                <div className="text-center mb-3 sm:mb-4 flex items-center justify-center gap-1.5">
-                                  <GraduationCap className="w-4 h-4 sm:w-4 sm:h-4 text-gray-400 flex-shrink-0" />
-                                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                                <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
+                                  <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
+                                  <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
                                     {executive.affiliation || executive.department}
                                   </p>
                                 </div>
@@ -197,13 +197,13 @@ const ExecutiveProfileSection = () => {
 
                               {/* 이메일 링크 */}
                               {executive.email && (
-                                <div className="flex items-center justify-center pt-3 sm:pt-4 border-t border-gray-100 mt-auto">
+                                <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
                                   <a
                                     href={`mailto:${executive.email}`}
                                     className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
                                     aria-label="이메일"
                                   >
-                                    <Mail className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                                    <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                   </a>
                                 </div>
                               )}
