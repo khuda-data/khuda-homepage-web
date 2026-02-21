@@ -56,7 +56,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 <br />
                 <span
                   key={activeIndex}
-                  className="inline-block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-blue-700 animate-fade-up -mt-1 sm:-mt-2"
+                  className="inline-block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-primary animate-fade-up -mt-1 sm:-mt-2"
                 >
                   {currentFeature.title}
                 </span>

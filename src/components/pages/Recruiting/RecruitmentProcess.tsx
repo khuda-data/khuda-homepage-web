@@ -3,7 +3,6 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { getStepStatus, type ProcessStep } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
 import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, APPLICATION_FORM_CONFIG, SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
-import { Info } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 
 // 프로세스 스텝 배열 (상수)
@@ -34,39 +33,65 @@ const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
-// 단일 색상
-const STEP_COLOR = "bg-blue-500";
-
-// 안내 메시지 가져오기
-const getNoticeMessage = (step: ProcessStep): string | null => {
-  const noticeMap: Record<number, string> = {
-    1: APPLICATION_FORM_CONFIG.applicationNotice.description,
-    2: APPLICATION_FORM_CONFIG.announcementNotice.description,
-    3: APPLICATION_FORM_CONFIG.interviewNotice.description,
-    4: RECRUITMENT_SCHEDULE.final.ot,
-  };
-  return noticeMap[step.step] || null;
+// 각 원의 그라데이션 배경 스타일 (왼쪽에서 오른쪽으로 파란색 → 보라색 → 빨간색, 파란색 비율 3:1)
+// 어두운 색상 사용, 각 원 내부에 그라데이션 적용
+const getStepGradient = (index: number): string => {
+  const gradients = [
+    "linear-gradient(to right, rgb(30 64 175), rgb(30 64 175))", // 첫 번째: 어두운 파란색 (blue-800, 단색)
+    "linear-gradient(to right, rgb(30 64 175), rgb(88 28 135))", // 두 번째: 어두운 파란색 → 어두운 보라색
+    "linear-gradient(to right, rgb(88 28 135), rgb(127 29 29))", // 세 번째: 어두운 보라색 → 어두운 붉은색
+    "linear-gradient(to right, rgb(127 29 29), rgb(185 28 28))", // 네 번째: 어두운 붉은색 → 어두운 빨간색
+  ];
+  return gradients[index] || gradients[gradients.length - 1];
 };
 
-// 날짜 포맷 압축 (원 안에서 보기 좋게)
+// 날짜 포맷 압축 (원 안에서 보기 좋게, 통일된 형식)
 const formatDateForCircle = (fullDate: string): string[] => {
+  const result: string[] = [];
+  
   // 날짜 범위 처리: "2025년 12월 31일 (수) ~ 2026년 1월 4일 (일) 23:59"
   if (fullDate.includes(" ~ ")) {
     const [startPart, endPart] = fullDate.split(" ~ ");
-    const startDate = startPart
-      .replace(/년/g, ".")
-      .replace(/월/g, ".")
-      .replace(/일.*$/, "");
-    const endDate = endPart
-      .replace(/년/g, ".")
-      .replace(/월/g, ".")
-      .replace(/일.*$/, "")
-      .trim();
-    const timePart = endPart.match(/\d{1,2}:\d{2}/)?.[0];
-    if (timePart) {
-      return [`${startDate} ~ ${endDate}`, timePart];
+    
+    // 시작 날짜 파싱
+    const startMatch = startPart.match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일 \(([^)]+)\)/);
+    if (startMatch) {
+      const [, year, month, day, weekday] = startMatch;
+      const startDate = `${year}.${month}.${day} (${weekday})`;
+      
+      // 종료 날짜 파싱
+      const endMatch = endPart.match(/(\d{4})년 (\d{1,2})월 (\d{1,2})일 \(([^)]+)\)/) || 
+                       endPart.match(/(\d{1,2})월 (\d{1,2})일 \(([^)]+)\)/);
+      
+      if (endMatch) {
+        let endDate: string;
+        if (endMatch.length === 5) {
+          // 연도 포함
+          const [, year, month, day, weekday] = endMatch;
+          endDate = `${year}.${month}.${day} (${weekday})`;
+        } else {
+          // 연도 없음 (같은 연도)
+          const [, month, day, weekday] = endMatch;
+          const year = startMatch[1]; // 시작 연도 사용
+          endDate = `${year}.${month}.${day} (${weekday})`;
+        }
+        
+        result.push(`${startDate} ~ ${endDate}`);
+        
+        // 시간 정보 추출
+        const timeMatch = endPart.match(/(\d{1,2}:\d{2})/);
+        if (timeMatch) {
+          result.push(timeMatch[1]);
+        }
+        
+        // 추가 정보 (온라인 비대면 등)
+        if (endPart.includes("온라인 비대면")) {
+          result.push("온라인 비대면");
+        }
+      }
     }
-    return [`${startDate} ~ ${endDate}`];
+    
+    if (result.length > 0) return result;
   }
   
   // 단일 날짜 처리
@@ -74,25 +99,25 @@ const formatDateForCircle = (fullDate: string): string[] => {
   if (dateMatch) {
     const [, year, month, day, weekday] = dateMatch;
     const dateStr = `${year}.${month}.${day} (${weekday})`;
-    const timeMatch = fullDate.match(/(\d{1,2}:\d{2})/);
-    const extraInfo = fullDate.includes("개별 안내") 
-      ? fullDate.match(/18:00 이후 개별 안내/)?.[0] || "개별 안내"
-      : fullDate.includes("온라인") 
-      ? "온라인 비대면"
-      : "";
+    result.push(dateStr);
     
-    if (timeMatch && extraInfo) {
-      return [dateStr, extraInfo];
-    }
+    // 시간 정보 추출
+    const timeMatch = fullDate.match(/(\d{1,2}:\d{2})/);
     if (timeMatch) {
-      return [dateStr, timeMatch[1]];
+      result.push(timeMatch[1]);
     }
-    if (extraInfo) {
-      return [dateStr, extraInfo];
+    
+    // 추가 정보 처리
+    if (fullDate.includes("개별 안내")) {
+      result.push("개별 안내");
+    } else if (fullDate.includes("온라인 비대면")) {
+      result.push("온라인 비대면");
     }
-    return [dateStr];
+    
+    return result;
   }
   
+  // 파싱 실패 시 원본 반환
   return [fullDate];
 };
 
@@ -106,19 +131,23 @@ interface StepCircleProps {
 }
 
 const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: StepCircleProps) => {
-  const noticeMessage = getNoticeMessage(step);
   const dateParts = formatDateForCircle(step.fullDate);
+  const gradientBg = getStepGradient(index);
+  const ringColor = index < 3 ? "ring-blue-800/45" : "ring-red-700/45";
 
   return (
     <button
       onClick={onToggle}
       className={cn(
         "rounded-full flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden",
-        STEP_COLOR,
-        isActive || isCompleted ? "shadow-lg shadow-blue-500/20" : "opacity-90",
-        isOpen && "ring-4 ring-blue-500/30"
+        isActive || isCompleted ? "" : "opacity-90",
+        isOpen && `ring-4 ${ringColor}`
       )}
-      style={{ width: "var(--circle-size)", height: "var(--circle-size)" }}
+      style={{ 
+        width: "var(--circle-size)", 
+        height: "var(--circle-size)",
+        background: gradientBg
+      }}
       aria-expanded={isOpen}
     >
       {/* 닫힌 상태 */}
@@ -158,22 +187,6 @@ const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: St
             </p>
           ))}
         </div>
-        {noticeMessage && (
-          <div
-            className={cn(
-              "pt-2.5 mt-2.5 border-t border-white/30 transition-all duration-300",
-              isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-            )}
-            style={{ transitionDelay: isOpen ? `${dateParts.length * 50}ms` : "0ms" }}
-          >
-            <div className="flex items-start gap-1.5 justify-center">
-              <Info className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/80 mt-0.5 shrink-0" />
-              <p className="text-[9px] sm:text-[10px] text-white/80 leading-tight text-center">
-                {noticeMessage}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </button>
   );
@@ -215,18 +228,19 @@ const RecruitmentProcess = () => {
       )}
     >
       {/* 헤더 */}
-      <SectionHeader label="Step" title="지원 절차" />
+      <SectionHeader label="Step" title="지원 절차" labelClassName="text-primary" />
 
       {/* 데스크톱 버전 */}
       <div className="hidden md:block max-w-7xl mx-auto">
         <div className="relative" style={circleStyle}>
-          {/* 연결선 */}
+          {/* 연결선 - 그라데이션 (어두운 파란색 → 어두운 빨간색, 파란색 비율 3:1) */}
           <div
-            className="absolute h-0.5 bg-blue-500/30 -z-10"
+            className="absolute h-0.5 -z-10"
             style={{
               top: "calc(var(--circle-size) / 2)",
               left: "calc(var(--circle-size) / 2)",
               right: "calc(var(--circle-size) / 2)",
+              background: "linear-gradient(to right, rgb(30 64 175 / 0.45) 0%, rgb(30 64 175 / 0.45) 33%, rgb(88 28 135 / 0.45) 66%, rgb(127 29 29 / 0.45) 100%)",
             }}
           />
 
@@ -266,7 +280,16 @@ const RecruitmentProcess = () => {
                 onToggle={() => toggleStep(step.step)}
               />
                   {index < PROCESS_STEPS.length - 1 && (
-                <div className="w-0.5 h-8 bg-blue-500/30 mt-4" />
+                <div 
+                  className="w-0.5 h-8 mt-4"
+                  style={{
+                    background: index === 0 
+                      ? "linear-gradient(to bottom, rgb(30 64 175 / 0.45), rgb(30 64 175 / 0.45))"
+                      : index === 1
+                      ? "linear-gradient(to bottom, rgb(30 64 175 / 0.45), rgb(88 28 135 / 0.45))"
+                      : "linear-gradient(to bottom, rgb(88 28 135 / 0.45), rgb(127 29 29 / 0.45))"
+                  }}
+                />
                   )}
               </div>
             );

@@ -9,7 +9,7 @@ interface CircularTextWithLogoProps {
 
 const CircularTextWithLogo = ({
   text = "CONNECTION*PASSION*VALUE*",
-  spinDuration = 20,
+  spinDuration = 80,
   onHover = "speedUp",
   className = "",
 }: CircularTextWithLogoProps) => {

@@ -108,7 +108,7 @@ const TrackShowcase = () => {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
                 IN
                 <br />
-                <span className="text-blue-700">KHUDA</span>
+                <span className="text-primary">KHUDA</span>
               </h2>
               <Link
                 to={ROUTES.activities}
@@ -156,19 +156,7 @@ const TrackShowcase = () => {
                 )}
               >
                 {/* 앞면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-blue-300/50 text-gray-900 overflow-hidden">
-                  {/* NLP 카드 배경 이미지 */}
-                  {track.id === "nlp" && (
-                    <>
-                      <img
-                        src="/images/nlp.jpg"
-                        alt="NLP"
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-blue-300/30" />
-                    </>
-                  )}
-                  
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-blue-200/70 text-gray-900 overflow-hidden">
                   <div className="relative z-10">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">
                       {track.label}
@@ -189,7 +177,7 @@ const TrackShowcase = () => {
                 </div>
 
                 {/* 뒷면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] [transform:rotateY(180deg)] bg-blue-300/50 text-gray-900 overflow-hidden">
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] [transform:rotateY(180deg)] bg-blue-200/70 text-gray-900 overflow-hidden">
                   <div className="min-h-0 overflow-hidden">
                     <h3 className="text-xs sm:text-base font-bold mb-1 sm:mb-2">
                       {track.label}

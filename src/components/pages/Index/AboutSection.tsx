@@ -50,10 +50,29 @@ const AboutSection = () => {
   ];
 
   const achievements: AchievementInfo[] = [
-    { value: 9, label: "기수", suffix: "기", from: 1, variant: "accent" },
-    { value: 150, label: "아이디어 제출", suffix: "+", variant: "accent" },
-    { value: 200, label: "수료생", suffix: "+", variant: "accent" },
-    { value: 0, label: "중앙동아리연합회 선정", suffix: "", isStatic: true, staticText: "경희대학교\n2025 최우수 동아리", variant: "primary" },
+    { 
+      value: 9, 
+      label: "기수", 
+      suffix: "기", 
+      from: 1
+    },
+    { 
+      value: 0, 
+      label: "중앙동아리연합회 선정", 
+      suffix: "", 
+      isStatic: true, 
+      staticText: "경희대학교\n2025 최우수 동아리"
+    },
+    { 
+      value: 200, 
+      label: "수료생", 
+      suffix: "+"
+    },
+    { 
+      value: 150, 
+      label: "아이디어 제출", 
+      suffix: "+"
+    },
   ];
 
   return (

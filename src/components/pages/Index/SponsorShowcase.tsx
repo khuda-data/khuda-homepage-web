@@ -39,18 +39,28 @@ const SponsorShowcase = () => {
     >
       {/* 헤더 */}
       <div className="mb-8 sm:mb-10 md:mb-12">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 md:gap-6">
           <div className="flex-1">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
-              SPONSOR
-            </h2>
+            <div className="flex items-start gap-2 sm:gap-0">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
+                SPONSOR
+              </h2>
+              {/* 모바일에서만 제목 옆에 화살표 표시 */}
+              <Link
+                to={ROUTES.sponsor}
+                className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group sm:hidden mt-0.5"
+              >
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-900 group-hover:text-white transition-colors duration-300" />
+              </Link>
+            </div>
             <p className="mt-3 sm:mt-4 text-sm sm:text-base text-foreground leading-relaxed max-w-xl">
               KHUDA와 새로운 가치를 만들어갈 후원 및 협업 문의, 언제든 기다리고 있습니다.
             </p>
           </div>
+          {/* 데스크톱에서만 오른쪽에 화살표 표시 */}
           <Link
             to={ROUTES.sponsor}
-            className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group mt-1 sm:mt-3 self-start"
+            className="hidden sm:flex flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-gray-300 items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group mt-2 sm:mt-3 self-start"
           >
             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 group-hover:text-white transition-colors duration-300" />
           </Link>

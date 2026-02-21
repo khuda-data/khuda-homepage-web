@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { trackPageView } from "./utils/analytics";
+import ScrollToTopButton from "./components/shared/ScrollToTopButton";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Activities from "./pages/Activities";
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/application-result" element={<ApplicationResult />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ScrollToTopButton />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
