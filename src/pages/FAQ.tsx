@@ -1,5 +1,5 @@
 import Header from "@/components/shared/Header";
-import FAQSection from "@/components/shared/FAQSection";
+import FAQSection from "@/components/pages/Recruiting/FAQSection";
 import Footer from "@/components/shared/Footer";
 
 const FAQ = () => {

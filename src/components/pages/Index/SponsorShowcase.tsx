@@ -1,33 +1,17 @@
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG, SPONSOR_DATA, ROUTES } from "@/lib/constants";
-import { useMemo } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import LogoLoop from "@/components/pages/Sponsor/LogoLoop";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
   rootMargin: "0px 0px -80px 0px",
 };
 
+// 로고 슬롯 6개 (PC 모바일 통일)
+const SPONSOR_SLOTS = Array.from({ length: 6 });
+
 const SponsorShowcase = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-  const isMobile = useIsMobile();
-
-  // 모든 기수의 후원사 로고를 수집 (LogoLoop용)
-  const sponsorLogos = useMemo(() => {
-    return SPONSOR_DATA.flatMap((generationData) =>
-      generationData.sponsors
-        .filter((sponsor) => sponsor.logo)
-        .map((sponsor) => ({
-          src: sponsor.logo!,
-          alt: sponsor.name,
-          href: sponsor.website,
-        }))
-    );
-  }, []);
 
   return (
     <div
@@ -37,54 +21,29 @@ const SponsorShowcase = () => {
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       )}
     >
-      {/* 헤더 */}
-      <div className="mb-8 sm:mb-10 md:mb-12">
-        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 md:gap-6">
-          <div className="flex-1">
-            <div className="flex items-start gap-2 sm:gap-0">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
-                SPONSOR
-              </h2>
-              {/* 모바일에서만 제목 옆에 화살표 표시 */}
-              <Link
-                to={ROUTES.sponsor}
-                className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group sm:hidden mt-0.5"
-              >
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-900 group-hover:text-white transition-colors duration-300" />
-              </Link>
-            </div>
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-foreground leading-relaxed max-w-xl">
-              KHUDA와 새로운 가치를 만들어갈 후원 및 협업 문의, 언제든 기다리고 있습니다.
-            </p>
+      <div className="flex flex-col lg:flex-row lg:items-start gap-6 sm:gap-8 lg:gap-12">
+        {/* 왼쪽: 제목 + 설명 */}
+        <div className="lg:w-[40%]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight mb-3 sm:mb-4 md:mb-5">
+            SPONSOR
+          </h2>
+          <p className="text-sm sm:text-sm md:text-base text-foreground leading-relaxed whitespace-nowrap">
+            KHUDA와 새로운 가치를 만들어갈 후원 및 협업 문의, 언제든 기다리고 있습니다.
+          </p>
+        </div>
+
+        {/* 오른쪽: 카드 그리드 - 모바일 3열, 태블릿 이상 3열 */}
+        <div className="lg:w-[60%] flex justify-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-5 max-w-[520px] w-full">
+            {SPONSOR_SLOTS.map((_, index) => (
+              <div
+                key={index}
+                className="bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center aspect-square"
+              />
+            ))}
           </div>
-          {/* 데스크톱에서만 오른쪽에 화살표 표시 */}
-          <Link
-            to={ROUTES.sponsor}
-            className="hidden sm:flex flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-gray-300 items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group mt-2 sm:mt-3 self-start"
-          >
-            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 group-hover:text-white transition-colors duration-300" />
-          </Link>
         </div>
       </div>
-
-      {/* 후원사 로고 루프 */}
-      {sponsorLogos.length > 0 && (
-        <div className="py-6 sm:py-8">
-          <div className="w-full h-[60px] sm:h-[120px] relative overflow-hidden">
-            <LogoLoop
-              logos={sponsorLogos}
-              speed={isMobile ? 60 : 100}
-              direction="left"
-              logoHeight={isMobile ? 32 : 56}
-              gap={isMobile ? 28 : 56}
-              hoverSpeed={0}
-              scaleOnHover
-              fadeOut={false}
-              ariaLabel="후원사 로고"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

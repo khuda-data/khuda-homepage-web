@@ -12,14 +12,14 @@ const TargetSection = memo(() => {
     <div 
       ref={ref}
       className={cn(
-        "w-full py-8 sm:py-12 md:py-16 lg:py-20 xl:py-24 transition-all duration-1000 ease-out",
+        "w-full pt-8 sm:pt-16 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 transition-all duration-1000 ease-out",
         isVisible ? SECTION_STYLES.visibility.visible : SECTION_STYLES.visibility.hidden
       )}
     >
       <SectionHeader
         label={RECRUITMENT_INFO.sectionLabel}
         title={RECRUITMENT_INFO.sectionTitle}
-        labelClassName="text-primary"
+        labelClassName="text-blue-600"
       />
 
       <TargetCards />

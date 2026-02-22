@@ -88,8 +88,8 @@ export const ROUTES = {
 // ============================================================================
 
 export const IMAGE_PATHS = {
-  //logo: "/images/khuda-logo.png",
-  logo: "/images/khuda-logo-white.png",
+  //logo: "/images/logos/khuda-logo.png",
+  logo: "/images/logos/khuda-logo-white.png",
 };
 
 // ============================================================================
@@ -175,7 +175,7 @@ export const HEADER_CONFIG = {
     { label: "후원", href: ROUTES.sponsor },
   ] as NavLink[],
   applyButton: {
-    desktop: "리크루팅",
+    desktop: "지원하기",
     mobile: "Apply",
   },
   scrollThreshold: 50,
@@ -296,7 +296,7 @@ export const HERO_STYLES = {
 export const FOOTER_STYLES = {
   footer: {
     base: "bg-secondary/85 border-t border-border",
-    padding: "py-8 sm:py-10 md:py-12",
+    padding: "py-5 sm:py-8 md:py-12",
   },
   container: {
     base: "container mx-auto",
@@ -304,22 +304,22 @@ export const FOOTER_STYLES = {
   },
   grid: {
     base: "flex flex-col md:flex-row md:items-start md:justify-between",
-    gap: "gap-8 md:gap-0",
+    gap: "gap-5 sm:gap-6 md:gap-0",
   },
   layout: {
     flexCol: "flex flex-col",
   },
   section: {
-    header: "font-semibold mb-4 sm:mb-5 text-sm sm:text-base text-black",
+    header: "font-semibold mb-3 sm:mb-4 md:mb-5 text-sm sm:text-base text-black",
     organization: "font-bold text-base sm:text-lg text-black",
     text: {
       base: "text-black text-xs sm:text-sm",
       small: "text-black text-[10px] sm:text-xs",
     },
     spacing: {
-      marginBottom: "mb-3 sm:mb-4",
-      marginTop: "mt-4 sm:mt-6",
-      itemGap: "space-y-2 sm:space-y-3",
+      marginBottom: "mb-2 sm:mb-3 md:mb-4",
+      marginTop: "mt-3 sm:mt-4 md:mt-6",
+      itemGap: "space-y-1.5 sm:space-y-2 md:space-y-3",
     },
   },
   middleSection: {
@@ -329,12 +329,12 @@ export const FOOTER_STYLES = {
     container: "flex flex-col",
   },
   rightGroup: {
-    container: "flex flex-col gap-8 md:flex-row md:items-start md:justify-end md:gap-12 lg:gap-16",
+    container: "flex flex-col gap-5 sm:gap-6 md:flex-row md:items-start md:justify-end md:gap-12 lg:gap-16",
   },
   socialLinks: {
-    container: "flex items-center gap-3 sm:gap-4",
-    link: "w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-muted/30 border border-border/50 flex items-center justify-center text-foreground hover:bg-muted/50 hover:border-foreground/30 transition-all duration-200 group",
-    icon: "w-5 h-5 sm:w-6 sm:h-6 stroke-[1.5] group-hover:stroke-2 transition-all",
+    container: "flex items-center gap-2.5 sm:gap-3 md:gap-4",
+    link: "w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-muted/30 border border-border/50 flex items-center justify-center text-foreground hover:bg-muted/50 hover:border-foreground/30 transition-all duration-200 group",
+    icon: "w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 stroke-[1.5] group-hover:stroke-2 transition-all",
   },
 };
 
@@ -357,15 +357,15 @@ export const RECRUITMENT_INFO = {
   deadlineLabel: "서류 마감:",
   targetCards: [
     {
-      icon: "GraduationCap",
-      description: "활동 내 대학생 신분을 유지하는 분\n(졸업 유예자, 휴학생, 수료생 포함)",
+      icon: "BookOpen",
+      description: "데이터 및 AI 분야에\n관심이 많은 분",
     },
     {
       icon: "CalendarCheck",
       description: "방학 중 매주 목요일 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
     },
     {
-      icon: "Users",
+      icon: "Flame",
       description: "활동 기간 동안 학회 활동에\n적극적으로 참여 가능한 분",
     },
   ],
@@ -1137,7 +1137,7 @@ export const APPLICATION_FORM_CONFIG = {
   obBenefits: {
     title: "KHUDA OB 회원 대상 혜택 및 활동 안내",
     intro: "KHUDA OB 회원께는 별도의 수료 조건 없이 본 동아리만의 다양한 인프라와 혜택이 제공됩니다. 이번 학기 개편된 주요 활동 내용을 다음과 같이 안내드립니다.",
-    notice: "OB는 방학 세션 전까지 상시 모집합니다.",
+    notice: "OB는 공식 신청 기간 외에도 토이 프로젝트 발표일 전까지 상시 모집합니다.\n해당 경우에는 운영진에게 따로 연락 바랍니다.",
     benefits: [
       {
         title: "1. 심화 트랙 참여",
@@ -1326,9 +1326,9 @@ export const SPONSOR_DATA: GenerationSponsors[] = [
   {
     generation: "8기",
     sponsors: [
-      { name: "Lovable", logo: "/images/lovable-color.png", website: "https://lovable.dev", year: 2025 },
-      { name: "Perplexity", logo: "/images/perplexity-color.png", website: "https://www.perplexity.ai", year: 2025 },
-      { name: "경희대학교", logo: "/images/univ-color.png", website: "https://www.khu.ac.kr", year: 2025 },
+      { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", year: 2025 },
+      { name: "Perplexity", logo: "/images/sponsors/perplexity-color.png", website: "https://www.perplexity.ai", year: 2025 },
+      { name: "경희대학교", logo: "/images/sponsors/univ-color.png", website: "https://www.khu.ac.kr", year: 2025 },
     ],
   },
 ];

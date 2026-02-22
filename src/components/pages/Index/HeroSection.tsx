@@ -1,4 +1,4 @@
-import Grainient from "@/components/Grainient";
+import Grainient from "./Grainient";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
 
@@ -54,7 +54,7 @@ const HeroSection = () => {
             <h1
               className="font-display font-black leading-none select-none opacity-0 animate-fade-up animation-delay-300 text-center md:text-left"
               style={{ 
-                fontSize: "clamp(3rem, 13vw, 9rem)",
+                fontSize: "clamp(2.5rem, 11vw, 8rem)",
                 color: "#0f172a",
                 letterSpacing: "0.05em"
               }}
@@ -62,15 +62,15 @@ const HeroSection = () => {
               KH<span
                 className="bg-clip-text text-transparent"
                 style={{
-                  backgroundImage: "linear-gradient(135deg, #dc2626 0%, #1e40af 100%)",
+                  backgroundImage: "linear-gradient(135deg, #1e40af 0%, #dc2626 100%)",
                 }}
               >U</span>DA
             </h1>
 
             {/* 지금 지원하기 버튼 */}
             <Link
-              to={ROUTES.apply}
-              className="mt-6 md:mt-8 inline-flex items-center justify-center px-5 py-2.5 sm:px-6 sm:py-3 md:px-10 md:py-4 bg-black text-white font-semibold text-sm sm:text-base md:text-lg rounded-lg hover:bg-black/90 transition-all duration-200 active:scale-[0.98] opacity-0 animate-fade-up animation-delay-400"
+              to={ROUTES.recruiting}
+              className="mt-6 md:mt-8 inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 md:px-8 md:py-3.5 bg-black text-white font-semibold text-xs sm:text-sm md:text-base rounded-lg hover:bg-black/90 transition-all duration-200 active:scale-[0.98] opacity-0 animate-fade-up animation-delay-400"
             >
               지금 지원하기
             </Link>

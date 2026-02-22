@@ -42,7 +42,7 @@ const ImageGallery = ({ images }: { images: { src: string; alt: string }[] }) =>
 
 const MLSessionContent = () => (
   <div>
-    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">01 · Session</p>
+    <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">01 · Session</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       기초 세션 (ML Session)
     </h3>
@@ -56,8 +56,8 @@ const MLSessionContent = () => (
     <ImageGallery
       images={[
         { src: "/images/activities/ml-session-1.jpeg", alt: "ML 세션 1" },
-        { src: "/images/activities/ml-session-2.jpeg", alt: "ML 세션 2" },
         { src: "/images/activities/ml-session-3.jpeg", alt: "ML 세션 3" },
+        { src: "/images/activities/ml-session8.jpg", alt: "ML 세션 8" },
       ]}
     />
 
@@ -86,7 +86,7 @@ const MLSessionContent = () => (
 
 const ToyProjectContent = () => (
   <div>
-    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">02 · Project</p>
+    <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">02 · Project</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       토이 프로젝트
     </h3>
@@ -99,6 +99,7 @@ const ToyProjectContent = () => (
 
     <ImageGallery
       images={[
+        { src: "/images/activities/toy-project-3.jpg", alt: "토이 프로젝트 3" },
         { src: "/images/activities/toy-project-1.jpeg", alt: "토이 프로젝트 1" },
         { src: "/images/activities/toy-project-2.jpeg", alt: "토이 프로젝트 2" },
       ]}
@@ -108,7 +109,7 @@ const ToyProjectContent = () => (
 
 const TrackSessionContent = () => (
   <div>
-    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">03 · Session</p>
+    <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">03 · Session</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       심화 세션 (Track Session)
     </h3>
@@ -128,19 +129,19 @@ const TrackSessionContent = () => (
       같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
     </p>
 
-    <div>
-      <img
-        src="/images/activities/track-session.jpg"
-        alt="심화 세션"
-        className="rounded-xl h-44 sm:h-60 md:h-64 w-full sm:w-auto object-cover"
-      />
-    </div>
+    <ImageGallery
+      images={[
+        { src: "/images/activities/track-session.jpg", alt: "심화 세션" },
+        { src: "/images/activities/track-session-2.jpg", alt: "심화 세션 2" },
+        { src: "/images/activities/track-session-3.jpg", alt: "심화 세션 3" },
+      ]}
+    />
   </div>
 );
 
 const DatathonContent = () => (
   <div>
-    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">04 · Datathon</p>
+    <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">04 · Datathon</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       데이터톤
     </h3>
@@ -162,7 +163,7 @@ const DatathonContent = () => (
 
 const AcademicFestivalContent = () => (
   <div>
-    <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">05 · Conference</p>
+    <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">05 · Conference</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       정기 학술제
     </h3>
@@ -175,7 +176,7 @@ const AcademicFestivalContent = () => (
 
     <div>
       <img
-        src="/images/activities/festival-group.png"
+        src="/images/activities/final-conference.png"
         alt="정기 학술제"
         className="rounded-xl h-44 sm:h-60 md:h-64 w-full sm:w-auto object-cover"
       />
@@ -286,17 +287,17 @@ const Activities = () => {
           <div className="absolute inset-0 z-0">
             <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url(/images/hello.png)" }}
+              style={{ backgroundImage: "url(/images/headers/hello.png)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/40" />
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-[1]" />
           <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 pt-28 sm:pt-36 md:pt-44 lg:pt-52 xl:pt-60 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16">
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-white leading-[1.3] text-left">
               KHUDA의 다양한 활동
             </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left">
-              세미나, 스터디, 해커톤 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요.
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left whitespace-nowrap">
+              기초 세션, 심화 세션, 정기 학술제 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요.
             </p>
           </div>
         </section>
@@ -330,7 +331,7 @@ const Activities = () => {
                           className={cn(
                             "absolute -left-5 w-[11px] h-[11px] rounded-full border-2 transition-all duration-200",
                             activeSection === step.id
-                              ? "border-primary bg-primary scale-125"
+                              ? "border-blue-600 bg-blue-600 scale-125"
                               : "border-border bg-background"
                           )}
                         />
@@ -355,7 +356,7 @@ const Activities = () => {
                     className={cn(
                       "flex items-center gap-1 rounded-full text-xs font-medium transition-all duration-200",
                       activeSection === step.id
-                        ? "bg-primary text-primary-foreground px-3 py-1.5"
+                        ? "bg-blue-600 text-white px-3 py-1.5"
                         : "text-muted-foreground px-2 py-1.5"
                     )}
                   >

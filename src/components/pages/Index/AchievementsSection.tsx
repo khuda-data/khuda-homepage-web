@@ -40,7 +40,7 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
           KHUDA's
           <br />
-          <span className="text-primary">
+          <span className="text-blue-600">
             Achievements
           </span>
         </h2>

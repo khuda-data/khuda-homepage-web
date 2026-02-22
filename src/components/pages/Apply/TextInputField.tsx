@@ -31,7 +31,7 @@ export const TextInputField = ({ question, answer, onAnswerChange }: TextInputFi
         placeholder={getPlaceholder(question.question)}
         required={question.required}
         maxLength={question.max_len || undefined}
-        className="w-full h-11 sm:h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 text-sm sm:text-base min-h-[44px]"
+        className="w-full h-11 sm:h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-blue-600/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-blue-600/10 text-sm sm:text-base min-h-[44px]"
       />
       {isPhoneField && (
         <p className="text-xs text-muted-foreground mt-1">하이픈(-)을 포함하여 입력해주세요. 예: 010-1234-5678</p>

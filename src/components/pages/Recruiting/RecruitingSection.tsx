@@ -4,7 +4,7 @@ import { SECTION_STYLES, RECRUITMENT_STYLES } from "@/lib/constants";
 import ApplicationCTA from "./ApplicationCTA";
 import TargetSection from "./TargetSection";
 import NotesSection from "./NotesSection";
-import FAQSection from "@/components/shared/FAQSection";
+import FAQSection from "./FAQSection";
 
 // 무거운 컴포넌트들을 lazy load
 const LazyRecruitmentProcess = lazy(() => import("./RecruitmentProcess"));
@@ -31,7 +31,7 @@ const RecruitingSection = () => {
         </Suspense>
 
         {/* 자주 묻는 질문 섹션 */}
-        <FAQSection headerLabelClassName="text-primary" accentClassName="text-primary" />
+        <FAQSection headerLabelClassName="text-blue-600" accentClassName="text-blue-600" />
       </div>
       
       {/* 지원하기 CTA - container 밖으로 이동하여 전체 너비 사용 */}

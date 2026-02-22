@@ -1,11 +1,11 @@
 import { memo } from "react";
-import { GraduationCap, CalendarCheck, Users, LucideIcon } from "lucide-react";
+import { BookOpen, CalendarCheck, Flame, LucideIcon } from "lucide-react";
 import { RECRUITMENT_INFO } from "@/lib/constants";
 
 const iconMap: Record<string, LucideIcon> = {
-  GraduationCap,
+  BookOpen,
   CalendarCheck,
-  Users,
+  Flame,
 };
 
 const TargetCards = memo(() => {
@@ -21,7 +21,7 @@ const TargetCards = memo(() => {
           >
             {/* Icon */}
             {IconComponent && (
-              <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center mb-3 sm:mb-4 md:mb-5 text-gray-900">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center mb-3 sm:mb-4 md:mb-5 text-blue-600">
                 <IconComponent className="w-full h-full" />
               </div>
             )}

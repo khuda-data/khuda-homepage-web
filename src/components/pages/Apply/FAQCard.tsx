@@ -35,8 +35,8 @@ export const FAQCard = () => {
     <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <HelpCircle className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center">
+            <HelpCircle className="w-5 h-5 text-blue-600" />
           </div>
           <CardTitle className="text-xl text-foreground">{APPLICATION_FORM_CONFIG.sections.faq}</CardTitle>
         </div>
@@ -45,14 +45,14 @@ export const FAQCard = () => {
         <div className="space-y-4 text-sm">
           <div className="p-4 rounded-xl bg-secondary/30 border border-border/50">
             <p className="font-semibold mb-2 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
+              <HelpCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
               Q. 학기 중 세션은 어디서 진행되나요?
             </p>
             <p className="text-muted-foreground">A. 국제캠퍼스에서 진행되며, 구체적 일정과 장소는 합격자 발표 시 안내드립니다.</p>
           </div>
           <div className="p-4 rounded-xl bg-secondary/30 border border-border/50">
             <p className="font-semibold mb-2 flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-primary flex-shrink-0" />
+              <HelpCircle className="w-4 h-4 text-blue-600 flex-shrink-0" />
               Q. 활동비가 있나요?
             </p>
             <p className="text-muted-foreground">A. YB 학회비 45,000원 / OB 학회비 5,000원으로 합격자 발표 시 안내드립니다.</p>
@@ -65,10 +65,10 @@ export const FAQCard = () => {
               href={SOCIAL_LINKS.instagram} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-primary/30 transition-all group"
+              className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-blue-600/30 transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Instagram className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-blue-600/10 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">
+                <Instagram className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">Instagram</p>
@@ -77,10 +77,10 @@ export const FAQCard = () => {
             </a>
             <a 
               href={`mailto:${CONTACT_EMAIL}`} 
-              className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-primary/30 transition-all group cursor-pointer relative"
+              className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-blue-600/30 transition-all group cursor-pointer relative"
             >
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Mail className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-blue-600/10 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">
+                <Mail className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -100,8 +100,8 @@ export const FAQCard = () => {
               </div>
             </a>
             <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Phone className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-blue-600/10 flex items-center justify-center">
+                <Phone className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">운영진 연락처</p>

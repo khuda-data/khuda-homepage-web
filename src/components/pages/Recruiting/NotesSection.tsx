@@ -21,7 +21,7 @@ const NotesSection = memo(() => {
       )}
     >
       {/* 헤더 */}
-      <SectionHeader label="Note" title="유의 사항" labelClassName="text-primary" />
+      <SectionHeader label="Note" title="유의 사항" labelClassName="text-blue-600" />
 
       {/* 상단 3열 - 모바일에서는 1열, 데스크톱에서는 2열 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-8 max-w-6xl mx-auto mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12 px-4 sm:px-6 md:px-8">
