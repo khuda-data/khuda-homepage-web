@@ -24,10 +24,10 @@ const SponsorShowcase = () => {
       <div className="flex flex-col lg:flex-row lg:items-start gap-6 sm:gap-8 lg:gap-12">
         {/* 왼쪽: 제목 + 설명 */}
         <div className="lg:w-[40%]">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight mb-3 sm:mb-4 md:mb-5">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight mb-3 sm:mb-4 md:mb-5">
             SPONSOR
           </h2>
-          <p className="text-sm sm:text-sm md:text-base text-foreground leading-relaxed whitespace-nowrap">
+          <p className="text-sm sm:text-sm md:text-base text-foreground leading-relaxed">
             KHUDA와 새로운 가치를 만들어갈 후원 및 협업 문의, 언제든 기다리고 있습니다.
           </p>
         </div>

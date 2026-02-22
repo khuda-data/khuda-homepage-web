@@ -51,7 +51,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
         <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 md:gap-6">
           <div className="flex-1">
             <div className="flex items-start gap-2 sm:gap-0">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
                 <span className="inline-block -translate-x-1 sm:-translate-x-2">We Experience</span>
                 <br />
                 <span

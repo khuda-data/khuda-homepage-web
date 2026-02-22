@@ -38,7 +38,7 @@ const AboutSection = () => {
       label: "성과",
       description: "한 학기 동안 완성한 프로젝트를 발표하는 KHUDA의 대표 학술 행사입니다.",
       details: "포스터 발표와 최종 발표를 통해 심사위원분들의 피드백을 받으며 프로젝트의 완성도를 높입니다.",
-      image: "/images/activities/final-conference.png",
+      image: "/images/activities/conference-1.png",
     },
     {
       title: "네트워킹",

@@ -258,7 +258,7 @@ const Activities = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
 
       <main>
@@ -276,7 +276,7 @@ const Activities = () => {
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-white leading-[1.3] text-left">
               KHUDA의 다양한 활동
             </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left whitespace-nowrap">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left">
               기초 세션, 심화 세션, 정기 학술제 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요.
             </p>
           </div>
