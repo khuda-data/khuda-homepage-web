@@ -42,7 +42,7 @@ export const LongTextQuestion = ({ question, answer, onAnswerChange }: LongTextQ
             }}
             required={question.required}
             maxLength={maxLen || undefined}
-            className={`min-h-[140px] sm:min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none resize-none pr-16 sm:pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10 text-sm sm:text-base ${
+            className={`min-h-[140px] sm:min-h-[180px] rounded-xl bg-secondary/30 border-border/50 focus:border-blue-600/60 focus:outline-none resize-none pr-16 sm:pr-20 transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-blue-600/10 text-sm sm:text-base ${
               maxLen && answer.length >= maxLen * 0.9 ? "border-orange-500/50" : ""
             }`}
             placeholder="답변을 작성해주세요..."
@@ -53,7 +53,7 @@ export const LongTextQuestion = ({ question, answer, onAnswerChange }: LongTextQ
                 answer.length >= maxLen 
                   ? "bg-orange-500/10 border border-orange-500/30" 
                   : answer.length > 0
-                  ? "bg-primary/10 border border-primary/20"
+                  ? "bg-blue-600/10 border border-blue-600/20"
                   : "bg-background/80 backdrop-blur-sm border border-border/40"
               }`}>
                 <span className={`text-xs font-semibold ${
@@ -62,7 +62,7 @@ export const LongTextQuestion = ({ question, answer, onAnswerChange }: LongTextQ
                     : answer.length >= maxLen * 0.9
                     ? "text-orange-500"
                     : answer.length > 0 
-                    ? "text-primary" 
+                    ? "text-blue-600" 
                     : "text-muted-foreground"
                 }`}>
                   {answer.length}

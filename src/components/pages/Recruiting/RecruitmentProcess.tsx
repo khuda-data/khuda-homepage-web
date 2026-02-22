@@ -228,7 +228,7 @@ const RecruitmentProcess = () => {
       )}
     >
       {/* 헤더 */}
-      <SectionHeader label="Step" title="지원 절차" labelClassName="text-primary" />
+      <SectionHeader label="Step" title="지원 절차" labelClassName="text-blue-600" />
 
       {/* 데스크톱 버전 */}
       <div className="hidden md:block max-w-7xl mx-auto">

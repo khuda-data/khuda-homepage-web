@@ -63,7 +63,7 @@ const SponsorInquiryButton = ({
     >
       후원 문의
       {isCard && (
-        <span className="text-xs sm:text-sm opacity-70">클릭하여 문의하기</span>
+        <span className="text-xs sm:text-sm opacity-70">이메일로 문의하기</span>
       )}
     </button>
   );

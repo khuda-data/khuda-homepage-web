@@ -20,12 +20,12 @@ const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage, actions 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${backgroundImage})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/40" />
           </>
         ) : (
           <>
             <div className="absolute inset-0 bg-gradient-to-br from-red-800/70 via-red-700/60 to-blue-800/70" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/40" />
             {/* 빨강 글로우 효과 */}
             <div className="absolute top-0 right-1/4 w-[300px] h-[200px] bg-red-600/25 rounded-full blur-[80px]" />
             {/* 파랑 글로우 효과 */}

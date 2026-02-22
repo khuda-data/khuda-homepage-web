@@ -27,23 +27,23 @@ const VisionSection = () => {
                 Our Vision
               </h2>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 font-medium leading-[1.7] sm:leading-relaxed">
-                경희대를 대표하는
+                경희대학교를 대표하는
                 <br className="hidden sm:block" />
                 <span className="sm:hidden"> </span>
-                최고의 데이터 & AI 학회
+                최고의 데이터 · AI 학회
               </p>
             </div>
             
             {/* 오른쪽: 본문 */}
             <div className="space-y-4 sm:space-y-4 order-2 lg:order-2 px-6 sm:px-0">
               <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed break-keep">
-                KHUDA는 경희대학교를 대표하는 최고의 데이터 분석 & AI 학회로 성장하며, 학문과 산업을 연결하는 인재 허브가 되는 것을 목표로 합니다. 학교 안에 머무르지 않고, 데이터와 AI를 통해 사회에 긍정적인 변화를 만들어가는 조직을 지향합니다.
+                KHUDA는 경희대학교를 대표하는 최고의 데이터 · AI 학회로 성장하며, 학문과 산업을 연결하는 인재 허브가 되는 것을 목표로 합니다. 학교 안에 머무르지 않고, 데이터와 AI를 통해 사회에 긍정적인 변화를 만들어가는 조직을 지향합니다.
               </p>
               <div className="pt-4 sm:pt-4 space-y-3.5 sm:space-y-3">
                 <div className="flex items-start gap-3 sm:gap-3">
                   <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
-                    <strong className="text-gray-900">최고의 학회</strong>: 경희대학교를 대표하는 데이터 분석 & AI 학회로서 지속적인 성장과 발전을 추구합니다.
+                    <strong className="text-gray-900">최고의 학회</strong>: 경희대학교를 대표하는 데이터 · AI 학회로서 지속적인 성장과 발전을 추구합니다.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-3">

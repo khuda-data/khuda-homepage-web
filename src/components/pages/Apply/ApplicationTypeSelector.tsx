@@ -22,7 +22,7 @@ export const ApplicationTypeSelector = ({
     <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
         <CardTitle className="text-xl text-foreground flex items-center gap-3">
-          <Users className="w-5 h-5 text-primary" />
+          <Users className="w-5 h-5 text-blue-600" />
           {APPLICATION_FORM_CONFIG.sections.applicationType}
           <span className="text-destructive">*</span>
         </CardTitle>
@@ -42,11 +42,11 @@ export const ApplicationTypeSelector = ({
           >
             <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
               isApplicationType("yb")
-                ? "border-primary bg-primary"
+                ? "border-blue-600 bg-blue-600"
                 : "border-border"
             }`}>
               {isApplicationType("yb") && (
-                <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                <Circle className="h-2.5 w-2.5 fill-current text-white" />
               )}
             </div>
             <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">
@@ -70,11 +70,11 @@ export const ApplicationTypeSelector = ({
           >
             <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
               isApplicationType("ob")
-                ? "border-primary bg-primary"
+                ? "border-blue-600 bg-blue-600"
                 : "border-border"
             }`}>
               {isApplicationType("ob") && (
-                <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                <Circle className="h-2.5 w-2.5 fill-current text-white" />
               )}
             </div>
             <div className="cursor-pointer font-medium flex-1 text-base flex items-center gap-2">

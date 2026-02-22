@@ -25,7 +25,7 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
 
   return (
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
       <CardHeader className="relative z-10">
         <CardTitle className="text-xl flex items-center gap-3">
           {questionIcon}
@@ -49,13 +49,13 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
               <SelectTrigger 
                 className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
                   answer && answer !== "none"
-                    ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
-                    : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
-                } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
+                    ? "bg-gradient-to-br from-blue-600/10 via-blue-600/5 to-transparent border-2 border-blue-600/60 shadow-md shadow-blue-600/10 scale-[1.01]"
+                    : "bg-secondary/20 border-2 border-border/40 hover:border-blue-600/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
+                } focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 focus:outline-none focus:scale-[1.01]`}
               >
                 <div className="flex items-center gap-2.5 flex-1">
                   {answer && answer !== "none" && (
-                    <div className="w-2 h-2 rounded-full bg-primary shrink-0 animate-in zoom-in-95 duration-200" />
+                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0 animate-in zoom-in-95 duration-200" />
                   )}
                   <SelectValue placeholder="트랙을 선택해주세요 (선택사항)" />
                 </div>
@@ -74,7 +74,7 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
                   <SelectItem 
                     key={track.value}
                     value={track.value} 
-                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
+                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-blue-600/10 focus:bg-blue-600/10 transition-all duration-150 ease-out data-[highlighted]:bg-blue-600/10 data-[highlighted]:scale-[1.02]"
                   >
                     {track.label}
                   </SelectItem>
@@ -95,13 +95,13 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
               <SelectTrigger 
                 className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
                   answer && answer !== "none"
-                    ? "bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/60 shadow-md shadow-primary/10 scale-[1.01]"
-                    : "bg-secondary/20 border-2 border-border/40 hover:border-primary/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
-                } focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none focus:scale-[1.01]`}
+                    ? "bg-gradient-to-br from-blue-600/10 via-blue-600/5 to-transparent border-2 border-blue-600/60 shadow-md shadow-blue-600/10 scale-[1.01]"
+                    : "bg-secondary/20 border-2 border-border/40 hover:border-blue-600/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
+                } focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 focus:outline-none focus:scale-[1.01]`}
               >
                 <div className="flex items-center gap-2.5 flex-1">
                   {answer && answer !== "none" && (
-                    <div className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
                   )}
                   <SelectValue placeholder="심화 트랙을 선택해주세요" />
                 </div>
@@ -117,7 +117,7 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
                   <SelectItem 
                     key={track.value}
                     value={track.value} 
-                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-primary/10 focus:bg-primary/10 transition-all duration-150 ease-out data-[highlighted]:bg-primary/10 data-[highlighted]:scale-[1.02]"
+                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-blue-600/10 focus:bg-blue-600/10 transition-all duration-150 ease-out data-[highlighted]:bg-blue-600/10 data-[highlighted]:scale-[1.02]"
                   >
                     {track.label}
                   </SelectItem>

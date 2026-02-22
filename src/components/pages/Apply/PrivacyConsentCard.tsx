@@ -20,7 +20,7 @@ export const PrivacyConsentCard = ({
     <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
         <CardTitle className="text-xl text-foreground flex items-center gap-3">
-          <FileText className="w-5 h-5 text-primary" />
+          <FileText className="w-5 h-5 text-blue-600" />
           {question.question}
           {question.required && <span className="text-destructive">*</span>}
         </CardTitle>
@@ -56,11 +56,11 @@ export const PrivacyConsentCard = ({
           >
             <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
               answer === "agree"
-                ? "border-primary bg-primary"
+                ? "border-blue-600 bg-blue-600"
                 : "border-border"
             }`}>
               {answer === "agree" && (
-                <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                <Circle className="h-2.5 w-2.5 fill-current text-white" />
               )}
             </div>
             <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
@@ -82,11 +82,11 @@ export const PrivacyConsentCard = ({
           >
             <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
               answer === "disagree"
-                ? "border-primary bg-primary"
+                ? "border-blue-600 bg-blue-600"
                 : "border-border"
             }`}>
               {answer === "disagree" && (
-                <Circle className="h-2.5 w-2.5 fill-current text-primary-foreground" />
+                <Circle className="h-2.5 w-2.5 fill-current text-white" />
               )}
             </div>
             <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">

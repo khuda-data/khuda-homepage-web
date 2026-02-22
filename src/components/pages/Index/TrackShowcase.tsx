@@ -108,7 +108,7 @@ const TrackShowcase = () => {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight">
                 IN
                 <br />
-                <span className="text-primary">KHUDA</span>
+                <span className="text-blue-600">KHUDA</span>
               </h2>
               <Link
                 to={ROUTES.activities}

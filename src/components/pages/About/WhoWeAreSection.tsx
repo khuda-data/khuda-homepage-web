@@ -33,7 +33,7 @@ const WhoWeAreSection = () => {
             {/* 오른쪽: 본문 */}
             <div className="space-y-5 sm:space-y-6 md:space-y-7 text-sm sm:text-base text-gray-700 leading-relaxed">
               <p className="break-keep">
-                KHUDA는 Kyung Hee University Data Analysis & AI의 약자로, 경희대학교 데이터 분석 & AI 학회입니다. 데이터 분석과 인공지능(AI)에 열정을 가진 경희인들이 모여 체계적인 학습과 실전 프로젝트 경험을 통해 전문 역량을 키우고 함께 성장하는 커뮤니티로 출발했습니다.
+                KHUDA는 Kyung Hee University Data Analysis & AI의 약자로, 경희대학교 데이터 · AI 학회입니다. 데이터 분석과 인공지능(AI)에 열정을 가진 경희인들이 모여 체계적인 학습과 실전 프로젝트 경험을 통해 전문 역량을 키우고 함께 성장하는 커뮤니티로 출발했습니다.
               </p>
               <p className="break-keep">
                 2022년 설립 이후, KHUDA는 머신러닝과 딥러닝의 탄탄한 기본기와 현업의 실제 문제를 다루는 실무 중심 프로젝트를 통해 데이터와 AI를 이해하고, 적용하고, 확장할 수 있는 인재를 길러내고 있습니다.

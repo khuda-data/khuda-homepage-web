@@ -56,7 +56,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
                 <br />
                 <span
                   key={activeIndex}
-                  className="inline-block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-primary animate-fade-up -mt-1 sm:-mt-2"
+                  className="inline-block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-blue-600 animate-fade-up -mt-1 sm:-mt-2"
                 >
                   {currentFeature.title}
                 </span>
@@ -71,7 +71,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
             </div>
             <p
               key={`desc-${activeIndex}`}
-              className="mt-2 sm:mt-3 md:mt-4 text-xs sm:text-sm md:text-base text-black leading-relaxed max-w-xl animate-smooth-slide"
+              className="mt-2 sm:mt-3 md:mt-4 text-sm sm:text-sm md:text-base text-black leading-relaxed max-w-xl animate-smooth-slide"
             >
               {currentFeature.description}
             </p>

@@ -139,7 +139,7 @@ const Header = () => {
             <Link
               to={ROUTES.recruiting}
               onClick={() => handleNavClick(ROUTES.recruiting)}
-              className="mt-4 px-8 py-2 bg-transparent text-white text-xl font-bold rounded-md hover:bg-primary transition-all duration-300 ease-out"
+              className="text-white text-2xl font-semibold tracking-wide hover:opacity-70 transition-opacity duration-300"
             >
               {HEADER_CONFIG.applyButton.desktop}
             </Link>

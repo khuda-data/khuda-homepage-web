@@ -134,7 +134,7 @@ const AboutMainSection = () => {
               <div className="space-y-3 sm:space-y-4 md:space-y-5 text-sm sm:text-base md:text-lg text-foreground leading-relaxed">
                 <p className="break-keep">
                   <strong className="text-lg sm:text-xl md:text-2xl">KHUDA</strong>
-                  <span className="text-xs sm:text-sm md:text-base text-muted-foreground"> (Kyung Hee University Data Analysis & AI)</span>는 경희대학교를 대표하는 데이터 분석 및 AI 학회입니다.
+                  <span className="text-xs sm:text-sm md:text-base text-muted-foreground"> (Kyung Hee University Data Analysis & AI)</span>는 경희대학교를 대표하는 데이터 · AI 학회입니다.
                   <br className="hidden sm:block" />
                   <span className="sm:inline"> 2022년 설립 이래 9개 기수를 거치며 300명 이상의 데이터 인재를 배출,</span>
                   <br className="hidden sm:block" />

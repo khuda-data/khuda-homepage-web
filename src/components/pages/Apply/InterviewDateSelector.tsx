@@ -21,10 +21,10 @@ export const InterviewDateSelector = ({
 }: InterviewDateSelectorProps) => {
   return (
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50 pointer-events-none"></div>
       <CardHeader className="relative z-10">
         <CardTitle className="text-xl flex items-center gap-3">
-          <Clock className="w-5 h-5 text-primary" />
+          <Clock className="w-5 h-5 text-blue-600" />
           {question.question}
           {question.required && <span className="text-destructive">*</span>}
         </CardTitle>
@@ -43,7 +43,7 @@ export const InterviewDateSelector = ({
           <>
             <div className="space-y-3">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-1 h-4 bg-primary rounded-full" />
+                <div className="w-1 h-4 bg-blue-600 rounded-full" />
                 <h3 className="text-sm font-semibold text-foreground">면접 가능 날짜</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
@@ -69,8 +69,8 @@ export const InterviewDateSelector = ({
                       tabIndex={0}
                       className={`group relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 cursor-pointer transition-all duration-200 min-h-[80px] sm:min-h-[100px] select-none ${
                         formData.interviewDates.includes(date.value)
-                          ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                          : "border-border/40 bg-secondary/10 hover:border-primary/40 hover:bg-secondary/20 active:scale-[0.98]"
+                          ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
+                          : "border-border/40 bg-secondary/10 hover:border-blue-600/40 hover:bg-secondary/20 active:scale-[0.98]"
                       }`}
                       onClick={handleDateClick}
                       onKeyDown={(e) => {
@@ -82,14 +82,14 @@ export const InterviewDateSelector = ({
                     >
                       <div className="pointer-events-none w-full flex flex-col items-center gap-1 sm:gap-1.5">
                         <span className={`text-sm sm:text-base font-semibold ${
-                          formData.interviewDates.includes(date.value) ? "text-primary" : "text-foreground"
+                          formData.interviewDates.includes(date.value) ? "text-blue-600" : "text-foreground"
                         }`}>
                           {date.label}
                         </span>
                         <span className="text-[10px] sm:text-xs text-muted-foreground">{date.subLabel}</span>
                         {formData.interviewDates.includes(date.value) && (
-                          <div className="mt-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
-                            <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
+                          <div className="mt-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
+                            <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                           </div>
                         )}
                       </div>
@@ -102,7 +102,7 @@ export const InterviewDateSelector = ({
             {formData.selectedInterviewDate ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-1 h-4 bg-primary rounded-full" />
+                  <div className="w-1 h-4 bg-blue-600 rounded-full" />
                   <h3 className="text-sm font-semibold text-foreground">
                     면접 가능 시간
                     <span className="text-xs text-muted-foreground ml-2">
@@ -137,12 +137,12 @@ export const InterviewDateSelector = ({
                       >
                         <div className="pointer-events-none w-full flex flex-col items-center gap-1">
                           <span className={`text-sm font-medium ${
-                            isSelected ? "text-primary" : "text-foreground"
+                            isSelected ? "text-blue-600" : "text-foreground"
                           }`}>
                             {time}
                           </span>
                           {isSelected && (
-                            <CheckCircle className="w-3.5 h-3.5 text-primary animate-in fade-in zoom-in-95 duration-200" />
+                            <CheckCircle className="w-3.5 h-3.5 text-blue-600 animate-in fade-in zoom-in-95 duration-200" />
                           )}
                         </div>
                       </div>
@@ -160,8 +160,8 @@ export const InterviewDateSelector = ({
 
             {formData.interviewDates.length > 0 && Object.keys(formData.interviewTimesByDate).length > 0 && (
               <div className="pt-4 border-t border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                <div className="flex items-start gap-2 p-4 rounded-xl bg-primary/5 border border-primary/20 transition-all duration-200 ease-out hover:bg-primary/10">
-                  <Info className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                <div className="flex items-start gap-2 p-4 rounded-xl bg-blue-600/5 border border-blue-600/20 transition-all duration-200 ease-out hover:bg-blue-600/10">
+                  <Info className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
                   <div className="flex-1 space-y-3">
                     <p className="text-xs font-semibold text-foreground">선택된 일정</p>
                     <div className="space-y-2.5">
@@ -171,7 +171,7 @@ export const InterviewDateSelector = ({
                         return (
                           <div key={date} className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${idx * 50}ms` }}>
                             <div className="flex items-center gap-2">
-                              <div className="w-1 h-4 bg-primary rounded-full" />
+                              <div className="w-1 h-4 bg-blue-600 rounded-full" />
                               <span className="text-sm font-medium text-foreground">{date}</span>
                             </div>
                             <div className="flex flex-wrap gap-1.5 pl-3">

@@ -16,7 +16,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
 
   return (
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
       <CardHeader className="relative z-10">
         <CardTitle className="text-xl flex items-center gap-3">
           {questionIcon}
@@ -39,28 +39,28 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
               }}
               className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
                 answer === "yes"
-                  ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                  : "border-border/50 bg-secondary/20 hover:border-primary/40 hover:bg-secondary/30"
+                  ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
+                  : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
               }`}
             >
               <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
                 answer === "yes"
-                  ? "bg-primary"
-                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-primary/40"
+                  ? "bg-blue-600"
+                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-blue-600/40"
               }`}>
                 {answer === "yes" ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-primary-foreground animate-in zoom-in-95 duration-200" />
+                  <CheckCircle className="w-3.5 h-3.5 text-white animate-in zoom-in-95 duration-200" />
                 ) : (
-                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-primary/50 transition-colors" />
+                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-blue-600/50 transition-colors" />
                 )}
               </div>
               <span className={`text-sm font-semibold transition-colors duration-200 ${
-                answer === "yes" ? "text-primary" : "text-foreground group-hover:text-primary/80"
+                answer === "yes" ? "text-blue-600" : "text-foreground group-hover:text-blue-600/80"
               }`}>
                 예
               </span>
               <span className={`text-xs mt-0.5 transition-colors duration-200 ${
-                answer === "yes" ? "text-primary/70" : "text-muted-foreground"
+                answer === "yes" ? "text-blue-600/70" : "text-muted-foreground"
               }`}>
                 스터디 개설 희망
               </span>
@@ -82,28 +82,28 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
               }}
               className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
                 answer === "no"
-                  ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                  : "border-border/50 bg-secondary/20 hover:border-primary/40 hover:bg-secondary/30"
+                  ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
+                  : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
               }`}
             >
               <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
                 answer === "no"
-                  ? "bg-primary"
-                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-primary/40"
+                  ? "bg-blue-600"
+                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-blue-600/40"
               }`}>
                 {answer === "no" ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-primary-foreground animate-in zoom-in-95 duration-200" />
+                  <CheckCircle className="w-3.5 h-3.5 text-white animate-in zoom-in-95 duration-200" />
                 ) : (
-                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-primary/50 transition-colors" />
+                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-blue-600/50 transition-colors" />
                 )}
               </div>
               <span className={`text-sm font-semibold transition-colors duration-200 ${
-                answer === "no" ? "text-primary" : "text-foreground group-hover:text-primary/80"
+                answer === "no" ? "text-blue-600" : "text-foreground group-hover:text-blue-600/80"
               }`}>
                 아니오
               </span>
               <span className={`text-xs mt-0.5 transition-colors duration-200 ${
-                answer === "no" ? "text-primary/70" : "text-muted-foreground"
+                answer === "no" ? "text-blue-600/70" : "text-muted-foreground"
               }`}>
                 스터디 개설 없음
               </span>

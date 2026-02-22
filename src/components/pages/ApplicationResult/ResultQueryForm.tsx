@@ -125,7 +125,7 @@ export const ResultQueryForm = ({
           <Button
             type="submit"
             disabled={isLoading || !isOpen}
-            className="w-full min-h-[48px] sm:min-h-[44px] text-base sm:text-sm bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+            className="w-full min-h-[48px] sm:min-h-[44px] text-base sm:text-sm bg-blue-600 text-white hover:bg-blue-600/90 font-semibold"
           >
             {isLoading ? (
               <>

@@ -15,7 +15,7 @@ export const BasicInfoCard = ({ questions, children }: BasicInfoCardProps) => {
     <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
         <CardTitle className="text-xl text-foreground flex items-center gap-3">
-          <UserCircle className="w-5 h-5 text-primary" />
+          <UserCircle className="w-5 h-5 text-blue-600" />
           {APPLICATION_FORM_CONFIG.sections.basicInfo}
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground">

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG, EXECUTIVE_PROFILES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Mail, GraduationCap, User } from "lucide-react";
+import { ChevronDown, Mail, GraduationCap } from "lucide-react";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -52,39 +52,24 @@ const ExecutiveProfileSection = () => {
               {currentGeneration.generation}
             </h3>
             <div className="px-4 sm:px-6 md:px-8">
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
               {currentGeneration.executives.map((executive, index) => (
                 <div
                   key={index}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
+                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
                 >
-                  {/* 프로필 이미지 영역 */}
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
-                    {executive.image ? (
-                      <img
-                        src={executive.image}
-                        alt={executive.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-                        <User className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 역할과 이름 */}
-                  <div className="text-center mb-2 sm:mb-3">
-                    <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 font-medium mb-0.5 sm:mb-1">
+                  {/* 이름과 역할 */}
+                  <div className="text-center mb-3 sm:mb-4">
+                    <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
+                      {executive.name}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-gray-600 font-medium">
                       {executive.role === "트랙장" && executive.department
                         ? `${executive.department} ${executive.role}`
                         : executive.department && executive.role !== "트랙장"
                         ? `${executive.role} · ${executive.department} 트랙장`
                         : executive.role}
                     </p>
-                    <h4 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900">
-                      {executive.name}
-                    </h4>
                   </div>
 
                   {/* 소속 정보 */}
@@ -150,39 +135,24 @@ const ExecutiveProfileSection = () => {
                       )}
                     >
                       <div className="px-4 sm:px-6 md:px-8 py-5 sm:py-6 md:py-8 border-t border-gray-200 bg-gray-50">
-                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
                           {generation.executives.map((executive, index) => (
                             <div
                               key={index}
-                              className="bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
+                              className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
                             >
-                              {/* 프로필 이미지 영역 */}
-                              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 rounded-full bg-gray-900 flex items-center justify-center overflow-hidden relative shadow-sm">
-                                {executive.image ? (
-                                  <img
-                                    src={executive.image}
-                                    alt={executive.name}
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-                                    <User className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* 역할과 이름 */}
-                              <div className="text-center mb-2 sm:mb-3">
-                                <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 font-medium mb-0.5 sm:mb-1">
+                              {/* 이름과 역할 */}
+                              <div className="text-center mb-3 sm:mb-4">
+                                <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
+                                  {executive.name}
+                                </h4>
+                                <p className="text-xs sm:text-sm text-gray-600 font-medium">
                                   {executive.role === "트랙장" && executive.department
                                     ? `${executive.department} ${executive.role}`
                                     : executive.department && executive.role !== "트랙장"
                                     ? `${executive.role} · ${executive.department} 트랙장`
                                     : executive.role}
                                 </p>
-                                <h4 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900">
-                                  {executive.name}
-                                </h4>
                               </div>
 
                               {/* 소속 정보 */}
