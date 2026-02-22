@@ -46,11 +46,10 @@ const MLSessionContent = () => (
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       기초 세션 (ML Session)
     </h3>
-    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mb-6 sm:mb-8">
-      방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.
-      주차별 교재 기반으로 핵심 개념 발제 및 코드 중심 학습,
-      이론·코드 퀴즈 및 해설 세션, 팀 단위 주제 토의를 통해
-      개념을 설명하고 질문할 수 있는 수준까지 도달하는 것을 목표로 합니다.
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
+      방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.<br />
+      주차별 교재 기반으로 핵심 개념 발제 및 코드 중심 학습, 이론·코드 퀴즈 및 해설 세션,<br />
+      팀 단위 주제 토의를 통해 개념을 설명하고 질문할 수 있는 수준까지 도달하는 것을 목표로 합니다.
     </p>
 
     <ImageGallery
@@ -61,21 +60,13 @@ const MLSessionContent = () => (
       ]}
     />
 
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 mt-6 sm:mt-8">
+    <div className="flex flex-col sm:flex-row mt-6 sm:mt-8 border-y sm:border-y-0 sm:border-x border-border divide-y sm:divide-y-0 sm:divide-x divide-border">
       {[
         { title: "개인 랜덤 발제", desc: "매주 랜덤으로 선택된 부원이 주제에 대해 발제하며, 발표 능력과 이해도를 향상시킵니다." },
         { title: "퀴즈 및 해설", desc: "학습한 내용을 퀴즈로 점검하고, 해설을 통해 복습하며 이해도를 높입니다." },
         { title: "팀별 토의", desc: "팀 단위로 주제를 토의하며 다양한 관점을 공유하고 협업 능력을 기릅니다." },
-      ].map((item, index) => (
-        <div
-          key={item.title}
-          className={cn(
-            "pl-4 py-4 sm:py-0",
-            index === 0
-              ? "border-l border-border"
-              : "border-l border-border border-t border-transparent sm:border-t-0 sm:border-l sm:border-border"
-          )}
-        >
+      ].map((item) => (
+        <div key={item.title} className="flex-1 px-4 py-4 sm:py-0">
           <h5 className="text-sm font-semibold text-foreground mb-1.5">{item.title}</h5>
           <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
         </div>
@@ -90,10 +81,9 @@ const ToyProjectContent = () => (
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       토이 프로젝트
     </h3>
-    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mb-6 sm:mb-8">
-      학습한 파이썬 프로그래밍과 머신러닝 기초 지식을 바탕으로
-      문제 정의부터 구현까지 전 과정을 경험합니다.
-      프로젝트 주제 기획, 데이터 수집 및 전처리, 모델 설계 및 구현, 결과 정리 및 공유를 통해
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
+      학습한 파이썬 프로그래밍과 머신러닝 기초 지식을 바탕으로 문제 정의부터 구현까지 전 과정을 경험합니다.<br />
+      프로젝트 주제 기획, 데이터 수집 및 전처리, 모델 설계 및 구현, 결과 정리 및 공유를 통해<br />
       학습한 내용을 "아는 것"에서 끝내지 않고 직접 만들어보는 경험으로 연결합니다.
     </p>
 
@@ -123,9 +113,9 @@ const TrackSessionContent = () => (
         </span>
       ))}
     </div>
-    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mb-6 sm:mb-8">
-      학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.
-      트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
+      학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.<br />
+      트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해<br />
       같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
     </p>
 
@@ -145,9 +135,9 @@ const DatathonContent = () => (
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       데이터톤
     </h3>
-    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mb-6 sm:mb-8">
-      트랙 구분 없이 팀을 구성해 주어진 데이터셋과 문제를 해결하는 대회입니다.
-      데이터 전처리부터 모델링, 결과 해석까지 전 과정을 제한된 시간 내에 수행하며,
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
+      트랙 구분 없이 팀을 구성해 주어진 데이터셋과 문제를 해결하는 대회입니다.<br />
+      데이터 전처리부터 모델링, 결과 해석까지 전 과정을 제한된 시간 내에 수행하며,<br />
       실전 경험과 팀워크를 동시에 쌓을 수 있는 KHUDA의 핵심 행사 중 하나입니다.
     </p>
 
@@ -167,45 +157,35 @@ const AcademicFestivalContent = () => (
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       정기 학술제
     </h3>
-    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] max-w-2xl mb-6 sm:mb-8">
-      트랙별 1–2팀을 구성해 팀 단위 프로젝트를 수행하고,
-      학술 포스터 제작과 프로젝트 발표를 진행합니다.
-      프로젝트를 공유하고 설명하는 경험을 통해
-      사고의 깊이와 표현력을 함께 성장시킵니다.
+    <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
+      트랙별 1–2팀을 구성해 팀 단위 프로젝트를 수행하고, 학술 포스터 제작과 프로젝트 발표를 진행합니다.<br />
+      프로젝트를 공유하고 설명하는 경험을 통해 사고의 깊이와 표현력을 함께 성장시킵니다.
     </p>
 
-    <div>
-      <img
-        src="/images/activities/final-conference.png"
-        alt="정기 학술제"
-        className="rounded-xl h-44 sm:h-60 md:h-64 w-full sm:w-auto object-cover"
-      />
+    <div className="flex gap-3 justify-start">
+      {[
+        { src: "/images/activities/conference-1.png", alt: "정기 학술제 1" },
+        { src: "/images/activities/conference-2.jpeg", alt: "정기 학술제 2" },
+      ].map((img) => (
+        <img key={img.src} src={img.src} alt={img.alt} className="rounded-xl h-44 sm:h-60 md:h-64 w-auto object-cover" />
+      ))}
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 mt-6 sm:mt-8">
-      {[
-        {
-          title: "포스터 발표",
-          desc: "참가 팀이 자신의 프로젝트를 포스터로 만들어 발표하는 자리입니다. KHUDA 부원들 간의 상호 평가를 통해 피드백을 받습니다.",
-        },
-        {
-          title: "정식 발표",
-          desc: "심사위원분들을 모셔서 진행하는 프로젝트 발표입니다. 교수님을 비롯해 현직자 분들이 심사위원으로 참여합니다.",
-        },
-      ].map((item, index) => (
-        <div
-          key={item.title}
-          className={cn(
-            "pl-4 py-4 sm:py-0",
-            index === 0
-              ? "border-l border-border"
-              : "border-l border-border border-t border-transparent sm:border-t-0"
-          )}
-        >
-          <h5 className="text-sm font-semibold text-foreground mb-1.5">{item.title}</h5>
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-        </div>
-      ))}
+    <div className="flex flex-col sm:flex-row mt-6 sm:mt-8 border-y sm:border-y-0 sm:border-x border-border divide-y sm:divide-y-0 sm:divide-x divide-border">
+      <div className="flex-1 px-4 py-4 sm:py-0">
+        <h5 className="text-sm font-semibold text-foreground mb-1.5">포스터 발표</h5>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          참가 팀이 자신의 프로젝트를 포스터로 만들어 발표하는 자리입니다.<br />
+          KHUDA 부원들 간의 상호 평가를 통해 피드백을 받습니다.
+        </p>
+      </div>
+      <div className="flex-1 px-4 py-4 sm:py-0">
+        <h5 className="text-sm font-semibold text-foreground mb-1.5">정식 발표</h5>
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          심사위원분들을 모셔서 진행하는 프로젝트 발표입니다.<br />
+          교수님을 비롯해 현직자 분들이 심사위원으로 참여합니다.
+        </p>
+      </div>
     </div>
   </div>
 );
@@ -289,7 +269,7 @@ const Activities = () => {
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: "url(/images/headers/hello.png)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/30 to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-black/15" />
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-[1]" />
           <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 pt-28 sm:pt-36 md:pt-44 lg:pt-52 xl:pt-60 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16">

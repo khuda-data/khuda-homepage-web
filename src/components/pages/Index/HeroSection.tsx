@@ -54,7 +54,7 @@ const HeroSection = () => {
             <h1
               className="font-display font-black leading-none select-none opacity-0 animate-fade-up animation-delay-300 text-center md:text-left"
               style={{ 
-                fontSize: "clamp(2.5rem, 11vw, 8rem)",
+                fontSize: "clamp(2.5rem, 9vw, 6.5rem)",
                 color: "#0f172a",
                 letterSpacing: "0.05em"
               }}
@@ -70,9 +70,12 @@ const HeroSection = () => {
             {/* 지금 지원하기 버튼 */}
             <Link
               to={ROUTES.recruiting}
-              className="mt-6 md:mt-8 inline-flex items-center justify-center px-4 py-2 sm:px-5 sm:py-2.5 md:px-8 md:py-3.5 bg-black text-white font-semibold text-xs sm:text-sm md:text-base rounded-lg hover:bg-black/90 transition-all duration-200 active:scale-[0.98] opacity-0 animate-fade-up animation-delay-400"
+              className="group mt-2 md:mt-3 inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 md:px-7 md:py-3 border border-[#0f172a] text-[#0f172a] font-semibold text-xs sm:text-sm md:text-base rounded-full hover:bg-[#0f172a] hover:text-white transition-all duration-300 active:scale-[0.97] opacity-0 animate-fade-up animation-delay-400"
             >
               지금 지원하기
+              <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
             </Link>
           </div>
         </div>
