@@ -48,9 +48,7 @@ export const InterviewDateSelector = ({
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {interviewSchedule.dates.map((date) => {
-                  const handleDateClick = (e: React.MouseEvent) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                  const toggleDate = () => {
                     const isSelected = formData.interviewDates.includes(date.value);
                     setFormData((prev) => ({
                       ...prev,
@@ -60,7 +58,7 @@ export const InterviewDateSelector = ({
                       selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate === date.value ? "" : prev.selectedInterviewDate,
                     }));
                   };
-                  
+
                   return (
                     <div
                       key={date.value}
@@ -72,11 +70,11 @@ export const InterviewDateSelector = ({
                           ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
                           : "border-border/40 bg-secondary/10 hover:border-blue-600/40 hover:bg-secondary/20 active:scale-[0.98]"
                       }`}
-                      onClick={handleDateClick}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleDate(); }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          handleDateClick(e as any);
+                          toggleDate();
                         }
                       }}
                     >

@@ -42,7 +42,7 @@ const projectsData: Project[] = [
       "수원시 카드 소비 데이터를 활용하여 기존 복지·금융 지표로는 포착하기 어려운 소비 취약 집단을 식별하고, 데이터 기반 맞춤형 정책 방향을 제안합니다. Isolation Forest와 군집 분석을 결합한 2단계 분석 프레임워크를 적용해 서로 다른 원인을 가진 소비 취약군을 도출하였습니다.",
     generation: "8기",
     track: "ML 심화",
-    thumbnail: "",
+    thumbnail: "/images/projects/Consumption-Vulnerability.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-MLFull-CardBasedSugg",
   },
@@ -53,7 +53,7 @@ const projectsData: Project[] = [
       "CCTV 영상에서 장애인 전용 주차구역에 주차된 차량에서 하차하는 사람의 보행 특성(Gait)을 분석하여, 보행상 장애 이용자가 실제로 탑승했을 가능성을 비식별적으로 추정하는 컴퓨터 비전 기반 프로토타입 시스템입니다. YOLO 기반 객체 탐지와 BoT-SORT 기반 Multi-object Tracking을 결합하였습니다.",
     generation: "8기",
     track: "CV",
-    thumbnail: "",
+    thumbnail: "/images/projects/Parking-Violation.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-CV-DisabledParkingGuard",
   },
@@ -64,7 +64,7 @@ const projectsData: Project[] = [
       "ResNet-34의 Grad-CAM 시각화 결과를 Gemini API가 분석하여, 기존 딥러닝 모델이 놓치던 미세 결함(False Negative)을 언어적 추론으로 찾아내는 하이브리드 검출 시스템입니다. 재학습 없이도 미검출 결함 탐지율을 개선합니다.",
     generation: "8기",
     track: "데이터비즈니스",
-    thumbnail: "",
+    thumbnail: "/images/projects/Defect-Detection.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DB-Refocus",
   },
@@ -75,7 +75,7 @@ const projectsData: Project[] = [
       "실시간 동시 접속자 수(PCCU)와 매칭 필터 알고리즘을 결합하여 게임 서비스 상태 및 유저 체감 품질을 지표화한 데이터 엔지니어링 프로젝트입니다. Steam API와 커뮤니티 여론 데이터를 수집하고, 독자적인 '적합 유저 유입 속도' 수식을 적용하여 유저에게 최적의 플레이 타이밍을 제안합니다.",
     generation: "8기",
     track: "데이터엔지니어링",
-    thumbnail: "",
+    thumbnail: "/images/projects/Match-Quality.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DE-SteamQueue",
   },
@@ -86,7 +86,7 @@ const projectsData: Project[] = [
       "자소서 텍스트에서 검증 가능한 주장(Claim)을 추출하고, 즉석 후속 질문을 통해 검증하는 시스템입니다. BERT 계열 모델로 Claim을 파싱하고 LLM으로 질문을 생성하며, FastAPI + PostgreSQL + FAISS로 전체 파이프라인을 구축하였습니다.",
     generation: "8기",
     track: "NLP",
-    thumbnail: "",
+    thumbnail: "/images/projects/Claim-Verification.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-NLP-CoverLetter",
   },
@@ -97,20 +97,29 @@ const projectsData: Project[] = [
       "사이버펑크 2077의 출시 전후 여론 변화를 시뮬레이션하기 위해, 3가지 다른 방법론을 비교 분석하는 프로젝트입니다. 공통된 평가 스크립트와 공통 페르소나 모듈을 사용하여 실험의 일관성을 유지하며, 에이전트 기반 시뮬레이션을 통해 시간에 따른 동적 변화를 모델링합니다.",
     generation: "8기",
     track: "NLP",
-    thumbnail: "",
+    thumbnail: "/images/projects/Sentiment-Simulation.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-NLP-Persona",
   },
   {
-    title: "AI 말하기 평가 — 국회 회의록 요약, 그림 기반 문장 생성, 일상 대화 연결",
-    members: "노건우, 양하린, 백준서, 구민채",
+    title: "유튜브 썸네일 효과 분석",
+    members: "",
     longDescription:
-      "국회 회의록 요약, 그림 기반 문장 생성, 한국어 일상 대화 연결의 3가지 NLP 태스크를 수행하는 프로젝트입니다. 각 팀이 독립적으로 개발 브랜치에서 작업하며, 공통된 평가 프레임워크를 통해 성능을 비교합니다.",
+      "유튜브 썸네일이 시청자 클릭률과 시청 지속 시간에 미치는 영향을 데이터로 분석하는 프로젝트입니다.",
     generation: "8기",
-    track: "NLP",
-    thumbnail: "",
+    track: "CV",
+    thumbnail: "/images/projects/Thumbnail-Impact.png",
     slides: [],
-    githubUrl: "https://github.com/khuda-data/8th-NLP-malpyeong",
+  },
+  {
+    title: "수원시 공유 냉장고 싹쓸이 감지 패턴 모델",
+    members: "",
+    longDescription:
+      "수원시 공유 냉장고 이용 데이터를 활용하여 비정상적 싹쓸이 패턴을 감지하고, 공정한 나눔이 이루어지도록 지원하는 모델 개발 프로젝트입니다.",
+    generation: "8기",
+    track: "데이터엔지니어링",
+    thumbnail: "/images/projects/Hoarding-Detection.png",
+    slides: [],
   },
 ];
 
@@ -119,19 +128,16 @@ const projectsData: Project[] = [
 // ============================================================================
 
 const generations = ["모든 기수", "9기", "8기", "7기", "6기", "5기", "4기", "3기", "2기", "1기"];
-const trackOptions = ["모든 트랙", "ML 심화", "CV", "NLP", "데이터비즈니스", "데이터엔지니어링"];
+const trackOptions = ["모든 트랙", "NLP", "CV", "데이터엔지니어링", "데이터비즈니스", "ML 심화"];
+
+/** 카드 노출 순서: 트랙 순서대로 정렬할 때 사용 */
+const trackDisplayOrder = ["NLP", "CV", "데이터엔지니어링", "데이터비즈니스", "ML 심화"];
 
 // ============================================================================
-// 트랙 색상 매핑
+// 트랙 색상
 // ============================================================================
 
-const trackAccentMap: Record<string, string> = {
-  "ML 심화": "text-blue-600",
-  CV: "text-blue-600",
-  NLP: "text-blue-600",
-  "데이터비즈니스": "text-blue-600",
-  "데이터엔지니어링": "text-blue-600",
-};
+const TRACK_ACCENT_CLASS = "text-blue-600";
 
 // ============================================================================
 // 커스텀 셀렉트 컴포넌트
@@ -249,7 +255,7 @@ const ProjectModal = ({
   project: Project;
   onClose: () => void;
 }) => {
-  const accentColor = trackAccentMap[project.track] || "text-muted-foreground";
+  const accentColor = TRACK_ACCENT_CLASS;
 
   // ESC 키로 닫기
   useEffect(() => {
@@ -344,12 +350,13 @@ const ProjectCard = ({
   project: Project;
   onClick: () => void;
 }) => {
-  const accentColor = trackAccentMap[project.track] || "text-muted-foreground";
+  const accentColor = TRACK_ACCENT_CLASS;
 
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
-      className="group rounded-xl sm:rounded-2xl bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-lg cursor-pointer"
+      className="group w-full text-left rounded-xl sm:rounded-2xl bg-card border border-border hover:border-foreground/20 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-lg cursor-pointer"
     >
       {/* 썸네일 이미지 */}
       <div className="relative aspect-[16/10] overflow-hidden bg-muted flex items-center justify-center">
@@ -382,7 +389,7 @@ const ProjectCard = ({
           {project.title}
         </h3>
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -398,7 +405,7 @@ const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
-    return projectsData.filter((project) => {
+    const filtered = projectsData.filter((project) => {
       const matchesGeneration =
         selectedGeneration === "모든 기수" || project.generation === selectedGeneration;
       const matchesTrack =
@@ -409,6 +416,10 @@ const ProjectsSection = () => {
         project.members.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesGeneration && matchesTrack && matchesSearch;
     });
+    return [...filtered].sort(
+      (a, b) =>
+        trackDisplayOrder.indexOf(a.track) - trackDisplayOrder.indexOf(b.track)
+    );
   }, [selectedGeneration, selectedTrack, searchQuery]);
 
   const handleCloseModal = useCallback(() => {

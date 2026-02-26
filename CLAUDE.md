@@ -1,5 +1,12 @@
 # CLAUDE.md
 
+## 언어 및 커뮤니케이션 규칙
+- 기본 응답 언어: 한국어
+- 코드 주석: 한국어로 작성
+- 커밋 메시지: 영어로 작성
+- 문서화: 한국어로 작성
+- 변수명/함수명: 영어 (코드 표준 준수)
+
 ## Project Overview
 
 KHUDA Homepage Web Project - Official website for KHUDA, a data analysis club at Kyung Hee University
@@ -79,3 +86,28 @@ pnpm preview    # Preview build output
 - Page-specific components are located in `src/components/pages/`
 - Shared components are located in `src/components/shared/`
 - Korean commit messages are allowed
+
+## Key Architectural Decisions
+
+- **QueryClient** is configured with `retry: 1`, `staleTime: 5min`, `refetchOnWindowFocus: false` (in `App.tsx`)
+- **Scroll animation** uses a custom `useScrollAnimation` hook with IntersectionObserver (`src/hooks/use-scroll-animation.ts`)
+- **Dual toast system**: both shadcn/ui `Toaster` and `sonner` Toaster are mounted in `App.tsx` — use `sonner` for simple notifications, shadcn `useToast` for form feedback
+- **API layer** (`src/lib/api.ts`) uses a typed `apiCall` wrapper with custom `ApiError`/`NetworkError` classes and 30s timeout
+- **Analytics** reads `VITE_GA_MEASUREMENT_ID` env var, falling back to the hardcoded ID
+- **Grainient** and **RotatingText** are `.jsx` files (OGL WebGL shader / CSS animation) — intentionally not TypeScript
+- **Projects data** is currently hardcoded in `ProjectsSection.tsx` — replace with API when backend is ready
+
+## Development Notes
+
+- Never mutate React state directly — always use the setter function
+- Interactive `div` elements with `onClick` should be converted to `button` elements for accessibility
+- Reusable sub-components should be extracted to avoid DRY violations (see `ExecutiveCard` pattern)
+- CSS classes that conflict (e.g., `top-0` and `-top-8` on same element) — keep only the intended one
+- The `vite.config.ts` dev proxy targets `http://3.38.172.201:8000` — this is the staging API server
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_BASE_URL` | Backend API base URL | `https://api-khuda.gaeng02.com` |
+| `VITE_GA_MEASUREMENT_ID` | Google Analytics ID | `G-PD86DRNELF` |

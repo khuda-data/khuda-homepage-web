@@ -113,7 +113,7 @@ const AboutMainSection = () => {
         {/* 빨간 원 - 우상단 */}
         <div className="absolute -top-16 -right-16 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 bg-red-500 rounded-full opacity-15 blur-sm"></div>
         {/* 초록 다각형 - 좌상단 */}
-        <div className="absolute top-0 left-0 -top-8 -left-8 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-green-500 opacity-15 blur-sm transform rotate-12"></div>
+        <div className="absolute -top-8 -left-8 w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-green-500 opacity-15 blur-sm transform rotate-12"></div>
         {/* 시안 다각형 - 중앙 좌측 */}
         <div className="absolute top-1/2 left-0 -left-10 w-36 h-36 sm:w-48 sm:h-48 md:w-60 md:h-60 bg-cyan-500 opacity-15 blur-sm transform -rotate-12"></div>
         {/* 파란 다각형 - 우하단 */}
@@ -136,7 +136,7 @@ const AboutMainSection = () => {
                   <strong className="text-lg sm:text-xl md:text-2xl">KHUDA</strong>
                   <span className="text-xs sm:text-sm md:text-base text-muted-foreground"> (Kyung Hee University Data Analysis & AI)</span>는 경희대학교를 대표하는 데이터 · AI 학회입니다.
                   <br className="hidden sm:block" />
-                  <span className="sm:inline"> 2022년 설립 이래 9개 기수를 거치며 300명 이상의 데이터 인재를 배출,</span>
+                  <span className="sm:inline"> 2022년 설립 이래 9개 기수를 거치며 400명 이상의 데이터 인재를 배출,</span>
                   <br className="hidden sm:block" />
                   <span className="sm:inline"> 교내를 넘어 학문과 실무를 잇는 핵심 커뮤니티로 자리매김했습니다.</span>
                 </p>

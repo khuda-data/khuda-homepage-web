@@ -1313,15 +1313,15 @@ export interface GenerationSponsors {
 
 // 년도별 후원사 데이터 (년도 내림차순 정렬)
 export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
-  { name: "몬스터", year: 2026 },
+  { name: "몬스터 에너지", year: 2026 },
   { name: "김성민커피", year: 2025 },
-  { name: "블레이버스", year: 2025 },
-  { name: "러버블", year: 2025 },
-  { name: "퍼플", year: 2025 },
-  { name: "몬스터", year: 2025 },
+  { name: "Blaybus", year: 2025 },
+  { name: "Lovable", year: 2025 },
+  { name: "Perplexity", year: 2025 },
+  { name: "몬스터 에너지", year: 2025 },
   { name: "한빛미디어", year: 2025 },
   { name: "현대모비스", year: 2024 },
-  { name: "중앙동아리연합회", description: "6기부터 (~2024)", year: 2024 },
+  { name: "경희대학교 중앙동아리연합회", description: "6기부터 (~2024)", year: 2024 },
 ];
 
 // 기수별 역대 후원사 데이터 (하위 호환성 유지)

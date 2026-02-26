@@ -17,7 +17,15 @@ import Apply from "./pages/Apply";
 import ApplicationResult from "./pages/ApplicationResult";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const ScrollToTop = () => {
   const location = useLocation();
