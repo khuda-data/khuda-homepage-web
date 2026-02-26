@@ -36,7 +36,7 @@ const Header = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -63,7 +63,7 @@ const Header = () => {
     return (
       <Link
         to={link.href}
-        onClick={() => handleNavClick(link.href)}
+        onClick={handleNavClick}
         className={cn(className, isActive && "nav-link-active")}
       >
         {link.label}
@@ -138,7 +138,7 @@ const Header = () => {
             ))}
             <Link
               to={ROUTES.recruiting}
-              onClick={() => handleNavClick(ROUTES.recruiting)}
+              onClick={handleNavClick}
               className="text-white text-2xl font-semibold tracking-wide hover:opacity-70 transition-opacity duration-300"
             >
               {HEADER_CONFIG.applyButton.desktop}

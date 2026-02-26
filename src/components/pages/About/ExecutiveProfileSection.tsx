@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG, EXECUTIVE_PROFILES } from "@/lib/constants";
+import { SCROLL_ANIMATION_CONFIG, EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Mail, GraduationCap } from "lucide-react";
 
@@ -8,6 +8,52 @@ const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
   rootMargin: "0px 0px -80px 0px",
 };
+
+const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
+  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group">
+    <div className="text-center mb-3 sm:mb-4">
+      <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
+        {executive.name}
+      </h4>
+      <p className="text-xs sm:text-sm text-gray-600 font-medium">
+        {executive.role === "트랙장" && executive.department
+          ? `${executive.department} ${executive.role}`
+          : executive.department && executive.role !== "트랙장"
+          ? `${executive.role} · ${executive.department} 트랙장`
+          : executive.role}
+      </p>
+    </div>
+
+    {(executive.affiliation || executive.department) && (
+      <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
+        <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
+        <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
+          {executive.affiliation || executive.department}
+        </p>
+      </div>
+    )}
+
+    {executive.email && (
+      <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
+        <a
+          href={`mailto:${executive.email}`}
+          className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          aria-label="이메일"
+        >
+          <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        </a>
+      </div>
+    )}
+  </div>
+);
+
+const ExecutiveGrid = ({ executives }: { executives: ExecutiveProfile[] }) => (
+  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
+    {executives.map((executive, index) => (
+      <ExecutiveCard key={`${executive.name}-${index}`} executive={executive} />
+    ))}
+  </div>
+);
 
 const ExecutiveProfileSection = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
@@ -52,51 +98,7 @@ const ExecutiveProfileSection = () => {
               {currentGeneration.generation}
             </h3>
             <div className="px-4 sm:px-6 md:px-8">
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
-              {currentGeneration.executives.map((executive, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
-                >
-                  {/* 이름과 역할 */}
-                  <div className="text-center mb-3 sm:mb-4">
-                    <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
-                      {executive.name}
-                    </h4>
-                    <p className="text-xs sm:text-sm text-gray-600 font-medium">
-                      {executive.role === "트랙장" && executive.department
-                        ? `${executive.department} ${executive.role}`
-                        : executive.department && executive.role !== "트랙장"
-                        ? `${executive.role} · ${executive.department} 트랙장`
-                        : executive.role}
-                    </p>
-                  </div>
-
-                  {/* 소속 정보 */}
-                  {(executive.affiliation || executive.department) && (
-                    <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
-                      <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
-                      <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
-                        {executive.affiliation || executive.department}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* 이메일 링크 */}
-                  {executive.email && (
-                    <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
-                      <a
-                        href={`mailto:${executive.email}`}
-                        className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                        aria-label="이메일"
-                      >
-                        <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </a>
-                    </div>
-                  )}
-                </div>
-              ))}
-              </div>
+              <ExecutiveGrid executives={currentGeneration.executives} />
             </div>
           </div>
 
@@ -135,51 +137,7 @@ const ExecutiveProfileSection = () => {
                       )}
                     >
                       <div className="px-4 sm:px-6 md:px-8 py-5 sm:py-6 md:py-8 border-t border-gray-200 bg-gray-50">
-                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
-                          {generation.executives.map((executive, index) => (
-                            <div
-                              key={index}
-                              className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group"
-                            >
-                              {/* 이름과 역할 */}
-                              <div className="text-center mb-3 sm:mb-4">
-                                <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
-                                  {executive.name}
-                                </h4>
-                                <p className="text-xs sm:text-sm text-gray-600 font-medium">
-                                  {executive.role === "트랙장" && executive.department
-                                    ? `${executive.department} ${executive.role}`
-                                    : executive.department && executive.role !== "트랙장"
-                                    ? `${executive.role} · ${executive.department} 트랙장`
-                                    : executive.role}
-                                </p>
-                              </div>
-
-                              {/* 소속 정보 */}
-                              {(executive.affiliation || executive.department) && (
-                                <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
-                                  <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
-                                  <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
-                                    {executive.affiliation || executive.department}
-                                  </p>
-                                </div>
-                              )}
-
-                              {/* 이메일 링크 */}
-                              {executive.email && (
-                                <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
-                                  <a
-                                    href={`mailto:${executive.email}`}
-                                    className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                                    aria-label="이메일"
-                                  >
-                                    <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                        <ExecutiveGrid executives={generation.executives} />
                       </div>
                     </div>
                   </div>

@@ -140,15 +140,6 @@ export const useApplicationForm = (questions: Question[]) => {
         return;
       }
       
-      const interviewDatesQuestion = findInterviewQuestion(true);
-      const interviewTimesQuestion = findInterviewQuestion(false);
-      
-      if (interviewDatesQuestion) {
-        formData.answers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
-      }
-      if (interviewTimesQuestion) {
-        formData.answers[interviewTimesQuestion.id.toString()] = JSON.stringify(formData.interviewTimesByDate);
-      }
     }
 
     const missingRequiredQuestions = questions.filter(q => {
