@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { trackPageView } from "./utils/analytics";
 import ScrollToTopButton from "./components/shared/ScrollToTopButton";
 import Index from "./pages/Index";
@@ -49,29 +50,31 @@ const PageTracker = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <PageTracker />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/activities" element={<Activities />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/sponsor" element={<Sponsor />} />
-          <Route path="/recruiting" element={<Recruiting />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/apply" element={<Apply />} />
-          <Route path="/application-result" element={<ApplicationResult />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ScrollToTopButton />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <PageTracker />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/activities" element={<Activities />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/sponsor" element={<Sponsor />} />
+            <Route path="/recruiting" element={<Recruiting />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/apply" element={<Apply />} />
+            <Route path="/application-result" element={<ApplicationResult />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <ScrollToTopButton />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

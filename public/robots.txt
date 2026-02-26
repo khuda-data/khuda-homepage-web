@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /apply
+Disallow: /application-result
+
+Sitemap: https://khuda.co.kr/sitemap.xml
