@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
+import SEO from "@/components/shared/SEO";
 
 const Apply = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SEO
+        title="지원하기 | KHUDA"
+        description="KHUDA 신규 부원 지원서를 작성하세요."
+        path="/apply"
+        noindex={true}
+      />
       <div className="text-center w-full">
         <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-8 sm:mb-12">
           아직 모집 기간이 아니에요.

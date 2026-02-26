@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
+import SEO from "@/components/shared/SEO";
 import { cn } from "@/lib/utils";
 
 const timelineSteps = [
@@ -259,6 +260,11 @@ const Activities = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <SEO
+        title="활동 | KHUDA"
+        description="KHUDA의 다양한 활동을 소개합니다."
+        path="/activities"
+      />
       <Header />
 
       <main>

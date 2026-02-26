@@ -7,6 +7,7 @@ import { ROUTES } from "@/lib/constants";
 import Footer from "@/components/shared/Footer";
 import { ResultQueryForm } from "@/components/pages/ApplicationResult/ResultQueryForm";
 import { ResultCard } from "@/components/pages/ApplicationResult/ResultCard";
+import SEO from "@/components/shared/SEO";
 
 // 합격자 조회 오픈 시간: 2026년 1월 12일 오후 6시 (한국 시간, KST)
 const OPEN_TIME = new Date("2026-01-12T18:00:00+09:00");
@@ -152,6 +153,12 @@ const ApplicationResult = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEO
+        title="합격자 조회 | KHUDA"
+        description="KHUDA 지원 결과를 조회할 수 있습니다. 학번, 전화번호, 이름을 입력하여 합격 여부를 확인하세요."
+        path="/application-result"
+        noindex={true}
+      />
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6 md:px-12 py-3 sm:py-4">
           <Link

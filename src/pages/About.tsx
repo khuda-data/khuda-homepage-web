@@ -6,6 +6,7 @@ import IntroductionSection from "@/components/pages/About/IntroductionSection";
 import MissionSection from "@/components/pages/About/MissionSection";
 import VisionSection from "@/components/pages/About/VisionSection";
 import ExecutiveProfileSection from "@/components/pages/About/ExecutiveProfileSection";
+import SEO from "@/components/shared/SEO";
 import { cn } from "@/lib/utils";
 
 type TabType = "Mission-Vision" | "Organization";
@@ -15,6 +16,11 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEO
+        title="소개 | KHUDA"
+        description="경희대학교 KHUDA의 미션, 비전, 운영진을 소개합니다."
+        path="/about"
+      />
       <Header />
       <main>
         <PageHeroSection
