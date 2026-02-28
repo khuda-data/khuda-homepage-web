@@ -1,5 +1,3 @@
-import React from "react";
-import { MapPin, Code, BookOpen, Users, Activity, Calendar, Award, Heart, Layers, FileText } from "lucide-react";
 import { APPLICATION_FORM_CONFIG } from "./constants";
 
 export const getPlaceholder = (questionText: string): string => {
@@ -13,21 +11,8 @@ export const getPlaceholder = (questionText: string): string => {
   return APPLICATION_FORM_CONFIG.commonTexts.defaultPlaceholder;
 };
 
-export const getQuestionIcon = (questionText: string): JSX.Element | null => {
-  if (questionText.includes("거주") || questionText.includes("지역")) return <MapPin className="w-5 h-5 text-primary" />;
-  if (questionText.includes("파이썬") || questionText.includes("Python")) return <Code className="w-5 h-5 text-primary" />;
-  if (questionText.includes("데이터 분석") || questionText.includes("AI 분야")) return <BookOpen className="w-5 h-5 text-primary" />;
-  if (questionText.includes("지원 동기") || questionText.includes("역량")) return null; // 번호로 표시
-  if (questionText.includes("도전") || questionText.includes("끈기")) return null; // 번호로 표시
-  if (questionText.includes("프로젝트") || questionText.includes("탐구")) return null; // 번호로 표시
-  if (questionText.includes("소모임") || questionText.includes("스터디")) return <Users className="w-5 h-5 text-primary" />;
-  if (questionText.includes("활동")) return <Activity className="w-5 h-5 text-primary" />;
-  if (questionText.includes("일정")) return <Calendar className="w-5 h-5 text-primary" />;
-  if (questionText.includes("자격증") || questionText.includes("수상")) return <Award className="w-5 h-5 text-primary" />;
-  if (questionText.includes("바라는") || questionText.includes("9기에게")) return <Heart className="w-5 h-5 text-primary" />;
-  if (questionText.includes("트랙")) return <Layers className="w-5 h-5 text-primary" />;
-  if (questionText.includes("스터디 개설")) return <BookOpen className="w-5 h-5 text-primary" />;
-  return <FileText className="w-5 h-5 text-primary" />;
+export const getQuestionIcon = (_questionText: string): null => {
+  return null;
 };
 
 export const getQuestionNumber = (questionText: string): string | null => {

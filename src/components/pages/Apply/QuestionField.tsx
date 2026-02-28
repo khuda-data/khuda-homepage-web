@@ -40,7 +40,7 @@ export const QuestionField = ({
         className={`h-12 rounded-xl border-border/50 focus:outline-none transition-all duration-200 ease-out ${
           isStudyDisabled 
             ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
-            : "bg-secondary/30 focus:border-primary/60 focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
+            : "bg-secondary/30 focus:border-blue-500/60 focus:scale-[1.01] focus:shadow-md focus:shadow-blue-500/10"
         }`}
       />
     );
@@ -69,7 +69,7 @@ export const QuestionField = ({
         className={`min-h-[100px] sm:min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out text-sm sm:text-base ${
           isStudyDisabled 
             ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
-            : "bg-secondary/30 focus:border-primary/60 focus:scale-[1.005] focus:shadow-md focus:shadow-primary/10"
+            : "bg-secondary/30 focus:border-blue-500/60 focus:scale-[1.005] focus:shadow-md focus:shadow-blue-500/10"
         }`}
       />
     );
@@ -98,7 +98,7 @@ export const QuestionField = ({
                 onClick={() => onCheckboxChange(question.id, option, !isChecked)}
               >
                 <div className={getCheckboxIconClass(isChecked)}>
-                  {isChecked && <Check className="h-3 w-3 text-primary-foreground" />}
+                  {isChecked && <Check className="h-3 w-3 text-blue-500-foreground" />}
                 </div>
                 <span className="font-medium">{option}</span>
               </div>

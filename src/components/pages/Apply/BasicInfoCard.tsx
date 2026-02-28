@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserCircle } from "lucide-react";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
 import type { Question } from "@/lib/api";
 
@@ -14,11 +13,10 @@ export const BasicInfoCard = ({ questions, children }: BasicInfoCardProps) => {
   return (
     <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-xl text-foreground flex items-center gap-3">
-          <UserCircle className="w-5 h-5 text-blue-600" />
+        <CardTitle className="text-lg sm:text-xl text-foreground">
           {APPLICATION_FORM_CONFIG.sections.basicInfo}
         </CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
+        <CardDescription className="text-xs sm:text-sm text-muted-foreground">
           지원에 필요한 기본 정보를 입력해주세요.
         </CardDescription>
       </CardHeader>

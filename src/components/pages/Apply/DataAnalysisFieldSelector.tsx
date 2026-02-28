@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { APPLICATION_FORM_CONFIG, COMMON_STYLES } from "@/lib/constants";
 import { getCheckboxContainerClass, getCheckboxIconClass } from "@/lib/form-utils";
 import type { Question } from "@/lib/api";
@@ -38,8 +38,7 @@ export const DataAnalysisFieldSelector = ({ question, answer, onAnswerChange }: 
     <Card key={question.id} className={COMMON_STYLES.cardBase}>
       <div className={COMMON_STYLES.cardGradient}></div>
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
-          <BookOpen className="w-5 h-5 text-primary" />
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
           {question.question}
         </CardTitle>
         <CardDescription>해당하는 항목을 모두 선택해주세요.</CardDescription>
@@ -58,13 +57,13 @@ export const DataAnalysisFieldSelector = ({ question, answer, onAnswerChange }: 
             >
               <div className={getCheckboxIconClass(dataAnalysisFieldsArray.includes(field))}>
                 {dataAnalysisFieldsArray.includes(field) && (
-                  <Check className="h-3 w-3 text-primary-foreground" />
+                  <Check className="h-3 w-3 text-blue-500-foreground" />
                 )}
               </div>
               <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
                 <span>{field}</span>
                 {dataAnalysisFieldsArray.includes(field) && (
-                  <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                  <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                     선택됨
                   </Badge>
                 )}
@@ -85,13 +84,13 @@ export const DataAnalysisFieldSelector = ({ question, answer, onAnswerChange }: 
           >
             <div className={getCheckboxIconClass(dataAnalysisFieldsArray.some((f) => f.startsWith("기타")))}>
               {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
-                <Check className="h-3 w-3 text-primary-foreground" />
+                <Check className="h-3 w-3 text-blue-500-foreground" />
               )}
             </div>
             <div className="cursor-pointer flex-1 text-sm flex items-center gap-2">
               <span>기타</span>
               {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
-                <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                   선택됨
                 </Badge>
               )}
@@ -99,7 +98,7 @@ export const DataAnalysisFieldSelector = ({ question, answer, onAnswerChange }: 
             {dataAnalysisFieldsArray.some((f) => f.startsWith("기타")) && (
               <Input
                 placeholder="기타 항목을 입력해주세요"
-                className="ml-2 flex-1 h-10 rounded-xl bg-secondary/30 border-border/50 focus:border-primary/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-primary/10"
+                className="ml-2 flex-1 h-10 min-h-[44px] rounded-xl bg-secondary/30 border-border/50 focus:border-blue-500/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.01] focus:shadow-md focus:shadow-blue-500/10"
                 onClick={(e) => e.stopPropagation()}
                 value={dataAnalysisFieldsArray.find((f) => f.startsWith("기타"))?.replace("기타: ", "") || ""}
                 onChange={(e) => {

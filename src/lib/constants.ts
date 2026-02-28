@@ -1275,7 +1275,7 @@ export const BUTTON_CONFIG = {
 };
 
 export const COMMON_STYLES = {
-  cardGradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-primary/25 rounded-lg opacity-50",
+  cardGradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-500/25 rounded-lg opacity-50",
   cardBase: "relative border border-border shadow-lg bg-card overflow-hidden",
 } as const;
 

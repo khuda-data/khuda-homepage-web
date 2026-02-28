@@ -17,10 +17,10 @@ export const ResidenceSelector = ({ question, answer, onAnswerChange }: Residenc
     <Card key={question.id} className={COMMON_STYLES.cardBase}>
       <div className={COMMON_STYLES.cardGradient}></div>
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
           <MapPin className="w-5 h-5 text-blue-600" />
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           {APPLICATION_FORM_CONFIG.residenceDescription}

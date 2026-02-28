@@ -15,9 +15,9 @@ export const TextInputField = ({ question, answer, onAnswerChange }: TextInputFi
   
   return (
     <div key={question.id} className="space-y-3 w-full">
-      <Label htmlFor={questionId} className="text-sm font-semibold flex items-center flex-wrap gap-2">
+      <Label htmlFor={questionId} className="text-xs sm:text-sm font-semibold flex items-center flex-wrap gap-2">
         {question.question}
-        {question.required && <span className="text-destructive">*</span>}
+        {question.required && <span className="text-blue-500">*</span>}
       </Label>
       <Input
         id={questionId}
