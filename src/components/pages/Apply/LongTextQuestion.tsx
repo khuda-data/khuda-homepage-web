@@ -19,9 +19,9 @@ export const LongTextQuestion = ({ question, answer, onAnswerChange }: LongTextQ
     <Card key={question.id} className={COMMON_STYLES.cardBase}>
       <div className={COMMON_STYLES.cardGradient}></div>
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
         {description && (
           <CardDescription>

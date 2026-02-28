@@ -51,7 +51,7 @@ export const ResultQueryForm = ({
         <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
           <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="student_id" className="text-sm sm:text-base font-medium">
-              학번 <span className="text-destructive">*</span>
+              학번 <span className="text-blue-500">*</span>
             </Label>
             <Input
               id="student_id"
@@ -63,19 +63,19 @@ export const ResultQueryForm = ({
               disabled={isLoading}
               className={cn(
                 "min-h-[48px] sm:min-h-[44px] text-base sm:text-sm",
-                errors.student_id && "border-destructive focus-visible:ring-destructive"
+                errors.student_id && "border-blue-500 focus-visible:ring-blue-500"
               )}
               maxLength={10}
               minLength={10}
             />
             {errors.student_id && (
-              <p className="text-xs sm:text-sm text-destructive mt-1">{errors.student_id}</p>
+              <p className="text-xs sm:text-sm text-blue-500 mt-1">{errors.student_id}</p>
             )}
           </div>
 
           <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="phone_number" className="text-sm sm:text-base font-medium">
-              전화번호 <span className="text-destructive">*</span>
+              전화번호 <span className="text-blue-500">*</span>
             </Label>
             <Input
               id="phone_number"
@@ -87,13 +87,13 @@ export const ResultQueryForm = ({
               disabled={isLoading}
               className={cn(
                 "min-h-[48px] sm:min-h-[44px] text-base sm:text-sm",
-                errors.phone_number && "border-destructive focus-visible:ring-destructive"
+                errors.phone_number && "border-blue-500 focus-visible:ring-blue-500"
               )}
               maxLength={11}
               minLength={11}
             />
             {errors.phone_number ? (
-              <p className="text-xs sm:text-sm text-destructive mt-1">{errors.phone_number}</p>
+              <p className="text-xs sm:text-sm text-blue-500 mt-1">{errors.phone_number}</p>
             ) : (
               <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 하이픈(-) 없이 숫자만 입력해주세요.
@@ -103,7 +103,7 @@ export const ResultQueryForm = ({
 
           <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="name" className="text-sm sm:text-base font-medium">
-              이름 <span className="text-destructive">*</span>
+              이름 <span className="text-blue-500">*</span>
             </Label>
             <Input
               id="name"
@@ -114,11 +114,11 @@ export const ResultQueryForm = ({
               disabled={isLoading}
               className={cn(
                 "min-h-[48px] sm:min-h-[44px] text-base sm:text-sm",
-                errors.name && "border-destructive focus-visible:ring-destructive"
+                errors.name && "border-blue-500 focus-visible:ring-blue-500"
               )}
             />
             {errors.name && (
-              <p className="text-xs sm:text-sm text-destructive mt-1">{errors.name}</p>
+              <p className="text-xs sm:text-sm text-blue-500 mt-1">{errors.name}</p>
             )}
           </div>
 

@@ -42,10 +42,10 @@ export const QuestionCard = ({ question, applicationType = "", isStudyDisabled =
   return (
     <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-xl text-foreground flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
           {questionIcon}
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
         {description && (
           <CardDescription className={isStudyDisabled ? "text-muted-foreground" : ""}>
@@ -53,7 +53,7 @@ export const QuestionCard = ({ question, applicationType = "", isStudyDisabled =
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4">
         {children}
       </CardContent>
     </Card>

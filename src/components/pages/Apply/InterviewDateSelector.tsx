@@ -23,10 +23,10 @@ export const InterviewDateSelector = ({
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50 pointer-events-none"></div>
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
           <Clock className="w-5 h-5 text-blue-600" />
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
         <CardDescription>
           면접 가능한 날짜와 시간을 모두 선택해주세요. 여러 날짜와 시간을 선택할 수 있습니다.

@@ -12,7 +12,7 @@ export const StatusDisplay = ({ status }: StatusDisplayProps) => {
   switch (statusType) {
     case 'fail':
       return (
-        <span className="text-sm sm:text-base font-semibold text-red-400">불합격</span>
+        <span className="text-sm sm:text-base font-semibold text-blue-400">불합격</span>
       );
     case 'pass':
       return (

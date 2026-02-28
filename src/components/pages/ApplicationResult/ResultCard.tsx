@@ -52,7 +52,7 @@ export const ResultCard = ({ result, onReset }: ResultCardProps) => {
             variant="ghost"
             size="sm"
             onClick={onReset}
-            className="text-xs sm:text-sm text-muted-foreground hover:text-foreground min-h-[36px] sm:min-h-[32px] px-2 sm:px-3"
+            className="text-xs sm:text-sm text-muted-foreground hover:text-foreground min-h-[44px] px-2 sm:px-3"
           >
             <RotateCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1" />
             <span className="hidden sm:inline">다시 조회</span>

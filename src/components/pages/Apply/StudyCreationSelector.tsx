@@ -18,10 +18,10 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
       <CardHeader className="relative z-10">
-        <CardTitle className="text-xl flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
           {questionIcon}
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
         <CardDescription>
           KHUDA는 강의 및 교재비를 일부 지원하고 있습니다. 많은 관심과 참여 부탁드립니다.
@@ -29,7 +29,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
       </CardHeader>
       <CardContent className="space-y-4 relative z-10">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
               type="button"
               onClick={(e) => {
@@ -37,7 +37,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
                 e.stopPropagation();
                 onAnswerChange(question.id, answer === "yes" ? "" : "yes");
               }}
-              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
+              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out min-h-[44px] ${
                 answer === "yes"
                   ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
                   : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
@@ -66,7 +66,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
               </span>
               {answer === "yes" && (
                 <div className="absolute top-1.5 right-1.5">
-                  <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                  <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                     선택됨
                   </Badge>
                 </div>
@@ -80,7 +80,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
                 e.stopPropagation();
                 onAnswerChange(question.id, answer === "no" ? "" : "no");
               }}
-              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out ${
+              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out min-h-[44px] ${
                 answer === "no"
                   ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
                   : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
@@ -109,7 +109,7 @@ export const StudyCreationSelector = ({ question, answer, onAnswerChange }: Stud
               </span>
               {answer === "no" && (
                 <div className="absolute top-1.5 right-1.5">
-                  <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                  <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                     선택됨
                   </Badge>
                 </div>

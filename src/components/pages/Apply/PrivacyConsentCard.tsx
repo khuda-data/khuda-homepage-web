@@ -19,16 +19,16 @@ export const PrivacyConsentCard = ({
   return (
     <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-xl text-foreground flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
           <FileText className="w-5 h-5 text-blue-600" />
           {question.question}
-          {question.required && <span className="text-destructive">*</span>}
+          {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="bg-secondary/30 p-6 rounded-xl border border-border/50">
-          <h3 className="text-lg font-semibold mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
-          <div className="space-y-4 text-sm leading-relaxed">
+        <div className="bg-secondary/30 p-4 sm:p-6 rounded-xl border border-border/50">
+          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
+          <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm leading-relaxed">
             <div>
               <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
               <p className="mb-2 text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
@@ -45,7 +45,7 @@ export const PrivacyConsentCard = ({
             </div>
           </div>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-2.5 sm:space-y-3">
           <div 
             className={getCheckboxContainerClass(answer === "agree")}
             onClick={(e) => {
@@ -54,7 +54,7 @@ export const PrivacyConsentCard = ({
               onAnswerChange(question.id, answer === "agree" ? "" : "agree");
             }}
           >
-            <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
               answer === "agree"
                 ? "border-blue-600 bg-blue-600"
                 : "border-border"
@@ -66,7 +66,7 @@ export const PrivacyConsentCard = ({
             <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
               <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
               {answer === "agree" && (
-                <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                   선택됨
                 </Badge>
               )}
@@ -80,7 +80,7 @@ export const PrivacyConsentCard = ({
               onAnswerChange(question.id, answer === "disagree" ? "" : "disagree");
             }}
           >
-            <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
               answer === "disagree"
                 ? "border-blue-600 bg-blue-600"
                 : "border-border"
@@ -92,7 +92,7 @@ export const PrivacyConsentCard = ({
             <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
               <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
               {answer === "disagree" && (
-                <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
+                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
                   선택됨
                 </Badge>
               )}

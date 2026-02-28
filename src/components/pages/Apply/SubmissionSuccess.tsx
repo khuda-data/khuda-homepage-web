@@ -6,21 +6,21 @@ import { RECRUITMENT_SCHEDULE } from "@/lib/constants";
 export const SubmissionSuccess = () => {
   return (
     <div className="fixed inset-0 bg-background flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-10 sm:py-12">
         <div className="w-full max-w-sm mx-auto flex flex-col items-center">
           {/* 성공 아이콘 */}
           <div className="mb-8 animate-[fade-up_0.4s_ease-out]">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-              <CheckCircle className="w-10 h-10 text-primary" strokeWidth={2.5} />
+            <div className="w-20 h-20 rounded-full bg-blue-500/10 flex items-center justify-center">
+              <CheckCircle className="w-10 h-10 text-blue-500" strokeWidth={2.5} />
             </div>
           </div>
 
           {/* 제목 */}
           <div className="text-center mb-12 animate-[fade-up_0.4s_ease-out_0.1s_both]">
-            <h1 className="text-[28px] font-semibold text-foreground leading-[1.3] mb-3 tracking-[-0.02em]">
+            <h1 className="text-2xl sm:text-[28px] font-semibold text-foreground leading-[1.3] mb-3 tracking-[-0.02em]">
               지원서가 제출되었습니다
             </h1>
-            <p className="text-[15px] text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
               결과는 발표 일정에 맞춰<br />
               홈페이지에서 확인하실 수 있습니다
             </p>
@@ -42,7 +42,7 @@ export const SubmissionSuccess = () => {
               <Button 
                 variant="hero" 
                 size="xl"
-                className="w-full h-14 text-[16px] font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 ease-out hover:scale-[1.01] active:scale-[0.99]"
+                className="w-full h-14 text-[16px] font-semibold rounded-xl shadow-lg transition-all duration-200 ease-out hover:scale-[1.01] active:scale-[0.99] bg-blue-600 text-white hover:shadow-[0_0_40px_rgb(59_130_246/0.4)]"
               >
                 메인으로 돌아가기
               </Button>
