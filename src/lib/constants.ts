@@ -667,7 +667,7 @@ export const CURRICULUM_INFO = {
   academicFestival: {
     title: "정기 학술제",
     subtitle: "심화 트랙의 마지막을 장식하는 프로젝트 데모데이",
-    description: "한 학기 동안 심화 트랙에서 쌓은 지식과 경험을 바탕으로 완성한 프로젝트를 발표하는 자리입니다. 포스터 발표와 정식 발표를 통해 동료들과 전문가들로부터 피드백을 받으며, 프로젝트의 완성도를 높여갑니다.",
+    description: "한 학기 동안 심화 트랙에서 쌓은 지식과 경험을 바탕으로 완성한 프로젝트를 발표하는 자리입니다. 포스터 발표와 최종 발표를 통해 동료들과 전문가들로부터 피드백을 받으며, 프로젝트의 완성도를 높여갑니다.",
     participation: {
       title: "참여 인원",
       description: "각 트랙별 4-6명 기준 한 팀 (트랙당 최대 2팀)",
@@ -678,7 +678,7 @@ export const CURRICULUM_INFO = {
       purpose: "부원들 간 프로젝트 피드백을 받기 어려웠다는 점을 개선하기 위해 도입되었습니다.",
     },
     formalPresentation: {
-      title: "정식 발표",
+      title: "최종 발표",
       description: "심사위원분들을 모셔서 진행하는 기존과 동일한 프로젝트 발표입니다.",
       purpose: "심사위원분들은 교수님을 비롯해 현직자 섭외 예정입니다.",
     },

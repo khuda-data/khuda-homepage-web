@@ -27,7 +27,7 @@ const AcademicFestivalContent = () => (
         </p>
       </div>
       <div className="flex-1 px-4 py-4 sm:py-0">
-        <h5 className="text-sm font-semibold text-foreground mb-1.5">정식 발표</h5>
+        <h5 className="text-sm font-semibold text-foreground mb-1.5">최종 발표</h5>
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
           심사위원분들을 모셔서 진행하는 프로젝트 발표입니다.<br />
           교수님을 비롯해 현직자 분들이 심사위원으로 참여합니다.
