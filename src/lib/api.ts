@@ -26,16 +26,7 @@ export interface ApplicationResponse {
   status: string;
 }
 
-export interface InterviewDate {
-  value: string;
-  label: string;
-  subLabel: string;
-}
-
-export interface InterviewSchedule {
-  dates: InterviewDate[];
-  times: string[];
-}
+export type { InterviewDate, InterviewSchedule } from "@/types/interview";
 
 export interface ApplicationResultRequest {
   student_id: string;
@@ -281,7 +272,7 @@ const apiCall = async <T>(
     
     return validator(data);
   } catch (error) {
-    handleNetworkError(error);
+    return handleNetworkError(error);
   }
 };
 

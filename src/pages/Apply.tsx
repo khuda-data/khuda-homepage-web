@@ -26,6 +26,8 @@ const Apply = () => {
     interviewSchedule,
     updateAnswer,
     handleCheckboxChange,
+    handleDateToggle,
+    handleTimeToggle,
     handleSubmit,
     findQuestionByKeywords,
     findInterviewQuestion,
@@ -38,6 +40,12 @@ const Apply = () => {
     setApplicationType(formData.applicationType);
   }, [formData.applicationType]);
 
+  const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
+  const privacyAnswer = privacyQuestion ? formData.answers[privacyQuestion.id.toString()] || "" : "";
+  const basicInfoQuestions = commonQuestions.filter(
+    (q) => !q.question.includes("개인정보") && !q.question.includes("동의")
+  );
+
   const renderQuestion = (question: any) => {
     const questionId = question.id.toString();
     const answer = formData.answers[questionId] || "";
@@ -49,10 +57,13 @@ const Apply = () => {
         answer={answer}
         applicationType={formData.applicationType as "yb" | "ob" | ""}
         interviewSchedule={interviewSchedule}
-        formData={formData}
-        setFormData={setFormData}
+        interviewDates={formData.interviewDates}
+        selectedInterviewDate={formData.selectedInterviewDate}
+        interviewTimesByDate={formData.interviewTimesByDate}
         onAnswerChange={updateAnswer}
         onCheckboxChange={handleCheckboxChange}
+        onDateToggle={handleDateToggle}
+        onTimeToggle={handleTimeToggle}
         findInterviewQuestion={findInterviewQuestion}
         findQuestionByKeywords={findQuestionByKeywords}
         isApplicationType={isApplicationType}
@@ -103,34 +114,17 @@ const Apply = () => {
               }
             }}
           >
-            {(() => {
-              const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
-              if (!privacyQuestion) return null;
-              const privacyAnswer = formData.answers[privacyQuestion.id.toString()] || "";
+            {privacyQuestion && (
+              <PrivacyConsentCard
+                question={privacyQuestion}
+                answer={privacyAnswer}
+                onAnswerChange={updateAnswer}
+              />
+            )}
 
-              return (
-                <PrivacyConsentCard
-                  question={privacyQuestion}
-                  answer={privacyAnswer}
-                  onAnswerChange={updateAnswer}
-                />
-              );
-            })()}
-
-            {commonQuestions.filter(
-              (q) => !q.question.includes("개인정보") && !q.question.includes("동의")
-            ).length > 0 && (
-              <BasicInfoCard
-                questions={commonQuestions.filter(
-                  (q) => !q.question.includes("개인정보") && !q.question.includes("동의")
-                )}
-              >
-                {commonQuestions
-                  .filter((q) => {
-                    if (q.question.includes("개인정보") || q.question.includes("동의")) return false;
-                    return true;
-                  })
-                  .map((question) => renderQuestion(question))}
+            {basicInfoQuestions.length > 0 && (
+              <BasicInfoCard questions={basicInfoQuestions}>
+                {basicInfoQuestions.map((question) => renderQuestion(question))}
               </BasicInfoCard>
             )}
 

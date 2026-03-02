@@ -1,14 +1,104 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Users, Presentation, Award, Info, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { CURRICULUM_INFO, CURRICULUM_STYLES, SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+
+// ============================================================================
+// 서브컴포넌트 (모듈 스코프에 정의하여 매 렌더 시 재생성 방지)
+// ============================================================================
+
+const GradientBackground = () => (
+  <>
+    <div className={CURRICULUM_STYLES.gradient.background.layer1}></div>
+    <div className={CURRICULUM_STYLES.gradient.background.layer2}></div>
+  </>
+);
+
+const Tag = ({ children }: { children: React.ReactNode }) => (
+  <span className={CURRICULUM_STYLES.tag.base}>{children}</span>
+);
+
+const TagList = ({ tags }: { tags: string[] }) => (
+  <div className={CURRICULUM_STYLES.layout.tagContainer}>
+    {tags.map((tag) => (
+      <Tag key={tag}>{tag}</Tag>
+    ))}
+  </div>
+);
+
+const SectionHeader = ({ title }: { title: string }) => (
+  <div className={CURRICULUM_STYLES.spacing.contentGap}>
+    <h4 className={CURRICULUM_STYLES.text.title.medium}>{title}</h4>
+  </div>
+);
+
+const ProjectCard = ({
+  title,
+  description,
+  tags,
+}: {
+  title: string;
+  description: string;
+  tags: string[];
+}) => (
+  <div className={CURRICULUM_STYLES.card.withHover.medium}>
+    <h4 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.contentGap)}>{title}</h4>
+    <p className={cn(CURRICULUM_STYLES.text.body.small, CURRICULUM_STYLES.spacing.mediumGap)}>
+      {description}
+    </p>
+    <TagList tags={tags} />
+  </div>
+);
+
+const ContainerWithGradient = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <div className={cn(CURRICULUM_STYLES.container.base, CURRICULUM_STYLES.container.padding, className)}>
+    <GradientBackground />
+    <div className={CURRICULUM_STYLES.layout.relativeZ10}>
+      {children}
+    </div>
+  </div>
+);
+
+interface NavigationButtonProps {
+  direction: "prev" | "next";
+  className?: string;
+  onNavigate: (direction: "prev" | "next") => void;
+}
+
+const NavigationButton = ({ direction, className, onNavigate }: NavigationButtonProps) => {
+  const isPrev = direction === CURRICULUM_STYLES.navigation.direction.prev;
+  const Icon = isPrev ? ChevronLeft : ChevronRight;
+  const isSmall = className?.includes(CURRICULUM_STYLES.layout.mobileNavButton);
+  const iconSize = isSmall
+    ? CURRICULUM_STYLES.navigation.button.icon.small
+    : CURRICULUM_STYLES.navigation.button.icon.medium;
+
+  return (
+    <button
+      onClick={() => onNavigate(direction)}
+      className={cn(CURRICULUM_STYLES.navigation.button.base, className)}
+    >
+      <Icon className={cn(iconSize, CURRICULUM_STYLES.icon.white)} />
+    </button>
+  );
+};
+
+// ============================================================================
+// 메인 컴포넌트
+// ============================================================================
 
 const CurriculumSection = () => {
   const defaultSessionType = CURRICULUM_STYLES.sessionTypes[0];
   const defaultTrack = CURRICULUM_INFO.tracks[0];
   const tracksLength = CURRICULUM_INFO.tracks.length;
-  // 트랙 설명회 카드에 표시할 순서: DE → DB → NLP → CV → AIE → FIN
+
   const getTrackLabel = (id: string) => CURRICULUM_INFO.tracks.find(t => t.id === id)?.label || "";
   const trackLabels = [
     getTrackLabel("de"),
@@ -16,9 +106,9 @@ const CurriculumSection = () => {
     getTrackLabel("nlp"),
     getTrackLabel("cv"),
     getTrackLabel("aie"),
-    getTrackLabel("fin")
+    getTrackLabel("fin"),
   ].join(CURRICULUM_STYLES.separator.trackLabels);
-  
+
   const [sessionType, setSessionType] = useState<"basic" | "advanced">(defaultSessionType);
   const [activeTrack, setActiveTrack] = useState(defaultTrack.id);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -43,98 +133,12 @@ const CurriculumSection = () => {
     handleTrackChange(CURRICULUM_INFO.tracks[newIndex].id);
   };
 
-  // 공통 그라데이션 배경 컴포넌트
-  const GradientBackground = () => (
-    <>
-      <div className={CURRICULUM_STYLES.gradient.background.layer1}></div>
-      <div className={CURRICULUM_STYLES.gradient.background.layer2}></div>
-    </>
-  );
-
-  // 네비게이션 버튼 컴포넌트
-  const NavigationButton = ({ direction, className }: { direction: "prev" | "next"; className?: string }) => {
-    const isPrev = direction === CURRICULUM_STYLES.navigation.direction.prev;
-    const Icon = isPrev ? ChevronLeft : ChevronRight;
-    const isSmall = className?.includes(CURRICULUM_STYLES.layout.mobileNavButton);
-    const iconSize = isSmall 
-      ? CURRICULUM_STYLES.navigation.button.icon.small 
-      : CURRICULUM_STYLES.navigation.button.icon.medium;
-    
-    return (
-      <button
-        onClick={() => navigateTrack(direction)}
-        className={cn(
-          CURRICULUM_STYLES.navigation.button.base,
-          className
-        )}
-      >
-        <Icon className={cn(iconSize, CURRICULUM_STYLES.icon.white)} />
-      </button>
-    );
-  };
-
-  // 태그 렌더링 컴포넌트
-  const Tag = ({ children }: { children: React.ReactNode }) => (
-    <span className={CURRICULUM_STYLES.tag.base}>{children}</span>
-  );
-
-  // 태그 리스트 렌더링 헬퍼 컴포넌트
-  const TagList = ({ tags }: { tags: string[] }) => (
-    <div className={CURRICULUM_STYLES.layout.tagContainer}>
-      {tags.map((tag) => (
-        <Tag key={tag}>{tag}</Tag>
-      ))}
-    </div>
-  );
-
-  // 섹션 헤더 렌더링 헬퍼 컴포넌트
-  const SectionHeader = ({ title }: { title: string }) => (
-    <div className={CURRICULUM_STYLES.spacing.contentGap}>
-      <h4 className={CURRICULUM_STYLES.text.title.medium}>{title}</h4>
-    </div>
-  );
-
-  // 프로젝트 카드 렌더링 헬퍼 컴포넌트
-  const ProjectCard = ({ 
-    title, 
-    description, 
-    tags 
-  }: { 
-    title: string; 
-    description: string; 
-    tags: string[] 
-  }) => (
-    <div className={CURRICULUM_STYLES.card.withHover.medium}>
-      <h4 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.contentGap)}>{title}</h4>
-      <p className={cn(CURRICULUM_STYLES.text.body.small, CURRICULUM_STYLES.spacing.mediumGap)}>
-        {description}
-      </p>
-      <TagList tags={tags} />
-    </div>
-  );
-
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
   const isBasicSession = sessionType === defaultSessionType;
 
-  // 컨테이너 래퍼 컴포넌트 (그라데이션 배경 포함)
-  const ContainerWithGradient = ({ 
-    className, 
-    children 
-  }: { 
-    className?: string; 
-    children: React.ReactNode 
-  }) => (
-    <div className={cn(CURRICULUM_STYLES.container.base, CURRICULUM_STYLES.container.padding, className)}>
-      <GradientBackground />
-      <div className={CURRICULUM_STYLES.layout.relativeZ10}>
-        {children}
-      </div>
-    </div>
-  );
-
   return (
-    <section 
-      id={CURRICULUM_STYLES.sectionId} 
+    <section
+      id={CURRICULUM_STYLES.sectionId}
       ref={ref}
       className={cn(
         CURRICULUM_STYLES.section.padding,
@@ -143,12 +147,12 @@ const CurriculumSection = () => {
       )}
     >
       <div className={CURRICULUM_STYLES.gradient.overlay} />
-      
+
       <div className={SECTION_STYLES.container.base}>
         <div className={CURRICULUM_STYLES.spacing.sectionGap}>
           <h2 className={cn(CURRICULUM_STYLES.header.title, CURRICULUM_STYLES.spacing.titleGap)}>
             {isBasicSession
-              ? CURRICULUM_INFO.basicSessionTitle 
+              ? CURRICULUM_INFO.basicSessionTitle
               : CURRICULUM_INFO.advancedSessionTitle(tracksLength)}
           </h2>
           <p className={cn(CURRICULUM_STYLES.header.subtitle, CURRICULUM_STYLES.spacing.sectionGap)}>
@@ -177,62 +181,62 @@ const CurriculumSection = () => {
 
         {isBasicSession ? (
           <ContainerWithGradient className={CURRICULUM_STYLES.layout.relative}>
-              <div className={CURRICULUM_STYLES.spacing.largeGap}>
-                <h3 className={cn(CURRICULUM_STYLES.text.title.large, CURRICULUM_STYLES.spacing.contentGap)}>
-                  {CURRICULUM_INFO.basicTrackTitle}
-                </h3>
-                <p className={CURRICULUM_STYLES.text.body.medium}>
-                  {CURRICULUM_INFO.basicTrackDescription}
-                </p>
-              </div>
+            <div className={CURRICULUM_STYLES.spacing.largeGap}>
+              <h3 className={cn(CURRICULUM_STYLES.text.title.large, CURRICULUM_STYLES.spacing.contentGap)}>
+                {CURRICULUM_INFO.basicTrackTitle}
+              </h3>
+              <p className={CURRICULUM_STYLES.text.body.medium}>
+                {CURRICULUM_INFO.basicTrackDescription}
+              </p>
+            </div>
 
-              <div className={CURRICULUM_STYLES.spacing.sectionGap}>
-                <SectionHeader title={CURRICULUM_INFO.weeklySessionTitle} />
-                <div className="w-full">
-                  {CURRICULUM_INFO.weeklySessions.map((session) => (
-                    <div key={session.title} className={CURRICULUM_STYLES.card.withHover.medium}>
-                      <div className={cn(CURRICULUM_STYLES.layout.flexItemsCenter, CURRICULUM_STYLES.spacing.contentGap)}>
-                        <h5 className={CURRICULUM_STYLES.text.title.small}>{session.title}</h5>
-                        <span className={CURRICULUM_STYLES.text.body.duration}>{session.duration}</span>
-                      </div>
-                      <p className={cn(CURRICULUM_STYLES.text.body.small, CURRICULUM_STYLES.spacing.contentGap)}>
-                        {session.description}
-                      </p>
-                      <TagList tags={session.topics} />
+            <div className={CURRICULUM_STYLES.spacing.sectionGap}>
+              <SectionHeader title={CURRICULUM_INFO.weeklySessionTitle} />
+              <div className="w-full">
+                {CURRICULUM_INFO.weeklySessions.map((session) => (
+                  <div key={session.title} className={CURRICULUM_STYLES.card.withHover.medium}>
+                    <div className={cn(CURRICULUM_STYLES.layout.flexItemsCenter, CURRICULUM_STYLES.spacing.contentGap)}>
+                      <h5 className={CURRICULUM_STYLES.text.title.small}>{session.title}</h5>
+                      <span className={CURRICULUM_STYLES.text.body.duration}>{session.duration}</span>
                     </div>
-                  ))}
-                </div>
+                    <p className={cn(CURRICULUM_STYLES.text.body.small, CURRICULUM_STYLES.spacing.contentGap)}>
+                      {session.description}
+                    </p>
+                    <TagList tags={session.topics} />
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div className={CURRICULUM_STYLES.spacing.sectionGap}>
-                <SectionHeader title={CURRICULUM_INFO.detailActivitiesTitle} />
-                <div className={cn(CURRICULUM_STYLES.layout.grid3, CURRICULUM_STYLES.spacing.gridGap)}>
-                  {CURRICULUM_INFO.activities.map((activity) => (
-                    <div key={activity.title} className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.small)}>
-                      <h5 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.smallGap)}>{activity.title}</h5>
-                      <p className={CURRICULUM_STYLES.text.body.tiny}>
-                        {activity.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+            <div className={CURRICULUM_STYLES.spacing.sectionGap}>
+              <SectionHeader title={CURRICULUM_INFO.detailActivitiesTitle} />
+              <div className={cn(CURRICULUM_STYLES.layout.grid3, CURRICULUM_STYLES.spacing.gridGap)}>
+                {CURRICULUM_INFO.activities.map((activity) => (
+                  <div key={activity.title} className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.small)}>
+                    <h5 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.smallGap)}>{activity.title}</h5>
+                    <p className={CURRICULUM_STYLES.text.body.tiny}>
+                      {activity.description}
+                    </p>
+                  </div>
+                ))}
               </div>
+            </div>
 
-              <div className={cn(CURRICULUM_STYLES.layout.grid2, CURRICULUM_STYLES.spacing.gridGap)}>
-                <ProjectCard
-                  title={CURRICULUM_INFO.toyProject.title}
-                  description={CURRICULUM_INFO.toyProject.description}
-                  tags={CURRICULUM_INFO.toyProject.tags}
-                />
-                <ProjectCard
-                  title={CURRICULUM_INFO.trackBriefing.title}
-                  description={CURRICULUM_INFO.trackBriefing.description(
-                    CURRICULUM_INFO.trackInfoWeeks,
-                    trackLabels
-                  )}
-                  tags={CURRICULUM_INFO.trackBriefing.tags(tracksLength)}
-                />
-              </div>
+            <div className={cn(CURRICULUM_STYLES.layout.grid2, CURRICULUM_STYLES.spacing.gridGap)}>
+              <ProjectCard
+                title={CURRICULUM_INFO.toyProject.title}
+                description={CURRICULUM_INFO.toyProject.description}
+                tags={CURRICULUM_INFO.toyProject.tags}
+              />
+              <ProjectCard
+                title={CURRICULUM_INFO.trackBriefing.title}
+                description={CURRICULUM_INFO.trackBriefing.description(
+                  CURRICULUM_INFO.trackInfoWeeks,
+                  trackLabels
+                )}
+                tags={CURRICULUM_INFO.trackBriefing.tags(tracksLength)}
+              />
+            </div>
           </ContainerWithGradient>
         ) : (
           <>
@@ -254,64 +258,76 @@ const CurriculumSection = () => {
             </div>
 
             <div className={CURRICULUM_STYLES.layout.relativeFlex}>
-              <NavigationButton direction={CURRICULUM_STYLES.navigation.direction.prev} className={CURRICULUM_STYLES.layout.desktopNav} />
+              <NavigationButton
+                direction={CURRICULUM_STYLES.navigation.direction.prev}
+                className={CURRICULUM_STYLES.layout.desktopNav}
+                onNavigate={navigateTrack}
+              />
 
               <ContainerWithGradient className={CURRICULUM_STYLES.layout.relativeFlex1}>
-                  <div className={cn(
-                    CURRICULUM_STYLES.layout.flexRow,
-                    isTransitioning ? CURRICULUM_STYLES.transition.inactive : CURRICULUM_STYLES.transition.active
-                  )}>
-                    <div className={CURRICULUM_STYLES.layout.flex1}>
-                      <div className={CURRICULUM_STYLES.spacing.mediumGap}>
-                        <span className={CURRICULUM_STYLES.badge.base}>
-                          {currentTrack.label}
-                        </span>
-                        <h3 className={cn(CURRICULUM_STYLES.text.title.large, CURRICULUM_STYLES.spacing.mediumGap)}>
-                          {currentTrack.title}
-                        </h3>
-                      </div>
-                      <p className={CURRICULUM_STYLES.text.body.large}>
-                        {currentTrack.description}
-                      </p>
+                <div className={cn(
+                  CURRICULUM_STYLES.layout.flexRow,
+                  isTransitioning ? CURRICULUM_STYLES.transition.inactive : CURRICULUM_STYLES.transition.active
+                )}>
+                  <div className={CURRICULUM_STYLES.layout.flex1}>
+                    <div className={CURRICULUM_STYLES.spacing.mediumGap}>
+                      <span className={CURRICULUM_STYLES.badge.base}>
+                        {currentTrack.label}
+                      </span>
+                      <h3 className={cn(CURRICULUM_STYLES.text.title.large, CURRICULUM_STYLES.spacing.mediumGap)}>
+                        {currentTrack.title}
+                      </h3>
                     </div>
-
-                    <div className={CURRICULUM_STYLES.layout.flexColCenter}>
-                      {currentTrack.topics.map((topic, index) => (
-                        <div
-                          key={`${currentTrack.id}-${index}`}
-                          className={cn(
-                            CURRICULUM_STYLES.topicCard.base,
-                            CURRICULUM_INFO.topicColors[topic.color]
-                          )}
-                        >
-                          {topic.title}
-                        </div>
-                      ))}
-                    </div>
+                    <p className={CURRICULUM_STYLES.text.body.large}>
+                      {currentTrack.description}
+                    </p>
                   </div>
 
+                  <div className={CURRICULUM_STYLES.layout.flexColCenter}>
+                    {currentTrack.topics.map((topic, index) => (
+                      <div
+                        key={`${currentTrack.id}-${index}`}
+                        className={cn(
+                          CURRICULUM_STYLES.topicCard.base,
+                          CURRICULUM_INFO.topicColors[topic.color]
+                        )}
+                      >
+                        {topic.title}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className={CURRICULUM_STYLES.layout.mobileNav}>
-                  <NavigationButton direction={CURRICULUM_STYLES.navigation.direction.prev} className={CURRICULUM_STYLES.layout.mobileNavButton} />
-                  <NavigationButton direction={CURRICULUM_STYLES.navigation.direction.next} className={CURRICULUM_STYLES.layout.mobileNavButton} />
+                  <NavigationButton
+                    direction={CURRICULUM_STYLES.navigation.direction.prev}
+                    className={CURRICULUM_STYLES.layout.mobileNavButton}
+                    onNavigate={navigateTrack}
+                  />
+                  <NavigationButton
+                    direction={CURRICULUM_STYLES.navigation.direction.next}
+                    className={CURRICULUM_STYLES.layout.mobileNavButton}
+                    onNavigate={navigateTrack}
+                  />
                 </div>
               </ContainerWithGradient>
 
-              <NavigationButton direction={CURRICULUM_STYLES.navigation.direction.next} className={CURRICULUM_STYLES.layout.desktopNav} />
+              <NavigationButton
+                direction={CURRICULUM_STYLES.navigation.direction.next}
+                className={CURRICULUM_STYLES.layout.desktopNav}
+                onNavigate={navigateTrack}
+              />
             </div>
 
             {/* 정기 학술제 섹션 */}
             <div className="mt-12">
-              {/* 연결선 효과 */}
               <div className="w-0.5 h-16 bg-gradient-to-b from-transparent via-white/50 to-white/40 mx-auto mb-8"></div>
-              
-              {/* 심화 트랙 카드와 동일한 레이아웃 구조 사용 */}
+
               <div className={CURRICULUM_STYLES.layout.relativeFlex}>
-                {/* 왼쪽 네비게이션 버튼 공간 (보이지 않지만 레이아웃 맞추기) */}
                 <div className="hidden md:flex w-12 h-12 flex-shrink-0"></div>
 
                 <ContainerWithGradient className={CURRICULUM_STYLES.layout.relativeFlex1}>
                   <div className="space-y-6">
-                    {/* 헤더 */}
                     <div className="flex flex-col items-center text-center space-y-4 pb-2 w-full">
                       <div className="flex items-center gap-2 text-white/70">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/30"></div>
@@ -329,7 +345,6 @@ const CurriculumSection = () => {
                       </p>
                     </div>
 
-                    {/* 참여 인원 카드 */}
                     <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover)}>
                       <div>
                         <h4 className={cn(CURRICULUM_STYLES.text.title.small, CURRICULUM_STYLES.spacing.smallGap, "text-white")}>
@@ -341,9 +356,7 @@ const CurriculumSection = () => {
                       </div>
                     </div>
 
-                    {/* 발표 형식 카드들 */}
                     <div className={cn(CURRICULUM_STYLES.layout.grid2, "gap-4 md:gap-6")}>
-                      {/* 포스터 발표 */}
                       <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover, "h-full flex flex-col")}>
                         <h4 className={cn(CURRICULUM_STYLES.text.title.small, "mb-4 text-white")}>
                           {CURRICULUM_INFO.academicFestival.posterPresentation.title}
@@ -359,7 +372,6 @@ const CurriculumSection = () => {
                         </div>
                       </div>
 
-                      {/* 정식 발표 */}
                       <div className={cn(CURRICULUM_STYLES.card.base, CURRICULUM_STYLES.card.padding.medium, CURRICULUM_STYLES.card.hover, "h-full flex flex-col")}>
                         <h4 className={cn(CURRICULUM_STYLES.text.title.small, "mb-4 text-white")}>
                           {CURRICULUM_INFO.academicFestival.formalPresentation.title}
@@ -378,7 +390,6 @@ const CurriculumSection = () => {
                   </div>
                 </ContainerWithGradient>
 
-                {/* 오른쪽 네비게이션 버튼 공간 (보이지 않지만 레이아웃 맞추기) */}
                 <div className="hidden md:flex w-12 h-12 flex-shrink-0"></div>
               </div>
             </div>

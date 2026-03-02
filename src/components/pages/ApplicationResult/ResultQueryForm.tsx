@@ -23,17 +23,30 @@ interface ResultQueryFormProps {
   errors: Errors;
   isLoading: boolean;
   isOpen: boolean;
+  openTime: Date;
   onStudentIdChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onNameChange: (value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
+const formatOpenTime = (date: Date): string => {
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "Asia/Seoul",
+  });
+};
+
 export const ResultQueryForm = ({
   formData,
   errors,
   isLoading,
   isOpen,
+  openTime,
   onStudentIdChange,
   onPhoneChange,
   onNameChange,
@@ -135,7 +148,7 @@ export const ResultQueryForm = ({
             ) : !isOpen ? (
               <>
                 <Clock className="w-4 h-4 sm:w-3.5 sm:h-3.5 mr-2" />
-                2026년 1월 12일 오후 6시부터 조회 가능
+                {formatOpenTime(openTime)}부터 조회 가능
               </>
             ) : (
               "결과 조회"

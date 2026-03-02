@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle } from "lucide-react";
 import { APPLICATION_FORM_CONFIG, COMMON_STYLES } from "@/lib/constants";
-import { getQuestionIcon } from "@/lib/questionUtils";
 import type { Question } from "@/lib/api";
 
 interface StudyCreationSelectorProps {
@@ -12,14 +11,11 @@ interface StudyCreationSelectorProps {
 }
 
 export const StudyCreationSelector = ({ question, answer, onAnswerChange }: StudyCreationSelectorProps) => {
-  const questionIcon = getQuestionIcon(question.question);
-
   return (
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
       <CardHeader className="relative z-10">
         <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
-          {questionIcon}
           {question.question}
           {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>

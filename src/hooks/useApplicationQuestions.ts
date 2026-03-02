@@ -1,71 +1,60 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 import { getQuestions, type Question } from "@/lib/api";
-import { filterOBQuestions } from "@/lib/constants";
+import { filterOBQuestions } from "@/utils/questions";
+
+const sortByPosition = (questions: Question[]): Question[] =>
+  [...questions].sort((a, b) => a.position - b.position);
 
 export const useApplicationQuestions = (applicationType: string) => {
   const { toast } = useToast();
-  const [commonQuestions, setCommonQuestions] = useState<Question[]>([]);
-  const [typeQuestions, setTypeQuestions] = useState<Question[]>([]);
-  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false);
+
+  const {
+    data: commonData,
+    isLoading: isLoadingCommon,
+    error: commonError,
+  } = useQuery({
+    queryKey: ["questions", "common"],
+    queryFn: () => getQuestions("common"),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const {
+    data: typeData,
+    isLoading: isLoadingType,
+    error: typeError,
+  } = useQuery({
+    queryKey: ["questions", applicationType],
+    queryFn: () => getQuestions(applicationType as "yb" | "ob" | "common"),
+    enabled: !!applicationType,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // 에러 발생 시 토스트 알림
+  useEffect(() => {
+    if (commonError) {
+      const message = commonError instanceof Error ? commonError.message : "질문을 가져오는데 실패했습니다.";
+      toast({ title: "질문 로드 실패", description: message, variant: "destructive" });
+    }
+  }, [commonError, toast]);
 
   useEffect(() => {
-    const fetchCommonQuestions = async () => {
-      setIsLoadingQuestions(true);
-      try {
-        const response = await getQuestions("common");
-        const sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
-        setCommonQuestions(sortedQuestions);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "질문을 가져오는데 실패했습니다.";
-        toast({
-          title: "질문 로드 실패",
-          description: errorMessage,
-          variant: "destructive",
-        });
-        setCommonQuestions([]);
-      } finally {
-        setIsLoadingQuestions(false);
-      }
-    };
+    if (typeError) {
+      const message = typeError instanceof Error ? typeError.message : "질문을 가져오는데 실패했습니다.";
+      toast({ title: "질문 로드 실패", description: message, variant: "destructive" });
+    }
+  }, [typeError, toast]);
 
-    fetchCommonQuestions();
-  }, [toast]);
+  const commonQuestions = commonData ? sortByPosition(commonData.questions) : [];
 
-  useEffect(() => {
-    const fetchTypeQuestions = async () => {
-      if (!applicationType) {
-        setTypeQuestions([]);
-        return;
-      }
-
-      setIsLoadingQuestions(true);
-      try {
-        const response = await getQuestions(applicationType as "yb" | "ob" | "common");
-        let sortedQuestions = response.questions.sort((a, b) => a.position - b.position);
-        
-        if (applicationType === "ob") {
-          sortedQuestions = filterOBQuestions(sortedQuestions);
-        }
-        
-        setTypeQuestions(sortedQuestions);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "질문을 가져오는데 실패했습니다.";
-        toast({
-          title: "질문 로드 실패",
-          description: errorMessage,
-          variant: "destructive",
-        });
-        setTypeQuestions([]);
-      } finally {
-        setIsLoadingQuestions(false);
-      }
-    };
-
-    fetchTypeQuestions();
-  }, [applicationType, toast]);
+  let typeQuestions: Question[] = typeData ? sortByPosition(typeData.questions) : [];
+  if (applicationType === "ob") {
+    typeQuestions = filterOBQuestions(typeQuestions);
+  }
 
   const questions = [...commonQuestions, ...typeQuestions];
+  const isLoadingQuestions = isLoadingCommon || (!!applicationType && isLoadingType);
 
   return {
     commonQuestions,

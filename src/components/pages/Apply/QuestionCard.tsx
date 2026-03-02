@@ -1,5 +1,4 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getQuestionIcon } from "@/lib/questionUtils";
 import type { Question } from "@/lib/api";
 
 interface QuestionCardProps {
@@ -35,15 +34,12 @@ const getCardDescription = (question: Question, applicationType: "yb" | "ob" | "
 };
 
 export const QuestionCard = ({ question, applicationType = "", isStudyDisabled = false, children }: QuestionCardProps) => {
-  const questionIcon = getQuestionIcon(question.question);
   const description = getCardDescription(question, applicationType, isStudyDisabled);
-  const answer = ""; // This will be passed from parent if needed for thank you message
 
   return (
     <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
       <CardHeader>
         <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
-          {questionIcon}
           {question.question}
           {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>

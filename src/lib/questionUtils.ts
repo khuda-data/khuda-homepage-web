@@ -11,10 +11,6 @@ export const getPlaceholder = (questionText: string): string => {
   return APPLICATION_FORM_CONFIG.commonTexts.defaultPlaceholder;
 };
 
-export const getQuestionIcon = (_questionText: string): null => {
-  return null;
-};
-
 export const getQuestionNumber = (questionText: string): string | null => {
   if (questionText.includes("지원 동기") || questionText.includes("역량")) return APPLICATION_FORM_CONFIG.questionNumbers.motivation;
   if (questionText.includes("도전") || questionText.includes("끈기")) return APPLICATION_FORM_CONFIG.questionNumbers.challenge;

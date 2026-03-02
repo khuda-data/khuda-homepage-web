@@ -50,8 +50,6 @@ export const QuestionField = ({
     const placeholder = question.question.includes("바라는") || question.question.includes("9기에게") || question.question.includes("KHUDA에게")
       ? "KHUDA에 대한 바람이나 제안사항을 작성해주세요..." 
       : "답변을 작성해주세요...";
-    const rows = question.question.includes("기타 활동") ? 5 : 5;
-
     return (
       <Textarea
         value={answer}
@@ -65,7 +63,7 @@ export const QuestionField = ({
         required={question.required && !isStudyDisabled}
         disabled={isStudyDisabled}
         maxLength={question.max_len || undefined}
-        rows={rows}
+        rows={5}
         className={`min-h-[100px] sm:min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out text-sm sm:text-base ${
           isStudyDisabled 
             ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 

@@ -3,8 +3,8 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import {
   SECTION_STYLES,
   SCROLL_ANIMATION_CONFIG,
-  SPONSOR_DATA_BY_YEAR,
 } from "@/lib/constants";
+import { SPONSOR_DATA_BY_YEAR } from "@/data/sponsors";
 import { cn } from "@/lib/utils";
 import SponsorCard from "./SponsorCard";
 import SponsorInquiryButton from "./SponsorInquiryButton";

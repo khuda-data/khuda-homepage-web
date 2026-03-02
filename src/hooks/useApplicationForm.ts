@@ -6,7 +6,7 @@ import {
   RECRUITMENT_INFO,
   APPLICATION_FORM_CONFIG,
 } from "@/lib/constants";
-import { generateInterviewTimes } from "@/lib/form-utils";
+import { generateInterviewTimes } from "@/utils/interview";
 
 export interface FormData {
   applicationType: string;
@@ -15,6 +15,59 @@ export interface FormData {
   interviewTimesByDate: Record<string, string[]>;
   selectedInterviewDate: string;
 }
+
+// 필수 항목 중 미답변 질문 목록 반환 (handleSubmit, isFormValid 공통 사용)
+const getMissingRequiredQuestions = (questions: Question[], answers: Record<string, string>): Question[] => {
+  return questions.filter(q => {
+    if (!q.required) return false;
+    const answer = answers[q.id.toString()];
+    return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
+  });
+};
+
+// 제출용 answers 페이로드 생성 (데이터 변환 로직 분리)
+const buildSubmissionPayload = (
+  questions: Question[],
+  formData: FormData,
+  interviewDatesQuestionId: string | null,
+  interviewTimesQuestionId: string | null,
+): Record<string, string> => {
+  const questionIds = new Set(questions.map(q => q.id.toString()));
+  const payload: Record<string, string> = {};
+
+  // 현재 질문 목록에 해당하는 답변만 포함
+  Object.keys(formData.answers).forEach(questionId => {
+    if (questionIds.has(questionId)) {
+      payload[questionId] = formData.answers[questionId];
+    }
+  });
+
+  // YB의 경우 면접 날짜/시간 주입
+  if (formData.applicationType === "yb") {
+    if (interviewDatesQuestionId) {
+      payload[interviewDatesQuestionId] = JSON.stringify(formData.interviewDates);
+    }
+    if (interviewTimesQuestionId) {
+      payload[interviewTimesQuestionId] = JSON.stringify(formData.interviewTimesByDate);
+    }
+  }
+
+  // 필수 항목 기본값 채우기
+  questions.forEach(question => {
+    const questionId = question.id.toString();
+    if (question.required && !payload[questionId]) {
+      if (interviewTimesQuestionId && questionId === interviewTimesQuestionId) {
+        payload[questionId] = JSON.stringify({});
+      } else if (interviewDatesQuestionId && questionId === interviewDatesQuestionId) {
+        payload[questionId] = JSON.stringify([]);
+      } else {
+        payload[questionId] = "";
+      }
+    }
+  });
+
+  return payload;
+};
 
 export const useApplicationForm = (questions: Question[]) => {
   const { toast } = useToast();
@@ -36,13 +89,10 @@ export const useApplicationForm = (questions: Question[]) => {
       setInterviewSchedule(null);
       return;
     }
-
-    const schedule: InterviewSchedule = {
+    setInterviewSchedule({
       dates: RECRUITMENT_SCHEDULE.interview.dates,
       times: generateInterviewTimes(),
-    };
-
-    setInterviewSchedule(schedule);
+    });
   }, [formData.applicationType]);
 
   const findQuestionByKeywords = (keywords: string[]): Question | undefined => {
@@ -71,6 +121,39 @@ export const useApplicationForm = (questions: Question[]) => {
     }));
   };
 
+  const handleDateToggle = (dateValue: string) => {
+    setFormData((prev) => {
+      const isSelected = prev.interviewDates.includes(dateValue);
+      return {
+        ...prev,
+        interviewDates: isSelected
+          ? prev.interviewDates.filter((d) => d !== dateValue)
+          : [...prev.interviewDates, dateValue],
+        selectedInterviewDate: !isSelected
+          ? dateValue
+          : prev.selectedInterviewDate === dateValue
+          ? ""
+          : prev.selectedInterviewDate,
+      };
+    });
+  };
+
+  const handleTimeToggle = (date: string, time: string) => {
+    setFormData((prev) => {
+      const currentTimes = prev.interviewTimesByDate[date] || [];
+      const isSelected = currentTimes.includes(time);
+      return {
+        ...prev,
+        interviewTimesByDate: {
+          ...prev.interviewTimesByDate,
+          [date]: isSelected
+            ? currentTimes.filter((t) => t !== time)
+            : [...currentTimes, time],
+        },
+      };
+    });
+  };
+
   const handleCheckboxChange = (questionId: number, value: string, checked: boolean) => {
     const currentAnswer = formData.answers[questionId.toString()] || "[]";
     let currentArray: string[] = [];
@@ -79,17 +162,15 @@ export const useApplicationForm = (questions: Question[]) => {
     } catch {
       currentArray = [];
     }
-    
     const newArray = checked
       ? [...currentArray, value]
       : currentArray.filter((item) => item !== value);
-    
     updateAnswer(questionId, JSON.stringify(newArray));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.applicationType) {
       toast({
         title: APPLICATION_FORM_CONFIG.errorMessages.selectApplicationType.title,
@@ -139,85 +220,51 @@ export const useApplicationForm = (questions: Question[]) => {
         });
         return;
       }
-      
     }
 
-    const missingRequiredQuestions = questions.filter(q => {
-      if (!q.required) return false;
-      const questionId = q.id.toString();
-      const answer = formData.answers[questionId];
-      return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
-    });
-
-    if (missingRequiredQuestions.length > 0) {
+    const missing = getMissingRequiredQuestions(questions, formData.answers);
+    if (missing.length > 0) {
       toast({
         title: APPLICATION_FORM_CONFIG.errorMessages.requiredFields.title,
-        description: APPLICATION_FORM_CONFIG.errorMessages.requiredFields.description(missingRequiredQuestions.length),
+        description: APPLICATION_FORM_CONFIG.errorMessages.requiredFields.description(missing.length),
         variant: "destructive",
       });
       return;
     }
 
-    handleFinalSubmit();
+    await handleFinalSubmit();
   };
 
   const handleFinalSubmit = async () => {
     setIsSubmitting(true);
-    
     try {
-      const filteredAnswers: Record<string, string> = {};
-      const questionIds = new Set(questions.map(q => q.id.toString()));
-      
-      Object.keys(formData.answers).forEach(questionId => {
-        if (questionIds.has(questionId)) {
-          filteredAnswers[questionId] = formData.answers[questionId];
-        }
-      });
-
       const interviewDatesQuestion = findInterviewQuestion(true);
       const interviewTimesQuestion = findInterviewQuestion(false);
-      
-      if (isApplicationType("yb")) {
-        if (interviewDatesQuestion) {
-          filteredAnswers[interviewDatesQuestion.id.toString()] = JSON.stringify(formData.interviewDates);
-        }
-        if (interviewTimesQuestion) {
-          filteredAnswers[interviewTimesQuestion.id.toString()] = JSON.stringify(formData.interviewTimesByDate);
-        }
-      }
+      const payload = buildSubmissionPayload(
+        questions,
+        formData,
+        interviewDatesQuestion?.id.toString() ?? null,
+        interviewTimesQuestion?.id.toString() ?? null,
+      );
 
-      questions.forEach(question => {
-        const questionId = question.id.toString();
-        if (question.required && !filteredAnswers[questionId]) {
-          if (interviewTimesQuestion && question.id === interviewTimesQuestion.id) {
-            filteredAnswers[questionId] = JSON.stringify({});
-          } else if (interviewDatesQuestion && question.id === interviewDatesQuestion.id) {
-            filteredAnswers[questionId] = JSON.stringify([]);
-          } else {
-            filteredAnswers[questionId] = "";
-          }
-        }
-      });
+      const response = await submitApplication(formData.applicationType as "yb" | "ob", payload);
 
-      const response = await submitApplication(formData.applicationType as "yb" | "ob", filteredAnswers);
-      
-      setIsSubmitting(false);
       setSubmittedApplicationId(response.application_id.toString());
       setSubmittedAt(new Date());
       setIsSubmitted(true);
-      
       toast({
         title: "지원서가 제출되었습니다",
         description: `지원서 ID: ${response.application_id}`,
       });
     } catch (error) {
-      setIsSubmitting(false);
       const errorMessage = error instanceof Error ? error.message : "지원서 제출 중 오류가 발생했습니다.";
       toast({
         title: "제출 실패",
         description: errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -237,37 +284,22 @@ export const useApplicationForm = (questions: Question[]) => {
   };
 
   const isFormValid = (): boolean => {
-    // applicationType이 선택되어야 함
     if (!formData.applicationType) return false;
-
-    // 질문이 로드되어야 함
     if (questions.length === 0) return false;
 
-    // 개인정보 동의 확인
     const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
     if (privacyQuestion) {
       const privacyAnswer = formData.answers[privacyQuestion.id.toString()];
-      if (!privacyAnswer || privacyAnswer === "disagree") {
-        return false;
-      }
+      if (!privacyAnswer || privacyAnswer === "disagree") return false;
     }
 
-    // YB인 경우 면접 일정/시간 확인
     if (isApplicationType("yb")) {
       if (formData.interviewDates.length === 0) return false;
       const hasInterviewTimes = Object.values(formData.interviewTimesByDate).some((times: string[]) => times.length > 0);
       if (!hasInterviewTimes) return false;
     }
 
-    // 필수 항목 확인
-    const missingRequiredQuestions = questions.filter(q => {
-      if (!q.required) return false;
-      const questionId = q.id.toString();
-      const answer = formData.answers[questionId];
-      return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
-    });
-
-    return missingRequiredQuestions.length === 0;
+    return getMissingRequiredQuestions(questions, formData.answers).length === 0;
   };
 
   return {
@@ -280,6 +312,8 @@ export const useApplicationForm = (questions: Question[]) => {
     interviewSchedule,
     updateAnswer,
     handleCheckboxChange,
+    handleDateToggle,
+    handleTimeToggle,
     handleSubmit,
     findQuestionByKeywords,
     findInterviewQuestion,

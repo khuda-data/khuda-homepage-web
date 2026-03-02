@@ -1,7 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { APPLICATION_FORM_CONFIG, CURRICULUM_INFO } from "@/lib/constants";
-import { getQuestionIcon } from "@/lib/questionUtils";
 import type { Question } from "@/lib/api";
 
 interface TrackSelectorProps {
@@ -12,7 +11,6 @@ interface TrackSelectorProps {
 }
 
 export const TrackSelector = ({ question, answer, applicationType, onAnswerChange }: TrackSelectorProps) => {
-  const questionIcon = getQuestionIcon(question.question);
   const isOB = applicationType === "ob";
   const isYB = applicationType === "yb";
 
@@ -28,7 +26,6 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
       <CardHeader className="relative z-10">
         <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
-          {questionIcon}
           {question.question}
           {question.required && <span className="text-blue-500">*</span>}
         </CardTitle>
