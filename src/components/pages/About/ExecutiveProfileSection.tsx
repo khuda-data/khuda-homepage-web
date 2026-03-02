@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG, EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/lib/constants";
+import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/data/executives";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Mail } from "lucide-react";
 

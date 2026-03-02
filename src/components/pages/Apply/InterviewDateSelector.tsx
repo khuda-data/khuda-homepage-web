@@ -3,21 +3,26 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, CheckCircle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getInterviewTimeButtonClass } from "@/lib/form-utils";
-import type { FormData } from "@/hooks/useApplicationForm";
 import type { Question, InterviewSchedule } from "@/lib/api";
 
 interface InterviewDateSelectorProps {
   question: Question;
   interviewSchedule: InterviewSchedule | null;
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  interviewDates: string[];
+  selectedInterviewDate: string;
+  interviewTimesByDate: Record<string, string[]>;
+  onDateToggle: (dateValue: string) => void;
+  onTimeToggle: (date: string, time: string) => void;
 }
 
 export const InterviewDateSelector = ({
   question,
   interviewSchedule,
-  formData,
-  setFormData,
+  interviewDates,
+  selectedInterviewDate,
+  interviewTimesByDate,
+  onDateToggle,
+  onTimeToggle,
 }: InterviewDateSelectorProps) => {
   return (
     <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
@@ -48,17 +53,7 @@ export const InterviewDateSelector = ({
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {interviewSchedule.dates.map((date) => {
-                  const toggleDate = () => {
-                    const isSelected = formData.interviewDates.includes(date.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      interviewDates: isSelected
-                        ? prev.interviewDates.filter((d) => d !== date.value)
-                        : [...prev.interviewDates, date.value],
-                      selectedInterviewDate: !isSelected ? date.value : prev.selectedInterviewDate === date.value ? "" : prev.selectedInterviewDate,
-                    }));
-                  };
-
+                  const isSelected = interviewDates.includes(date.value);
                   return (
                     <div
                       key={date.value}
@@ -66,26 +61,26 @@ export const InterviewDateSelector = ({
                       role="button"
                       tabIndex={0}
                       className={`group relative flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 cursor-pointer transition-all duration-200 min-h-[80px] sm:min-h-[100px] select-none ${
-                        formData.interviewDates.includes(date.value)
+                        isSelected
                           ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
                           : "border-border/40 bg-secondary/10 hover:border-blue-600/40 hover:bg-secondary/20 active:scale-[0.98]"
                       }`}
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleDate(); }}
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDateToggle(date.value); }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          toggleDate();
+                          onDateToggle(date.value);
                         }
                       }}
                     >
                       <div className="pointer-events-none w-full flex flex-col items-center gap-1 sm:gap-1.5">
                         <span className={`text-sm sm:text-base font-semibold ${
-                          formData.interviewDates.includes(date.value) ? "text-blue-600" : "text-foreground"
+                          isSelected ? "text-blue-600" : "text-foreground"
                         }`}>
                           {date.label}
                         </span>
                         <span className="text-[10px] sm:text-xs text-muted-foreground">{date.subLabel}</span>
-                        {formData.interviewDates.includes(date.value) && (
+                        {isSelected && (
                           <div className="mt-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 flex items-center justify-center animate-in fade-in zoom-in-95 duration-200">
                             <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                           </div>
@@ -97,20 +92,20 @@ export const InterviewDateSelector = ({
               </div>
             </div>
 
-            {formData.selectedInterviewDate ? (
+            {selectedInterviewDate ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-1 h-4 bg-blue-600 rounded-full" />
                   <h3 className="text-sm font-semibold text-foreground">
                     면접 가능 시간
                     <span className="text-xs text-muted-foreground ml-2">
-                      ({formData.selectedInterviewDate} 선택 중)
+                      ({selectedInterviewDate} 선택 중)
                     </span>
                   </h3>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-2.5">
                   {interviewSchedule.times.map((time) => {
-                    const currentTimes = formData.interviewTimesByDate[formData.selectedInterviewDate] || [];
+                    const currentTimes = interviewTimesByDate[selectedInterviewDate] || [];
                     const isSelected = currentTimes.includes(time);
                     return (
                       <div
@@ -120,17 +115,7 @@ export const InterviewDateSelector = ({
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          const selectedDate = formData.selectedInterviewDate;
-                          const currentTimes = formData.interviewTimesByDate[selectedDate] || [];
-                          setFormData((prev) => ({
-                            ...prev,
-                            interviewTimesByDate: {
-                              ...prev.interviewTimesByDate,
-                              [selectedDate]: isSelected
-                                ? currentTimes.filter((t) => t !== time)
-                                : [...currentTimes, time],
-                            },
-                          }));
+                          onTimeToggle(selectedInterviewDate, time);
                         }}
                       >
                         <div className="pointer-events-none w-full flex flex-col items-center gap-1">
@@ -156,15 +141,15 @@ export const InterviewDateSelector = ({
               </div>
             )}
 
-            {formData.interviewDates.length > 0 && Object.keys(formData.interviewTimesByDate).length > 0 && (
+            {interviewDates.length > 0 && Object.keys(interviewTimesByDate).length > 0 && (
               <div className="pt-4 border-t border-border/50 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex items-start gap-2 p-4 rounded-xl bg-blue-600/5 border border-blue-600/20 transition-all duration-200 ease-out hover:bg-blue-600/10">
                   <Info className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
                   <div className="flex-1 space-y-3">
                     <p className="text-xs font-semibold text-foreground">선택된 일정</p>
                     <div className="space-y-2.5">
-                      {formData.interviewDates.map((date, idx) => {
-                        const times = formData.interviewTimesByDate[date] || [];
+                      {interviewDates.map((date, idx) => {
+                        const times = interviewTimesByDate[date] || [];
                         if (times.length === 0) return null;
                         return (
                           <div key={date} className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-200" style={{ animationDelay: `${idx * 50}ms` }}>
@@ -174,9 +159,9 @@ export const InterviewDateSelector = ({
                             </div>
                             <div className="flex flex-wrap gap-1.5 pl-3">
                               {times.map((time, timeIdx) => (
-                                <Badge 
-                                  key={`${date}-${time}`} 
-                                  variant="default" 
+                                <Badge
+                                  key={`${date}-${time}`}
+                                  variant="default"
                                   className="text-[10px] px-2 py-0.5 rounded-md animate-in fade-in zoom-in-95 duration-200 transition-all duration-200 ease-out hover:scale-105"
                                   style={{ animationDelay: `${(idx * 50) + (timeIdx * 30)}ms` }}
                                 >

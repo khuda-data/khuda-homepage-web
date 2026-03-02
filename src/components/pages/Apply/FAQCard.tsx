@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, Instagram, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { copyToClipboard } from "@/lib/form-utils";
+import { copyToClipboard } from "@/utils/clipboard";
 import { 
   CONTACT_EMAIL, 
   CONTACT_PHONE, 

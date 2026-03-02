@@ -5,7 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { FAQ_DATA, FAQ_MESSAGES, SECTION_STYLES, FAQ_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { FAQ_MESSAGES, SECTION_STYLES, FAQ_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { FAQ_DATA } from "@/data/faq";
 import { cn } from "@/lib/utils";
 import SectionHeader from "@/components/shared/SectionHeader";
 

@@ -16,22 +16,13 @@ interface QuestionRendererProps {
   answer: string;
   applicationType: "yb" | "ob" | "";
   interviewSchedule: InterviewSchedule | null;
-  formData: {
-    applicationType: string;
-    answers: Record<string, string>;
-    interviewDates: string[];
-    interviewTimesByDate: Record<string, string[]>;
-    selectedInterviewDate: string;
-  };
-  setFormData: React.Dispatch<React.SetStateAction<{
-    applicationType: string;
-    answers: Record<string, string>;
-    interviewDates: string[];
-    interviewTimesByDate: Record<string, string[]>;
-    selectedInterviewDate: string;
-  }>>;
+  interviewDates: string[];
+  selectedInterviewDate: string;
+  interviewTimesByDate: Record<string, string[]>;
   onAnswerChange: (questionId: number, value: string) => void;
   onCheckboxChange: (questionId: number, value: string, checked: boolean) => void;
+  onDateToggle: (dateValue: string) => void;
+  onTimeToggle: (date: string, time: string) => void;
   findInterviewQuestion: (isDate: boolean) => Question | undefined;
   findQuestionByKeywords: (keywords: string[]) => Question | undefined;
   isApplicationType: (type: "yb" | "ob") => boolean;
@@ -43,10 +34,13 @@ export const QuestionRenderer = ({
   answer,
   applicationType,
   interviewSchedule,
-  formData,
-  setFormData,
+  interviewDates,
+  selectedInterviewDate,
+  interviewTimesByDate,
   onAnswerChange,
   onCheckboxChange,
+  onDateToggle,
+  onTimeToggle,
   findInterviewQuestion,
   findQuestionByKeywords,
   isApplicationType,
@@ -69,8 +63,11 @@ export const QuestionRenderer = ({
       <InterviewDateSelector
         question={question}
         interviewSchedule={interviewSchedule}
-        formData={formData}
-        setFormData={setFormData}
+        interviewDates={interviewDates}
+        selectedInterviewDate={selectedInterviewDate}
+        interviewTimesByDate={interviewTimesByDate}
+        onDateToggle={onDateToggle}
+        onTimeToggle={onTimeToggle}
       />
     );
   }
