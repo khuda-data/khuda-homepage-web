@@ -99,12 +99,16 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               )}
               onMouseEnter={() => handleHover(index)}
             >
-              {/* 배경 이미지 / 플레이스홀더 */}
+              {/* 배경 이미지 / 플레이스홀더: 활성 카드만 우선 로드, 나머지 lazy */}
               <div className="absolute inset-0 bg-blue-200/70">
                 {feature.image ? (
                   <img
                     src={feature.image}
                     alt={feature.title}
+                    width={800}
+                    height={400}
+                    loading={isActive ? "eager" : "lazy"}
+                    fetchPriority={isActive ? "high" : undefined}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -173,12 +177,16 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               )}
               onClick={() => handleTap(index)}
             >
-              {/* 배경 */}
+              {/* 배경: 활성 카드만 우선 로드, 나머지 lazy */}
               <div className="absolute inset-0 bg-blue-200/70">
                 {feature.image ? (
                   <img
                     src={feature.image}
                     alt={feature.title}
+                    width={400}
+                    height={260}
+                    loading={isActive ? "eager" : "lazy"}
+                    fetchPriority={isActive ? "high" : undefined}
                     className="w-full h-full object-cover"
                   />
                 ) : (

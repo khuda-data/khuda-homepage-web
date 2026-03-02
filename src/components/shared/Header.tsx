@@ -82,9 +82,13 @@ const Header = () => {
         <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
           <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base, "relative")}>
             <Link to={ROUTES.home} onClick={handleLogoClick} className={HEADER_STYLES.logo.container}>
-              <img 
-                src={IMAGE_PATHS.logo} 
-                alt={HEADER_CONFIG.logo.alt} 
+              <img
+                src={IMAGE_PATHS.logo}
+                alt={HEADER_CONFIG.logo.alt}
+                width={320}
+                height={100}
+                fetchPriority="high"
+                loading="eager"
                 className={cn(HEADER_STYLES.logo.height, HEADER_STYLES.logo.width, HEADER_STYLES.logo.image)}
               />
             </Link>
