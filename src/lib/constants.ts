@@ -1304,6 +1304,8 @@ export interface Sponsor {
   website?: string;
   description?: string;
   year: number;
+  /** 같은 년도 내 노출 순서 (작을수록 먼저, 임팩트 높은 순) */
+  order?: number;
 }
 
 export interface GenerationSponsors {
@@ -1311,15 +1313,16 @@ export interface GenerationSponsors {
   sponsors: Sponsor[];
 }
 
-// 년도별 후원사 데이터 (년도 내림차순 정렬)
+// 년도별 후원사 데이터 (년도 내림차순, 같은 년도는 order 오름차순·미지정 시 뒤로)
 export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
   { name: "몬스터 에너지", year: 2026 },
-  { name: "김성민커피", year: 2025 },
-  { name: "Blaybus", year: 2025 },
-  { name: "Lovable", year: 2025 },
-  { name: "Perplexity", year: 2025 },
-  { name: "몬스터 에너지", year: 2025 },
-  { name: "한빛미디어", year: 2025 },
+  { name: "Perplexity", year: 2025, order: 1 },
+  { name: "Lovable", year: 2025, order: 2 },
+  { name: "블레이버스", year: 2025, order: 3 },
+  { name: "한빛미디어", year: 2025, order: 4 },
+  { name: "레드불", year: 2025, order: 5 },
+  { name: "몬스터 에너지", year: 2025, order: 6 },
+  { name: "김성민커피", year: 2025, order: 7 },
   { name: "현대모비스", year: 2024 },
   { name: "경희대학교 중앙동아리연합회", description: "6기부터 (~2024)", year: 2024 },
 ];
@@ -1518,15 +1521,97 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         name: "박윤찬",
         role: "회장",
         department: "",
-        affiliation: "경희대학교",
+        affiliation: "호텔관광대학 Hospitality 경영학과",
         year: "2023",
+        email: "park.yunchan@khuda.kr",
       },
       {
         name: "이승준",
         role: "부회장",
-        department: "",
-        affiliation: "경희대학교",
+        department: "CV",
+        affiliation: "공과대학 산업경영공학과",
         year: "2023",
+        email: "lee.seungjun@khuda.kr",
+      },
+      {
+        name: "정유진",
+        role: "대외협력부장",
+        department: "NLP",
+        affiliation: "공과대학 산업경영공학과",
+        year: "2023",
+        email: "jeong.yujin@khuda.kr",
+      },
+      {
+        name: "조윤수",
+        role: "기획부장",
+        department: "",
+        affiliation: "공과대학 산업경영공학과",
+        year: "2023",
+        email: "cho.yunsu@khuda.kr",
+      },
+      {
+        name: "이지민",
+        role: "기획부원",
+        department: "",
+        affiliation: "응용과학대학 우주과학과",
+        year: "2023",
+        email: "lee.jimin@khuda.kr",
+      },
+      {
+        name: "신진수",
+        role: "교육부장",
+        department: "",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        year: "2023",
+        email: "shin.jinsu@khuda.kr",
+      },
+      {
+        name: "김리원",
+        role: "교육부원",
+        department: "",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        year: "2023",
+        email: "kim.riwon@khuda.kr",
+      },
+      {
+        name: "지가은",
+        role: "홍보부장",
+        department: "",
+        affiliation: "정경대학 경제학과",
+        year: "2023",
+        email: "ji.gaeun@khuda.kr",
+      },
+      {
+        name: "백지원",
+        role: "홍보부원",
+        department: "",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        year: "2023",
+        email: "baek.jiwon@khuda.kr",
+      },
+      {
+        name: "양경식",
+        role: "트랙장",
+        department: "데이터엔지니어링",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        year: "2023",
+        email: "yang.kyungsik@khuda.kr",
+      },
+      {
+        name: "임주현",
+        role: "트랙장",
+        department: "머신러닝 심화",
+        affiliation: "공과대학 산업경영공학과",
+        year: "2023",
+        email: "im.juhyun@khuda.kr",
+      },
+      {
+        name: "오윤진",
+        role: "트랙장",
+        department: "데이터비즈니스",
+        affiliation: "공과대학 산업경영공학과",
+        year: "2023",
+        email: "oh.yunjin@khuda.kr",
       },
     ],
   },
@@ -1539,6 +1624,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         department: "",
         affiliation: "경희대학교",
         year: "2022",
+        email: "jeong.yujin@khuda.kr",
       },
       {
         name: "이승준",
@@ -1546,6 +1632,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         department: "",
         affiliation: "경희대학교",
         year: "2022",
+        email: "lee.seungjun@khuda.kr",
       },
     ],
   },

@@ -2,11 +2,24 @@ import { useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG, EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Mail, GraduationCap } from "lucide-react";
+import { ChevronDown, Mail } from "lucide-react";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
   rootMargin: "0px 0px -80px 0px",
+};
+
+/** 운영진 이메일 클릭 시 Gmail 작성 화면 열기 (후원 문의 버튼과 동일한 방식) */
+const openExecutiveEmail = (executive: ExecutiveProfile) => {
+  if (!executive.email) return;
+  const subject = `[KHUDA 문의] ${executive.name}님께`;
+  const body = `안녕하세요, ${executive.name}님.\n\nKHUDA 관련 문의드립니다.\n\n`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(executive.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&tf=cm`;
+  const mailtoUrl = `mailto:${encodeURIComponent(executive.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const opened = window.open(gmailUrl, "_blank", "noopener,noreferrer");
+  if (!opened) {
+    window.location.href = mailtoUrl;
+  }
 };
 
 const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
@@ -24,24 +37,26 @@ const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
       </p>
     </div>
 
-    {(executive.affiliation || executive.department) && (
-      <div className="text-center mb-2 sm:mb-3 flex items-center justify-center gap-1">
-        <GraduationCap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 flex-shrink-0" />
-        <p className="text-[10px] sm:text-xs text-gray-500 leading-relaxed">
-          {executive.affiliation || executive.department}
-        </p>
-      </div>
-    )}
-
-    {executive.email && (
-      <div className="flex items-center justify-center pt-2 sm:pt-3 border-t border-gray-100 mt-auto">
-        <a
-          href={`mailto:${executive.email}`}
-          className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-          aria-label="이메일"
-        >
-          <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-        </a>
+    {((executive.affiliation || executive.department) || executive.email) && (
+      <div className="flex items-center justify-center gap-2 sm:gap-3 mt-auto pt-2 sm:pt-3 border-t border-gray-100 text-[10px] sm:text-xs text-gray-500">
+        {(executive.affiliation || executive.department) && (
+          <span className="leading-relaxed truncate" title={executive.affiliation || executive.department}>
+            {executive.affiliation || executive.department}
+          </span>
+        )}
+        {(executive.affiliation || executive.department) && executive.email && (
+          <span className="text-gray-300 flex-shrink-0">|</span>
+        )}
+        {executive.email && (
+          <button
+            type="button"
+            onClick={() => openExecutiveEmail(executive)}
+            className="text-gray-400 hover:text-gray-600 transition-colors duration-200 flex-shrink-0 p-0 border-0 bg-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 rounded"
+            aria-label={`${executive.name}님에게 이메일 보내기`}
+          >
+            <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </button>
+        )}
       </div>
     )}
   </div>
