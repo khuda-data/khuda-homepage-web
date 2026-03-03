@@ -1,14 +1,14 @@
-import type { Sponsor } from "@/lib/constants";
+import type { Sponsor } from "@/data/sponsors";
 
 interface SponsorCardProps {
   sponsor: Sponsor;
 }
 
 const SponsorCard = ({ sponsor }: SponsorCardProps) => {
-  return (
-    <div className="flex flex-col">
+  const cardContent = (
+    <>
       {/* 카드 */}
-      <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col items-center justify-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px] lg:min-h-[160px] mb-2 sm:mb-3">
+      <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col items-center justify-center min-h-[100px] sm:min-h-[120px] md:min-h-[140px] lg:min-h-[160px] mb-2 sm:mb-3 transition-colors hover:bg-gray-200">
         {sponsor.logo && (
           <img
             src={sponsor.logo}
@@ -29,8 +29,24 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
           {sponsor.year}
         </p>
       </div>
-    </div>
+    </>
   );
+
+  if (sponsor.website) {
+    return (
+      <a
+        href={sponsor.website}
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label={sponsor.name}
+        className="flex flex-col"
+      >
+        {cardContent}
+      </a>
+    );
+  }
+
+  return <div className="flex flex-col">{cardContent}</div>;
 };
 
 export default SponsorCard;

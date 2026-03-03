@@ -141,7 +141,7 @@ const Activities = () => {
         </section>
 
         {/* 콘텐츠 섹션 */}
-        <section className="py-8 sm:py-16 px-4 sm:px-4 md:px-8 bg-background">
+        <section className="py-8 sm:py-16 px-4 sm:px-4 md:px-8 bg-background overflow-x-hidden">
           <div className="mx-auto max-w-7xl">
             <div className="flex gap-6 lg:gap-10">
 

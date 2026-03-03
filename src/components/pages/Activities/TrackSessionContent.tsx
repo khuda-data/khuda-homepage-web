@@ -26,16 +26,16 @@ const TrackSessionContent = () => (
       ))}
     </div>
     <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
-      학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.<br />
-      트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해<br />
+      학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.
+      트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해
       같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
     </p>
 
     <ImageGallery
       images={[
+        { src: "/images/activities/track-session-4.jpg", alt: "심화 세션 4" },
         { src: "/images/activities/track-session.jpg", alt: "심화 세션" },
         { src: "/images/activities/track-session-2.jpg", alt: "심화 세션 2" },
-        { src: "/images/activities/track-session-3.jpg", alt: "심화 세션 3" },
       ]}
     />
   </div>

@@ -10,17 +10,13 @@ const SCROLL_REVEAL_OPTIONS = {
   rootMargin: "0px 0px -80px 0px",
 };
 
-/** 운영진 이메일 클릭 시 Gmail 작성 화면 열기 (후원 문의 버튼과 동일한 방식) */
+/** 운영진 이메일 클릭 시 Gmail 작성 화면 열기 */
 const openExecutiveEmail = (executive: ExecutiveProfile) => {
   if (!executive.email) return;
   const subject = `[KHUDA 문의] ${executive.name}님께`;
   const body = `안녕하세요, ${executive.name}님.\n\nKHUDA 관련 문의드립니다.\n\n`;
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(executive.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}&tf=cm`;
-  const mailtoUrl = `mailto:${encodeURIComponent(executive.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const opened = window.open(gmailUrl, "_blank", "noopener,noreferrer");
-  if (!opened) {
-    window.location.href = mailtoUrl;
-  }
+  window.open(gmailUrl, "_blank", "noopener,noreferrer");
 };
 
 const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
