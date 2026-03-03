@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/shared/Header";
 import PageHeroSection from "@/components/shared/PageHeroSection";
 import Footer from "@/components/shared/Footer";
@@ -11,8 +12,28 @@ import { cn } from "@/lib/utils";
 
 type TabType = "Mission-Vision" | "Organization";
 
+const TAB_PARAM: Record<TabType, string> = {
+  "Mission-Vision": "mission-vision",
+  "Organization": "organization",
+};
+const PARAM_TO_TAB: Record<string, TabType> = {
+  "mission-vision": "Mission-Vision",
+  "organization": "Organization",
+};
+
 const About = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("Mission-Vision");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab: TabType = PARAM_TO_TAB[searchParams.get("tab") ?? ""] ?? "Mission-Vision";
+
+  const setActiveTab = useCallback(
+    (tab: TabType) => {
+      setSearchParams(
+        tab === "Mission-Vision" ? {} : { tab: TAB_PARAM[tab] },
+        { replace: false }
+      );
+    },
+    [setSearchParams]
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
