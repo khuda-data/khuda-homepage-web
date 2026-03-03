@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
 import { ApplicationHeader } from "@/components/pages/Apply/ApplicationHeader";
@@ -13,8 +14,15 @@ import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 import SEO from "@/components/shared/SEO";
 
+const VALID_TYPES = ["yb", "ob"] as const;
+type ValidType = (typeof VALID_TYPES)[number];
+const isValidType = (v: string | null): v is ValidType =>
+  VALID_TYPES.includes(v as ValidType);
+
 const Apply = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [applicationType, setApplicationType] = useState("");
+  const initializedFromUrl = useRef(false);
 
   const { commonQuestions, typeQuestions, questions } = useApplicationQuestions(applicationType);
 
@@ -36,9 +44,30 @@ const Apply = () => {
     isFormValid,
   } = useApplicationForm(questions);
 
+  // formData → 로컬 상태 동기화
   useEffect(() => {
     setApplicationType(formData.applicationType);
   }, [formData.applicationType]);
+
+  // URL ?type= → formData 초기화 (최초 1회)
+  useEffect(() => {
+    if (initializedFromUrl.current) return;
+    const urlType = searchParams.get("type");
+    if (isValidType(urlType)) {
+      initializedFromUrl.current = true;
+      setFormData((prev) => ({ ...prev, applicationType: urlType }));
+    }
+    // 마운트 시 한 번만 실행
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // formData → URL 동기화 (replace 모드로 히스토리 오염 방지)
+  useEffect(() => {
+    setSearchParams(
+      formData.applicationType ? { type: formData.applicationType } : {},
+      { replace: true }
+    );
+  }, [formData.applicationType, setSearchParams]);
 
   const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
   const privacyAnswer = privacyQuestion ? formData.answers[privacyQuestion.id.toString()] || "" : "";

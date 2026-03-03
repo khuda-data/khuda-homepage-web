@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import SEO from "@/components/shared/SEO";
@@ -30,8 +31,10 @@ const sectionComponents: Record<string, React.FC> = {
 // ============================================================================
 
 const Activities = () => {
+  const [searchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState("ml-session");
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const scrolledToSection = useRef(false);
 
   const setSectionRef = useCallback((id: string) => (el: HTMLElement | null) => {
     sectionRefs.current[id] = el;
@@ -55,6 +58,29 @@ const Activities = () => {
     });
 
     return () => observer.disconnect();
+  }, []);
+
+  // ?section= 파라미터로 진입 시 해당 섹션으로 스크롤 (최초 1회)
+  useEffect(() => {
+    if (scrolledToSection.current) return;
+    const sectionParam = searchParams.get("section");
+    if (!sectionParam) return;
+    const validIds = timelineSteps.map((s) => s.id);
+    if (!validIds.includes(sectionParam)) return;
+
+    const timeoutId = setTimeout(() => {
+      scrolledToSection.current = true;
+      const el = sectionRefs.current[sectionParam];
+      if (el) {
+        const offset = 100;
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+    // 마운트 시 한 번만 실행
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -115,7 +141,7 @@ const Activities = () => {
         </section>
 
         {/* 콘텐츠 섹션 */}
-        <section className="py-8 sm:py-16 px-4 sm:px-4 md:px-8 bg-background">
+        <section className="py-8 sm:py-16 px-4 sm:px-4 md:px-8 bg-background overflow-x-hidden">
           <div className="mx-auto max-w-7xl">
             <div className="flex gap-6 lg:gap-10">
 

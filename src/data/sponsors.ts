@@ -19,7 +19,7 @@ export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
   { name: "Perplexity", year: 2025, order: 1 },
   { name: "Lovable", year: 2025, order: 2 },
   { name: "블레이버스", year: 2025, order: 3 },
-  { name: "한빛미디어", year: 2025, order: 4 },
+  { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com", year: 2025, order: 4 },
   { name: "레드불", year: 2025, order: 5 },
   { name: "몬스터 에너지", year: 2025, order: 6 },
   { name: "김성민커피", year: 2025, order: 7 },

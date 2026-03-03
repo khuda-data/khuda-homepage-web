@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -8,12 +9,35 @@ import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import CustomSelect from "./CustomSelect";
 
+const DEFAULT_GENERATION = "모든 기수";
+const DEFAULT_TRACK = "모든 트랙";
+
 const ProjectsSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
-  const [selectedGeneration, setSelectedGeneration] = useState("모든 기수");
-  const [selectedTrack, setSelectedTrack] = useState("모든 트랙");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const selectedGeneration = searchParams.get("generation") ?? DEFAULT_GENERATION;
+  const selectedTrack = searchParams.get("track") ?? DEFAULT_TRACK;
+  const searchQuery = searchParams.get("q") ?? "";
+
+  const setFilter = useCallback(
+    (key: string, value: string, defaultValue: string) => {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (value === defaultValue) {
+            next.delete(key);
+          } else {
+            next.set(key, value);
+          }
+          return next;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
 
   const filteredProjects = useMemo(() => {
     const filtered = projectsData.filter((project) => {
@@ -52,12 +76,12 @@ const ProjectsSection = () => {
             <div className="flex items-center gap-3">
               <CustomSelect
                 value={selectedTrack}
-                onChange={setSelectedTrack}
+                onChange={(v) => setFilter("track", v, DEFAULT_TRACK)}
                 options={trackOptions}
               />
               <CustomSelect
                 value={selectedGeneration}
-                onChange={setSelectedGeneration}
+                onChange={(v) => setFilter("generation", v, DEFAULT_GENERATION)}
                 options={generations}
               />
             </div>
@@ -68,7 +92,7 @@ const ProjectsSection = () => {
                 type="text"
                 placeholder="프로젝트 검색 (제목, 팀명..)"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => setFilter("q", e.target.value, "")}
                 className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-card border border-border hover:border-foreground/20 focus:border-foreground/30 focus:outline-none text-sm text-foreground placeholder:text-muted-foreground transition-colors duration-200"
               />
             </div>
