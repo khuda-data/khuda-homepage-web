@@ -25,7 +25,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "회장",
         department: "",
         affiliation: "공과대학 산업경영공학과",
-        email: "cho.yunsu@khuda.kr",
+        email: "yoonsoo2002@gmail.com",
       },
       {
         name: "신진수",
@@ -46,14 +46,14 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "교육부원",
         department: "",
         affiliation: "소프트웨어융합대학 소프트웨어융합학과",
-        email: "kim.hoegwang@khuda.kr",
+        email: "whekwang@khu.ac.kr",
       },
       {
         name: "표지훈",
         role: "교육부원",
         department: "",
         affiliation: "소프트웨어융합대학 소프트웨어융합학과",
-        email: "pyo.jihun@khuda.kr",
+        email: "pjh7639@khu.ac.kr",
       },
       {
         name: "박윤찬",
@@ -67,14 +67,14 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "기획부원",
         department: "",
         affiliation: "소프트웨어융합대학 컴퓨터공학부",
-        email: "ahn.sihyun@khuda.kr",
+        email: "sihyun8870@khu.ac.kr",
       },
       {
         name: "허준혁",
         role: "기획부원",
         department: "",
         affiliation: "소프트웨어융합대학 소프트웨어융합학과",
-        email: "heo.junhyuk@khuda.kr",
+        email: "scythe0325@khu.ac.kr",
       },
       {
         name: "오윤진",
@@ -88,7 +88,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "대외협력부원",
         department: "",
         affiliation: "공과대학 산업경영공학과",
-        email: "lee.seungju@khuda.kr",
+        email: "pjh7639@khu.ac.kr",
       },
       {
         name: "장은서",
@@ -109,7 +109,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "트랙장",
         department: "금융",
         affiliation: "소프트웨어융합대학 컴퓨터공학부",
-        email: "kang.byeongo@khuda.kr",
+        email: "garamkg@khu.ac.kr",
       },
       {
         name: "지가은",
@@ -123,7 +123,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "트랙장",
         department: "데이터엔지니어링",
         affiliation: "소프트웨어융합대학 소프트웨어융합학과",
-        email: "oh.jonghyun@khuda.kr",
+        email: "sjaiz1717@gmail.com",
       },
     ],
   },
@@ -156,7 +156,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "기획부장",
         department: "",
         affiliation: "공과대학 산업경영공학과",
-        email: "cho.yunsu@khuda.kr",
+        email: "yoonsoo2002@gmail.com",
       },
       {
         name: "이지민",

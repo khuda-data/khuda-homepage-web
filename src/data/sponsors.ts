@@ -1,6 +1,10 @@
 export interface Sponsor {
   name: string;
   logo?: string;
+  /** 로고를 다른 후원사보다 크게 표시 (예: 몬스터 에너지) */
+  logoLarge?: boolean;
+  /** 로고 사용 금지 (법적/정책적 사유로 노출하지 않음) */
+  logoProhibited?: boolean;
   website?: string;
   description?: string;
   year: number;
@@ -15,14 +19,13 @@ export interface GenerationSponsors {
 
 // 년도별 후원사 데이터 (년도 내림차순, 같은 년도는 order 오름차순·미지정 시 뒤로)
 export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
-  { name: "몬스터 에너지", year: 2026 },
+  { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", logoLarge: true, website: "https://www.monsterenergy.com", year: 2026 },
   { name: "Perplexity", year: 2025, order: 1 },
-  { name: "Lovable", year: 2025, order: 2 },
-  { name: "블레이버스", year: 2025, order: 3 },
+  { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", year: 2025, order: 2 },
   { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com", year: 2025, order: 4 },
-  { name: "레드불", year: 2025, order: 5 },
-  { name: "몬스터 에너지", year: 2025, order: 6 },
-  { name: "김성민커피", year: 2025, order: 7 },
+  { name: "레드불", logoProhibited: true, year: 2025, order: 5 },
+  { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", logoLarge: true, website: "https://www.monsterenergy.com", year: 2025, order: 6 },
+  { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/", year: 2025, order: 7 },
   { name: "현대모비스", year: 2024 },
   { name: "경희대학교 중앙동아리연합회", description: "6기부터 (~2024)", year: 2024 },
 ];

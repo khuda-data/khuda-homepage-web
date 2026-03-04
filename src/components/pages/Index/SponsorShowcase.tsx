@@ -8,11 +8,11 @@ const SCROLL_REVEAL_OPTIONS = {
 };
 
 // 인덱스 페이지 후원사 로고 (카드 6개 슬롯, 노출할 후원사만 채움)
-const INDEX_SPONSORS: Array<{ name: string; logo: string; website: string } | null> = [
+const INDEX_SPONSORS: Array<{ name: string; logo: string; website?: string; logoSmall?: boolean } | null> = [
+  { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", website: "https://www.monsterenergy.com" },
+  { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", logoSmall: true },
   { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com" },
-  null,
-  null,
-  null,
+  { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/" },
   null,
   null,
 ];
@@ -44,22 +44,37 @@ const SponsorShowcase = () => {
           <div className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-5 max-w-[520px] w-full">
             {INDEX_SPONSORS.map((sponsor, index) =>
               sponsor ? (
-                <a
-                  key={sponsor.name}
-                  href={sponsor.website}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center aspect-square p-3 sm:p-4 hover:bg-gray-200 transition-colors"
-                  aria-label={sponsor.name}
-                >
-                  <img
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    className="max-h-full max-w-full object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
+                sponsor.website ? (
+                  <a
+                    key={sponsor.name}
+                    href={sponsor.website}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center aspect-square p-3 sm:p-4 hover:bg-gray-200 transition-colors"
+                    aria-label={sponsor.name}
+                  >
+                    <img
+                      src={sponsor.logo}
+                      alt={sponsor.name}
+                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]")}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ) : (
+                  <div
+                    key={sponsor.name}
+                    className="bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center aspect-square p-3 sm:p-4"
+                  >
+                    <img
+                      src={sponsor.logo}
+                      alt={sponsor.name}
+                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]")}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )
               ) : (
                 <div
                   key={index}
