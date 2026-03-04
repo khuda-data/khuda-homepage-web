@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { getApplicationResult, ApiError, NetworkError } from "@/lib/api";
+import { RESULT_OPEN_TIME } from "@/lib/constants";
 
-// 합격자 조회 오픈 시간: 2026년 1월 12일 오후 6시 (KST)
-export const RESULT_OPEN_TIME = new Date("2026-01-12T18:00:00+09:00");
+export { RESULT_OPEN_TIME };
 
 interface ResultFormData {
   student_id: string;

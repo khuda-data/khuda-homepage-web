@@ -1,21 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
-
-const SCROLL_REVEAL_OPTIONS = {
-  threshold: SCROLL_ANIMATION_CONFIG.threshold,
-  rootMargin: "0px 0px -80px 0px",
-};
-
-// 인덱스 페이지 후원사 로고 (카드 6개 슬롯, 노출할 후원사만 채움)
-const INDEX_SPONSORS: Array<{ name: string; logo: string; website?: string; logoSmall?: boolean } | null> = [
-  { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", website: "https://www.monsterenergy.com" },
-  { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", logoSmall: true },
-  { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com" },
-  { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/" },
-  null,
-  null,
-];
+import { SCROLL_REVEAL_OPTIONS, INDEX_SPONSORS } from "@/lib/constants";
 
 const SponsorShowcase = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);

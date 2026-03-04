@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./constants";
+import { API_BASE_URL, REQUEST_TIMEOUT, API_ENDPOINTS } from "./constants";
 
 // ============================================================================
 // 타입 정의
@@ -39,17 +39,6 @@ export interface ApplicationResultResponse {
   name: string;
   status: string;
 }
-
-// ============================================================================
-// 상수
-// ============================================================================
-
-const REQUEST_TIMEOUT = 30000; // 30초
-const API_ENDPOINTS = {
-  QUESTIONS: (type: ApplicantType) => `/api/questions/${type}`,
-  APPLICATIONS: "/api/applications",
-  APPLICATION_RESULT: "/api/application_result",
-} as const;
 
 // ============================================================================
 // 커스텀 에러 클래스

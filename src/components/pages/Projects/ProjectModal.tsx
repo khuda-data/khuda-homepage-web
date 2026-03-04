@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Github, ChevronLeft, ChevronRight } from "lucide-react";
 import type { Project } from "@/data/projects";
-
-const TRACK_ACCENT_CLASS = "text-blue-600";
+import { TRACK_ACCENT_CLASS } from "@/lib/constants";
 
 const SlideCarousel = ({ slides, title }: { slides: string[]; title: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

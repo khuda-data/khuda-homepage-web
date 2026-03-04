@@ -1,73 +1,9 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
+import { SCROLL_REVEAL_OPTIONS, INDEX_TRACKS, ROUTES } from "@/lib/constants";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-
-const SCROLL_REVEAL_OPTIONS = {
-  threshold: SCROLL_ANIMATION_CONFIG.threshold,
-  rootMargin: "0px 0px -80px 0px",
-};
-
-interface TrackInfo {
-  id: string;
-  label: string;
-  title: string;
-  description: string;
-  topics: string[];
-}
-
-const tracks: TrackInfo[] = [
-  {
-    id: "nlp",
-    label: "NLP",
-    title: "자연어처리",
-    description:
-      "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 NLP 파이프라인을 경험합니다.",
-    topics: ["분류/요약", "검색/챗봇", "NLP 파이프라인"],
-  },
-  {
-    id: "cv",
-    label: "CV",
-    title: "컴퓨터비전",
-    description:
-      "이미지와 비디오에서 의미 있는 데이터를 해석하고 분석하며 추출하는 기술을 학습합니다. 딥러닝과 신경망을 활용해 사물 인식, 상황 인지, 이미지 생성까지 경험합니다.",
-    topics: ["사물 인식", "상황 인지", "이미지 생성"],
-  },
-  {
-    id: "de",
-    label: "Data Engineering",
-    title: "데이터엔지니어링",
-    description:
-      "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
-    topics: ["데이터 파이프라인", "분산 처리", "클라우드 인프라"],
-  },
-  {
-    id: "aie",
-    label: "AI Engineering",
-    title: "AI엔지니어링",
-    description:
-      "파운데이션 모델을 실제 애플리케이션에 적용하기 위한 엔지니어링 과정을 다룹니다. 프롬프트 설계, RAG/에이전트, 파인튜닝과 최적화까지 전 과정을 학습합니다.",
-    topics: ["프롬프트 설계", "RAG/에이전트", "파인튜닝/최적화"],
-  },
-  {
-    id: "da",
-    label: "Data Business",
-    title: "데이터비즈니스",
-    description:
-      "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. XAI로 AI 모델의 예측 근거를 해석하여 투명성과 신뢰성을 확보합니다.",
-    topics: ["비즈니스 인사이트", "XAI", "신뢰성 확보"],
-  },
-  {
-    id: "fin",
-    label: "Finance",
-    title: "금융",
-    description:
-      "기업 부도 예측, 주가 수익률 예측, 뉴스 감성 분석 등 금융 데이터 분석 프로젝트를 수행합니다.",
-    topics: ["부도 예측(ML)", "주가 예측(DL)", "감성 분석(NLP)"],
-  },
-];
 
 const TrackShowcase = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
@@ -136,7 +72,7 @@ const TrackShowcase = () => {
 
       {/* 트랙 카드 그리드 */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4">
-        {tracks.map((track) => {
+        {INDEX_TRACKS.map((track) => {
           const isFlipped = flippedId === track.id;
 
           return (
