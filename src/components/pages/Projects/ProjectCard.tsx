@@ -1,6 +1,5 @@
 import type { Project } from "@/data/projects";
-
-const TRACK_ACCENT_CLASS = "text-blue-600";
+import { TRACK_ACCENT_CLASS } from "@/lib/constants";
 
 interface ProjectCardProps {
   project: Project;

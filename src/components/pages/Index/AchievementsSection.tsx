@@ -1,23 +1,10 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { SCROLL_REVEAL_OPTIONS } from "@/lib/constants";
+import { type AchievementInfo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import CountUp from "./CountUp";
 
-const SCROLL_REVEAL_OPTIONS = {
-  threshold: SCROLL_ANIMATION_CONFIG.threshold,
-  rootMargin: "0px 0px -80px 0px",
-};
-
-export interface AchievementInfo {
-  value: number;
-  label: string;
-  suffix: string;
-  from?: number;
-  isStatic?: boolean;
-  staticText?: string;
-  emoji?: string;
-  variant?: "primary" | "white" | "accent";
-}
+export type { AchievementInfo };
 
 interface AchievementsSectionProps {
   achievements: AchievementInfo[];

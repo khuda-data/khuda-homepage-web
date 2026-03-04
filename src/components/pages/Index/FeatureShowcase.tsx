@@ -1,22 +1,12 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
+import { SCROLL_REVEAL_OPTIONS, ROUTES } from "@/lib/constants";
+import { type FeatureInfo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Image } from "lucide-react";
 
-const SCROLL_REVEAL_OPTIONS = {
-  threshold: SCROLL_ANIMATION_CONFIG.threshold,
-  rootMargin: "0px 0px -80px 0px",
-};
-
-export interface FeatureInfo {
-  title: string;
-  label: string;
-  description: string;
-  details: string;
-  image?: string;
-}
+export type { FeatureInfo };
 
 interface FeatureShowcaseProps {
   features: FeatureInfo[];
