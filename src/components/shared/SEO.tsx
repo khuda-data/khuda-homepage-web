@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet-async";
 
-const SITE_URL = "https://khuda.co.kr";
+const SITE_URL = "https://www.khuda.co.kr";
 const SITE_NAME = "KHUDA";
-const DEFAULT_IMAGE = `${SITE_URL}/images/logos/khuda-og-image.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/images/logos/khuda-og.png`;
 const DEFAULT_DESCRIPTION =
   "KHUDA는 인공지능과 데이터 분석을 기반으로 실전 프로젝트와 협업을 통해 성장하는 경희대학교 데이터·AI 학술 동아리입니다.";
 

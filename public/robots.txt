@@ -15,4 +15,4 @@ Allow: /
 Disallow: /apply
 Disallow: /application-result
 
-Sitemap: https://khuda.co.kr/sitemap.xml
+Sitemap: https://www.khuda.co.kr/sitemap.xml
