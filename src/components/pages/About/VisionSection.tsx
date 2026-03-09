@@ -41,19 +41,19 @@ const VisionSection = () => {
               </p>
               <div className="pt-4 sm:pt-4 space-y-3.5 sm:space-y-3">
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">최고의 학회</strong>: 경희대학교를 대표하는 데이터 · AI 학회로서 지속적인 성장과 발전을 추구합니다.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">인재 허브</strong>: 학문과 산업을 연결하는 다리 역할을 하며, 실무 역량을 갖춘 AI 인재를 양성합니다.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">사회 기여</strong>: 데이터와 AI 기술로 사회 전반에 긍정적인 변화를 만들어가는 것을 목표로 합니다.
                   </p>
