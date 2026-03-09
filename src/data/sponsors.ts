@@ -27,7 +27,7 @@ export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
   { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", logoLarge: true, website: "https://www.monsterenergy.com", year: 2025, order: 6 },
   { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/", year: 2025, order: 7 },
   { name: "현대모비스", year: 2024 },
-  { name: "경희대학교 중앙동아리연합회", description: "6기부터 (~2024)", year: 2024 },
+  { name: "경희대학교 총동아리연합회", logo: "/images/sponsors/univ-color.png", description: "6기부터 (~2024)", website: "https://www.khu.ac.kr", year: 2024 },
 ];
 
 // 기수별 역대 후원사 데이터 (하위 호환성 유지)

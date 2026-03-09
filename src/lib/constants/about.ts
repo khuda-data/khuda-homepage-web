@@ -81,7 +81,7 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
   },
   {
     value: 0,
-    label: "경희대학교 중앙동아리연합회 선정",
+    label: "경희대학교 총동아리연합회 선정",
     suffix: "",
     isStatic: true,
     staticText: "경희대학교\n2025 최우수 동아리",
