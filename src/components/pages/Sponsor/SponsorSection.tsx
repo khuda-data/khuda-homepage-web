@@ -4,7 +4,7 @@ import {
   SECTION_STYLES,
   SCROLL_ANIMATION_CONFIG,
 } from "@/lib/constants";
-import { SPONSOR_DATA_BY_YEAR } from "@/data/sponsors";
+import type { Sponsor } from "@/data/sponsors";
 import { cn } from "@/lib/utils";
 import SponsorCard from "./SponsorCard";
 import SponsorInquiryButton from "./SponsorInquiryButton";
@@ -13,26 +13,21 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const CARDS_PER_PAGE = 6;
 const SWIPE_THRESHOLD = 50;
 
-const SponsorSection = () => {
+interface SponsorSectionProps {
+  sponsors: Sponsor[];
+}
+
+const SponsorSection = ({ sponsors }: SponsorSectionProps) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDir, setSlideDir] = useState<"left" | "right">("left");
   const touchStartX = useRef<number | null>(null);
 
-  const sortedSponsors = useMemo(() => {
-    return [...SPONSOR_DATA_BY_YEAR].sort((a, b) => {
-      if (a.year !== b.year) return b.year - a.year;
-      const orderA = a.order ?? Infinity;
-      const orderB = b.order ?? Infinity;
-      return orderA - orderB;
-    });
-  }, []);
-
-  const totalPages = Math.ceil(sortedSponsors.length / CARDS_PER_PAGE);
+  const totalPages = Math.ceil(sponsors.length / CARDS_PER_PAGE);
 
   const currentSponsors = useMemo(
-    () => sortedSponsors.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE),
-    [sortedSponsors, currentPage]
+    () => sponsors.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE),
+    [sponsors, currentPage]
   );
 
   const goTo = useCallback(
@@ -73,7 +68,7 @@ const SponsorSection = () => {
           <SponsorInquiryButton variant="card" className="px-6 sm:px-8 md:px-10 py-4 sm:py-5" />
         </div>
 
-        {sortedSponsors.length > 0 ? (
+        {sponsors.length > 0 ? (
           <div className="mb-8 sm:mb-12 md:mb-16">
             {/* 카드 그리드 (스와이프 가능) */}
             <div

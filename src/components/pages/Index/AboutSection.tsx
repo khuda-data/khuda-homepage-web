@@ -3,7 +3,7 @@ import AchievementsSection from "./AchievementsSection";
 import FeatureShowcase from "./FeatureShowcase";
 import TrackShowcase from "./TrackShowcase";
 import SponsorShowcase from "./SponsorShowcase";
-import { KHUDA_FEATURES, KHUDA_ACHIEVEMENTS } from "@/lib/constants";
+import { KHUDA_FEATURES, KHUDA_ACHIEVEMENTS, INDEX_TRACKS, INDEX_SPONSORS } from "@/lib/constants";
 
 const AboutSection = () => {
   const [resetKey, setResetKey] = useState(0);
@@ -38,14 +38,14 @@ const AboutSection = () => {
       {/* 트랙 소개 섹션 */}
       <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
-          <TrackShowcase />
+          <TrackShowcase tracks={INDEX_TRACKS} />
         </div>
       </section>
 
       {/* 후원사 섹션 */}
       <section className="relative bg-background py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="container mx-auto px-6 sm:px-8 md:px-16 lg:px-20">
-          <SponsorShowcase />
+          <SponsorShowcase sponsors={INDEX_SPONSORS} />
         </div>
       </section>
 

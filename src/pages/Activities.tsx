@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "@/components/shared/Header";
+import PageHeroSection from "@/components/shared/PageHeroSection";
 import Footer from "@/components/shared/Footer";
 import SEO from "@/components/shared/SEO";
 import { cn } from "@/lib/utils";
@@ -120,25 +121,11 @@ const Activities = () => {
       <Header />
 
       <main>
-        {/* 히어로 섹션 */}
-        <section className="relative overflow-hidden bg-black">
-          <div className="absolute inset-0 z-0">
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url(/images/headers/hello.png)" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-black/15" />
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-[1]" />
-          <div className="container mx-auto relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 pt-28 sm:pt-36 md:pt-44 lg:pt-52 xl:pt-60 pb-8 sm:pb-10 md:pb-12 lg:pb-14 xl:pb-16">
-            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-white leading-[1.3] text-left">
-              KHUDA의 다양한 활동
-            </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl lg:max-w-none text-left">
-              기초 세션, 심화 세션, 정기 학술제 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요.
-            </p>
-          </div>
-        </section>
+        <PageHeroSection
+          title="KHUDA의 다양한 활동"
+          subtitle="기초 세션, 심화 세션, 정기 학술제 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요."
+          backgroundImage="/images/headers/hello.png"
+        />
 
         {/* 콘텐츠 섹션 */}
         <section className="py-8 sm:py-16 px-4 sm:px-4 md:px-8 bg-background overflow-x-clip">

@@ -1,8 +1,13 @@
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_REVEAL_OPTIONS, INDEX_SPONSORS } from "@/lib/constants";
+import { SCROLL_REVEAL_OPTIONS } from "@/lib/constants";
+import type { IndexSponsor } from "@/lib/constants";
 
-const SponsorShowcase = () => {
+interface SponsorShowcaseProps {
+  sponsors: IndexSponsor[];
+}
+
+const SponsorShowcase = ({ sponsors }: SponsorShowcaseProps) => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
 
   return (
@@ -27,7 +32,7 @@ const SponsorShowcase = () => {
         {/* 오른쪽: 카드 그리드 - 모바일 3열, 태블릿 이상 3열 */}
         <div className="lg:w-[60%] flex justify-center">
           <div className="grid grid-cols-3 gap-2 sm:gap-2.5 md:gap-4 lg:gap-5 max-w-[520px] w-full">
-            {INDEX_SPONSORS.map((sponsor, index) =>
+            {sponsors.map((sponsor, index) =>
               sponsor ? (
                 sponsor.website ? (
                   <a
