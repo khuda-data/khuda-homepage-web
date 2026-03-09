@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_REVEAL_OPTIONS, INDEX_TRACKS, ROUTES } from "@/lib/constants";
+import { SCROLL_REVEAL_OPTIONS, ROUTES } from "@/lib/constants";
+import type { IndexTrackInfo } from "@/lib/constants";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-const TrackShowcase = () => {
+interface TrackShowcaseProps {
+  tracks: IndexTrackInfo[];
+}
+
+const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
   const [flippedId, setFlippedId] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -72,7 +77,7 @@ const TrackShowcase = () => {
 
       {/* 트랙 카드 그리드 */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4">
-        {INDEX_TRACKS.map((track) => {
+        {tracks.map((track) => {
           const isFlipped = flippedId === track.id;
 
           return (

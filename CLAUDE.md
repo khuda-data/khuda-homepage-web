@@ -176,6 +176,30 @@ Base URL: `https://api-khuda.gaeng02.com` (override via `VITE_API_BASE_URL` env 
 - **Tailwind custom**: `khuda.crimson` brand color, `font-sans`(Pretendard), `font-display`(Cafe24Decobox), fade-up/fade-in/slide-in-right custom animations
 - **SPA routing**: `ScrollToTop` component resets scroll on navigation, Vercel rewrite for SPA fallback
 
+## Component Design Principles
+
+Three core principles of the component-based architecture.
+
+### 1. Single Responsibility
+Each component focuses on a single role. Do not place data fetching/sorting/processing logic and rendering logic in the same component.
+
+### 2. Reusable vs Domain-Specific Components
+- `src/components/ui/` — Pure UI atomic components with no knowledge of app state or domain data
+- `src/components/shared/` — Layout and common section components reused across multiple pages (e.g., `PageHeroSection`, `SectionHeader`)
+- `src/components/pages/` — Domain-specific components; not reused across other pages
+- If a shared component (`shared/`) already exists, do not re-implement the same layout inline
+
+### 3. Container vs Presentation (Parent-Child Separation)
+- **Parent (Container)**: Responsible for data fetching, sorting, injecting constants, and flow control
+  - Page components (`src/pages/`) or section components acting as containers
+- **Child (Presentation)**: Only responsible for rendering data received via props
+  - Must not directly import global constants or APIs internally
+
+### Data Flow Rules
+- Sibling components under the same parent must use a consistent data acquisition method (no mixing props and direct imports)
+- If a component needs to support future API replacement, data fetching must be handled by the parent (page) and the component should only receive props
+- Hardcoded strings (emails, URLs, etc.) must reference constants defined in `src/lib/constants/`
+
 ## Development Notes
 
 - Never mutate React state directly — always use the setter function

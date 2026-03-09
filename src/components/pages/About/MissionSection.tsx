@@ -41,19 +41,19 @@ const MissionSection = () => {
               </p>
               <div className="pt-4 sm:pt-4 space-y-3.5 sm:space-y-3">
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">체계적 학습</strong>: 기초부터 심화까지 단계별 커리큘럼으로 데이터와 AI의 핵심을 배워나갑니다.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">실전 경험</strong>: 토이 프로젝트부터 학술제까지, 실제 데이터로 문제를 해결하며 실무 역량을 키웁니다.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 sm:gap-3">
-                  <span className="text-primary font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
+                  <span className="text-blue-500 font-semibold text-base sm:text-lg flex-shrink-0 mt-0.5">•</span>
                   <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed">
                     <strong className="text-gray-900">협업 문화</strong>: 팀 프로젝트와 스터디를 통해 함께 성장하며 데이터로 세상을 이해하는 인재로 거듭납니다.
                   </p>

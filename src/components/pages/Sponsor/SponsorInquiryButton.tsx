@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { CONTACT_EMAIL } from "@/lib/constants";
 
 type SponsorInquiryButtonProps = {
   variant?: "default" | "hero" | "card";
@@ -14,7 +15,7 @@ const SponsorInquiryButton = ({
   "aria-label": ariaLabel = "후원 문의 메일 작성하기",
 }: SponsorInquiryButtonProps) => {
   const handleInquiry = () => {
-    const recipient = "khuda.official.khu@gmail.com";
+    const recipient = CONTACT_EMAIL;
     const subject = "후원문의";
     const body = "안녕하세요, 후원 관련 문의드립니다.";
     
