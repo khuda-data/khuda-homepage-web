@@ -14,6 +14,22 @@ import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 import SEO from "@/components/shared/SEO";
 
+// 질문 로딩 중 스켈레톤 카드
+const QuestionSkeleton = ({ count = 2 }: { count?: number }) => (
+  <div className="space-y-6 sm:space-y-8 animate-pulse">
+    {Array.from({ length: count }).map((_, i) => (
+      <div key={i} className="rounded-xl border border-border bg-card p-6 space-y-4">
+        <div className="h-5 w-2/5 bg-muted rounded" />
+        <div className="space-y-3">
+          <div className="h-4 w-full bg-muted rounded" />
+          <div className="h-4 w-4/5 bg-muted rounded" />
+          <div className="h-10 w-full bg-muted rounded" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const VALID_TYPES = ["yb", "ob"] as const;
 type ValidType = (typeof VALID_TYPES)[number];
 const isValidType = (v: string | null): v is ValidType =>
@@ -24,7 +40,7 @@ const Apply = () => {
   const [applicationType, setApplicationType] = useState("");
   const initializedFromUrl = useRef(false);
 
-  const { commonQuestions, typeQuestions, questions } = useApplicationQuestions(applicationType);
+  const { commonQuestions, typeQuestions, questions, isLoadingCommon, isLoadingType, isLoadingQuestions } = useApplicationQuestions(applicationType);
 
   const {
     formData,
@@ -143,18 +159,23 @@ const Apply = () => {
               }
             }}
           >
-            {privacyQuestion && (
-              <PrivacyConsentCard
-                question={privacyQuestion}
-                answer={privacyAnswer}
-                onAnswerChange={updateAnswer}
-              />
-            )}
-
-            {basicInfoQuestions.length > 0 && (
-              <BasicInfoCard questions={basicInfoQuestions}>
-                {basicInfoQuestions.map((question) => renderQuestion(question))}
-              </BasicInfoCard>
+            {isLoadingCommon ? (
+              <QuestionSkeleton count={2} />
+            ) : (
+              <>
+                {privacyQuestion && (
+                  <PrivacyConsentCard
+                    question={privacyQuestion}
+                    answer={privacyAnswer}
+                    onAnswerChange={updateAnswer}
+                  />
+                )}
+                {basicInfoQuestions.length > 0 && (
+                  <BasicInfoCard questions={basicInfoQuestions}>
+                    {basicInfoQuestions.map((question) => renderQuestion(question))}
+                  </BasicInfoCard>
+                )}
+              </>
             )}
 
             <ApplicationTypeSelector
@@ -164,10 +185,15 @@ const Apply = () => {
               }
             />
 
-            {formData.applicationType &&
-              typeQuestions
-                .filter((question) => question.applicant_type !== "common")
-                .map((question) => renderQuestion(question))}
+            {formData.applicationType && (
+              isLoadingType ? (
+                <QuestionSkeleton count={3} />
+              ) : (
+                typeQuestions
+                  .filter((question) => question.applicant_type !== "common")
+                  .map((question) => renderQuestion(question))
+              )
+            )}
 
             <div className="sticky bottom-0 pb-4 sm:pb-6 md:pb-8 pt-3 sm:pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-4 sm:-mx-6 md:-mx-12 px-4 sm:px-6 md:px-12">
               <Button
@@ -175,7 +201,7 @@ const Apply = () => {
                 variant="hero"
                 size="xl"
                 className="w-full rounded-xl h-12 sm:h-14 text-sm sm:text-base font-semibold shadow-lg transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] min-h-[44px] bg-blue-600 text-white hover:shadow-[0_0_40px_rgb(59_130_246/0.4)]"
-                disabled={isSubmitting || !isFormValid()}
+                disabled={isSubmitting || isLoadingQuestions || !isFormValid()}
               >
                 {isSubmitting ? "제출 중..." : "지원서 제출하기"}
               </Button>
