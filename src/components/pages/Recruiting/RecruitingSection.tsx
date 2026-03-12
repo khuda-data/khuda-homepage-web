@@ -26,7 +26,21 @@ const RecruitingSection = () => {
         <NotesSection />
 
         {/* 모집 프로세스 - lazy load */}
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center py-16 animate-pulse">
+              <div className="space-y-4 w-full max-w-2xl">
+                <div className="h-6 w-1/3 bg-muted rounded mx-auto" />
+                <div className="h-4 w-2/3 bg-muted rounded mx-auto" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-20 bg-muted rounded-xl" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          }
+        >
           <LazyRecruitmentProcess />
         </Suspense>
 

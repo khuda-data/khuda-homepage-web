@@ -60,6 +60,8 @@ export const useApplicationQuestions = (applicationType: string) => {
     commonQuestions,
     typeQuestions,
     questions,
+    isLoadingCommon,
+    isLoadingType,
     isLoadingQuestions,
   };
 };

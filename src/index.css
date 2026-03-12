@@ -21,6 +21,25 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* 모달 등 세로 스크롤 시 얇고 은은한 스크롤바 */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(0 0% 80%) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 80%);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 0% 70%);
+  }
   .fade-up {
     opacity: 0;
     transform: translateY(40px);

@@ -74,7 +74,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
         className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-[780px] max-h-[85vh] overflow-y-auto rounded-2xl bg-card border border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[780px] max-h-[85vh] overflow-y-auto scrollbar-thin rounded-2xl bg-card border border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
           className="sticky top-5 float-right mr-8 z-10 w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center text-muted-foreground hover:text-foreground transition-all"
@@ -104,12 +104,9 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
             )}
           </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-2.5">
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-6">
             {project.title}
           </h2>
-          <p className="text-sm text-muted-foreground mb-8">
-            {project.members}
-          </p>
 
           <div className="mb-8">
             <SlideCarousel
