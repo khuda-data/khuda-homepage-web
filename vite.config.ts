@@ -33,4 +33,28 @@ export default defineConfig({
     },
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React 코어 — 불변에 가까우므로 장기 캐시 효율 극대화
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          // 데이터 패칭 레이어
+          "vendor-query": ["@tanstack/react-query"],
+          // 애니메이션 — Recruiting/Index에서만 사용
+          "vendor-motion": ["motion"],
+          // Radix UI 컴포넌트 묶음
+          "vendor-radix": [
+            "@radix-ui/react-accordion",
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-label",
+            "@radix-ui/react-select",
+            "@radix-ui/react-slot",
+            "@radix-ui/react-toast",
+            "@radix-ui/react-tooltip",
+          ],
+        },
+      },
+    },
+  },
 });
