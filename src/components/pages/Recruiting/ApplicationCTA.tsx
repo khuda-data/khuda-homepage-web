@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SECTION_STYLES, RECRUITMENT_SCHEDULE, SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";

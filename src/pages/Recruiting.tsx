@@ -1,7 +1,6 @@
 import Header from "@/components/shared/Header";
 import PageHeroSection from "@/components/shared/PageHeroSection";
 import RecruitingSection from "@/components/pages/Recruiting/RecruitingSection";
-import ApplicationCTA from "@/components/pages/Recruiting/ApplicationCTA";
 import Footer from "@/components/shared/Footer";
 import SEO from "@/components/shared/SEO";
 
