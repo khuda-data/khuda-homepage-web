@@ -6,6 +6,10 @@
 <img width="2838" height="1522" alt="hero-2" src="https://github.com/user-attachments/assets/0e8f8e85-fa11-41ec-b98e-3c837b90d8ce" />
 
 
+## 문서
+
+[![API 명세서](https://img.shields.io/badge/API_명세서-보기-85EA2D?style=flat&logo=swagger&logoColor=black)](doc/api-spec.md)
+
 ## Team
 
 ### PM
