@@ -68,8 +68,10 @@ export const FAQCard = () => {
                 <p className="text-xs text-muted-foreground">@khu_da.official</p>
               </div>
             </a>
-            <a 
-              href={`mailto:${CONTACT_EMAIL}`} 
+            <a
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 rounded-xl bg-secondary/30 border border-border/50 hover:bg-secondary/50 hover:border-blue-600/30 transition-all group cursor-pointer relative min-h-[44px]"
             >
               <div className="w-10 h-10 rounded-lg bg-blue-600/10 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">
