@@ -32,7 +32,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "부회장",
         department: "AI 엔지니어링",
         affiliation: "소프트웨어융합대학 컴퓨터공학부",
-        email: "shin.jinsu@khuda.kr",
+        email: "jsshin8128@gmail.com",
       },
       {
         name: "양경식",
@@ -170,7 +170,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "교육부장",
         department: "",
         affiliation: "소프트웨어융합대학 컴퓨터공학부",
-        email: "shin.jinsu@khuda.kr",
+        email: "jsshin8128@gmail.com",
       },
       {
         name: "김리원",
