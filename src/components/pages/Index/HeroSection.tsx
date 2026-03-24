@@ -73,7 +73,7 @@ const HeroSection = () => {
 
           {/* 태그라인 + 로고 + CTA 버튼 묶음
               gap-3 md:gap-5: 세 요소 사이 간격을 균일하게 유지           */}
-          <div className="flex flex-col items-center md:items-start gap-3 md:gap-5 flex-shrink-0">
+          <div className="flex flex-col items-center md:items-start gap-6 md:gap-8 flex-shrink-0">
 
             {/* 태그라인 — 데스크톱에서만 로고 위에 표시 (모바일은 아래 별도 처리) */}
             <p

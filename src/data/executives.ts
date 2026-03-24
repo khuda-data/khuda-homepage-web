@@ -95,7 +95,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "대외협력부원",
         department: "",
         affiliation: "공과대학 산업경영공학과",
-        email: "jang.eunseo@khuda.kr",
+        email: "changse6829@gmail.com",
       },
       {
         name: "이승준",
