@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_REVEAL_OPTIONS, ROUTES } from "@/lib/constants";
@@ -10,10 +10,26 @@ interface TrackShowcaseProps {
   tracks: IndexTrackInfo[];
 }
 
+const LONG_PRESS_MS = 600;
+
 const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
   const [flippedId, setFlippedId] = useState<string | null>(null);
+  const [pressingId, setPressingId] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isLongPress = useRef(false);
+  const isTouchAction = useRef(false);
+  const touchStartPos = useRef({ x: 0, y: 0 });
+
+  const cancelLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    setPressingId(null);
+  };
 
   const handlePointerEnter = (e: React.PointerEvent, id: string) => {
     if (e.pointerType === "mouse") setFlippedId(id);
@@ -23,13 +39,42 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
     if (e.pointerType === "mouse") setFlippedId(null);
   };
 
+  const handlePointerDown = (e: React.PointerEvent, id: string) => {
+    if (e.pointerType === "mouse") return;
+    isTouchAction.current = true;
+    isLongPress.current = false;
+    touchStartPos.current = { x: e.clientX, y: e.clientY };
+    setPressingId(id);
+
+    longPressTimer.current = setTimeout(() => {
+      isLongPress.current = true;
+      setPressingId(null);
+      navigate(ROUTES.activities);
+    }, LONG_PRESS_MS);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (e.pointerType === "mouse" || !longPressTimer.current) return;
+    const dx = Math.abs(e.clientX - touchStartPos.current.x);
+    const dy = Math.abs(e.clientY - touchStartPos.current.y);
+    if (dx > 10 || dy > 10) cancelLongPress();
+  };
+
   const handlePointerUp = (e: React.PointerEvent, id: string) => {
-    if (e.pointerType !== "mouse") {
+    if (e.pointerType === "mouse") return;
+    cancelLongPress();
+    if (!isLongPress.current) {
       setFlippedId((prev) => (prev === id ? null : id));
     }
   };
 
+  const handlePointerCancel = () => cancelLongPress();
+
   const handleCardClick = () => {
+    if (isTouchAction.current) {
+      isTouchAction.current = false;
+      return;
+    }
     navigate(ROUTES.activities);
   };
 
@@ -83,11 +128,18 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
           return (
             <div
               key={track.id}
-              className="h-[160px] sm:h-[180px] md:h-[200px] lg:h-[220px] cursor-pointer"
+              className={cn(
+                "h-[160px] sm:h-[180px] md:h-[200px] lg:h-[220px] cursor-pointer select-none transition-all duration-150",
+                pressingId === track.id && "ring-2 ring-blue-500 ring-offset-2 rounded-xl sm:rounded-2xl"
+              )}
               style={{ perspective: "800px" }}
               onPointerEnter={(e) => handlePointerEnter(e, track.id)}
               onPointerLeave={handlePointerLeave}
+              onPointerDown={(e) => handlePointerDown(e, track.id)}
+              onPointerMove={handlePointerMove}
               onPointerUp={(e) => handlePointerUp(e, track.id)}
+              onPointerCancel={handlePointerCancel}
+              onContextMenu={(e) => e.preventDefault()}
               onClick={handleCardClick}
             >
               <div
