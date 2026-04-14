@@ -15,7 +15,13 @@ const SponsorCard = ({ sponsor }: SponsorCardProps) => {
           <img
             src={sponsor.logo}
             alt={sponsor.name}
-            className={sponsor.logoLarge ? "max-h-16 sm:max-h-20 md:max-h-24 lg:max-h-28 max-w-full object-contain" : "max-h-12 sm:max-h-14 md:max-h-16 lg:max-h-20 max-w-full object-contain"}
+            className={
+                sponsor.logoLarge
+                  ? "max-h-16 sm:max-h-20 md:max-h-24 lg:max-h-28 max-w-full object-contain"
+                  : sponsor.logoSmall
+                  ? "max-h-8 sm:max-h-10 md:max-h-12 lg:max-h-14 max-w-full object-contain"
+                  : "max-h-12 sm:max-h-14 md:max-h-16 lg:max-h-20 max-w-full object-contain"
+              }
             loading="lazy"
             decoding="async"
           />

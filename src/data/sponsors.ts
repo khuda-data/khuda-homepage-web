@@ -3,6 +3,8 @@ export interface Sponsor {
   logo?: string;
   /** 로고를 다른 후원사보다 크게 표시 (예: 몬스터 에너지) */
   logoLarge?: boolean;
+  /** 로고를 다른 후원사보다 작게 표시 */
+  logoSmall?: boolean;
   /** 로고 사용 금지 (법적/정책적 사유로 노출하지 않음) */
   logoProhibited?: boolean;
   website?: string;
@@ -26,7 +28,7 @@ export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
   { name: "레드불", logoProhibited: true, year: 2025, order: 5 },
   { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", logoLarge: true, website: "https://www.monsterenergy.com", year: 2025, order: 6 },
   { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/", year: 2025, order: 7 },
-  { name: "현대모비스", year: 2024 },
+  { name: "현대모비스", logo: "/images/sponsors/mobis-color.png", logoSmall: true, website: "https://www.mobis.co.kr", year: 2024 },
   { name: "경희대학교 총동아리연합회", logo: "/images/sponsors/univ-color.png", description: "6기부터 (~2024)", website: "https://www.khu.ac.kr", year: 2024 },
 ];
 
