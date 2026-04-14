@@ -5,7 +5,7 @@ export const INDEX_SPONSORS: IndexSponsor[] = [
   { name: "Perplexity", logo: "/images/sponsors/perplexity-color.png", website: "https://www.perplexity.ai", logoSmall: true },
   { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", logoSmall: true },
   { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com" },
-  { name: "김성민커피", logo: "/images/sponsors/ksmcoffee-color.png", website: "https://kimsungmin.co.kr/" },
+  { name: "현대모비스", logo: "/images/sponsors/mobis-color.png", website: "https://www.mobis.co.kr" },
   { name: "경희대학교 총동아리연합회", logo: "/images/sponsors/univ-color.png", website: "https://www.khu.ac.kr" },
 ];
 
