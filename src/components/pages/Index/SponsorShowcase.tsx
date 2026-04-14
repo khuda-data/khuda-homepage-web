@@ -46,7 +46,7 @@ const SponsorShowcase = ({ sponsors }: SponsorShowcaseProps) => {
                     <img
                       src={sponsor.logo}
                       alt={sponsor.name}
-                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]")}
+                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]", sponsor.logoMedium && "max-h-[72%] max-w-[72%]")}
                       loading="lazy"
                       decoding="async"
                     />
@@ -59,7 +59,7 @@ const SponsorShowcase = ({ sponsors }: SponsorShowcaseProps) => {
                     <img
                       src={sponsor.logo}
                       alt={sponsor.name}
-                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]")}
+                      className={cn("max-h-full max-w-full object-contain", sponsor.logoSmall && "max-h-[55%] max-w-[55%]", sponsor.logoMedium && "max-h-[72%] max-w-[72%]")}
                       loading="lazy"
                       decoding="async"
                     />
