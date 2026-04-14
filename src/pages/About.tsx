@@ -41,6 +41,24 @@ const About = () => {
         title="소개 | KHUDA"
         description="경희대학교 KHUDA의 미션, 비전, 운영진을 소개합니다."
         path="/about"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "홈", item: "https://www.khuda.co.kr" },
+              { "@type": "ListItem", position: 2, name: "소개", item: "https://www.khuda.co.kr/about" },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "소개 | KHUDA",
+            description: "경희대학교 KHUDA의 미션, 비전, 운영진을 소개합니다.",
+            url: "https://www.khuda.co.kr/about",
+            isPartOf: { "@type": "WebSite", url: "https://www.khuda.co.kr" },
+          },
+        ]}
       />
       <Header />
       <main>
