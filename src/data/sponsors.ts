@@ -22,6 +22,7 @@ export interface GenerationSponsors {
 // 년도별 후원사 데이터 (년도 내림차순, 같은 년도는 order 오름차순·미지정 시 뒤로)
 export const SPONSOR_DATA_BY_YEAR: Sponsor[] = [
   { name: "몬스터 에너지", logo: "/images/sponsors/monster.png", logoLarge: true, website: "https://www.monsterenergy.com", year: 2026 },
+  { name: "Upstage", logo: "/images/sponsors/upstage.png", logoSmall: true, website: "https://www.upstage.ai/", year: 2026, order: 1 },
   { name: "Perplexity", logo: "/images/sponsors/perplexity.png", website: "https://www.perplexity.ai", year: 2025, order: 1 },
   { name: "Lovable", logo: "/images/sponsors/lovable.png", website: "https://lovable.dev", year: 2025, order: 2 },
   { name: "한빛앤", logo: "/images/sponsors/hanbit.png", website: "https://www.hanbitn.com", year: 2025, order: 4 },

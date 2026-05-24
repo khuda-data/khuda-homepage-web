@@ -1,7 +1,8 @@
 export type IndexSponsor = { name: string; logo: string; website?: string; logoSmall?: boolean; logoMedium?: boolean } | null;
 
+// 랜딩 페이지 후원사 카드는 대표 6개 고정 (디자인 제약)
 export const INDEX_SPONSORS: IndexSponsor[] = [
-  { name: "몬스터 에너지", logo: "/images/sponsors/monster.png", website: "https://www.monsterenergy.com" },
+  { name: "Upstage", logo: "/images/sponsors/upstage.png", website: "https://www.upstage.ai/" },
   { name: "Perplexity", logo: "/images/sponsors/perplexity.png", website: "https://www.perplexity.ai", logoSmall: true },
   { name: "Lovable", logo: "/images/sponsors/lovable.png", website: "https://lovable.dev", logoSmall: true },
   { name: "한빛앤", logo: "/images/sponsors/hanbit.png", website: "https://www.hanbitn.com" },
