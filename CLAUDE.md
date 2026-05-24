@@ -181,7 +181,7 @@ KHUDA Homepage Web Project - Official website for KHUDA, a data analysis & AI cl
 - **Styling**: Tailwind CSS 3 + tailwindcss-animate
 - **UI Components**: Radix UI + shadcn/ui (CVA + tailwind-merge + clsx)
 - **Routing**: React Router DOM v6
-- **Animation**: Motion (framer-motion), OGL (WebGL shader)
+- **Animation**: OGL (WebGL shader)
 - **State/Data**: TanStack React Query v5
 - **SEO**: react-helmet-async (shared `<SEO>` component)
 - **Icons**: Lucide React
@@ -193,9 +193,9 @@ KHUDA Homepage Web Project - Official website for KHUDA, a data analysis & AI cl
 ```
 src/
 ├── components/
-│   ├── ui/              # shadcn/ui base components (13)
-│   │                    # accordion, badge, button, card, dialog, input,
-│   │                    # label, select, sonner, textarea, toast, toaster, tooltip
+│   ├── ui/              # shadcn/ui base components (12)
+│   │                    # accordion, badge, button, card, input, label,
+│   │                    # select, sonner, textarea, toast, toaster, tooltip
 │   ├── shared/          # Shared components (6)
 │   │                    # Footer, Header, PageHeroSection, ScrollToTopButton, SectionHeader, SEO
 │   └── pages/           # Page-specific components
@@ -259,7 +259,6 @@ src/
     └── questions.ts     # filterOBQuestions (exclude position 9~21)
 
 public/
-├── fonts/               # Web fonts (Cafe24Decobox.ttf)
 ├── robots.txt           # Crawler rules
 ├── sitemap.xml          # Sitemap
 └── images/
@@ -334,7 +333,7 @@ Base URL: `https://api-khuda.gaeng02.com` (override via `VITE_API_BASE_URL` env 
 - **JSX files**: `Grainient.jsx` (OGL WebGL shader), `RotatingText.jsx` (CSS animation) — intentionally not TypeScript
 - **Projects data**: Hardcoded in `ProjectsSection.tsx` — replace with API when backend is ready
 - **Image optimization**: `vite-plugin-image-optimizer` compresses public/ images at build time (JPEG 85, PNG 90)
-- **Tailwind custom**: `khuda.crimson` brand color, `font-sans`(Pretendard), `font-display`(Cafe24Decobox), fade-up/fade-in/slide-in-right custom animations
+- **Tailwind custom**: `khuda.crimson` brand color, `font-sans`(Pretendard), `font-display`(Outfit), fade-up/fade-in/slide-in-right custom animations
 - **SPA routing**: `ScrollToTop` component resets scroll on navigation, Vercel rewrite for SPA fallback
 
 ## Component Design Principles
