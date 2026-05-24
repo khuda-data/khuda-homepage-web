@@ -31,9 +31,3 @@ dist-ssr
 .env
 .env.local
 .env.*.local
-
-# Claude
-CLAUDE.md
-
-# Personal docs
-doc/dev-diary.md
