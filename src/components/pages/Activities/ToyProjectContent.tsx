@@ -14,9 +14,9 @@ const ToyProjectContent = () => (
 
     <ImageGallery
       images={[
-        { src: "/images/activities/toy-project-3.jpg", alt: "토이 프로젝트 3" },
-        { src: "/images/activities/toy-project-4.jpg", alt: "토이 프로젝트 4" },
-        { src: "/images/activities/toy-project-5.jpg", alt: "토이 프로젝트 5" },
+        { src: "/images/activities/toy-project-1.jpg", alt: "토이 프로젝트 3" },
+        { src: "/images/activities/toy-project-2.jpg", alt: "토이 프로젝트 4" },
+        { src: "/images/activities/toy-project-3.jpg", alt: "토이 프로젝트 5" },
       ]}
     />
   </div>

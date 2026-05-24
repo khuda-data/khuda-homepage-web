@@ -14,9 +14,9 @@ const MLSessionContent = () => (
 
     <ImageGallery
       images={[
-        { src: "/images/activities/ml-session-1.jpeg", alt: "ML 세션 1" },
-        { src: "/images/activities/ml-session-3.jpeg", alt: "ML 세션 3" },
-        { src: "/images/activities/ml-session8.jpg", alt: "ML 세션 8" },
+        { src: "/images/activities/ml-session-1.jpg", alt: "ML 세션 1" },
+        { src: "/images/activities/ml-session-2.jpg", alt: "ML 세션 3" },
+        { src: "/images/activities/ml-session-4.jpg", alt: "ML 세션 8" },
       ]}
     />
 

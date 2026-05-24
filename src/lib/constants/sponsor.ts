@@ -1,12 +1,12 @@
 export type IndexSponsor = { name: string; logo: string; website?: string; logoSmall?: boolean; logoMedium?: boolean } | null;
 
 export const INDEX_SPONSORS: IndexSponsor[] = [
-  { name: "몬스터 에너지", logo: "/images/sponsors/monster-color.png", website: "https://www.monsterenergy.com" },
-  { name: "Perplexity", logo: "/images/sponsors/perplexity-color.png", website: "https://www.perplexity.ai", logoSmall: true },
-  { name: "Lovable", logo: "/images/sponsors/lovable-color.png", website: "https://lovable.dev", logoSmall: true },
-  { name: "한빛앤", logo: "/images/sponsors/hanbit-color.png", website: "https://www.hanbitn.com" },
-  { name: "현대모비스", logo: "/images/sponsors/mobis-color.png", website: "https://www.mobis.co.kr", logoMedium: true },
-  { name: "경희대학교 총동아리연합회", logo: "/images/sponsors/univ-color.png", website: "https://www.khu.ac.kr" },
+  { name: "몬스터 에너지", logo: "/images/sponsors/monster.png", website: "https://www.monsterenergy.com" },
+  { name: "Perplexity", logo: "/images/sponsors/perplexity.png", website: "https://www.perplexity.ai", logoSmall: true },
+  { name: "Lovable", logo: "/images/sponsors/lovable.png", website: "https://lovable.dev", logoSmall: true },
+  { name: "한빛앤", logo: "/images/sponsors/hanbit.png", website: "https://www.hanbitn.com" },
+  { name: "현대모비스", logo: "/images/sponsors/mobis.png", website: "https://www.mobis.co.kr", logoMedium: true },
+  { name: "경희대학교 총동아리연합회", logo: "/images/sponsors/univ.png", website: "https://www.khu.ac.kr" },
 ];
 
 export const SPONSOR_PAGE_CONFIG = {

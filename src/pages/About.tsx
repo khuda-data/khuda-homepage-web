@@ -65,7 +65,7 @@ const About = () => {
         <PageHeroSection
           title="KHUDA를 소개합니다"
           subtitle="경희대학교를 대표하는 데이터 · AI 학회"
-          backgroundImage="/images/headers/hello.png"
+          backgroundImage="/images/headers/page-header.png"
         />
 
         {/* 탭 버튼 */}

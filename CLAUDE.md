@@ -262,11 +262,11 @@ public/
 ├── robots.txt           # Crawler rules
 ├── sitemap.xml          # Sitemap
 └── images/
-    ├── activities/      # Activity images (27: conference, datathon, ml-session, networking, toy-project, track-session)
-    ├── headers/         # Page header backgrounds (hello.png)
-    ├── logos/           # KHUDA logos (khuda-ico.png, khuda-logo.png, khuda-logo-white.png)
-    ├── projects/        # Project thumbnails (9)
-    └── sponsors/        # Sponsor logos (6: hanbit, ksmcoffee, lovable, monster, perplexity, univ)
+    ├── activities/      # Activity images (16: conference 2, datathon 3, ml-session 4, networking 1, toy-project 3, track-session 3)
+    ├── headers/         # Page header backgrounds (page-header.png)
+    ├── logos/           # KHUDA logos (khuda-icon.png, khuda-logo.png, khuda-logo-white.png, khuda-og.png)
+    ├── projects/        # Project thumbnails (9, lowercase kebab-case)
+    └── sponsors/        # Sponsor logos (7: hanbit, ksmcoffee, lovable, mobis, monster, perplexity, univ)
 ```
 
 ## Path Alias

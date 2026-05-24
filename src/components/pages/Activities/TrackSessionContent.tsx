@@ -33,8 +33,8 @@ const TrackSessionContent = () => (
 
     <ImageGallery
       images={[
-        { src: "/images/activities/track-session-4.jpg", alt: "심화 세션 4" },
-        { src: "/images/activities/track-session.jpg", alt: "심화 세션" },
+        { src: "/images/activities/track-session-3.jpg", alt: "심화 세션 4" },
+        { src: "/images/activities/track-session-1.jpg", alt: "심화 세션" },
         { src: "/images/activities/track-session-2.jpg", alt: "심화 세션 2" },
       ]}
     />

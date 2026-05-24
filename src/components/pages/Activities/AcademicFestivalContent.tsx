@@ -12,7 +12,7 @@ const AcademicFestivalContent = () => (
     <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
       {[
         { src: "/images/activities/conference-1.png", alt: "정기 학술제 1" },
-        { src: "/images/activities/conference-2.jpeg", alt: "정기 학술제 2" },
+        { src: "/images/activities/conference-2.jpg", alt: "정기 학술제 2" },
       ].map((img) => (
         <img key={img.src} src={img.src} alt={img.alt} className="rounded-xl h-44 sm:h-60 md:h-64 w-[72vw] sm:w-auto sm:flex-1 flex-shrink-0 snap-start object-cover" />
       ))}

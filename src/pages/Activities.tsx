@@ -142,7 +142,7 @@ const Activities = () => {
         <PageHeroSection
           title="KHUDA의 다양한 활동"
           subtitle="기초 세션, 심화 세션, 정기 학술제 등 다양한 활동을 통해 데이터와 AI에 대해 함께 배우고 성장해요."
-          backgroundImage="/images/headers/hello.png"
+          backgroundImage="/images/headers/page-header.png"
         />
 
         {/* 콘텐츠 섹션 */}
