@@ -41,12 +41,9 @@ export default defineConfig({
           "vendor-react": ["react", "react-dom", "react-router-dom"],
           // 데이터 패칭 레이어
           "vendor-query": ["@tanstack/react-query"],
-          // 애니메이션 — Recruiting/Index에서만 사용
-          "vendor-motion": ["motion"],
           // Radix UI 컴포넌트 묶음
           "vendor-radix": [
             "@radix-ui/react-accordion",
-            "@radix-ui/react-dialog",
             "@radix-ui/react-label",
             "@radix-ui/react-select",
             "@radix-ui/react-slot",
