@@ -19,7 +19,7 @@ const getCardDescription = (question: Question, applicationType: "yb" | "ob" | "
     return "스터디 개설을 선택하지 않으셔서 이 항목은 비활성화되었습니다.";
   }
   if (question.question.includes("소모임") || question.question.includes("스터디")) {
-    return "KHUDA는 스터디 및 소모임을 적극 권장하고 있으며, KHUDA 9기에서는 더욱 강조하여 활성화할 생각입니다. (산학협력 프로젝트, SQL 스터디, 공모전 스터디 등이 예정되어 있습니다)";
+    return "KHUDA는 스터디 및 소모임을 적극 권장하고 있으며, KHUDA 10기에서는 더욱 강조하여 활성화할 생각입니다. (산학협력 프로젝트, SQL 스터디, 공모전 스터디 등이 예정되어 있습니다)";
   }
   if (question.question.includes("일정") && !question.question.includes("면접")) {
     return "타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.";

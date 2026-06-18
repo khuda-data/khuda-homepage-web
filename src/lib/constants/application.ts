@@ -21,7 +21,7 @@ export const APPLICATION_FORM_CONFIG = {
     "인천", "부산", "대구", "대전", "광주", "울산", "세종",
     "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "해외"
   ],
-  residenceDescription: "1월~2월 기준 거주 지역을 선택해주세요",
+  residenceDescription: "7월~8월 기준 거주 지역을 선택해주세요",
 
   pythonLevels: [
     {
@@ -177,20 +177,21 @@ export const APPLICATION_FORM_CONFIG = {
 
   ybCompletionRequirements: {
     title: "YB 수료 조건 안내",
-    intro: "KHUDA 9기 YB 부원분들의 원활한 활동 이행과 학술적 성취를 위해 아래와 같이 수료 조건을 공지합니다. YB 부원께서는 해당 사항을 반드시 숙지하시어 활동에 참고하시기 바랍니다.",
+    intro: "KHUDA 10기 YB 부원분들의 원활한 활동 이행과 학술적 성취를 위해 아래와 같이 수료 조건을 공지합니다. YB 부원께서는 해당 사항을 반드시 숙지하시어 활동에 참고하시기 바랍니다.",
     requirements: [
       {
+        // 기초 세션 요일은 기수마다 달라질 수 있으니 모집 공지에 맞춰 수정한다. 10기는 수요일.
         title: "1. 방학 정기 세션 이수",
-        description: "방학 중 매주 목요일 진행되는 기초 세션 참석 (벌점제도가 존재합니다)",
+        description: "방학 중 매주 수요일 진행되는 기초 세션 참석 (벌점제도가 존재합니다)",
       },
       {
         title: "2. 방학 토이 프로젝트 완수",
-        period: "2026년 겨울 방학",
+        period: "2026년 여름 방학",
         description: "해당 기간 내 운영되는 토이 프로젝트 필수 참여 및 결과물 제출",
       },
       {
         title: "3. 정규 학기 활동 이행",
-        period: "2026년 1학기",
+        period: "2026년 2학기",
         description: "학기 중 운영되는 정규 심화 트랙 수강 참여",
       },
       {

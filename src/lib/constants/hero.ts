@@ -5,7 +5,7 @@ export const HERO_CONFIG = {
     prefix: "Dive into",
     dot: ".",
   },
-  subtitle: "KHUDA 9th",
+  subtitle: "KHUDA 10th",
   tagline: "경희대학교 데이터·AI 학회",
   taglineSub: " | KHUDA",
   buttons: {

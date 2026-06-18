@@ -22,7 +22,7 @@ export const RECRUITMENT_INFO = {
   totalCapacity: 50,
   trackCapacityText: "트랙별 6~8명",
   totalCapacityText: "총 40명 내외",
-  generation: "9기",
+  generation: "10기",
   sectionLabel: "Target",
   sectionTitle: "모집 대상",
   sectionSubtitle: (generation: string) => `KHUDA와 함께 성장할 ${generation} 멤버를 모집합니다.`,
@@ -34,8 +34,9 @@ export const RECRUITMENT_INFO = {
       description: "데이터 및 AI 분야에\n관심이 많은 분",
     },
     {
+      // 정기 세션 요일은 기수마다 달라질 수 있으니 모집 공지를 보고 맞춰서 수정한다. 10기는 수요일.
       icon: "CalendarCheck",
-      description: "방학 중 매주 목요일 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
+      description: "방학 중 매주 수요일 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
     },
     {
       icon: "Flame",
@@ -63,37 +64,36 @@ export const RECRUITMENT_INFO = {
 
 export const RECRUITMENT_SCHEDULE = {
   application: {
-    start: "2025년 12월 31일 (수)",
-    end: "2026년 1월 4일 (일)",
-    deadline: "2026년 1월 4일 23:59",
-    deadlineISO: "2026-01-04T23:59:59",
-    short: "12.31~1.4",
-    full: "2025년 12월 31일 (수) ~ 2026년 1월 4일 (일) 23:59",
+    start: "2026년 6월 29일 (월)",
+    end: "2026년 7월 5일 (일)",
+    deadline: "2026년 7월 5일 23:59",
+    deadlineISO: "2026-07-05T23:59:59",
+    short: "6.29~7.5",
+    full: "2026년 6월 29일 (월) ~ 7월 5일 (일) 23:59",
     dateRange: (start: string, end: string) => `${start} ~ ${end}`,
     deadlineWithLabel: (label: string, deadline: string) => `${label} ${deadline}`,
   },
   announcement: {
-    date: "2026년 1월 7일 (수) 18:00",
-    short: "1.7",
-    full: "2026년 1월 7일 (수) 18:00",
+    date: "2026년 7월 7일 (화)",
+    short: "7.7",
+    full: "2026년 7월 7일 (화)",
   },
   interview: {
-    start: "2026년 1월 9일 (금)",
-    end: "2026년 1월 11일 (일)",
+    start: "2026년 7월 8일 (수)",
+    end: "2026년 7월 9일 (목)",
     method: "온라인 비대면",
-    short: "1.9~1.11",
-    full: "2026년 1월 9일 (금) ~ 1월 11일 (일) 온라인 비대면",
+    short: "7.8~7.9",
+    full: "2026년 7월 8일 (수) ~ 7월 9일 (목) 온라인 비대면",
     dates: [
-      { value: "1월 9일 (금)", label: "1월 9일", subLabel: "금요일" },
-      { value: "1월 10일 (토)", label: "1월 10일", subLabel: "토요일" },
-      { value: "1월 11일 (일)", label: "1월 11일", subLabel: "일요일" },
+      { value: "7월 8일 (수)", label: "7월 8일", subLabel: "수요일" },
+      { value: "7월 9일 (목)", label: "7월 9일", subLabel: "목요일" },
     ],
   },
   final: {
-    date: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
-    short: "1.12",
-    full: "2026년 1월 12일 (월) 18:00 이후 개별 안내",
-    ot: "합격자 대상으로 1월 15일에 오리엔테이션을 진행합니다.",
+    date: "2026년 7월 10일 (금) 이후 개별 안내",
+    short: "7.10",
+    full: "2026년 7월 10일 (금) 이후 개별 안내",
+    ot: "최종 합격자 대상으로 7월 13일에 오리엔테이션을 진행하며, YB 세션은 7월 15일에 시작합니다.",
   },
 };
 

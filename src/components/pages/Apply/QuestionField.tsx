@@ -47,7 +47,7 @@ export const QuestionField = ({
   }
 
   if (question.field_type === "textarea") {
-    const placeholder = question.question.includes("바라는") || question.question.includes("9기에게") || question.question.includes("KHUDA에게")
+    const placeholder = question.question.includes("바라는") || question.question.includes("10기에게") || question.question.includes("KHUDA에게")
       ? "KHUDA에 대한 바람이나 제안사항을 작성해주세요..." 
       : "답변을 작성해주세요...";
     return (
