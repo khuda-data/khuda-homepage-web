@@ -34,7 +34,7 @@ const IntroductionSection = () => {
               </h2>
               <div className="space-y-4 sm:space-y-4">
                 <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed break-keep">
-                  KHUDA는 경희대학교를 대표하는 데이터 · AI 학회입니다. 2022년 설립 이래 9개 기수를 거치며 400명 이상의 데이터 및 AI 역량을 갖춘 인재를 배출, 교내를 넘어 학문과 실무를 잇는 핵심 커뮤니티로 자리매김했습니다.
+                  KHUDA는 경희대학교를 대표하는 데이터 · AI 학회입니다. 2022년 설립 이래 10개 기수를 거치며 450명 이상의 데이터 및 AI 역량을 갖춘 인재를 배출, 교내를 넘어 학문과 실무를 잇는 핵심 커뮤니티로 자리매김했습니다.
                 </p>
                 <p className="text-sm sm:text-base text-gray-700 leading-[1.8] sm:leading-relaxed break-keep">
                   우리는 단순한 기술 습득을 넘어, 데이터 중심의 사고로 세상의 문제를 재정의합니다. 체계적인 커리큘럼과 실전 프로젝트를 통해 전문 역량을 갈고닦으며, 동료와 함께 성장하는 즐거움을 동력 삼아 사회에 새로운 가치를 더하는 해답을 찾아 나갑니다.

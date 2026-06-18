@@ -14,9 +14,18 @@ export interface ExecutiveProfile {
 export interface GenerationExecutives {
   generation: string;
   executives: ExecutiveProfile[];
+  // 명단 공개 전 기수는 true로 두면 운영진 카드 대신 커밍순 안내가 노출된다.
+  comingSoon?: boolean;
 }
 
 export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
+  {
+    // 10기 운영진은 아직 공개 전이라 커밍순으로 둔다.
+    // 명단이 확정되면 comingSoon을 지우고 executives를 채운다.
+    generation: "10기",
+    comingSoon: true,
+    executives: [],
+  },
   {
     generation: "9기",
     executives: [

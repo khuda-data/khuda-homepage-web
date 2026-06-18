@@ -73,7 +73,7 @@ const ExecutiveProfileSection = () => {
     new Set()
   );
 
-  // 9기는 기본으로 표시, 나머지는 토글로
+  // 현재 기수는 기본으로 표시, 이전 기수는 토글로
   const currentGeneration = EXECUTIVE_PROFILES[0];
   const pastGenerations = EXECUTIVE_PROFILES.slice(1);
 
@@ -104,13 +104,40 @@ const ExecutiveProfileSection = () => {
             </h2>
           </div>
 
-          {/* 현재 기수 (9기) */}
+          {/* 현재 기수 */}
           <div className="mb-10 sm:mb-12 md:mb-16">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-medium text-gray-700 mb-8 sm:mb-10 text-center">
-              {currentGeneration.generation}
-            </h3>
+            {!currentGeneration.comingSoon && (
+              <h3 className="text-lg sm:text-xl md:text-2xl font-medium text-gray-700 mb-8 sm:mb-10 text-center">
+                {currentGeneration.generation}
+              </h3>
+            )}
             <div className="px-4 sm:px-6 md:px-8">
-              <ExecutiveGrid executives={currentGeneration.executives} />
+              {currentGeneration.comingSoon ? (
+                // 운영진 명단이 확정되기 전까지는 이 커밍순 블록을 그대로 사용한다.
+                // 명단이 정해지면 executives.ts에서 해당 기수의 comingSoon을 지우고 명단을 채우면
+                // 자동으로 아래 ExecutiveGrid가 대신 렌더된다.
+                <div className="max-w-3xl mx-auto py-6 sm:py-8">
+                  <div className="text-center mb-8 sm:mb-10">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                      곧 새로운 운영진으로 업데이트됩니다
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col items-center rounded-2xl bg-gray-50 px-4 py-6 sm:py-7"
+                      >
+                        <div className="mb-3 h-12 w-12 rounded-full bg-gray-200" />
+                        <div className="mb-2 h-3 w-16 rounded-full bg-gray-200" />
+                        <div className="h-2.5 w-12 rounded-full bg-gray-200/70" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <ExecutiveGrid executives={currentGeneration.executives} />
+              )}
             </div>
           </div>
 
