@@ -44,7 +44,7 @@ const PageHeroSection = ({ title, subtitle, backgroundImage, heroImage, actions 
             <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-white leading-[1.3] text-left">
               {title}
             </h2>
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-2xl text-left">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed max-w-5xl text-left break-keep">
               {subtitle}
             </p>
             {actions && (
