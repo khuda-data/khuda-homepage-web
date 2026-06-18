@@ -1,12 +1,12 @@
 import ImageGallery from "./ImageGallery";
 
 const tracks = [
-  { name: "CV", fullName: "컴퓨터비전" },
-  { name: "NLP", fullName: "자연어처리" },
-  { name: "Finance", fullName: "금융" },
-  { name: "Data Business", fullName: "데이터비즈니스" },
+  { name: "Data Analytics", fullName: "데이터 분석" },
   { name: "Data Engineering", fullName: "데이터엔지니어링" },
+  { name: "NLP", fullName: "자연어처리" },
+  { name: "CV", fullName: "컴퓨터비전" },
   { name: "AI Engineering", fullName: "AI엔지니어링" },
+  { name: "Finance", fullName: "금융" },
 ];
 
 const TrackSessionContent = () => (

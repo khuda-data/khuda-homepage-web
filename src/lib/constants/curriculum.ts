@@ -9,6 +9,22 @@ export interface IndexTrackInfo {
 
 export const INDEX_TRACKS: IndexTrackInfo[] = [
   {
+    id: "da",
+    label: "Data Analytics",
+    title: "데이터 분석",
+    description:
+      "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. XAI로 AI 모델의 예측 근거를 해석하여 투명성과 신뢰성을 확보합니다.",
+    topics: ["비즈니스 인사이트", "XAI", "신뢰성 확보"],
+  },
+  {
+    id: "de",
+    label: "Data Engineering",
+    title: "데이터엔지니어링",
+    description:
+      "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
+    topics: ["데이터 파이프라인", "분산 처리", "클라우드 인프라"],
+  },
+  {
     id: "nlp",
     label: "NLP",
     title: "자연어처리",
@@ -25,28 +41,12 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
     topics: ["사물 인식", "상황 인지", "이미지 생성"],
   },
   {
-    id: "de",
-    label: "Data Engineering",
-    title: "데이터엔지니어링",
-    description:
-      "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
-    topics: ["데이터 파이프라인", "분산 처리", "클라우드 인프라"],
-  },
-  {
     id: "aie",
     label: "AI Engineering",
     title: "AI엔지니어링",
     description:
       "파운데이션 모델을 실제 애플리케이션에 적용하기 위한 엔지니어링 과정을 다룹니다. 프롬프트 설계, RAG/에이전트, 파인튜닝과 최적화까지 전 과정을 학습합니다.",
     topics: ["프롬프트 설계", "RAG/에이전트", "파인튜닝/최적화"],
-  },
-  {
-    id: "da",
-    label: "Data Business",
-    title: "데이터비즈니스",
-    description:
-      "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. XAI로 AI 모델의 예측 근거를 해석하여 투명성과 신뢰성을 확보합니다.",
-    topics: ["비즈니스 인사이트", "XAI", "신뢰성 확보"],
   },
   {
     id: "fin",
@@ -113,6 +113,28 @@ export const CURRICULUM_INFO = {
   } as const,
   tracks: [
     {
+      id: "da",
+      label: "DA",
+      title: "데이터 분석",
+      description: "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. ML/DL 모델의 예측 근거를 XAI로 해석하여 인공지능의 투명성과 신뢰성을 확보하는 기술을 학습합니다.",
+      topics: [
+        { title: "비즈니스 인사이트", color: "primary" as const },
+        { title: "XAI", color: "secondary" as const },
+        { title: "신뢰성 확보", color: "tertiary" as const },
+      ],
+    },
+    {
+      id: "de",
+      label: "DE",
+      title: "데이터엔지니어링",
+      description: "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
+      topics: [
+        { title: "데이터 파이프라인", color: "primary" as const },
+        { title: "분산 처리", color: "secondary" as const },
+        { title: "클라우드 인프라", color: "tertiary" as const },
+      ],
+    },
+    {
       id: "nlp",
       label: "NLP",
       title: "자연어처리",
@@ -132,28 +154,6 @@ export const CURRICULUM_INFO = {
         { title: "사물 인식", color: "primary" as const },
         { title: "상황 인지", color: "secondary" as const },
         { title: "이미지 생성", color: "tertiary" as const },
-      ],
-    },
-    {
-      id: "de",
-      label: "DE",
-      title: "데이터엔지니어링",
-      description: "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
-      topics: [
-        { title: "데이터 파이프라인", color: "primary" as const },
-        { title: "분산 처리", color: "secondary" as const },
-        { title: "클라우드 인프라", color: "tertiary" as const },
-      ],
-    },
-    {
-      id: "da",
-      label: "DB",
-      title: "데이터비즈니스",
-      description: "데이터에서 인사이트를 도출하고 비즈니스 문제를 해결하는 방법을 학습합니다. ML/DL 모델의 예측 근거를 XAI로 해석하여 인공지능의 투명성과 신뢰성을 확보하는 기술을 학습합니다.",
-      topics: [
-        { title: "비즈니스 인사이트", color: "primary" as const },
-        { title: "XAI", color: "secondary" as const },
-        { title: "신뢰성 확보", color: "tertiary" as const },
       ],
     },
     {
