@@ -7,13 +7,6 @@ const OBContent = () => {
       <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 sm:mb-5">
         {APPLICATION_FORM_CONFIG.obBenefits.intro}
       </p>
-      
-      {/* 상시 모집 안내 - 강조 */}
-      <div className="border-l-4 border-blue-600 rounded-r-lg p-3 sm:p-4 mb-4 sm:mb-5">
-        <p className="text-xs sm:text-sm font-semibold text-blue-600 leading-relaxed whitespace-pre-line">
-          ※ {APPLICATION_FORM_CONFIG.obBenefits.notice}
-        </p>
-      </div>
 
       {/* 혜택 목록 */}
       <div className="space-y-4 sm:space-y-5">
@@ -29,9 +22,6 @@ const OBContent = () => {
             )}
             {benefit.operation && (
               <p className="text-xs sm:text-sm text-muted-foreground mt-2">운영: {benefit.operation}</p>
-            )}
-            {benefit.purpose && (
-              <p className="text-xs sm:text-sm text-muted-foreground mt-2">취지: {benefit.purpose}</p>
             )}
           </div>
         ))}

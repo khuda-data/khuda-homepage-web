@@ -181,23 +181,23 @@ export const APPLICATION_FORM_CONFIG = {
     requirements: [
       {
         // 기초 세션 요일은 기수마다 달라질 수 있으니 모집 공지에 맞춰 수정한다. 10기는 수요일.
-        title: "1. 방학 정기 세션 이수",
+        title: "1. 기초 세션 이수",
         description: "방학 중 매주 수요일 진행되는 기초 세션 참석 (벌점제도가 존재합니다)",
       },
       {
-        title: "2. 방학 토이 프로젝트 완수",
+        title: "2. 토이 프로젝트 컨퍼런스 참가",
         period: "2026년 여름 방학",
         description: "해당 기간 내 운영되는 토이 프로젝트 필수 참여 및 결과물 제출",
       },
       {
-        title: "3. 정규 학기 활동 이행",
+        title: "3. 심화 세션 이수",
         period: "2026년 2학기",
-        description: "학기 중 운영되는 정규 심화 트랙 수강 참여",
+        description: "학기 중 운영되는 심화 트랙 수강 필수 참여",
       },
       {
         title: "4. 정기 학술제 참가",
+        period: "2026년 2학기",
         description: "KHUDA 정기 학술제 필수 참여",
-        obligation: "연구 성과 발표(포스터 또는 구두 발표) 및 전 과정 참석",
       },
     ],
     notice: "※ 위 수료 조건을 모두 충족한 회원에 한하여 수료증 발급 및 차기 학기 OB 자격이 부여됩니다. 관련 문의 사항은 운영진에게 연락해 주시기 바랍니다.",
@@ -206,14 +206,9 @@ export const APPLICATION_FORM_CONFIG = {
       items: [
         {
           title: "1. 스터디 그룹 지원",
-          description: "분야: SQL, 공모전, 어학, 기술 블로그 등 다양한 커리큘럼 운영 예정",
-          benefit: "스터디 교재 및 강의료 일부 지원",
+          description: "SQL, 공모전, 어학 등 다양한 분야의 스터디 참여",
+          benefit: "스터디 교재 및 강의비 일부 지원",
           operation: "운영진 & OB & YB의 자유로운 스터디 개설 및 참여 독려",
-        },
-        {
-          title: "2. 산학협력 프로젝트",
-          description: "대외협력부 주관 산학협력 과제 추진",
-          operation: "과제 발생 시 별도 트랙 형태로 집중 운영 예정",
         },
       ],
     },
@@ -222,28 +217,28 @@ export const APPLICATION_FORM_CONFIG = {
   obBenefits: {
     title: "KHUDA OB 회원 대상 혜택 및 활동 안내",
     intro: "KHUDA OB 회원께는 별도의 수료 조건 없이 본 동아리만의 다양한 인프라와 혜택이 제공됩니다. 이번 학기 개편된 주요 활동 내용을 다음과 같이 안내드립니다.",
-    notice: "OB는 공식 신청 기간 외에도 토이 프로젝트 발표일 전까지 상시 모집합니다.\n해당 경우에는 운영진에게 따로 연락 바랍니다.",
     benefits: [
       {
-        title: "1. 심화 트랙 참여",
+        title: "1. 심화 세션 참여",
         description: "학기 중 운영되는 심화 트랙 수강 가능",
-        feature: "역량 강화 중심의 전면 개편을 통해 필요 역량에 최적화된 학습 환경 제공",
+        feature: "필요 역량에 최적화된 학습 환경 제공",
       },
       {
         title: "2. 스터디 그룹 지원",
-        description: "분야: SQL, 공모전, 어학, 기술 블로그 등 다양한 커리큘럼 운영 예정",
-        benefit: "스터디 교재 및 강의료 일부 지원",
-        operation: "회원 중심의 자유로운 스터디 개설 및 참여 독려",
+        description: "SQL, 공모전, 어학 등 다양한 분야의 스터디 참여",
+        benefit: "스터디 교재 및 강의비 일부 지원",
+        operation: "운영진 & OB & YB의 자유로운 스터디 개설 및 참여 독려",
       },
       {
-        title: "3. 산학협력 프로젝트",
-        description: "대외협력부 주관 산학협력 과제 추진",
-        operation: "과제 발생 시 별도 트랙 형태로 집중 운영 예정",
+        title: "3. OB 심화 활동",
+        description: "논문, 프로젝트 등 OB 대상 추가 심화 활동, 트랙 단위 팀 구성",
+        feature: "KSDC, 공모전 등 대외 대회 출전",
+        benefit: "졸업생 및 KHUDA 출신 석박사, 교수님 멘토진 구성",
+        operation: "10기 최종 선발 직후 OB 심화 대상 공지 예정",
       },
       {
-        title: "4. 정기 학술제 개최",
-        description: "구성: 포스터 세션 및 최종 발표회 (트랙 참여 인원의 한해서)",
-        purpose: "한 학기 동안의 연구 성과를 대외적으로 공유하는 장으로, 확대된 규모에 걸맞은 수준 높은 학술 교류의 기회 제공",
+        title: "4. 정기 학술제 참여",
+        description: "구성: 프로젝트 발표회 (트랙 참여 인원에 한해)",
       },
     ],
   },

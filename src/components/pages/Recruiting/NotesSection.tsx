@@ -31,7 +31,7 @@ const NotesSection = memo(() => {
             활동 기간
           </h3>
           <p className="text-xs sm:text-sm md:text-base text-gray-900 leading-relaxed">
-            1월부터 7월까지
+            7월부터 12월까지
             <br />
             활동할 수 있어야 해요.
           </p>
@@ -43,7 +43,7 @@ const NotesSection = memo(() => {
             세션 참여
           </h3>
           <p className="text-xs sm:text-sm md:text-base text-gray-900 leading-relaxed">
-            OT, 방학 세션, 정규 세션에
+            OT, 기초 세션, 심화 세션에
             <br />
             필수적으로 참여해야 해요.
           </p>
