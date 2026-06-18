@@ -16,7 +16,8 @@ const Projects = lazy(() => import("./pages/Projects"));
 const Sponsor = lazy(() => import("./pages/Sponsor"));
 const Recruiting = lazy(() => import("./pages/Recruiting"));
 const FAQ = lazy(() => import("./pages/FAQ"));
-const Apply = lazy(() => import("./pages/Apply"));
+// 지원 폼은 현재 비공개. 모집이 열리면 아래 import와 /apply 라우트를 <Apply /> 로 복구한다.
+// const Apply = lazy(() => import("./pages/Apply"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -68,7 +69,8 @@ const App = () => (
               <Route path="/sponsor" element={<Sponsor />} />
               <Route path="/recruiting" element={<Recruiting />} />
               <Route path="/faq" element={<FAQ />} />
-              <Route path="/apply" element={<Apply />} />
+              {/* /apply 는 현재 차단: 직접 접근해도 지원하지 못하도록 404 처리. 모집 오픈 시 <Apply /> 로 복구. */}
+              <Route path="/apply" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
