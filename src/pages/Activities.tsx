@@ -11,8 +11,13 @@ import TrackSessionContent from "@/components/pages/Activities/TrackSessionConte
 import DatathonContent from "@/components/pages/Activities/DatathonContent";
 import AcademicFestivalContent from "@/components/pages/Activities/AcademicFestivalContent";
 
+// 세션 명칭 규칙
+// 기초 세션 = ML 세션 = 방학 중 세션 (같은 세션을 가리키는 이름들)
+// 심화 세션 = 트랙 세션 = 학기 중 세션 (같은 세션을 가리키는 이름들)
+// 화면에 노출하는 라벨은 "기초 세션", "심화 세션"으로 통일한다.
+// id는 URL 파라미터와 스크롤 이동에 쓰이므로 바꾸지 않는다.
 const timelineSteps = [
-  { id: "ml-session", label: "ML 세션", number: "01" },
+  { id: "ml-session", label: "기초 세션", number: "01" },
   { id: "toy-project", label: "토이 프로젝트", number: "02" },
   { id: "track-session", label: "심화 세션", number: "03" },
   { id: "datathon", label: "데이터톤", number: "04" },
