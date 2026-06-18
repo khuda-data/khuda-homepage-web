@@ -5,7 +5,6 @@ export const REQUEST_TIMEOUT = 30000; // 30초
 export const API_ENDPOINTS = {
   QUESTIONS: (type: string) => `/api/questions/${type}`,
   APPLICATIONS: "/api/applications",
-  APPLICATION_RESULT: "/api/application_result",
 } as const;
 
 export const ROUTES = {
@@ -17,7 +16,6 @@ export const ROUTES = {
   recruiting: "/recruiting",
   faq: "/faq",
   apply: "/apply",
-  applicationResult: "/application-result",
 } as const;
 
 export const IMAGE_PATHS = {

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SECTION_STYLES, RECRUITMENT_SCHEDULE, SCROLL_ANIMATION_CONFIG, ROUTES } from "@/lib/constants";
+import { SECTION_STYLES, RECRUITMENT_SCHEDULE, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { parseKoreanDate } from "@/lib/date-utils";
 
@@ -67,22 +67,6 @@ const ApplicationCTA = () => {
                 )}
               >
                 <span>지원하기</span>
-              </div>
-
-              {/* 구분선 */}
-              <div className="h-6 w-px bg-background/30 flex-shrink-0" />
-
-              {/* 합격자 조회 버튼 */}
-              <div
-                className={cn(
-                  "flex items-center justify-center",
-                  "px-6 sm:px-8 md:px-10",
-                  "h-full",
-                  "font-semibold text-sm sm:text-base md:text-lg",
-                  "flex-1 sm:flex-none"
-                )}
-              >
-                <span>합격자 조회</span>
               </div>
             </div>
           </div>

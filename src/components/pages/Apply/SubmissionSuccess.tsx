@@ -22,7 +22,7 @@ export const SubmissionSuccess = () => {
             </h1>
             <p className="text-sm sm:text-[15px] text-muted-foreground leading-relaxed">
               결과는 발표 일정에 맞춰<br />
-              홈페이지에서 확인하실 수 있습니다
+              입력하신 이메일로 개별 안내드립니다
             </p>
           </div>
 

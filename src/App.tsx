@@ -17,7 +17,6 @@ const Sponsor = lazy(() => import("./pages/Sponsor"));
 const Recruiting = lazy(() => import("./pages/Recruiting"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Apply = lazy(() => import("./pages/Apply"));
-const ApplicationResult = lazy(() => import("./pages/ApplicationResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -70,7 +69,6 @@ const App = () => (
               <Route path="/recruiting" element={<Recruiting />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/apply" element={<Apply />} />
-              <Route path="/application-result" element={<ApplicationResult />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

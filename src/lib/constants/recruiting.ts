@@ -1,6 +1,3 @@
-// 합격자 조회 오픈 시간: RECRUITMENT_SCHEDULE.final과 동일 날짜 (1월 12일 18:00 KST)
-export const RESULT_OPEN_TIME = new Date("2026-01-12T18:00:00+09:00");
-
 export interface RecruitmentInfoItem {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
