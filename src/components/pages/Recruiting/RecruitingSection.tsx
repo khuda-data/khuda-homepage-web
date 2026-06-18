@@ -18,6 +18,9 @@ const RecruitingSection = () => {
         "pt-0"
       )}
     >
+      {/* 지원하기 CTA - 페이지 최상단, container 밖으로 전체 너비 사용 */}
+      <ApplicationCTA />
+
       <div className={SECTION_STYLES.container.base}>
         {/* 모집 대상 (Target) 섹션 */}
         <TargetSection />
@@ -47,9 +50,6 @@ const RecruitingSection = () => {
         {/* 자주 묻는 질문 섹션 */}
         <FAQSection headerLabelClassName="text-blue-600" accentClassName="text-blue-600" />
       </div>
-      
-      {/* 지원하기 CTA - container 밖으로 이동하여 전체 너비 사용 */}
-      <ApplicationCTA />
     </section>
   );
 };
