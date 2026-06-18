@@ -49,7 +49,7 @@ export const projectsData: Project[] = [
     longDescription:
       "ResNet-34의 Grad-CAM 시각화 결과를 Gemini API가 분석하여, 기존 딥러닝 모델이 놓치던 미세 결함(False Negative)을 언어적 추론으로 찾아내는 하이브리드 검출 시스템입니다. 재학습 없이도 미검출 결함 탐지율을 개선합니다.",
     generation: "8기",
-    track: "데이터비즈니스",
+    track: "데이터 분석",
     thumbnail: "/images/projects/defect-detection.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DB-Refocus",
@@ -109,6 +109,19 @@ export const projectsData: Project[] = [
   },
 ];
 
-export const generations = ["모든 기수", "9기", "8기", "7기", "6기", "5기", "4기", "3기", "2기", "1기"];
-export const trackOptions = ["모든 트랙", "NLP", "CV", "데이터엔지니어링", "데이터비즈니스", "ML 심화"];
-export const trackDisplayOrder = ["NLP", "CV", "데이터엔지니어링", "데이터비즈니스", "ML 심화"];
+// 최신 기수. 새 기수가 시작되면 이 숫자만 올리면 필터 목록이 자동으로 갱신된다.
+const LATEST_GENERATION = 10;
+export const generations = [
+  "모든 기수",
+  ...Array.from({ length: LATEST_GENERATION }, (_, index) => `${LATEST_GENERATION - index}기`),
+];
+
+// 화면에 노출하는 정식 트랙은 아래 6개로 통일한다 (커리큘럼 트랙과 동일하게 유지).
+// 순서도 커리큘럼 기준이다.
+const CORE_TRACKS = ["데이터 분석", "데이터엔지니어링", "NLP", "CV", "AI엔지니어링", "금융"];
+// ML 심화는 8기에서 금융 대신 운영한 트랙이라 과거 프로젝트 분류를 위해 예외로 유지한다.
+// 9기 이후로는 금융 트랙을 사용하므로 새 프로젝트에는 ML 심화를 쓰지 않는다.
+const LEGACY_TRACKS = ["ML 심화"];
+
+export const trackOptions = ["모든 트랙", ...CORE_TRACKS, ...LEGACY_TRACKS];
+export const trackDisplayOrder = [...CORE_TRACKS, ...LEGACY_TRACKS];
