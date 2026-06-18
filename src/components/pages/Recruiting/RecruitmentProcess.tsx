@@ -139,8 +139,8 @@ const StepCircle = ({ step, index, isOpen, isActive, isCompleted, onToggle }: St
     <button
       onClick={onToggle}
       className={cn(
+        // 원은 항상 불투명하게 둔다. 반투명이면 뒤의 연결선이 비쳐 원을 관통한 것처럼 보인다.
         "rounded-full flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden",
-        isActive || isCompleted ? "" : "opacity-90",
         isOpen && `ring-4 ${ringColor}`
       )}
       style={{ 
