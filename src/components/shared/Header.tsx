@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import RecruitmentBanner from "./RecruitmentBanner";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,12 +74,9 @@ const Header = () => {
 
   return (
     <>
-      <header
-        className={cn(
-          HEADER_STYLES.header.base,
-          HEADER_STYLES.header.scrolled
-        )}
-      >
+      <header className={HEADER_STYLES.header.base}>
+        {/* 흰색 네비 바. 하단 경계선을 여기에 둬서 아래 배너에는 흰 줄이 남지 않게 한다. */}
+        <div className={HEADER_STYLES.header.scrolled}>
         <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
           <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base, "relative")}>
             <Link to={ROUTES.home} onClick={handleLogoClick} className={HEADER_STYLES.logo.container}>
@@ -121,6 +119,8 @@ const Header = () => {
             </button>
           </div>
         </div>
+        </div>
+        <RecruitmentBanner />
       </header>
 
       {/* 전체 화면 모바일 메뉴 오버레이 */}

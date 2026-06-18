@@ -94,6 +94,15 @@ export const RECRUITMENT_SCHEDULE = {
   },
 };
 
+// 상단 모집 배너. 카운트다운 기준은 RECRUITMENT_SCHEDULE.application.deadlineISO(서류 마감).
+// showFromISO: 배너를 띄우기 시작하는 시점. 서류 모집 시작일에 맞춘다.
+// (10기 모집 시작일은 2026년 6월 29일. 다음 기수에는 그 기수 모집 시작일로 갱신한다.)
+export const RECRUITMENT_BANNER = {
+  message: "KHUDA 10기 모집중 🔥",
+  ctaLabel: "지원하러 가기",
+  showFromISO: "2026-06-29T00:00:00+09:00",
+};
+
 export const RECRUITMENT_STYLES = {
   sectionId: "recruiting",
   section: {
