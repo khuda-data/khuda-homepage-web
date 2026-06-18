@@ -72,9 +72,13 @@ export const KHUDA_FEATURES: FeatureInfo[] = [
   },
 ];
 
+// 메인 페이지 성과 집계 수치.
+// 수료생과 아이디어 제출 수치는 기수마다 정확히 집계해서 갱신하고, 두 값 모두 50 단위로만 올린다.
+// (10기 출범 기준 초기값: 수료생 450, 아이디어 제출 150)
 export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
   {
-    value: 9,
+    // 현재 기수와 숫자를 맞춘다. 새 기수가 시작되면 함께 올린다.
+    value: 10,
     label: "기수",
     suffix: "기",
     from: 1,
@@ -87,11 +91,13 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
     staticText: "경희대학교\n2025 최우수 동아리",
   },
   {
-    value: 400,
+    // 누적 수료생 인원. 이 값부터 정확히 집계해서 50 단위로 갱신한다.
+    value: 450,
     label: "수료생",
     suffix: "+",
   },
   {
+    // 누적 아이디어 제출 건수. 마찬가지로 50 단위로 갱신한다.
     value: 150,
     label: "아이디어 제출",
     suffix: "+",
