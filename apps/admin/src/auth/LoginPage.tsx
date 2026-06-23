@@ -18,9 +18,14 @@ export const LoginPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted px-4">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-xl font-bold">KHUDA Admin</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <img
+            src="/images/logos/khuda-logo.png"
+            alt="KHUDA"
+            className="h-8 w-auto"
+          />
+          <p className="mt-1 text-xs font-medium text-muted-foreground">운영진</p>
+          <p className="mt-4 text-sm text-muted-foreground">
             KHUDA 공식 구글 계정으로 로그인하세요
           </p>
         </div>

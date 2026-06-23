@@ -14,8 +14,13 @@ export const AppLayout = () => {
     <div className="flex min-h-screen bg-muted/30">
       {/* 좌측 사이드바 */}
       <aside className="hidden w-56 flex-shrink-0 flex-col bg-sidebar text-sidebar-foreground md:flex">
-        <div className="flex h-14 items-center px-5 text-base font-bold">
-          KHUDA Admin
+        <div className="flex h-14 items-center gap-2 px-5">
+          <img
+            src="/images/logos/khuda-icon.png"
+            alt="KHUDA"
+            className="h-6 w-6"
+          />
+          <span className="text-sm font-semibold text-white">운영진</span>
         </div>
         <nav className="flex-1 space-y-1 px-3 py-4">
           {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
