@@ -22,7 +22,7 @@ export function applicationsToCsv(applications: Application[]): string {
     }
   }
 
-  const header = ["이름", "지원유형", "트랙", "연락처", "제출일시", ...questionCols, "면접 희망시간"];
+  const header = ["이름", "지원유형", "트랙", "연락처", "이메일", "제출일시", ...questionCols, "면접 희망시간"];
 
   const rows = applications.map((app) => {
     const answerMap = new Map(app.answers.map((a) => [`[${a.section}] ${a.question}`, a.answer]));
@@ -31,6 +31,7 @@ export function applicationsToCsv(applications: Application[]): string {
       APPLICATION_TYPE_LABEL[app.applicationType],
       app.track,
       app.phone,
+      app.email,
       app.submittedAt,
       ...questionCols.map((col) => answerMap.get(col) ?? ""),
       (app.interviewTimes ?? []).join(", "),

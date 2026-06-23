@@ -11,6 +11,7 @@ export interface Application {
   id: string;
   name: string;
   phone: string;
+  email: string;
   applicationType: ApplicationType;
   track: string;
   submittedAt: string; // ISO 8601
