@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Download, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,21 +25,19 @@ import { APPLICATION_TRACKS, APPLICATION_TYPE_LABEL } from "@/types/application"
 import { formatDateTime } from "@/lib/format";
 import { useApplications } from "./api";
 import { applicationsToCsv, downloadCsv } from "./csv";
-import { ApplicationDetailDrawer } from "./ApplicationDetailDrawer";
 
 type TypeFilter = "all" | ApplicationType;
 type TrackFilter = "all" | (typeof APPLICATION_TRACKS)[number];
 type SortKey = "recent" | "oldest" | "name";
 
 export const ApplicationsPage = () => {
+  const navigate = useNavigate();
   const { data, isLoading } = useApplications();
 
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [trackFilter, setTrackFilter] = useState<TrackFilter>("all");
   const [sort, setSort] = useState<SortKey>("recent");
-  const [selected, setSelected] = useState<Application | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const applications = data ?? [];
 
@@ -62,8 +61,7 @@ export const ApplicationsPage = () => {
   }, [applications, search, typeFilter, trackFilter, sort]);
 
   const openDetail = (app: Application) => {
-    setSelected(app);
-    setDrawerOpen(true);
+    navigate(`/applications/${app.id}`);
   };
 
   const handleExport = () => {
@@ -138,7 +136,7 @@ export const ApplicationsPage = () => {
       </div>
 
       {/* 목록 */}
-      <div className="rounded-lg border border-border bg-card">
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -190,12 +188,6 @@ export const ApplicationsPage = () => {
           </TableBody>
         </Table>
       </div>
-
-      <ApplicationDetailDrawer
-        application={selected}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-      />
     </div>
   );
 };

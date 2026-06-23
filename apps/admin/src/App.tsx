@@ -5,6 +5,7 @@ import { ProtectedRoute } from "@/auth/ProtectedRoute";
 import { LoginPage } from "@/auth/LoginPage";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ApplicationsPage } from "@/features/applications/ApplicationsPage";
+import { ApplicationDetailPage } from "@/features/applications/ApplicationDetailPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ const App = () => (
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route path="/applications" element={<ApplicationsPage />} />
+              <Route path="/applications/:id" element={<ApplicationDetailPage />} />
             </Route>
           </Route>
           {/* 기본 진입은 지원서 목록으로 */}

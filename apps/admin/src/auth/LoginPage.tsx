@@ -16,23 +16,17 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 shadow-sm">
-        <div className="mb-8 flex flex-col items-center text-center">
-          <img
-            src="/images/logos/khuda-logo.png"
-            alt="KHUDA"
-            className="h-8 w-auto"
-          />
-          <p className="mt-1 text-xs font-medium text-muted-foreground">운영진</p>
-          <p className="mt-4 text-sm text-muted-foreground">
-            KHUDA 공식 구글 계정으로 로그인하세요
-          </p>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
+      <div className="w-full max-w-xs">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <img src="/images/logos/khuda-icon.png" alt="KHUDA" className="h-14 w-14" />
+          <h1 className="mt-5 text-2xl font-bold tracking-tight">KHUDA 리크루팅</h1>
+          <p className="mt-2 text-[15px] text-muted-foreground">운영진 전용 페이지입니다</p>
         </div>
 
-        <Button onClick={handleLogin} variant="outline" className="w-full">
+        <Button onClick={handleLogin} variant="outline" size="lg" className="w-full gap-2.5">
           {/* 구글 로고 */}
-          <svg className="size-4" viewBox="0 0 24 24" aria-hidden>
+          <svg className="size-5" viewBox="0 0 24 24" aria-hidden>
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1Z" />
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z" />
             <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84Z" />
@@ -41,8 +35,8 @@ export const LoginPage = () => {
           Google로 로그인
         </Button>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          공식 계정 외에는 접근할 수 없습니다.
+        <p className="mt-5 text-center text-xs text-muted-foreground">
+          KHUDA 공식 구글 계정으로만 로그인할 수 있습니다.
         </p>
       </div>
     </div>
