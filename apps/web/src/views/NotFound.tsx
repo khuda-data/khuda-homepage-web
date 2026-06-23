@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import SEO from "@/components/shared/SEO";
+import Link from "next/link";
 
 const NOT_FOUND_CONFIG = {
   title: "404",
@@ -10,15 +9,10 @@ const NOT_FOUND_CONFIG = {
 const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
-      <SEO
-        title="페이지를 찾을 수 없습니다 | KHUDA"
-        description="요청하신 페이지를 찾을 수 없습니다."
-        noindex={true}
-      />
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">{NOT_FOUND_CONFIG.title}</h1>
         <p className="mb-4 text-xl text-muted-foreground">{NOT_FOUND_CONFIG.message}</p>
-        <Link to="/" className="text-primary underline hover:text-primary/90">
+        <Link href="/" className="text-primary underline hover:text-primary/90">
           {NOT_FOUND_CONFIG.backToHome}
         </Link>
       </div>

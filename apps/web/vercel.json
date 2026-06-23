@@ -1,20 +1,11 @@
 {
-  "buildCommand": "pnpm install && pnpm run build",
-  "outputDirectory": "dist",
-  "installCommand": "pnpm install",
-  "framework": "vite",
+  "framework": "nextjs",
   "redirects": [
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "khuda.co.kr" }],
       "destination": "https://www.khuda.co.kr/:path*",
       "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
     }
   ]
 }

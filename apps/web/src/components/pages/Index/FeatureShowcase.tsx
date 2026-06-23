@@ -3,7 +3,7 @@ import { SCROLL_REVEAL_OPTIONS, ROUTES } from "@/lib/constants";
 import { type FeatureInfo } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowRight, Image } from "lucide-react";
 
 export type { FeatureInfo };
@@ -53,7 +53,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
               </h2>
               {/* 모바일에서만 제목 옆에 화살표 표시 */}
               <Link
-                to={ROUTES.activities}
+                href={ROUTES.activities}
                 className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group sm:hidden mt-0.5"
               >
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-900 group-hover:text-white transition-colors duration-300" />
@@ -68,7 +68,7 @@ const FeatureShowcase = ({ features }: FeatureShowcaseProps) => {
           </div>
           {/* 데스크톱에서만 오른쪽에 화살표 표시 */}
           <Link
-            to={ROUTES.activities}
+            href={ROUTES.activities}
             className="hidden sm:flex flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-gray-300 items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group mt-2 sm:mt-3 self-start"
           >
             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 group-hover:text-white transition-colors duration-300" />

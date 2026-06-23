@@ -1,5 +1,7 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
 import { ApplicationHeader } from "@/components/pages/Apply/ApplicationHeader";
@@ -12,7 +14,6 @@ import { BasicInfoCard } from "@/components/pages/Apply/BasicInfoCard";
 import { QuestionRenderer } from "@/components/pages/Apply/QuestionRenderer";
 import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
-import SEO from "@/components/shared/SEO";
 
 // 질문 로딩 중 스켈레톤 카드
 const QuestionSkeleton = ({ count = 2 }: { count?: number }) => (
@@ -36,7 +37,9 @@ const isValidType = (v: string | null): v is ValidType =>
   VALID_TYPES.includes(v as ValidType);
 
 const Apply = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [applicationType, setApplicationType] = useState("");
   const initializedFromUrl = useRef(false);
 
@@ -79,11 +82,9 @@ const Apply = () => {
 
   // formData → URL 동기화 (replace 모드로 히스토리 오염 방지)
   useEffect(() => {
-    setSearchParams(
-      formData.applicationType ? { type: formData.applicationType } : {},
-      { replace: true }
-    );
-  }, [formData.applicationType, setSearchParams]);
+    const qs = formData.applicationType ? `?type=${formData.applicationType}` : "";
+    router.replace(`${pathname}${qs}`, { scroll: false });
+  }, [formData.applicationType, router, pathname]);
 
   const privacyQuestion = findQuestionByKeywords(["개인정보", "동의"]);
   const privacyAnswer = privacyQuestion ? formData.answers[privacyQuestion.id.toString()] || "" : "";
@@ -123,12 +124,6 @@ const Apply = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10">
-      <SEO
-        title="지원하기 | KHUDA"
-        description="KHUDA 신규 부원 지원서를 작성하세요."
-        path="/apply"
-        noindex={true}
-      />
       <ApplicationHeader />
 
       <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">

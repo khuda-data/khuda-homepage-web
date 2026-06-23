@@ -1,9 +1,8 @@
+"use client";
+
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import Header from "@/components/shared/Header";
+import { useSearchParams } from "next/navigation";
 import PageHeroSection from "@/components/shared/PageHeroSection";
-import Footer from "@/components/shared/Footer";
-import SEO from "@/components/shared/SEO";
 import { cn } from "@/lib/utils";
 import MLSessionContent from "@/components/pages/Activities/MLSessionContent";
 import ToyProjectContent from "@/components/pages/Activities/ToyProjectContent";
@@ -37,7 +36,7 @@ const sectionComponents: Record<string, React.FC> = {
 // ============================================================================
 
 const Activities = () => {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const [activeSection, setActiveSection] = useState("ml-session");
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const scrolledToSection = useRef(false);
@@ -118,31 +117,6 @@ const Activities = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEO
-        title="활동 | KHUDA"
-        description="KHUDA의 다양한 활동을 소개합니다."
-        path="/activities"
-        jsonLd={[
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "홈", item: "https://www.khuda.co.kr" },
-              { "@type": "ListItem", position: 2, name: "활동", item: "https://www.khuda.co.kr/activities" },
-            ],
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: "활동 | KHUDA",
-            description: "KHUDA의 다양한 활동을 소개합니다.",
-            url: "https://www.khuda.co.kr/activities",
-            isPartOf: { "@type": "WebSite", url: "https://www.khuda.co.kr" },
-          },
-        ]}
-      />
-      <Header />
-
       <main>
         <PageHeroSection
           title="KHUDA의 다양한 활동"
@@ -235,8 +209,6 @@ const Activities = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 };

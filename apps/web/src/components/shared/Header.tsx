@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { IMAGE_PATHS, HEADER_CONFIG, HEADER_STYLES, ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -8,7 +11,7 @@ import RecruitmentBanner from "./RecruitmentBanner";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,10 +23,10 @@ const Header = () => {
 
   useEffect(() => {
     // 홈 페이지로 이동할 때 맨 위로 스크롤
-    if (location.pathname === ROUTES.home) {
+    if (pathname === ROUTES.home) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [location.pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     // 모바일 메뉴가 열렸을 때 body 스크롤 막기
@@ -42,7 +45,7 @@ const Header = () => {
   };
 
   const handleLogoClick = (e: React.MouseEvent) => {
-    if (location.pathname === ROUTES.home) {
+    if (pathname === ROUTES.home) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
       // 카운트업 재시작 이벤트 발생
@@ -59,11 +62,11 @@ const Header = () => {
     link: typeof HEADER_CONFIG.navLinks[0]; 
     className?: string;
   }) => {
-    const isActive = location.pathname === link.href;
-    
+    const isActive = pathname === link.href;
+
     return (
       <Link
-        to={link.href}
+        href={link.href}
         onClick={handleNavClick}
         className={cn(className, isActive && "nav-link-active")}
       >
@@ -79,7 +82,7 @@ const Header = () => {
         <div className={HEADER_STYLES.header.scrolled}>
         <div className={cn(HEADER_STYLES.container.base, HEADER_STYLES.container.padding)}>
           <div className={cn(HEADER_STYLES.wrapper.base, HEADER_STYLES.height.base, "relative")}>
-            <Link to={ROUTES.home} onClick={handleLogoClick} className={HEADER_STYLES.logo.container}>
+            <Link href={ROUTES.home} onClick={handleLogoClick} className={HEADER_STYLES.logo.container}>
               <img
                 src={IMAGE_PATHS.logo}
                 alt={HEADER_CONFIG.logo.alt}
@@ -100,7 +103,7 @@ const Header = () => {
                 />
               ))}
               <Link
-                to={ROUTES.recruiting}
+                href={ROUTES.recruiting}
                 className={HEADER_STYLES.nav.desktop.link}
               >
                 {HEADER_CONFIG.applyButton.desktop}
@@ -141,7 +144,7 @@ const Header = () => {
               />
             ))}
             <Link
-              to={ROUTES.recruiting}
+              href={ROUTES.recruiting}
               onClick={handleNavClick}
               className="text-white text-2xl font-semibold tracking-wide hover:opacity-70 transition-opacity duration-300"
             >

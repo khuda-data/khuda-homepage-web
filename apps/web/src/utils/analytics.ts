@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-PD86DRNELF";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PD86DRNELF";
 
 export const trackPageView = (path: string): void => {
   if (typeof window === "undefined" || !window.gtag) return;

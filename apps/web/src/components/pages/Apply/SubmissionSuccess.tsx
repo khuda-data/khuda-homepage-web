@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import { RECRUITMENT_SCHEDULE } from "@/lib/constants";
@@ -38,7 +38,7 @@ export const SubmissionSuccess = () => {
 
           {/* 버튼 - 하단 고정 */}
           <div className="w-full mt-auto pt-8 animate-[fade-up_0.4s_ease-out_0.3s_both]">
-            <Link to="/" className="block">
+            <Link href="/" className="block">
               <Button 
                 variant="hero" 
                 size="xl"

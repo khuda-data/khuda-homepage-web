@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Timer, ChevronRight } from "lucide-react";
 import { RECRUITMENT_SCHEDULE, RECRUITMENT_BANNER, ROUTES } from "@/lib/constants";
 
@@ -36,9 +38,12 @@ const getRemaining = (): Remaining | null => {
 const pad = (value: number) => String(value).padStart(2, "0");
 
 const RecruitmentBanner = () => {
-  const [remaining, setRemaining] = useState<Remaining | null>(getRemaining);
+  // SSR과 클라이언트의 시간 계산 차이로 인한 하이드레이션 불일치를 막기 위해
+  // 초기값은 null로 두고 마운트 후 클라이언트에서만 계산한다.
+  const [remaining, setRemaining] = useState<Remaining | null>(null);
 
   useEffect(() => {
+    setRemaining(getRemaining());
     const timerId = setInterval(() => setRemaining(getRemaining()), 1000);
     return () => clearInterval(timerId);
   }, []);
@@ -61,7 +66,7 @@ const RecruitmentBanner = () => {
 
           {/* 지원하러 가기 링크만 오른쪽에 배치 */}
           <Link
-            to={ROUTES.recruiting}
+            href={ROUTES.recruiting}
             className="hidden flex-shrink-0 items-center gap-0.5 whitespace-nowrap font-medium text-white/90 transition-colors hover:text-white sm:flex"
           >
             {RECRUITMENT_BANNER.ctaLabel}

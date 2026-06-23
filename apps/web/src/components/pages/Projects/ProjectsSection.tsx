@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,9 @@ const DEFAULT_TRACK = "모든 트랙";
 
 const ProjectsSection = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const selectedGeneration = searchParams.get("generation") ?? DEFAULT_GENERATION;
@@ -23,20 +25,17 @@ const ProjectsSection = () => {
 
   const setFilter = useCallback(
     (key: string, value: string, defaultValue: string) => {
-      setSearchParams(
-        (prev) => {
-          const next = new URLSearchParams(prev);
-          if (value === defaultValue) {
-            next.delete(key);
-          } else {
-            next.set(key, value);
-          }
-          return next;
-        },
-        { replace: true }
-      );
+      const next = new URLSearchParams(searchParams.toString());
+      if (value === defaultValue) {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+      const qs = next.toString();
+      // 필터 변경은 히스토리를 오염시키지 않도록 replace + 스크롤 유지
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     },
-    [setSearchParams]
+    [router, pathname, searchParams]
   );
 
   const filteredProjects = useMemo(() => {

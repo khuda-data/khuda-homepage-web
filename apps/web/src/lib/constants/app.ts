@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api-khuda.gaeng02.com";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api-khuda.gaeng02.com";
 
 export const REQUEST_TIMEOUT = 30000; // 30초
 

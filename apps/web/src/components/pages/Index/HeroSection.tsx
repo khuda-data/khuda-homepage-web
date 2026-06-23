@@ -23,7 +23,7 @@
 
 import Grainient from "./Grainient";
 import KhudaLogo from "./KhudaLogo";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ROUTES } from "@/lib/constants";
 
 const HeroSection = () => {
@@ -99,7 +99,7 @@ const HeroSection = () => {
             {/* CTA 버튼 — 리쿠르팅 페이지로 이동
                 hover 시 배경/텍스트 색 반전, active 시 살짝 축소             */}
             <Link
-              to={ROUTES.recruiting}
+              href={ROUTES.recruiting}
               className="group inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 md:px-7 md:py-3 border border-[#0f172a] text-[#0f172a] font-semibold text-xs sm:text-sm md:text-base rounded-full hover:bg-[#0f172a] hover:text-white transition-all duration-300 active:scale-[0.97] opacity-0 animate-fade-up animation-delay-400"
             >
               지금 지원하기

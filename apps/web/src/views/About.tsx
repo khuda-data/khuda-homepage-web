@@ -1,13 +1,12 @@
+"use client";
+
 import { useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import Header from "@/components/shared/Header";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import PageHeroSection from "@/components/shared/PageHeroSection";
-import Footer from "@/components/shared/Footer";
 import IntroductionSection from "@/components/pages/About/IntroductionSection";
 import MissionSection from "@/components/pages/About/MissionSection";
 import VisionSection from "@/components/pages/About/VisionSection";
 import ExecutiveProfileSection from "@/components/pages/About/ExecutiveProfileSection";
-import SEO from "@/components/shared/SEO";
 import { cn } from "@/lib/utils";
 
 type TabType = "Mission-Vision" | "Organization";
@@ -22,45 +21,27 @@ const PARAM_TO_TAB: Record<string, TabType> = {
 };
 
 const About = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const activeTab: TabType = PARAM_TO_TAB[searchParams.get("tab") ?? ""] ?? "Mission-Vision";
 
   const setActiveTab = useCallback(
     (tab: TabType) => {
-      setSearchParams(
-        tab === "Mission-Vision" ? {} : { tab: TAB_PARAM[tab] },
-        { replace: false }
-      );
+      const params = new URLSearchParams(searchParams.toString());
+      if (tab === "Mission-Vision") {
+        params.delete("tab");
+      } else {
+        params.set("tab", TAB_PARAM[tab]);
+      }
+      const qs = params.toString();
+      router.push(qs ? `${pathname}?${qs}` : pathname);
     },
-    [setSearchParams]
+    [router, pathname, searchParams]
   );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <SEO
-        title="소개 | KHUDA"
-        description="경희대학교 KHUDA의 미션, 비전, 운영진을 소개합니다."
-        path="/about"
-        jsonLd={[
-          {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "홈", item: "https://www.khuda.co.kr" },
-              { "@type": "ListItem", position: 2, name: "소개", item: "https://www.khuda.co.kr/about" },
-            ],
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "AboutPage",
-            name: "소개 | KHUDA",
-            description: "경희대학교 KHUDA의 미션, 비전, 운영진을 소개합니다.",
-            url: "https://www.khuda.co.kr/about",
-            isPartOf: { "@type": "WebSite", url: "https://www.khuda.co.kr" },
-          },
-        ]}
-      />
-      <Header />
       <main>
         <PageHeroSection
           title="KHUDA를 소개합니다"
@@ -103,7 +84,6 @@ const About = () => {
 
         {activeTab === "Organization" && <ExecutiveProfileSection />}
       </main>
-      <Footer />
     </div>
   );
 };
