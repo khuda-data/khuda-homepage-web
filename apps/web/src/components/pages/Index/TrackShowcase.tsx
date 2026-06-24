@@ -15,7 +15,6 @@ const LONG_PRESS_MS = 600;
 
 const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-  const [flippedId, setFlippedId] = useState<string | null>(null);
   const [pressingId, setPressingId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -32,25 +31,23 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
     setPressingId(null);
   };
 
-  const handlePointerEnter = (e: React.PointerEvent, id: string) => {
-    if (e.pointerType === "mouse") setFlippedId(id);
+  // 해당 트랙의 프로젝트만 필터링된 프로젝트 페이지로 이동
+  const goToTrackProjects = (track: IndexTrackInfo) => {
+    router.push(`${ROUTES.projects}?track=${encodeURIComponent(track.projectTrack)}`);
   };
 
-  const handlePointerLeave = (e: React.PointerEvent) => {
-    if (e.pointerType === "mouse") setFlippedId(null);
-  };
-
-  const handlePointerDown = (e: React.PointerEvent, id: string) => {
+  // 모바일: 꾹 누르면(롱프레스) 해당 트랙 프로젝트로 이동하는 인터랙션
+  const handlePointerDown = (e: React.PointerEvent, track: IndexTrackInfo) => {
     if (e.pointerType === "mouse") return;
     isTouchAction.current = true;
     isLongPress.current = false;
     touchStartPos.current = { x: e.clientX, y: e.clientY };
-    setPressingId(id);
+    setPressingId(track.id);
 
     longPressTimer.current = setTimeout(() => {
       isLongPress.current = true;
       setPressingId(null);
-      router.push(ROUTES.activities);
+      goToTrackProjects(track);
     }, LONG_PRESS_MS);
   };
 
@@ -61,22 +58,20 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
     if (dx > 10 || dy > 10) cancelLongPress();
   };
 
-  const handlePointerUp = (e: React.PointerEvent, id: string) => {
+  const handlePointerUp = (e: React.PointerEvent) => {
     if (e.pointerType === "mouse") return;
     cancelLongPress();
-    if (!isLongPress.current) {
-      setFlippedId((prev) => (prev === id ? null : id));
-    }
   };
 
   const handlePointerCancel = () => cancelLongPress();
 
-  const handleCardClick = () => {
+  // 데스크톱: 카드 클릭 시 해당 트랙 프로젝트로 이동 (모바일 탭은 롱프레스로만 이동)
+  const handleCardClick = (track: IndexTrackInfo) => {
     if (isTouchAction.current) {
       isTouchAction.current = false;
       return;
     }
-    router.push(ROUTES.activities);
+    goToTrackProjects(track);
   };
 
   return (
@@ -121,81 +116,47 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
         </div>
       </div>
 
-      {/* 트랙 카드 그리드 */}
+      {/* 트랙 카드 그리드 (설명 상시 노출 / 데스크톱 hover 시 자세히 보기 화살표) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4">
-        {tracks.map((track) => {
-          const isFlipped = flippedId === track.id;
+        {tracks.map((track) => (
+          <div
+            key={track.id}
+            className={cn(
+              "group relative flex flex-col h-full min-h-[180px] sm:min-h-[205px] md:min-h-[230px] rounded-2xl p-3.5 sm:p-4 md:p-5 bg-white border border-gray-100 text-gray-900 cursor-pointer select-none overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200 ease-out hover:-translate-y-1.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.14)] active:scale-[0.97] active:shadow-[0_2px_8px_rgba(0,0,0,0.06)]",
+              pressingId === track.id && "scale-[0.97] shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+            )}
+            onPointerDown={(e) => handlePointerDown(e, track)}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            onContextMenu={(e) => e.preventDefault()}
+            onClick={() => handleCardClick(track)}
+          >
+            {/* 파이프라인 단계 */}
+            <span className="self-start px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-blue-50 text-[10px] sm:text-xs font-semibold text-blue-600">
+              {track.stage}
+            </span>
 
-          return (
-            <div
-              key={track.id}
-              className={cn(
-                "h-[160px] sm:h-[180px] md:h-[200px] lg:h-[220px] cursor-pointer select-none transition-all duration-150",
-                pressingId === track.id && "ring-2 ring-blue-500 ring-offset-2 rounded-xl sm:rounded-2xl"
-              )}
-              style={{ perspective: "800px" }}
-              onPointerEnter={(e) => handlePointerEnter(e, track.id)}
-              onPointerLeave={handlePointerLeave}
-              onPointerDown={(e) => handlePointerDown(e, track.id)}
-              onPointerMove={handlePointerMove}
-              onPointerUp={(e) => handlePointerUp(e, track.id)}
-              onPointerCancel={handlePointerCancel}
-              onContextMenu={(e) => e.preventDefault()}
-              onClick={handleCardClick}
-            >
-              <div
-                className={cn(
-                  "relative w-full h-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d]",
-                  isFlipped && "[transform:rotateY(180deg)]"
-                )}
-              >
-                {/* 앞면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] bg-blue-200/70 text-gray-900 overflow-hidden">
-                  <div className="relative z-10">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">
-                      {track.label}
-                    </h3>
-                    <p className="text-[11px] sm:text-xs mt-0.5 sm:mt-1 text-gray-600">
-                      {track.title}
-                    </p>
-                  </div>
+            <div className="mt-2.5 sm:mt-3 flex items-center gap-2">
+              <h3 className="text-sm sm:text-base md:text-lg font-bold leading-tight">
+                {track.title}
+              </h3>
+              <span className="h-3 sm:h-3.5 w-px bg-gray-300" />
+              <span className="text-[10px] sm:text-[11px] font-medium text-gray-500">{track.label}</span>
+            </div>
 
-                  <div className="relative z-10 flex items-center gap-1.5">
-                    <span className="text-xs sm:text-sm font-semibold">
-                      자세히 보기
-                    </span>
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-900/20 flex items-center justify-center">
-                      <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-900" />
-                    </div>
-                  </div>
-                </div>
+            <p className="mt-3 sm:mt-4 flex-1 text-[13px] sm:text-sm md:text-base leading-relaxed text-gray-700">
+              {track.description}
+            </p>
 
-                {/* 뒷면 */}
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col justify-between [backface-visibility:hidden] [transform:rotateY(180deg)] bg-blue-200/70 text-gray-900 overflow-hidden">
-                  <div className="min-h-0 overflow-hidden">
-                    <h3 className="text-xs sm:text-base font-bold mb-1 sm:mb-2">
-                      {track.label}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs md:text-sm leading-relaxed line-clamp-3 sm:line-clamp-5 text-gray-700">
-                      {track.description}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-1.5 sm:mt-2 flex-shrink-0">
-                    {track.topics.map((topic) => (
-                      <span
-                        key={topic}
-                        className="px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-medium bg-gray-900/20 text-gray-700"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+            {/* 자세히 보기 화살표: 모바일은 상시 표시, 데스크톱은 hover 시 등장 */}
+            <div className="flex justify-end">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30 transition-all duration-200 opacity-100 md:opacity-0 md:translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+                <ArrowUpRight className="w-5 h-5 text-white" />
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

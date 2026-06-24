@@ -60,7 +60,7 @@ export const projectsData: Project[] = [
     longDescription:
       "실시간 동시 접속자 수(PCCU)와 매칭 필터 알고리즘을 결합하여 게임 서비스 상태 및 유저 체감 품질을 지표화한 데이터 엔지니어링 프로젝트입니다. Steam API와 커뮤니티 여론 데이터를 수집하고, 독자적인 '적합 유저 유입 속도' 수식을 적용하여 유저에게 최적의 플레이 타이밍을 제안합니다.",
     generation: "8기",
-    track: "데이터엔지니어링",
+    track: "데이터 엔지니어링",
     thumbnail: "/images/projects/match-quality.png",
     slides: [],
     githubUrl: "https://github.com/khuda-data/8th-DE-SteamQueue",
@@ -103,7 +103,7 @@ export const projectsData: Project[] = [
     longDescription:
       "수원시 공유 냉장고 이용 데이터를 활용하여 비정상적 싹쓸이 패턴을 감지하고, 공정한 나눔이 이루어지도록 지원하는 모델 개발 프로젝트입니다.",
     generation: "8기",
-    track: "데이터엔지니어링",
+    track: "데이터 엔지니어링",
     thumbnail: "/images/projects/hoarding-detection.png",
     slides: [],
   },
@@ -118,7 +118,7 @@ export const generations = [
 
 // 화면에 노출하는 정식 트랙은 아래 6개로 통일한다 (커리큘럼 트랙과 동일하게 유지).
 // 순서도 커리큘럼 기준이다.
-const CORE_TRACKS = ["데이터 분석", "데이터엔지니어링", "NLP", "CV", "AI엔지니어링", "금융"];
+const CORE_TRACKS = ["데이터 분석", "데이터 엔지니어링", "NLP", "CV", "AI 엔지니어링", "금융"];
 // ML 심화는 8기에서 금융 대신 운영한 트랙이라 과거 프로젝트 분류를 위해 예외로 유지한다.
 // 9기 이후로는 금융 트랙을 사용하므로 새 프로젝트에는 ML 심화를 쓰지 않는다.
 const LEGACY_TRACKS = ["ML 심화"];
