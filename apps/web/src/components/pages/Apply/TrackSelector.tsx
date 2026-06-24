@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { APPLICATION_FORM_CONFIG, CURRICULUM_INFO } from "@/lib/constants";
 import type { Question } from "@/lib/api";
@@ -14,28 +15,30 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
   const isOB = applicationType === "ob";
   const isYB = applicationType === "yb";
 
-  const getDescription = () => {
-    if (isOB) {
-      return "심화 트랙 참여를 희망하시는 경우에만 선택해주세요.";
-    }
-    return null;
-  };
+  const getDescription = () => null;
 
   return (
-    <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
+    <Card key={question.id} className="relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
       <CardHeader className="relative z-10">
-        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
+        <CardTitle className="text-base sm:text-lg font-bold text-[#191F28] flex items-center gap-2">
           {question.question}
-          {question.required && <span className="text-blue-500">*</span>}
+          {question.required && <RequiredMark />}
         </CardTitle>
         {getDescription() && (
-          <CardDescription>
+          <CardDescription className="text-[#8B95A1] leading-relaxed">
             {getDescription()}
           </CardDescription>
         )}
       </CardHeader>
       <CardContent className="space-y-4 relative z-10">
+        {isYB && (
+          <div className="p-4 rounded-2xl bg-[#EBF3FF] space-y-1.5">
+            <p className="text-sm font-semibold text-[#191F28]">면접 평가 기준 안내</p>
+            <p className="text-[13px] font-medium text-[#333D4B] leading-relaxed">
+              선택하신 관심 트랙이 방학 세션 이후 희망 트랙과 같다면 트랙 배정에 유리하게 작용할 수 있습니다. 또한 해당 트랙과 관련한 질문이 면접에 포함될 수 있습니다.
+            </p>
+          </div>
+        )}
         <div className="space-y-4">
           {isOB ? (
             <Select
@@ -43,35 +46,26 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
               onValueChange={(value) => onAnswerChange(question.id, value)}
               required={question.required}
             >
-              <SelectTrigger 
-                className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
-                  answer && answer !== "none"
-                    ? "bg-gradient-to-br from-blue-600/10 via-blue-600/5 to-transparent border-2 border-blue-600/60 shadow-md shadow-blue-600/10 scale-[1.01]"
-                    : "bg-secondary/20 border-2 border-border/40 hover:border-blue-600/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
-                } focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 focus:outline-none focus:scale-[1.01]`}
+              <SelectTrigger
+                className="h-14 rounded-xl text-base font-medium bg-[#F2F4F6] border border-transparent text-[#191F28] transition-colors duration-200 hover:bg-[#F9FAFB] focus:bg-white focus:border-[#3182F6] focus:outline-none focus:ring-0 focus:ring-offset-0"
               >
-                <div className="flex items-center gap-2.5 flex-1">
-                  {answer && answer !== "none" && (
-                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0 animate-in zoom-in-95 duration-200" />
-                  )}
-                  <SelectValue placeholder="트랙을 선택해주세요 (선택사항)" />
-                </div>
+                <SelectValue placeholder="트랙을 선택해주세요 (선택사항)" />
               </SelectTrigger>
-              <SelectContent 
-                className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[400px] p-2"
+              <SelectContent
+                className="rounded-2xl border border-[#E8EBED] bg-white shadow-xl max-h-[400px] p-2"
                 position="popper"
               >
                 {[
                   ...CURRICULUM_INFO.tracks.map(track => ({
                     value: track.id,
-                    label: `${track.label} (${track.title})`,
+                    label: track.title,
                   })),
                   ...APPLICATION_FORM_CONFIG.trackSelectOptions,
                 ].map((track) => (
-                  <SelectItem 
+                  <SelectItem
                     key={track.value}
-                    value={track.value} 
-                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-blue-600/10 focus:bg-blue-600/10 transition-all duration-150 ease-out data-[highlighted]:bg-blue-600/10 data-[highlighted]:scale-[1.02]"
+                    value={track.value}
+                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-[#EBF3FF] focus:bg-[#EBF3FF] transition-colors duration-150 data-[highlighted]:bg-[#EBF3FF] [&>span:first-child]:hidden"
                   >
                     {track.label}
                   </SelectItem>
@@ -80,41 +74,32 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
             </Select>
           ) : isYB ? (
             <Select
-              value={CURRICULUM_INFO.tracks.find(track => `${track.label} (${track.title})` === answer)?.id || ""}
+              value={CURRICULUM_INFO.tracks.find(track => track.title === answer)?.id || ""}
               onValueChange={(value) => {
                 const selectedTrack = CURRICULUM_INFO.tracks.find(track => track.id === value);
                 if (selectedTrack) {
-                  onAnswerChange(question.id, `${selectedTrack.label} (${selectedTrack.title})`);
+                  onAnswerChange(question.id, selectedTrack.title);
                 }
               }}
               required={question.required}
             >
-              <SelectTrigger 
-                className={`h-14 rounded-2xl text-base font-medium transition-all duration-200 ease-out transform ${
-                  answer && answer !== "none"
-                    ? "bg-gradient-to-br from-blue-600/10 via-blue-600/5 to-transparent border-2 border-blue-600/60 shadow-md shadow-blue-600/10 scale-[1.01]"
-                    : "bg-secondary/20 border-2 border-border/40 hover:border-blue-600/30 hover:bg-secondary/30 hover:scale-[1.01] active:scale-[0.99]"
-                } focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10 focus:outline-none focus:scale-[1.01]`}
+              <SelectTrigger
+                className="h-14 rounded-xl text-base font-medium bg-[#F2F4F6] border border-transparent text-[#191F28] transition-colors duration-200 hover:bg-[#F9FAFB] focus:bg-white focus:border-[#3182F6] focus:outline-none focus:ring-0 focus:ring-offset-0"
               >
-                <div className="flex items-center gap-2.5 flex-1">
-                  {answer && answer !== "none" && (
-                    <div className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                  )}
-                  <SelectValue placeholder="심화 트랙을 선택해주세요" />
-                </div>
+                <SelectValue placeholder="심화 트랙을 선택해주세요" />
               </SelectTrigger>
-              <SelectContent 
-                className="rounded-2xl border-2 border-border/50 bg-card/95 backdrop-blur-md shadow-xl max-h-[400px] p-2"
+              <SelectContent
+                className="rounded-2xl border border-[#E8EBED] bg-white shadow-xl max-h-[400px] p-2"
                 position="popper"
               >
                 {CURRICULUM_INFO.tracks.map(track => ({
                   value: track.id,
-                  label: `${track.label} (${track.title})`,
+                  label: track.title,
                 })).map((track) => (
-                  <SelectItem 
+                  <SelectItem
                     key={track.value}
-                    value={track.value} 
-                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-blue-600/10 focus:bg-blue-600/10 transition-all duration-150 ease-out data-[highlighted]:bg-blue-600/10 data-[highlighted]:scale-[1.02]"
+                    value={track.value}
+                    className="rounded-xl px-4 py-3 text-base font-medium cursor-pointer hover:bg-[#EBF3FF] focus:bg-[#EBF3FF] transition-colors duration-150 data-[highlighted]:bg-[#EBF3FF] [&>span:first-child]:hidden"
                   >
                     {track.label}
                   </SelectItem>

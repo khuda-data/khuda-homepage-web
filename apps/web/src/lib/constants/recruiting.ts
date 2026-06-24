@@ -73,7 +73,7 @@ export const RECRUITMENT_SCHEDULE = {
   announcement: {
     date: "2026년 7월 7일 (화)",
     short: "7.7",
-    full: "2026년 7월 7일 (화)",
+    full: "2026년 7월 7일 (화) 이후 개별 안내",
   },
   interview: {
     start: "2026년 7월 8일 (수)",

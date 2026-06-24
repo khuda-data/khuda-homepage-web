@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { submitApplication, type Question, type InterviewSchedule } from "@/lib/api";
+import { type Question, type InterviewSchedule } from "@/lib/api";
+// 백엔드 리팩토링 중이라 제출은 mock으로 처리한다. 재연결 시 submitApplication(@/lib/api)로 되돌린다.
+import { mockSubmitApplication } from "@/lib/mock/applicationQuestions";
 import { 
   RECRUITMENT_SCHEDULE, 
   RECRUITMENT_INFO,
@@ -16,10 +18,21 @@ export interface FormData {
   selectedInterviewDate: string;
 }
 
+// 임시저장 키 (localStorage). 백엔드 연동과 무관하게 작성 내용만 브라우저에 보관한다.
+const DRAFT_STORAGE_KEY = "khuda-apply-draft";
+
 // 필수 항목 중 미답변 질문 목록 반환 (handleSubmit, isFormValid 공통 사용)
+// 면접 날짜/시간 문항은 answers가 아니라 interviewDates/interviewTimesByDate로 별도 검증하므로 제외한다.
 const getMissingRequiredQuestions = (questions: Question[], answers: Record<string, string>): Question[] => {
+  // 스터디 개설 의향이 "예"면 개설 희망 스터디 세부 입력을 조건부 필수로 본다.
+  const studyIntention = questions.find(q => q.question.includes("스터디 개설"));
+  const wantsStudy = studyIntention ? answers[studyIntention.id.toString()] === "yes" : false;
+
   return questions.filter(q => {
-    if (!q.required) return false;
+    if (q.field_type === "interview_date" || q.field_type === "interview_time") return false;
+    const isStudyDetail = q.question.includes("개설하고 싶은");
+    const required = q.required || (isStudyDetail && wantsStudy);
+    if (!required) return false;
     const answer = answers[q.id.toString()];
     return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
   });
@@ -83,6 +96,57 @@ export const useApplicationForm = (questions: Question[]) => {
     interviewTimesByDate: {},
     selectedInterviewDate: "",
   });
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+
+  // 마운트 시 임시저장된 초안 복원 (SSR 안전을 위해 effect에서 처리)
+  const skipNextSave = useRef(true);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as Partial<FormData>;
+        setFormData((prev) => ({ ...prev, ...draft }));
+        setLastSavedAt(new Date());
+      }
+    } catch {
+      // 손상된 초안은 무시
+    }
+    // 마운트 시 1회만 복원
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 작성 내용 변경 시 자동 임시저장 (최초 1회는 마운트 기본값이라 건너뜀)
+  useEffect(() => {
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
+    if (isSubmitted) return;
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(formData));
+    } catch {
+      // 용량 초과 등은 무시
+    }
+  }, [formData, isSubmitted]);
+
+  // 명시적 임시저장 (버튼용): 즉시 저장하고 저장 시각 갱신
+  const saveDraft = () => {
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(formData));
+      setLastSavedAt(new Date());
+      toast({ title: "임시저장되었습니다", description: "작성 내용이 이 브라우저에 저장됐어요.", duration: 1500 });
+    } catch {
+      toast({ title: "임시저장 실패", description: "잠시 후 다시 시도해주세요.", variant: "destructive", duration: 1500 });
+    }
+  };
+
+  const clearDraft = () => {
+    try {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+    } catch {
+      // 무시
+    }
+  };
 
   useEffect(() => {
     if (formData.applicationType !== "yb") {
@@ -247,11 +311,12 @@ export const useApplicationForm = (questions: Question[]) => {
         interviewTimesQuestion?.id.toString() ?? null,
       );
 
-      const response = await submitApplication(formData.applicationType as "yb" | "ob", payload);
+      const response = await mockSubmitApplication(formData.applicationType as "yb" | "ob", payload);
 
       setSubmittedApplicationId(response.application_id.toString());
       setSubmittedAt(new Date());
       setIsSubmitted(true);
+      clearDraft();
       toast({
         title: "지원서가 제출되었습니다",
         description: `지원서 ID: ${response.application_id}`,
@@ -321,5 +386,7 @@ export const useApplicationForm = (questions: Question[]) => {
     getAnswer,
     getArrayAnswer,
     isFormValid,
+    saveDraft,
+    lastSavedAt,
   };
 };

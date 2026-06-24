@@ -26,34 +26,33 @@ export const APPLICATION_FORM_CONFIG = {
   pythonLevels: [
     {
       value: "1",
-      label: "1단계: 기초 문법",
-      description: "input/print, 변수, 연산자",
+      label: "기본 문법",
+      description: "변수, 연산자, 입력과 출력 등 기본 문법을 다룰 수 있다.",
     },
     {
       value: "2",
-      label: "2단계: 기본 프로그래밍",
-      description: "반복문, 조건문, 자료형, 파일 입출력",
+      label: "기본 프로그래밍",
+      description: "조건문과 반복문, 함수로 간단한 프로그램을 만들 수 있다.",
     },
     {
       value: "3",
-      label: "3단계: 데이터 분석 라이브러리 활용",
-      description: "numpy, pandas, scikit-learn, 시각화",
+      label: "데이터 분석",
+      description: "pandas와 numpy로 데이터를 다루고 시각화할 수 있다.",
     },
     {
       value: "4",
-      label: "4단계: 딥러닝 프레임워크로 모델 구현",
-      description: "PyTorch/TensorFlow",
+      label: "모델 학습",
+      description: "scikit-learn이나 PyTorch로 모델을 학습시키고 결과를 해석할 수 있다.",
     },
     {
       value: "5",
-      label: "5단계: 프로젝트 관리",
-      description: "아키텍처 설계, 성능 최적화, 모듈화, 테스트/배포, 협업",
+      label: "프로젝트 수행",
+      description: "데이터 수집부터 모델링까지 프로젝트를 직접 설계하고 이끌 수 있다.",
     },
   ],
   pythonLevelGuide: {
-    title: "평가 기준 안내",
-    description: "각 단계는 이전 단계의 내용을 포함합니다. 예를 들어, 3단계를 선택하시면 1-2단계 내용도 할 수 있다는 의미입니다.",
-    note: "현재 본인이 실제로 할 수 있는 수준을 선택해주세요.",
+    title: "면접 평가 기준 안내",
+    description: "각 단계는 이전 단계의 내용을 포함합니다. 더 높은 단계를 선택하고 면접에서 그에 맞는 답변을 들려주실수록 평가에 더 좋게 반영됩니다.",
   },
 
   dataAnalysisFields: [
@@ -63,7 +62,7 @@ export const APPLICATION_FORM_CONFIG = {
     "머신러닝 알고리즘 (Random Forest, SVM)",
     "데이터베이스 및 SQL",
     "딥러닝 (CNN, RNN, Transformer)",
-    "자연어처리(NLP) 및 컴퓨터비전(CV)",
+    "자연어 처리(NLP) 및 컴퓨터 비전(CV)",
   ],
 
   trackSelectOptions: [
@@ -152,15 +151,15 @@ export const APPLICATION_FORM_CONFIG = {
     description: "OB 지원자는 면접 없이 서류만 심사됩니다.",
   },
 
-  pageTitle: "함께 성장하며\n한계를 뛰어넘는 경험을 만들어가요",
-  pageDescription: "KHUDA는 데이터 분석과 인공지능(AI)에 열정을 가진 경희인이 함께 모여 체계적인 학습과 실무 프로젝트 경험을 통해 성장하는 학회입니다.",
+  pageTitle: "함께 성장할 KHUDA 10기 부원을 모집합니다 🏃",
+  pageDescription: "아래 항목을 작성한 뒤 지원서를 제출해 주세요.",
 
   sections: {
     schedule: "모집 일정",
     faq: "자주 묻는 질문",
     privacy: "개인정보 수집 동의",
     basicInfo: "기본 정보",
-    applicationType: "지원 분야",
+    applicationType: "지원 유형",
     interviewSchedule: "면접 가능 일정",
   },
 

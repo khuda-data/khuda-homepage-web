@@ -1,118 +1,95 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle } from "lucide-react";
-import { APPLICATION_FORM_CONFIG, COMMON_STYLES } from "@/lib/constants";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
+import { Check } from "lucide-react";
 import type { Question } from "@/lib/api";
 
 interface StudyCreationSelectorProps {
   question: Question;
   answer: string;
   onAnswerChange: (questionId: number, value: string) => void;
+  // 개설하고 싶은 스터디 세부 입력 (예 선택 시 같은 카드에서 작성)
+  detailQuestion?: Question;
+  detailAnswer?: string;
+  onDetailChange?: (questionId: number, value: string) => void;
 }
 
-export const StudyCreationSelector = ({ question, answer, onAnswerChange }: StudyCreationSelectorProps) => {
+const OPTIONS = [
+  { value: "yes", label: "예" },
+  { value: "no", label: "아니오" },
+] as const;
+
+export const StudyCreationSelector = ({
+  question,
+  answer,
+  onAnswerChange,
+  detailQuestion,
+  detailAnswer = "",
+  onDetailChange,
+}: StudyCreationSelectorProps) => {
+  const select = (value: string) => {
+    const next = answer === value ? "" : value;
+    onAnswerChange(question.id, next);
+    // 예가 아니게 되면 세부 입력 초기화
+    if (next !== "yes" && detailQuestion && onDetailChange) {
+      onDetailChange(detailQuestion.id, "");
+    }
+  };
+
   return (
-    <Card key={question.id} className="relative border border-white/10 shadow-lg bg-black/70 backdrop-blur-2xl overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-600/25 rounded-lg opacity-50"></div>
-      <CardHeader className="relative z-10">
-        <CardTitle className="text-lg sm:text-xl flex items-center gap-3">
+    <Card key={question.id} className="relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
+      <CardHeader>
+        <CardTitle className="text-base sm:text-lg font-bold text-[#191F28] flex items-center gap-2">
           {question.question}
-          {question.required && <span className="text-blue-500">*</span>}
+          {question.required && <RequiredMark />}
         </CardTitle>
-        <CardDescription>
-          KHUDA는 강의 및 교재비를 일부 지원하고 있습니다. 많은 관심과 참여 부탁드립니다.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 relative z-10">
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onAnswerChange(question.id, answer === "yes" ? "" : "yes");
-              }}
-              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out min-h-[44px] ${
-                answer === "yes"
-                  ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
-                  : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
-              }`}
-            >
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
-                answer === "yes"
-                  ? "bg-blue-600"
-                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-blue-600/40"
-              }`}>
-                {answer === "yes" ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-white animate-in zoom-in-95 duration-200" />
-                ) : (
-                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-blue-600/50 transition-colors" />
-                )}
-              </div>
-              <span className={`text-sm font-semibold transition-colors duration-200 ${
-                answer === "yes" ? "text-blue-600" : "text-foreground group-hover:text-blue-600/80"
-              }`}>
-                예
-              </span>
-              <span className={`text-xs mt-0.5 transition-colors duration-200 ${
-                answer === "yes" ? "text-blue-600/70" : "text-muted-foreground"
-              }`}>
-                스터디 개설 희망
-              </span>
-              {answer === "yes" && (
-                <div className="absolute top-1.5 right-1.5">
-                  <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                    선택됨
-                  </Badge>
-                </div>
-              )}
-            </button>
-            
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onAnswerChange(question.id, answer === "no" ? "" : "no");
-              }}
-              className={`group relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ease-out min-h-[44px] ${
-                answer === "no"
-                  ? "border-blue-600 bg-blue-600/10 shadow-md shadow-blue-600/10"
-                  : "border-border/50 bg-secondary/20 hover:border-blue-600/40 hover:bg-secondary/30"
-              }`}
-            >
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center mb-2 transition-all duration-200 ${
-                answer === "no"
-                  ? "bg-blue-600"
-                  : "bg-secondary/40 border-2 border-border/50 group-hover:border-blue-600/40"
-              }`}>
-                {answer === "no" ? (
-                  <CheckCircle className="w-3.5 h-3.5 text-white animate-in zoom-in-95 duration-200" />
-                ) : (
-                  <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50 group-hover:border-blue-600/50 transition-colors" />
-                )}
-              </div>
-              <span className={`text-sm font-semibold transition-colors duration-200 ${
-                answer === "no" ? "text-blue-600" : "text-foreground group-hover:text-blue-600/80"
-              }`}>
-                아니오
-              </span>
-              <span className={`text-xs mt-0.5 transition-colors duration-200 ${
-                answer === "no" ? "text-blue-600/70" : "text-muted-foreground"
-              }`}>
-                스터디 개설 없음
-              </span>
-              {answer === "no" && (
-                <div className="absolute top-1.5 right-1.5">
-                  <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                    선택됨
-                  </Badge>
-                </div>
-              )}
-            </button>
-          </div>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          {OPTIONS.map((opt) => {
+            const selected = answer === opt.value;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  select(opt.value);
+                }}
+                className={`flex items-center justify-center gap-1.5 h-14 rounded-2xl border text-sm font-semibold transition-colors duration-200 ${
+                  selected
+                    ? "border-[#3182F6] bg-[#EBF3FF] text-[#3182F6]"
+                    : "border-[#E8EBED] bg-white text-[#191F28] hover:bg-[#F9FAFB]"
+                }`}
+              >
+                {selected && <Check className="w-4 h-4" />}
+                {opt.label}
+              </button>
+            );
+          })}
         </div>
+
+        {answer === "yes" && detailQuestion && (
+          <div className="space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
+            <label htmlFor={`detail-${detailQuestion.id}`} className="text-sm font-semibold text-[#333D4B]">
+              {detailQuestion.question}
+            </label>
+            <Input
+              id={`detail-${detailQuestion.id}`}
+              value={detailAnswer}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (detailQuestion.max_len === null || value.length <= detailQuestion.max_len) {
+                  onDetailChange?.(detailQuestion.id, value);
+                }
+              }}
+              placeholder="개설한 스터디나 소모임은 교재비와 강의비를 일부 지원받을 수 있습니다."
+              maxLength={detailQuestion.max_len || undefined}
+              className="h-12 min-h-[48px] rounded-xl bg-[#F2F4F6] border border-transparent focus:bg-white focus:border-[#3182F6] focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors duration-200 text-sm sm:text-base placeholder:text-[#B0B8C1]"
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

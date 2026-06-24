@@ -37,10 +37,10 @@ export const QuestionField = ({
         required={question.required && !isStudyDisabled}
         disabled={isStudyDisabled}
         maxLength={question.max_len || undefined}
-        className={`h-12 rounded-xl border-border/50 focus:outline-none transition-all duration-200 ease-out ${
-          isStudyDisabled 
-            ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
-            : "bg-secondary/30 focus:border-blue-500/60 focus:scale-[1.01] focus:shadow-md focus:shadow-blue-500/10"
+        className={`h-12 min-h-[48px] rounded-xl border focus:outline-none transition-colors duration-200 placeholder:text-[#B0B8C1] ${
+          isStudyDisabled
+            ? "bg-[#F2F4F6] border-transparent text-[#B0B8C1] cursor-not-allowed"
+            : "bg-[#F2F4F6] border-transparent focus:bg-white focus:border-[#3182F6] focus-visible:ring-0 focus-visible:ring-offset-0"
         }`}
       />
     );
@@ -64,10 +64,10 @@ export const QuestionField = ({
         disabled={isStudyDisabled}
         maxLength={question.max_len || undefined}
         rows={5}
-        className={`min-h-[100px] sm:min-h-[120px] rounded-xl border-border/50 focus:outline-none resize-none transition-all duration-200 ease-out text-sm sm:text-base ${
-          isStudyDisabled 
-            ? "bg-secondary/10 border-border/30 text-muted-foreground cursor-not-allowed opacity-50" 
-            : "bg-secondary/30 focus:border-blue-500/60 focus:scale-[1.005] focus:shadow-md focus:shadow-blue-500/10"
+        className={`min-h-[120px] rounded-xl border focus:outline-none resize-none transition-colors duration-200 text-sm sm:text-base placeholder:text-[#B0B8C1] ${
+          isStudyDisabled
+            ? "bg-[#F2F4F6] border-transparent text-[#B0B8C1] cursor-not-allowed"
+            : "bg-[#F2F4F6] border-transparent focus:bg-white focus:border-[#3182F6] focus-visible:ring-0 focus-visible:ring-offset-0"
         }`}
       />
     );
@@ -82,7 +82,7 @@ export const QuestionField = ({
 
     // 다른 체크박스 옵션 (예: 머신러닝 분야 등)
     if (question.question.includes("머신러닝") || question.question.includes("딥러닝")) {
-      const options = ["머신러닝", "딥러닝", "자연어처리", "컴퓨터비전", "강화학습", "추천시스템"];
+      const options = ["머신러닝", "딥러닝", "자연어 처리", "컴퓨터 비전", "강화학습", "추천시스템"];
       const currentArray: string[] = answer ? JSON.parse(answer) : [];
 
       return (
@@ -96,7 +96,7 @@ export const QuestionField = ({
                 onClick={() => onCheckboxChange(question.id, option, !isChecked)}
               >
                 <div className={getCheckboxIconClass(isChecked)}>
-                  {isChecked && <Check className="h-3 w-3 text-blue-500-foreground" />}
+                  {isChecked && <Check className="h-3 w-3 text-white" />}
                 </div>
                 <span className="font-medium">{option}</span>
               </div>

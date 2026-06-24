@@ -1,5 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
 import { Circle } from "lucide-react";
 import { getRadioButtonClass } from "@/lib/form-utils";
 import { 
@@ -19,17 +19,16 @@ export const ApplicationTypeSelector = ({
   const isApplicationType = (type: "yb" | "ob") => applicationType === type;
 
   return (
-    <Card className="relative border border-border shadow-lg bg-card overflow-hidden">
+    <Card className="relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
+        <CardTitle className="text-lg sm:text-xl font-bold text-[#191F28] flex items-center gap-2">
           {APPLICATION_FORM_CONFIG.sections.applicationType}
-          <span className="text-blue-500">*</span>
+          <RequiredMark />
         </CardTitle>
-        <CardDescription>지원하실 분야를 선택해주세요.</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
-          <div 
+        <div className="space-y-2.5">
+          <div
             className={getRadioButtonClass(isApplicationType("yb"))}
             onClick={(e) => {
               e.preventDefault();
@@ -39,25 +38,20 @@ export const ApplicationTypeSelector = ({
               }
             }}
           >
-            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+            <div className={`h-5 w-5 rounded-full border flex items-center justify-center transition-colors duration-200 flex-shrink-0 ${
               isApplicationType("yb")
-                ? "border-blue-600 bg-blue-600"
-                : "border-border"
+                ? "border-[#3182F6] bg-[#3182F6]"
+                : "border-[#D1D6DB] bg-white"
             }`}>
               {isApplicationType("yb") && (
-                <Circle className="h-2.5 w-2.5 fill-current text-white" />
+                <Circle className="h-2 w-2 fill-current text-white" />
               )}
             </div>
-            <div className="cursor-pointer font-medium flex-1 text-sm sm:text-base flex items-center gap-2">
-              <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
-              {isApplicationType("yb") && (
-                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                  선택됨
-                </Badge>
-              )}
+            <div className="cursor-pointer font-medium flex-1 text-sm sm:text-base flex items-center gap-2 text-[#191F28]">
+              <span>{APPLICATION_FORM_CONFIG.applicationTypes.yb.label(RECRUITMENT_INFO.generation)}</span>
             </div>
           </div>
-          <div 
+          <div
             className={getRadioButtonClass(isApplicationType("ob"))}
             onClick={(e) => {
               e.preventDefault();
@@ -67,22 +61,17 @@ export const ApplicationTypeSelector = ({
               }
             }}
           >
-            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+            <div className={`h-5 w-5 rounded-full border flex items-center justify-center transition-colors duration-200 flex-shrink-0 ${
               isApplicationType("ob")
-                ? "border-blue-600 bg-blue-600"
-                : "border-border"
+                ? "border-[#3182F6] bg-[#3182F6]"
+                : "border-[#D1D6DB] bg-white"
             }`}>
               {isApplicationType("ob") && (
-                <Circle className="h-2.5 w-2.5 fill-current text-white" />
+                <Circle className="h-2 w-2 fill-current text-white" />
               )}
             </div>
-            <div className="cursor-pointer font-medium flex-1 text-sm sm:text-base flex items-center gap-2">
-              <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
-              {isApplicationType("ob") && (
-                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                  선택됨
-                </Badge>
-              )}
+            <div className="cursor-pointer font-medium flex-1 text-sm sm:text-base flex items-center gap-2 text-[#191F28]">
+              <span>{APPLICATION_FORM_CONFIG.applicationTypes.ob.label(RECRUITMENT_INFO.generation)}</span>
             </div>
           </div>
         </div>

@@ -2,15 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
 import { ApplicationHeader } from "@/components/pages/Apply/ApplicationHeader";
+import { ApplicationGuide } from "@/components/pages/Apply/ApplicationGuide";
+import { NoticeCard } from "@/components/pages/Apply/NoticeCard";
 import { ScheduleCard } from "@/components/pages/Apply/ScheduleCard";
-import { FAQCard } from "@/components/pages/Apply/FAQCard";
 import { ApplicationTypeSelector } from "@/components/pages/Apply/ApplicationTypeSelector";
 import { SubmissionSuccess } from "@/components/pages/Apply/SubmissionSuccess";
 import { PrivacyConsentCard } from "@/components/pages/Apply/PrivacyConsentCard";
 import { BasicInfoCard } from "@/components/pages/Apply/BasicInfoCard";
+import { BasicInfoField } from "@/components/pages/Apply/BasicInfoField";
+import { QuestionLoading } from "@/components/pages/Apply/QuestionLoading";
 import { QuestionRenderer } from "@/components/pages/Apply/QuestionRenderer";
 import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
@@ -61,6 +63,7 @@ const Apply = () => {
     isApplicationType,
     getAnswer,
     isFormValid,
+    saveDraft,
   } = useApplicationForm(questions);
 
   // formData → 로컬 상태 동기화
@@ -123,29 +126,37 @@ const Apply = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/10">
-      <ApplicationHeader />
+    <div className="min-h-screen bg-[#F2F4F6]">
+      <ApplicationHeader
+        onSaveDraft={saveDraft}
+        isSubmitting={isSubmitting}
+        submitDisabled={isSubmitting || isLoadingQuestions || !isFormValid()}
+        formId="apply-form"
+      />
 
       <main className="container mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-12 md:py-16">
-        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
-          <div className="text-center space-y-4 sm:space-y-6 mb-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-              <div className="space-y-2 sm:space-y-3">
+        <div className="max-w-4xl mx-auto space-y-5 sm:space-y-6">
+          <div className="text-center space-y-3 sm:space-y-4 mb-8 sm:mb-10">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#191F28]">
+              <div className="space-y-1.5 sm:space-y-2">
                 {APPLICATION_FORM_CONFIG.pageTitle.split("\n").map((line, i) => (
                   <div key={i}>{line}</div>
                 ))}
               </div>
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
+            <p className="text-sm sm:text-base text-[#4E5968] max-w-xl mx-auto leading-relaxed px-2">
               {APPLICATION_FORM_CONFIG.pageDescription}
             </p>
           </div>
 
+          <ApplicationGuide />
+
           <ScheduleCard />
 
-          <FAQCard />
+          <NoticeCard />
 
           <form
+            id="apply-form"
             onSubmit={handleSubmit}
             className="space-y-6 sm:space-y-8"
             onKeyDown={(e) => {
@@ -167,7 +178,14 @@ const Apply = () => {
                 )}
                 {basicInfoQuestions.length > 0 && (
                   <BasicInfoCard questions={basicInfoQuestions}>
-                    {basicInfoQuestions.map((question) => renderQuestion(question))}
+                    {basicInfoQuestions.map((question) => (
+                      <BasicInfoField
+                        key={question.id}
+                        question={question}
+                        answer={formData.answers[question.id.toString()] || ""}
+                        onAnswerChange={updateAnswer}
+                      />
+                    ))}
                   </BasicInfoCard>
                 )}
               </>
@@ -182,7 +200,7 @@ const Apply = () => {
 
             {formData.applicationType && (
               isLoadingType ? (
-                <QuestionSkeleton count={3} />
+                <QuestionLoading />
               ) : (
                 typeQuestions
                   .filter((question) => question.applicant_type !== "common")
@@ -190,17 +208,6 @@ const Apply = () => {
               )
             )}
 
-            <div className="sticky bottom-0 pb-4 sm:pb-6 md:pb-8 pt-3 sm:pt-4 bg-background/80 backdrop-blur-md border-t border-border/50 -mx-4 sm:-mx-6 md:-mx-12 px-4 sm:px-6 md:px-12">
-              <Button
-                type="submit"
-                variant="hero"
-                size="xl"
-                className="w-full rounded-xl h-12 sm:h-14 text-sm sm:text-base font-semibold shadow-lg transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] min-h-[44px] bg-blue-600 text-white hover:shadow-[0_0_40px_rgb(59_130_246/0.4)]"
-                disabled={isSubmitting || isLoadingQuestions || !isFormValid()}
-              >
-                {isSubmitting ? "제출 중..." : "지원서 제출하기"}
-              </Button>
-            </div>
           </form>
         </div>
       </main>

@@ -1,67 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
-import { getQuestions, type Question } from "@/lib/api";
-import { filterOBQuestions } from "@/utils/questions";
+import { useEffect, useState } from "react";
+import { type Question } from "@/lib/api";
+import { getMockQuestions } from "@/lib/mock/applicationQuestions";
 
 const sortByPosition = (questions: Question[]): Question[] =>
   [...questions].sort((a, b) => a.position - b.position);
 
+// 백엔드 리팩토링 중이라 질문을 프론트 mock에서 가져온다.
+// 백엔드 재연결 시 useQuery(getQuestions) 방식으로 되돌린다. (이전 구현 git 이력 참고)
+// 유형별 문항은 실제로는 API 호출이 일어나는 지점이라, mock에서도 잠깐 로딩 상태를 흉내 낸다.
+const TYPE_LOADING_MS = 700;
+
 export const useApplicationQuestions = (applicationType: string) => {
-  const { toast } = useToast();
+  const commonQuestions = sortByPosition(getMockQuestions("common"));
 
-  const {
-    data: commonData,
-    isLoading: isLoadingCommon,
-    error: commonError,
-  } = useQuery({
-    queryKey: ["questions", "common"],
-    queryFn: () => getQuestions("common"),
-    staleTime: 5 * 60 * 1000,
-  });
+  const isTypeSelected = applicationType === "yb" || applicationType === "ob";
+  const [isLoadingType, setIsLoadingType] = useState(false);
 
-  const {
-    data: typeData,
-    isLoading: isLoadingType,
-    error: typeError,
-  } = useQuery({
-    queryKey: ["questions", applicationType],
-    queryFn: () => getQuestions(applicationType as "yb" | "ob" | "common"),
-    enabled: !!applicationType,
-    staleTime: 5 * 60 * 1000,
-  });
-
-  // 에러 발생 시 토스트 알림
+  // 유형 선택 시 잠깐 로딩(추후 API fetch로 대체)
   useEffect(() => {
-    if (commonError) {
-      const message = commonError instanceof Error ? commonError.message : "질문을 가져오는데 실패했습니다.";
-      toast({ title: "질문 로드 실패", description: message, variant: "destructive" });
+    if (!isTypeSelected) {
+      setIsLoadingType(false);
+      return;
     }
-  }, [commonError, toast]);
+    setIsLoadingType(true);
+    const timer = setTimeout(() => setIsLoadingType(false), TYPE_LOADING_MS);
+    return () => clearTimeout(timer);
+  }, [applicationType, isTypeSelected]);
 
-  useEffect(() => {
-    if (typeError) {
-      const message = typeError instanceof Error ? typeError.message : "질문을 가져오는데 실패했습니다.";
-      toast({ title: "질문 로드 실패", description: message, variant: "destructive" });
-    }
-  }, [typeError, toast]);
-
-  const commonQuestions = commonData ? sortByPosition(commonData.questions) : [];
-
-  let typeQuestions: Question[] = typeData ? sortByPosition(typeData.questions) : [];
-  if (applicationType === "ob") {
-    typeQuestions = filterOBQuestions(typeQuestions);
-  }
+  const typeQuestions: Question[] =
+    isTypeSelected && !isLoadingType ? sortByPosition(getMockQuestions(applicationType as "yb" | "ob")) : [];
 
   const questions = [...commonQuestions, ...typeQuestions];
-  const isLoadingQuestions = isLoadingCommon || (!!applicationType && isLoadingType);
 
   return {
     commonQuestions,
     typeQuestions,
     questions,
-    isLoadingCommon,
+    isLoadingCommon: false,
     isLoadingType,
-    isLoadingQuestions,
+    isLoadingQuestions: isLoadingType,
   };
 };

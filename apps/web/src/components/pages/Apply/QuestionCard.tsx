@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
 import type { Question } from "@/lib/api";
 
 interface QuestionCardProps {
@@ -24,9 +25,6 @@ const getCardDescription = (question: Question, applicationType: "yb" | "ob" | "
   if (question.question.includes("일정") && !question.question.includes("면접")) {
     return "타 동아리나, 학생회, 아르바이트, 대외활동 관련하여 서술해주세요.";
   }
-  if (question.question.includes("기타 활동") || question.question.includes("활동")) {
-    return "데이터 분석과 관련이 없더라도 괜찮습니다.";
-  }
   if (question.question.includes("자격증") || question.question.includes("수상")) {
     return "해당 사항이 없는 경우 작성하지 않으셔도 됩니다.";
   }
@@ -37,14 +35,14 @@ export const QuestionCard = ({ question, applicationType = "", isStudyDisabled =
   const description = getCardDescription(question, applicationType, isStudyDisabled);
 
   return (
-    <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
+    <Card key={question.id} className="relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
+        <CardTitle className="text-base sm:text-lg font-bold text-[#191F28] flex items-center gap-2">
           {question.question}
-          {question.required && <span className="text-blue-500">*</span>}
+          {question.required && <RequiredMark />}
         </CardTitle>
         {description && (
-          <CardDescription className={isStudyDisabled ? "text-muted-foreground" : ""}>
+          <CardDescription className="text-[#8B95A1] leading-relaxed">
             {description}
           </CardDescription>
         )}

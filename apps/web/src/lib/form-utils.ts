@@ -1,14 +1,16 @@
 // ============================================================================
-// 폼 UI 스타일 헬퍼
+// 폼 UI 스타일 헬퍼 (토스 스타일)
+// 선택 시 연블루 배경(#EBF3FF) + 블루 보더(#3182F6), 비선택은 흰 배경.
+// 과한 scale/shadow 없이 색·보더 전환만 부드럽게.
 // ============================================================================
 
 /**
  * 체크박스 컨테이너의 CSS 클래스를 반환
  */
 export const getCheckboxContainerClass = (isSelected: boolean): string => {
-  const baseClasses = "relative flex items-center space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform min-h-[44px]";
-  const selectedClasses = "border-blue-500 bg-gradient-to-br from-blue-500/10 to-blue-500/5 shadow-lg shadow-blue-500/10 scale-[1.02]";
-  const unselectedClasses = "border-border/50 hover:border-blue-500/30 hover:bg-secondary/20 hover:scale-[1.01] active:scale-[0.99]";
+  const baseClasses = "relative flex items-center gap-3 p-4 rounded-2xl border transition-colors duration-200 ease-out cursor-pointer min-h-[52px]";
+  const selectedClasses = "border-[#3182F6] bg-[#EBF3FF]";
+  const unselectedClasses = "border-[#E8EBED] bg-white hover:border-[#3182F6]/40 hover:bg-[#F9FAFB]";
   return `${baseClasses} ${isSelected ? selectedClasses : unselectedClasses}`;
 };
 
@@ -16,9 +18,9 @@ export const getCheckboxContainerClass = (isSelected: boolean): string => {
  * 체크박스 아이콘의 CSS 클래스를 반환
  */
 export const getCheckboxIconClass = (isSelected: boolean): string => {
-  const baseClasses = "h-4 w-4 rounded-sm border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0";
-  const selectedClasses = "border-blue-500 bg-blue-500";
-  const unselectedClasses = "border-border";
+  const baseClasses = "h-5 w-5 rounded-md border flex items-center justify-center transition-colors duration-200 flex-shrink-0";
+  const selectedClasses = "border-[#3182F6] bg-[#3182F6]";
+  const unselectedClasses = "border-[#D1D6DB] bg-white";
   return `${baseClasses} ${isSelected ? selectedClasses : unselectedClasses}`;
 };
 
@@ -26,9 +28,9 @@ export const getCheckboxIconClass = (isSelected: boolean): string => {
  * 라디오 버튼의 CSS 클래스를 반환
  */
 export const getRadioButtonClass = (isSelected: boolean): string => {
-  const baseClasses = "relative flex items-center space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-200 ease-out cursor-pointer transform min-h-[44px]";
-  const selectedClasses = "border-blue-500 bg-gradient-to-br from-blue-500/10 to-blue-500/5 shadow-lg shadow-blue-500/10 scale-[1.02]";
-  const unselectedClasses = "border-border/50 hover:border-blue-500/50 hover:bg-blue-500/5 hover:scale-[1.01] active:scale-[0.99]";
+  const baseClasses = "relative flex items-center gap-3 p-4 rounded-2xl border transition-colors duration-200 ease-out cursor-pointer min-h-[52px]";
+  const selectedClasses = "border-[#3182F6] bg-[#EBF3FF]";
+  const unselectedClasses = "border-[#E8EBED] bg-white hover:border-[#3182F6]/40 hover:bg-[#F9FAFB]";
   return `${baseClasses} ${isSelected ? selectedClasses : unselectedClasses}`;
 };
 
@@ -36,8 +38,8 @@ export const getRadioButtonClass = (isSelected: boolean): string => {
  * 면접 시간 버튼의 CSS 클래스를 반환
  */
 export const getInterviewTimeButtonClass = (isSelected: boolean): string => {
-  const baseClasses = "group relative flex items-center justify-center p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out transform min-h-[44px]";
-  const selectedClasses = "border-blue-500 bg-blue-500/10 shadow-md shadow-blue-500/10 scale-[1.05]";
-  const unselectedClasses = "border-border/40 bg-secondary/10 hover:border-blue-500/40 hover:bg-secondary/20 hover:scale-[1.02] active:scale-[0.98]";
+  const baseClasses = "group relative flex items-center justify-center px-2 py-2.5 rounded-xl border text-sm font-medium cursor-pointer transition-colors duration-150 ease-out min-h-[44px]";
+  const selectedClasses = "border-[#3182F6] bg-[#EBF3FF] text-[#3182F6]";
+  const unselectedClasses = "border-[#E8EBED] bg-white text-[#4E5968] hover:border-[#3182F6]/40 hover:bg-[#F9FAFB]";
   return `${baseClasses} ${isSelected ? selectedClasses : unselectedClasses}`;
 };

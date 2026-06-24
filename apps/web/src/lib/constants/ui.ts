@@ -41,6 +41,6 @@ export const BUTTON_CONFIG = {
 };
 
 export const COMMON_STYLES = {
-  cardGradient: "absolute inset-0 bg-gradient-to-br from-blue-950/50 via-blue-950/40 to-blue-500/25 rounded-lg opacity-50",
-  cardBase: "relative border border-border shadow-lg bg-card overflow-hidden",
+  cardGradient: "hidden",
+  cardBase: "relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden",
 } as const;

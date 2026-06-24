@@ -10,7 +10,7 @@ export interface SocialLink {
 
 export const FOOTER_INFO = {
   organization: "경희대학교 데이터분석/AI 학회 KHUDA",
-  description: "데이터와 AI로 미래를 만들어가는 KHUDA와 함께하세요.",
+  description: "KYUNGHEE's Leading Society in Data and AI",
   copyright: (year: number) => `Copyright © ${year} KHUDA. All Rights Reserved.`,
   sections: {
     location: "Location",

@@ -1,8 +1,6 @@
 import type { Question, InterviewSchedule } from "@/lib/api";
 import { InterviewDateSelector } from "@/components/pages/Apply/InterviewDateSelector";
-import { ResidenceSelector } from "@/components/pages/Apply/ResidenceSelector";
 import { PythonLevelSelector } from "@/components/pages/Apply/PythonLevelSelector";
-import { DataAnalysisFieldSelector } from "@/components/pages/Apply/DataAnalysisFieldSelector";
 import { LongTextQuestion } from "@/components/pages/Apply/LongTextQuestion";
 import { StudyCreationSelector } from "@/components/pages/Apply/StudyCreationSelector";
 import { TrackSelector } from "@/components/pages/Apply/TrackSelector";
@@ -95,29 +93,9 @@ export const QuestionRenderer = ({
     );
   }
 
-  if (question.question.includes("거주지역") || question.question.includes("거주")) {
-    return (
-      <ResidenceSelector
-        question={question}
-        answer={answer}
-        onAnswerChange={onAnswerChange}
-      />
-    );
-  }
-
   if (question.question.includes("파이썬") || question.question.includes("Python")) {
     return (
       <PythonLevelSelector
-        question={question}
-        answer={answer}
-        onAnswerChange={onAnswerChange}
-      />
-    );
-  }
-
-  if (question.question.includes("데이터 분석") || question.question.includes("AI 분야")) {
-    return (
-      <DataAnalysisFieldSelector
         question={question}
         answer={answer}
         onAnswerChange={onAnswerChange}
@@ -136,12 +114,21 @@ export const QuestionRenderer = ({
     );
   }
 
+  // 스터디 개설 세부(개설하고 싶은 스터디)는 StudyCreationSelector 카드 안에서 함께 처리하므로 단독 렌더 숨김
+  if (question.question.includes("개설하고 싶은")) {
+    return null;
+  }
+
   if (question.question.includes("스터디 개설") && isApplicationType("ob")) {
+    const detailQuestion = findQuestionByKeywords(["개설하고 싶은"]);
     return (
       <StudyCreationSelector
         question={question}
         answer={answer}
         onAnswerChange={onAnswerChange}
+        detailQuestion={detailQuestion}
+        detailAnswer={detailQuestion ? getAnswer(detailQuestion.id) : ""}
+        onDetailChange={onAnswerChange}
       />
     );
   }

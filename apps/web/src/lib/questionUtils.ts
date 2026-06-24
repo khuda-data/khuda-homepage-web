@@ -12,21 +12,14 @@ export const getPlaceholder = (questionText: string): string => {
 };
 
 export const getQuestionNumber = (questionText: string): string | null => {
+  // "1. ..." 처럼 선행 번호가 있으면 그 번호를 사용 (자기소개서 문항)
+  const leadingNumber = questionText.trim().match(/^(\d+)\./);
+  if (leadingNumber) return leadingNumber[1];
   if (questionText.includes("지원 동기") || questionText.includes("역량")) return APPLICATION_FORM_CONFIG.questionNumbers.motivation;
   if (questionText.includes("도전") || questionText.includes("끈기")) return APPLICATION_FORM_CONFIG.questionNumbers.challenge;
   if (questionText.includes("프로젝트") || questionText.includes("탐구")) return APPLICATION_FORM_CONFIG.questionNumbers.project;
   return null;
 };
 
-export const getLongTextDescription = (questionText: string): string => {
-  if (questionText.includes("지원 동기") || questionText.includes("역량")) {
-    return "KHUDA에 지원한 이유와 자기가 가지고 있는 역량을 바탕으로 쿠다에서 어떠한 장점을 발휘할 수 있는지 서술해주세요.";
-  }
-  if (questionText.includes("도전") || questionText.includes("끈기")) {
-    return "힘들었거나 끈기있게 무언가를 수행해 본 경험이 있다면 서술해주세요.";
-  }
-  if (questionText.includes("프로젝트") || questionText.includes("탐구")) {
-    return "자신이 했던 프로젝트나, 탐구했던 경험이 있다면 서술해주세요.";
-  }
-  return "";
-};
+// 질문 텍스트 자체가 전체 안내 문장이므로 별도 설명은 두지 않는다.
+export const getLongTextDescription = (_questionText: string): string => "";

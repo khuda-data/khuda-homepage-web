@@ -19,7 +19,7 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
   {
     id: "de",
     label: "Data Engineering",
-    title: "데이터엔지니어링",
+    title: "데이터 엔지니어링",
     description:
       "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
     topics: ["데이터 파이프라인", "분산 처리", "클라우드 인프라"],
@@ -27,7 +27,7 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
   {
     id: "nlp",
     label: "NLP",
-    title: "자연어처리",
+    title: "자연어 처리",
     description:
       "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 NLP 파이프라인을 경험합니다.",
     topics: ["분류/요약", "검색/챗봇", "NLP 파이프라인"],
@@ -35,7 +35,7 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
   {
     id: "cv",
     label: "CV",
-    title: "컴퓨터비전",
+    title: "컴퓨터 비전",
     description:
       "이미지와 비디오에서 의미 있는 데이터를 해석하고 분석하며 추출하는 기술을 학습합니다. 딥러닝과 신경망을 활용해 사물 인식, 상황 인지, 이미지 생성까지 경험합니다.",
     topics: ["사물 인식", "상황 인지", "이미지 생성"],
@@ -43,7 +43,7 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
   {
     id: "aie",
     label: "AI Engineering",
-    title: "AI엔지니어링",
+    title: "AI 엔지니어링",
     description:
       "파운데이션 모델을 실제 애플리케이션에 적용하기 위한 엔지니어링 과정을 다룹니다. 프롬프트 설계, RAG/에이전트, 파인튜닝과 최적화까지 전 과정을 학습합니다.",
     topics: ["프롬프트 설계", "RAG/에이전트", "파인튜닝/최적화"],
@@ -65,7 +65,7 @@ export const CURRICULUM_INFO = {
   basicSessionDescription: `방학 동안 파이썬 실습과 머신러닝 기초를 함께 배워요.
 개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 기초를 탄탄히 다지고, 팀 단위로 토이프로젝트를 진행합니다.`,
   advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구합니다.
-자연어처리, 컴퓨터비전, 데이터엔지니어링 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고, 학기 말 정기 학술제를 진행합니다.`,
+자연어 처리, 컴퓨터 비전, 데이터 엔지니어링 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고, 학기 말 정기 학술제를 진행합니다.`,
   basicTrackTitle: "기초 세션",
   basicTrackDescription: `방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
 이론과 실습을 통해 단계별로 실력을 쌓아갑니다.`,
@@ -126,7 +126,7 @@ export const CURRICULUM_INFO = {
     {
       id: "de",
       label: "DE",
-      title: "데이터엔지니어링",
+      title: "데이터 엔지니어링",
       description: "대규모 데이터를 효율적으로 수집, 저장, 처리하는 인프라를 구축하는 기술을 학습합니다. ETL 파이프라인, 분산 처리 시스템, 클라우드 서비스를 활용한 데이터 플랫폼 구축을 다룹니다.",
       topics: [
         { title: "데이터 파이프라인", color: "primary" as const },
@@ -137,7 +137,7 @@ export const CURRICULUM_INFO = {
     {
       id: "nlp",
       label: "NLP",
-      title: "자연어처리",
+      title: "자연어 처리",
       description: "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 뉴스/댓글/문서 같은 실제 데이터를 기반으로 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 NLP 파이프라인을 경험합니다.",
       topics: [
         { title: "분류/요약", color: "primary" as const },
@@ -148,7 +148,7 @@ export const CURRICULUM_INFO = {
     {
       id: "cv",
       label: "CV",
-      title: "컴퓨터비전",
+      title: "컴퓨터 비전",
       description: "Computer Vision은 기계로 하여금 이미지와 비디오에서 의미 있는 데이터를 해석하고 분석하며 추출할 수 있게 합니다. 딥러닝과 신경망 등 다양한 기술이 사용되며, 이를 통해 기계가 사물을 인식하거나, 상황을 인지하고, 심지어 새로운 이미지를 생성하기도 합니다. 다시 말해, Computer Vision이란 인간의 시각과 시각 데이터를 해석하는 인지 능력을 복제하는 것입니다.",
       topics: [
         { title: "사물 인식", color: "primary" as const },
@@ -159,7 +159,7 @@ export const CURRICULUM_INFO = {
     {
       id: "aie",
       label: "AIE",
-      title: "AI엔지니어링",
+      title: "AI 엔지니어링",
       description: "파운데이션 모델을 실제 애플리케이션에 작용하기 위한 AI 엔지니어링 과정을 다룹니다. 모델 이해와 평가에서 출발하여 프롬프트 설계와 컨텍스트 관리, RAG와 에이전트 설계, 파인튜닝과 데이터 추론, 성능 최적화와 피드백 루프까지 이어지는 전 과정을 통해 운영 환경에서 마주하는 실제 개발 과제를 안정적으로 해결하기 위한 판단 기준과 설계 원리를 학습합니다.",
       topics: [
         { title: "프롬프트 설계", color: "primary" as const },

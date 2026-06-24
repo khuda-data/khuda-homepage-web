@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
 import { Label } from "@/components/ui/label";
 import { getPlaceholder } from "@/lib/questionUtils";
 import type { Question } from "@/lib/api";
@@ -15,9 +16,9 @@ export const TextInputField = ({ question, answer, onAnswerChange }: TextInputFi
   
   return (
     <div key={question.id} className="space-y-3 w-full">
-      <Label htmlFor={questionId} className="text-xs sm:text-sm font-semibold flex items-center flex-wrap gap-2">
+      <Label htmlFor={questionId} className="text-sm font-semibold text-[#333D4B] flex items-center flex-wrap gap-2">
         {question.question}
-        {question.required && <span className="text-blue-500">*</span>}
+        {question.required && <RequiredMark />}
       </Label>
       <Input
         id={questionId}
@@ -31,10 +32,10 @@ export const TextInputField = ({ question, answer, onAnswerChange }: TextInputFi
         placeholder={getPlaceholder(question.question)}
         required={question.required}
         maxLength={question.max_len || undefined}
-        className="w-full h-11 sm:h-12 rounded-xl bg-secondary/30 border-border/50 focus:border-blue-600/60 focus:outline-none transition-all duration-200 ease-out focus:scale-[1.005] focus:shadow-md focus:shadow-blue-600/10 text-sm sm:text-base min-h-[44px]"
+        className="w-full h-12 rounded-xl bg-[#F2F4F6] border border-transparent focus:bg-white focus:border-[#3182F6] focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors duration-200 text-sm sm:text-base min-h-[48px] placeholder:text-[#B0B8C1]"
       />
       {isPhoneField && (
-        <p className="text-xs text-muted-foreground mt-1">하이픈(-)을 포함하여 입력해주세요. 예: 010-1234-5678</p>
+        <p className="text-xs text-[#8B95A1] mt-1">하이픈(-)을 포함하여 입력해주세요. 예: 010-1234-5678</p>
       )}
     </div>
   );

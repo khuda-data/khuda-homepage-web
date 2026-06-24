@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { FileText, Circle } from "lucide-react";
+import { RequiredMark } from "@/components/pages/Apply/RequiredMark";
+import { Circle } from "lucide-react";
 import { getCheckboxContainerClass } from "@/lib/form-utils";
 import { APPLICATION_FORM_CONFIG } from "@/lib/constants";
 import type { Question } from "@/lib/api";
@@ -17,31 +17,31 @@ export const PrivacyConsentCard = ({
   onAnswerChange,
 }: PrivacyConsentCardProps) => {
   return (
-    <Card key={question.id} className="relative border border-border shadow-lg bg-card overflow-hidden">
+    <Card key={question.id} className="relative rounded-2xl border border-[#E8EBED] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden">
       <CardHeader>
-        <CardTitle className="text-lg sm:text-xl text-foreground flex items-center gap-3">
-          <FileText className="w-5 h-5 text-blue-600" />
+        <CardTitle className="text-lg sm:text-xl font-bold text-[#191F28] flex items-center gap-2">
           {question.question}
-          {question.required && <span className="text-blue-500">*</span>}
+          {question.required && <RequiredMark />}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="bg-secondary/30 p-4 sm:p-6 rounded-xl border border-border/50">
-          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-center">{APPLICATION_FORM_CONFIG.privacyConsent.title}</h3>
-          <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm leading-relaxed">
-            <div>
-              <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
-              <p className="mb-2 text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
-              <p className="mb-2"><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.purpose}</strong></p>
-              <p><strong>{APPLICATION_FORM_CONFIG.privacyConsent.section1.items}</strong></p>
+        <div className="rounded-2xl border border-[#E8EBED] bg-white overflow-hidden">
+          <div className="px-4 sm:px-5 py-4 space-y-5 text-xs sm:text-[13px] leading-relaxed">
+            <div className="space-y-2">
+              <p className="font-semibold text-[#333D4B]">{APPLICATION_FORM_CONFIG.privacyConsent.section1.title}</p>
+              <p className="text-[#4E5968]">{APPLICATION_FORM_CONFIG.privacyConsent.section1.description}</p>
+              <div className="space-y-1.5 text-[#4E5968]">
+                <p>{APPLICATION_FORM_CONFIG.privacyConsent.section1.purpose}</p>
+                <p>{APPLICATION_FORM_CONFIG.privacyConsent.section1.items}</p>
+              </div>
             </div>
-            <div>
-              <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section2.title}</p>
-              <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section2.description}</p>
+            <div className="space-y-2">
+              <p className="font-semibold text-[#333D4B]">{APPLICATION_FORM_CONFIG.privacyConsent.section2.title}</p>
+              <p className="text-[#4E5968]">{APPLICATION_FORM_CONFIG.privacyConsent.section2.description}</p>
             </div>
-            <div>
-              <p className="font-semibold mb-2">{APPLICATION_FORM_CONFIG.privacyConsent.section3.title}</p>
-              <p className="text-muted-foreground">{APPLICATION_FORM_CONFIG.privacyConsent.section3.description}</p>
+            <div className="space-y-2">
+              <p className="font-semibold text-[#333D4B]">{APPLICATION_FORM_CONFIG.privacyConsent.section3.title}</p>
+              <p className="text-[#4E5968]">{APPLICATION_FORM_CONFIG.privacyConsent.section3.description}</p>
             </div>
           </div>
         </div>
@@ -54,22 +54,17 @@ export const PrivacyConsentCard = ({
               onAnswerChange(question.id, answer === "agree" ? "" : "agree");
             }}
           >
-            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+            <div className={`h-5 w-5 rounded-full border flex items-center justify-center transition-colors duration-200 flex-shrink-0 ${
               answer === "agree"
-                ? "border-blue-600 bg-blue-600"
-                : "border-border"
+                ? "border-[#3182F6] bg-[#3182F6]"
+                : "border-[#D1D6DB] bg-white"
             }`}>
               {answer === "agree" && (
-                <Circle className="h-2.5 w-2.5 fill-current text-white" />
+                <Circle className="h-2 w-2 fill-current text-white" />
               )}
             </div>
-            <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-              <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
-              {answer === "agree" && (
-                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                  선택됨
-                </Badge>
-              )}
+            <div className="cursor-pointer font-medium flex-1 flex items-center gap-2 text-[#191F28]">
+              <span>{APPLICATION_FORM_CONFIG.privacyConsent.agreeText}</span>
             </div>
           </div>
           <div 
@@ -80,22 +75,17 @@ export const PrivacyConsentCard = ({
               onAnswerChange(question.id, answer === "disagree" ? "" : "disagree");
             }}
           >
-            <div className={`h-5 w-5 sm:h-4 sm:w-4 rounded-full border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+            <div className={`h-5 w-5 rounded-full border flex items-center justify-center transition-colors duration-200 flex-shrink-0 ${
               answer === "disagree"
-                ? "border-blue-600 bg-blue-600"
-                : "border-border"
+                ? "border-[#3182F6] bg-[#3182F6]"
+                : "border-[#D1D6DB] bg-white"
             }`}>
               {answer === "disagree" && (
-                <Circle className="h-2.5 w-2.5 fill-current text-white" />
+                <Circle className="h-2 w-2 fill-current text-white" />
               )}
             </div>
-            <div className="cursor-pointer font-medium flex-1 flex items-center gap-2">
-              <span className="transition-all duration-200">{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
-              {answer === "disagree" && (
-                <Badge className="bg-blue-600 text-white text-[10px] px-1.5 py-0 h-4 rounded-md animate-in fade-in zoom-in-95 duration-200">
-                  선택됨
-                </Badge>
-              )}
+            <div className="cursor-pointer font-medium flex-1 flex items-center gap-2 text-[#191F28]">
+              <span>{APPLICATION_FORM_CONFIG.privacyConsent.disagreeText}</span>
             </div>
           </div>
         </div>

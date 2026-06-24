@@ -14,6 +14,8 @@ export interface Question {
   required: boolean;
   max_len: number | null;
   position: number;
+  // 기본 인적사항용 옵션(성별/재학상태/학년/거주지 등 select 필드). 백엔드 연결 전 mock 단계에서 사용.
+  options?: string[];
 }
 
 export interface QuestionsResponse {
