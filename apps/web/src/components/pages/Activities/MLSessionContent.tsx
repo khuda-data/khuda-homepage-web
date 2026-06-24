@@ -4,10 +4,10 @@ const MLSessionContent = () => (
   <div>
     <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">01 · Session</p>
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
-      기초 세션 (ML Session)
+      기초 세션 (ML·DL Session)
     </h3>
     <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
-      방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.
+      방학 기간 동안 머신러닝과 딥러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.
       주차별 교재 기반으로 핵심 개념 발제 및 코드 중심 학습, 이론·코드 퀴즈 및 해설 세션,
       팀 단위 주제 토의를 통해 개념을 설명하고 질문할 수 있는 수준까지 도달하는 것을 목표로 합니다.
     </p>

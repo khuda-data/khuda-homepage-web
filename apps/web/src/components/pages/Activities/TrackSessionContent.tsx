@@ -15,20 +15,21 @@ const TrackSessionContent = () => (
     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
       심화 세션 (Track Session)
     </h3>
-    <div className="flex flex-wrap gap-2 mb-5">
+    <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-5">
       {tracks.map((track) => (
         <span
           key={track.name}
-          className="px-3 py-1.5 rounded-full bg-muted text-foreground/70 text-xs sm:text-sm font-medium"
+          className="inline-flex items-baseline gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-border shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
         >
-          {track.name}
+          <span className="text-sm font-bold text-foreground">{track.fullName}</span>
+          <span className="text-[11px] font-medium text-muted-foreground">{track.name}</span>
         </span>
       ))}
     </div>
     <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
       학기 중에는 관심 분야에 따라 6개 트랙 중 선택하여 보다 전문적인 주제와 실제 적용 사례를 다룹니다.
       트랙장 주관 심화 이론 및 적용 기법 학습, 최신 논문, 산업 사례, 실무 관점 공유를 통해
-      같은 '머신러닝'이라도 분야에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
+      같은 '데이터·AI 분야'라도 세부 트랙에 따라 어떻게 달라지는지 이해하는 단계로 나아갑니다.
     </p>
 
     <ImageGallery

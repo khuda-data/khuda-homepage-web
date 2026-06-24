@@ -20,7 +20,7 @@ const timelineSteps = [
   { id: "toy-project", label: "토이 프로젝트", number: "02" },
   { id: "track-session", label: "심화 세션", number: "03" },
   { id: "datathon", label: "데이터톤", number: "04" },
-  { id: "academic-festival", label: "학술제", number: "05" },
+  { id: "academic-festival", label: "정기 학술제", number: "05" },
 ];
 
 const sectionComponents: Record<string, React.FC> = {
