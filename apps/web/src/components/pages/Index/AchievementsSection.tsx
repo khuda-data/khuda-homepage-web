@@ -32,7 +32,7 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
           </span>
         </h2>
         <p className="text-sm sm:text-base text-foreground mt-3 sm:mt-4">
-          데이터와 AI를 함께 탐구하며 성장하는 경희대 대표 학회
+          데이터와 AI를 함께 탐구하며 성장하는 경희대학교 대표 학회
         </p>
       </div>
 

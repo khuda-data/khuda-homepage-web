@@ -24,7 +24,7 @@ const SponsorShowcase = ({ sponsors }: SponsorShowcaseProps) => {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight sm:leading-[1.15] tracking-tight mb-3 sm:mb-4 md:mb-5">
             SPONSOR
           </h2>
-          <p className="text-sm sm:text-sm md:text-base text-foreground leading-relaxed">
+          <p className="text-sm sm:text-sm md:text-base text-foreground leading-relaxed break-keep">
             KHUDA와 새로운 가치를 만들어갈 후원 및 협업 문의, 언제든 기다리고 있습니다.
           </p>
         </div>
