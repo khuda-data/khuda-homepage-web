@@ -34,6 +34,17 @@ const getMissingRequiredQuestions = (questions: Question[], answers: Record<stri
     const required = q.required || (isStudyDetail && wantsStudy);
     if (!required) return false;
     const answer = answers[q.id.toString()];
+    // 확인 체크리스트는 모든 항목이 체크되어야 통과한다.
+    if (q.field_type === "checklist") {
+      const options = q.options ?? [];
+      let checked: string[] = [];
+      try {
+        checked = JSON.parse(answer || "[]");
+      } catch {
+        checked = [];
+      }
+      return options.some((option) => !checked.includes(option));
+    }
     return !answer || answer.trim() === "" || answer === "[]" || answer === "{}";
   });
 };

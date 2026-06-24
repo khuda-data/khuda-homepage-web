@@ -1,6 +1,8 @@
 import type { Question, InterviewSchedule } from "@/lib/api";
 import { InterviewDateSelector } from "@/components/pages/Apply/InterviewDateSelector";
 import { PythonLevelSelector } from "@/components/pages/Apply/PythonLevelSelector";
+import { CourseExperienceField } from "@/components/pages/Apply/CourseExperienceField";
+import { ConfirmChecklistField } from "@/components/pages/Apply/ConfirmChecklistField";
 import { LongTextQuestion } from "@/components/pages/Apply/LongTextQuestion";
 import { StudyCreationSelector } from "@/components/pages/Apply/StudyCreationSelector";
 import { TrackSelector } from "@/components/pages/Apply/TrackSelector";
@@ -96,6 +98,26 @@ export const QuestionRenderer = ({
   if (question.question.includes("파이썬") || question.question.includes("Python")) {
     return (
       <PythonLevelSelector
+        question={question}
+        answer={answer}
+        onAnswerChange={onAnswerChange}
+      />
+    );
+  }
+
+  if (question.field_type === "course_experience") {
+    return (
+      <CourseExperienceField
+        question={question}
+        answer={answer}
+        onAnswerChange={onAnswerChange}
+      />
+    );
+  }
+
+  if (question.field_type === "checklist") {
+    return (
+      <ConfirmChecklistField
         question={question}
         answer={answer}
         onAnswerChange={onAnswerChange}

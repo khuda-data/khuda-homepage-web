@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const NOTICE_ITEMS = [
   "방학 중과 학기 중 모두 경희대학교 국제캠퍼스에서 대면으로 진행됩니다.",
   "데이터 엔지니어링 트랙은 10기에서 운영하지 않습니다.",
-  "YB는 기초 세션과 심화 세션을 이수하고 컨퍼런스에 참가해 산출물을 제출 및 발표해야 수료로 인정됩니다.",
+  "YB는 기초 세션과 심화 세션을 이수하고 정기 학술제에 참가해 산출물을 제출 및 발표해야 수료로 인정됩니다.",
   "OB는 별도의 수료 요건이 없습니다.",
 ];
 
@@ -19,7 +19,7 @@ export const NoticeCard = () => {
           {NOTICE_ITEMS.map((item) => (
             <li
               key={item}
-              className="relative pl-4 text-sm sm:text-[15px] text-[#4E5968] leading-relaxed before:absolute before:left-0 before:top-[9px] before:h-1 before:w-1 before:rounded-full before:bg-[#8B95A1]"
+              className="relative pl-4 text-sm sm:text-[15px] font-semibold text-[#333D4B] leading-relaxed before:absolute before:left-0 before:top-[10px] before:h-1 before:w-1 before:rounded-full before:bg-[#8B95A1]"
             >
               {item}
             </li>
