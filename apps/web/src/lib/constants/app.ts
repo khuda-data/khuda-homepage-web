@@ -16,6 +16,7 @@ export const ROUTES = {
   recruiting: "/recruiting",
   faq: "/faq",
   apply: "/apply",
+  rules: "/rules",
 } as const;
 
 export const IMAGE_PATHS = {

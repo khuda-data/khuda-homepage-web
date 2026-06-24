@@ -10,3 +10,4 @@ export * from "./application";
 export * from "./sponsor";
 export * from "./ui";
 export * from "./about";
+export * from "./bylaws";

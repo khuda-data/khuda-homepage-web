@@ -1,22 +1,23 @@
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { FOOTER_INFO, FOOTER_STYLES, EXTERNAL_LINK_PROPS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
     <footer className={cn(FOOTER_STYLES.footer.base, FOOTER_STYLES.footer.padding)}>
       <div className={cn(FOOTER_STYLES.container.base, FOOTER_STYLES.container.padding)}>
         <div className={cn(FOOTER_STYLES.grid.base, FOOTER_STYLES.grid.gap)}>
           <div className={FOOTER_STYLES.layout.flexCol}>
-            <p className={FOOTER_STYLES.section.organization}>
+            <Link href={FOOTER_INFO.rules.href} className={FOOTER_STYLES.section.rulesLink}>
+              {FOOTER_INFO.rules.label}
+              <ChevronRight className={FOOTER_STYLES.section.rulesIcon} />
+            </Link>
+            <p className={cn(FOOTER_STYLES.section.organization, "mt-6 sm:mt-8")}>
               {FOOTER_INFO.organization}
             </p>
-            <p className={cn(FOOTER_STYLES.section.text.base, "mt-3 sm:mt-4")}>
-              {FOOTER_INFO.description}
-            </p>
-            <p className={cn(FOOTER_STYLES.section.text.small, FOOTER_STYLES.section.spacing.marginTop)}>
-              {FOOTER_INFO.copyright(currentYear)}
+            <p className={cn(FOOTER_STYLES.section.text.small, "mt-2 sm:mt-3")}>
+              {FOOTER_INFO.copyright}
             </p>
           </div>
 

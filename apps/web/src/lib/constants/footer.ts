@@ -1,5 +1,6 @@
 import { Instagram, Link2, Github } from "lucide-react";
 import { SOCIAL_LINKS } from "./contact";
+import { ROUTES } from "./app";
 
 export interface SocialLink {
   id: string;
@@ -9,9 +10,13 @@ export interface SocialLink {
 }
 
 export const FOOTER_INFO = {
+  // 회칙 페이지 이동 링크 (푸터 좌측 상단)
+  rules: {
+    label: "KHUDA 회칙",
+    href: ROUTES.rules,
+  },
   organization: "경희대학교 데이터분석/AI 학회 KHUDA",
-  description: "KYUNGHEE's Leading Society in Data and AI",
-  copyright: (year: number) => `Copyright © ${year} KHUDA. All Rights Reserved.`,
+  copyright: "Copyright © 2022 KHUDA. All Rights Reserved.",
   sections: {
     location: "Location",
     contact: "Contact",
@@ -60,6 +65,8 @@ export const FOOTER_STYLES = {
   },
   section: {
     header: "font-semibold mb-3 sm:mb-4 md:mb-5 text-sm sm:text-base text-black",
+    rulesLink: "inline-flex items-center gap-1 font-bold text-base sm:text-lg text-black hover:opacity-70 transition-opacity",
+    rulesIcon: "w-4 h-4 sm:w-5 sm:h-5",
     organization: "font-bold text-base sm:text-lg text-black",
     text: {
       base: "text-black text-xs sm:text-sm",
