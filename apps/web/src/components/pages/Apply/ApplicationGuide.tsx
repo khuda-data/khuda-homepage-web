@@ -4,9 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const NOTICE_ITEMS = [
   "지원 전 모집 및 활동 일정과 KHUDA 커리큘럼을 꼭 확인해 주세요.",
   "마감 시간 이후에는 지원서를 접수하지 않습니다.",
+  "서버 오류에 대비해 작성 내용을 따로 백업해 두시길 권장합니다.",
   "최종 제출하지 않은 임시저장 지원서는 미제출로 간주하오니 반드시 최종 제출하시길 바랍니다.",
   "제출한 지원서는 수정과 반환이 불가합니다.",
-  "서버 오류에 대비해 작성 내용을 따로 백업해 두시길 권장합니다.",
 ];
 
 export const ApplicationGuide = () => {
