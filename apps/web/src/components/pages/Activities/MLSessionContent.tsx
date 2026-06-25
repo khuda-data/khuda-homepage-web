@@ -3,8 +3,11 @@ import ImageGallery from "./ImageGallery";
 const MLSessionContent = () => (
   <div>
     <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">01 · Session</p>
-    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
-      기초 세션 (ML·DL Session)
+    <h3 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      기초 세션
+      <span className="text-sm sm:text-base md:text-lg font-semibold text-foreground/35">
+        ML·DL Session
+      </span>
     </h3>
     <p className="text-sm sm:text-base text-foreground/60 leading-[1.8] mb-6 sm:mb-8">
       방학 기간 동안 머신러닝과 딥러닝의 기본 개념부터 주요 알고리즘까지, 이론과 실습을 병행하며 탄탄한 기초를 쌓는 세션입니다.

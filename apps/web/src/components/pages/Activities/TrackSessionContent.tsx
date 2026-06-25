@@ -12,8 +12,11 @@ const tracks = [
 const TrackSessionContent = () => (
   <div>
     <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-3">03 · Session</p>
-    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
-      심화 세션 (Track Session)
+    <h3 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
+      심화 세션
+      <span className="text-sm sm:text-base md:text-lg font-semibold text-foreground/35">
+        Track Session
+      </span>
     </h3>
     <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-5">
       {tracks.map((track) => (
