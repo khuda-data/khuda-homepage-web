@@ -93,7 +93,7 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
                 <span className="text-blue-600">KHUDA</span>
               </h2>
               <Link
-                href={ROUTES.activities}
+                href={ROUTES.projects}
                 className="flex-shrink-0 w-7 h-7 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group sm:hidden"
               >
                 <ArrowRight className="w-3.5 h-3.5 text-gray-900 group-hover:text-white transition-colors duration-300" />
@@ -108,7 +108,7 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
             </p>
           </div>
           <Link
-            href={ROUTES.activities}
+            href={ROUTES.projects}
             className="hidden sm:flex flex-shrink-0 w-12 sm:w-12 md:w-14 md:h-14 rounded-full border-2 border-gray-300 items-center justify-center hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all duration-300 group mt-3 self-start"
           >
             <ArrowRight className="w-6 sm:w-6 text-gray-900 group-hover:text-white transition-colors duration-300" />
