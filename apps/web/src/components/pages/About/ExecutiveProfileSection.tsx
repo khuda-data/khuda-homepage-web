@@ -113,8 +113,10 @@ const ComingSoonBlock = () => (
 const ExecutiveProfileSection = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
 
-  // 현재 기수는 기본으로 펼쳐둔다.
+  // 현재 기수는 기수 라벨(예: "10기") 행 없이 카드만 바로 노출한다.
+  // 과거 기수만 아코디언으로 접어둔다.
   const currentGeneration = EXECUTIVE_PROFILES[0];
+  const pastGenerations = EXECUTIVE_PROFILES.slice(1);
 
   return (
     <section className="relative bg-background text-foreground pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-16 sm:pb-20 md:pb-24 lg:pb-28">
@@ -133,31 +135,41 @@ const ExecutiveProfileSection = () => {
             </h2>
           </div>
 
-          {/* 기수 단위 아코디언 (다중 펼침, 얇은 구분선) */}
-          <Accordion
-            type="multiple"
-            defaultValue={[currentGeneration.generation]}
-            className="mt-10 sm:mt-14 md:mt-16 w-full border-t border-border"
-          >
-            {EXECUTIVE_PROFILES.map((generation) => (
-              <AccordionItem
-                key={generation.generation}
-                value={generation.generation}
-                className="border-b border-border"
-              >
-                <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-base sm:text-lg md:text-xl font-bold text-gray-900 hover:no-underline">
-                  {generation.generation}
-                </AccordionTrigger>
-                <AccordionContent className="pb-6 sm:pb-7 md:pb-8">
-                  {generation.comingSoon ? (
-                    <ComingSoonBlock />
-                  ) : (
-                    <ExecutiveGrid executives={generation.executives} />
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {/* 현재 기수: 기수 라벨 표시 안 함, 카드만 바로 노출 */}
+          <div className="mt-10 sm:mt-14 md:mt-16">
+            {currentGeneration.comingSoon ? (
+              <ComingSoonBlock />
+            ) : (
+              <ExecutiveGrid executives={currentGeneration.executives} />
+            )}
+          </div>
+
+          {/* 과거 기수: 아코디언 (다중 펼침, 얇은 구분선) */}
+          {pastGenerations.length > 0 && (
+            <Accordion
+              type="multiple"
+              className="mt-12 sm:mt-16 md:mt-20 w-full border-t border-border"
+            >
+              {pastGenerations.map((generation) => (
+                <AccordionItem
+                  key={generation.generation}
+                  value={generation.generation}
+                  className="border-b border-border"
+                >
+                  <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-base sm:text-lg md:text-xl font-bold text-gray-900 hover:no-underline">
+                    {generation.generation}
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-6 sm:pb-7 md:pb-8">
+                    {generation.comingSoon ? (
+                      <ComingSoonBlock />
+                    ) : (
+                      <ExecutiveGrid executives={generation.executives} />
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </div>
       </div>
     </section>
