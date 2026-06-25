@@ -20,11 +20,88 @@ export interface GenerationExecutives {
 
 export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
   {
-    // 10기 운영진은 아직 공개 전이라 커밍순으로 둔다.
-    // 명단이 확정되면 comingSoon을 지우고 executives를 채운다.
+    // 트랙장은 아직 미정이라 제외했다. 확정되면 role "트랙장" + department(트랙명)으로 추가한다.
     generation: "10기",
-    comingSoon: true,
-    executives: [],
+    executives: [
+      {
+        name: "표지훈",
+        role: "회장",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "pjh7639@khu.ac.kr",
+      },
+      {
+        name: "이세혁",
+        role: "부회장",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "tpgur0125@khu.ac.kr",
+      },
+      {
+        name: "김연길",
+        role: "교육부장",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "mcladinz@khu.ac.kr",
+      },
+      {
+        name: "이채경",
+        role: "교육부원",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "leecg1219@khu.ac.kr",
+      },
+      {
+        name: "정시찬",
+        role: "교육부원",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "jsc66519075@khu.ac.kr",
+      },
+      {
+        name: "남필량",
+        role: "기획부장",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "philipn337@khu.ac.kr",
+      },
+      {
+        name: "김은아",
+        role: "기획부원",
+        affiliation: "국제대학 국제학과",
+        email: "sarahkim3494@gmail.com",
+      },
+      {
+        name: "김민영",
+        role: "기획부원",
+        affiliation: "생명과학대학 스마트팜과학과",
+        email: "alsdud8863@khu.ac.kr",
+      },
+      {
+        name: "최수민",
+        role: "기획부원",
+        affiliation: "공과대학 산업경영공학과",
+        email: "chsumin0316@khu.ac.kr",
+      },
+      {
+        name: "조윤수",
+        role: "대외홍보부장",
+        affiliation: "공과대학 산업경영공학과",
+        email: "yoonsoo2002@khu.ac.kr",
+      },
+      {
+        name: "장은서",
+        role: "대외홍보부원",
+        affiliation: "공과대학 산업경영공학과",
+        email: "esc6829@khu.ac.kr",
+      },
+      {
+        name: "유민서",
+        role: "대외홍보부원",
+        affiliation: "전자정보대학 생체의공학과",
+        email: "minser2005@khu.ac.kr",
+      },
+      {
+        name: "김나균",
+        role: "대외홍보부원",
+        affiliation: "공과대학 산업경영공학과",
+        email: "0503kng@khu.ac.kr",
+      },
+    ],
   },
   {
     generation: "9기",

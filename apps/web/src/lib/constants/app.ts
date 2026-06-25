@@ -22,6 +22,7 @@ export const ROUTES = {
 export const IMAGE_PATHS = {
   //logo: "/images/logos/khuda-logo.png",
   logo: "/images/logos/khuda-logo-white.png",
+  icon: "/images/logos/khuda-icon.png",
 };
 
 export const EXTERNAL_LINK_PROPS = {

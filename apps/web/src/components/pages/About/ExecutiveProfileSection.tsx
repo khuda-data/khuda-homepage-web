@@ -1,9 +1,17 @@
-import { useState } from "react";
+"use client";
+
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { IMAGE_PATHS } from "@/lib/constants/app";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/data/executives";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -19,171 +27,137 @@ const openExecutiveEmail = (executive: ExecutiveProfile) => {
   window.open(gmailUrl, "_blank", "noopener,noreferrer");
 };
 
+/** 카드에 표시할 직책 라벨 (트랙장은 트랙명을 앞에 붙인다) */
+const getRoleLabel = (executive: ExecutiveProfile): string => {
+  if (executive.role === "트랙장" && executive.department) {
+    return `${executive.department} 트랙장`;
+  }
+  // 겸임(예: 부회장 + 트랙장)인 경우 구분자로 두 직책을 나란히 표기한다.
+  if (executive.department && executive.role !== "트랙장") {
+    return `${executive.role} / ${executive.department} 트랙장`;
+  }
+  return executive.role;
+};
+
 const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
-  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-5 hover:shadow-md hover:border-gray-300 hover:bg-gray-100 transition-all duration-300 flex flex-col group">
-    <div className="text-center mb-3 sm:mb-4">
-      <h4 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5">
+  // 명함 스타일: 정식 명함 비율(90:55) + 좌측 정렬 정보 + 우상단 KHUDA 아이콘
+  <div className="group relative flex aspect-[90/55] flex-col justify-between rounded-2xl border border-[#E8EBED] bg-white p-5 sm:p-6 text-left shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
+    {/* 우상단 KHUDA 아이콘 */}
+    <img
+      src={IMAGE_PATHS.icon}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute right-5 top-5 h-9 w-9 sm:h-11 sm:w-11 opacity-90"
+    />
+
+    {/* 이름 + 직책 */}
+    <div className="pr-12">
+      <h4 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
         {executive.name}
       </h4>
-      <p className="text-xs sm:text-sm text-gray-600 font-medium">
-        {executive.role === "트랙장" && executive.department
-          ? `${executive.department} ${executive.role}`
-          : executive.department && executive.role !== "트랙장"
-          ? `${executive.role} · ${executive.department} 트랙장`
-          : executive.role}
+      <p className="mt-1 text-xs sm:text-sm font-semibold text-gray-500">
+        {getRoleLabel(executive)}
       </p>
     </div>
 
-    {((executive.affiliation || executive.department) || executive.email) && (
-      <div className="flex items-center justify-center gap-2 sm:gap-3 mt-auto pt-2 sm:pt-3 border-t border-gray-100 text-[10px] sm:text-xs text-gray-500">
-        {(executive.affiliation || executive.department) && (
-          <span className="leading-relaxed truncate" title={executive.affiliation || executive.department}>
-            {executive.affiliation || executive.department}
-          </span>
-        )}
-        {(executive.affiliation || executive.department) && executive.email && (
-          <span className="text-gray-300 flex-shrink-0">|</span>
-        )}
-        {executive.email && (
-          <button
-            type="button"
-            onClick={() => openExecutiveEmail(executive)}
-            className="text-gray-400 hover:text-gray-600 transition-colors duration-200 flex-shrink-0 p-0 border-0 bg-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 rounded"
-            aria-label={`${executive.name}님에게 이메일 보내기`}
-          >
-            <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-        )}
-      </div>
-    )}
+    {/* 소속 + 이메일 */}
+    <div className="mt-4 space-y-1.5">
+      {executive.affiliation && (
+        <p className="text-[11px] sm:text-xs leading-relaxed text-gray-400 break-keep">
+          {executive.affiliation}
+        </p>
+      )}
+      {executive.email && (
+        <button
+          type="button"
+          onClick={() => openExecutiveEmail(executive)}
+          className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-gray-600 transition-colors duration-200 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 rounded"
+          aria-label={`${executive.name}님에게 이메일 보내기`}
+        >
+          <Mail className="h-3.5 w-3.5 flex-shrink-0" />
+          <span className="truncate">{executive.email}</span>
+        </button>
+      )}
+    </div>
   </div>
 );
 
 const ExecutiveGrid = ({ executives }: { executives: ExecutiveProfile[] }) => (
-  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-5 max-w-7xl mx-auto w-full">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
     {executives.map((executive, index) => (
       <ExecutiveCard key={`${executive.name}-${index}`} executive={executive} />
     ))}
   </div>
 );
 
+// 운영진 명단 확정 전 기수에 노출되는 안내 블록
+const ComingSoonBlock = () => (
+  <div className="py-2 sm:py-4">
+    <p className="mb-6 sm:mb-8 text-base sm:text-lg font-bold text-gray-900">
+      곧 새로운 운영진으로 업데이트됩니다
+    </p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className="aspect-[90/55] rounded-2xl border border-[#E8EBED] bg-white p-5 sm:p-6"
+        >
+          <div className="mb-3 h-4 w-16 rounded-full bg-[#F2F4F6]" />
+          <div className="h-3 w-12 rounded-full bg-[#F2F4F6]/80" />
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const ExecutiveProfileSection = () => {
   const { ref, isVisible } = useScrollAnimation(SCROLL_REVEAL_OPTIONS);
-  const [expandedGenerations, setExpandedGenerations] = useState<Set<string>>(
-    new Set()
-  );
 
-  // 현재 기수는 기본으로 표시, 이전 기수는 토글로
+  // 현재 기수는 기본으로 펼쳐둔다.
   const currentGeneration = EXECUTIVE_PROFILES[0];
-  const pastGenerations = EXECUTIVE_PROFILES.slice(1);
-
-  const toggleGeneration = (generation: string) => {
-    const newExpanded = new Set(expandedGenerations);
-    if (newExpanded.has(generation)) {
-      newExpanded.delete(generation);
-    } else {
-      newExpanded.add(generation);
-    }
-    setExpandedGenerations(newExpanded);
-  };
 
   return (
-    <section className="relative bg-background pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-16 sm:pb-20 md:pb-24 lg:pb-28">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+    <section className="relative bg-background text-foreground pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-16 sm:pb-20 md:pb-24 lg:pb-28">
+      <div className="container mx-auto max-w-5xl px-4 sm:px-6 md:px-8 lg:px-12">
         <div
           ref={ref}
           className={cn(
-            "max-w-7xl mx-auto transition-all duration-700 ease-out",
+            "transition-all duration-700 ease-out",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           )}
         >
-          {/* 섹션 제목 */}
-          <div className="mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight text-center px-2">
-              KHUDA를 이끌어가는 운영진을 소개합니다
+          {/* 섹션 제목 (기존 스타일: 가운데 정렬 큰 제목) */}
+          <div className="text-center">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight px-2 break-keep">
+              KHUDA를 이끌어가는 {currentGeneration.generation} 운영진을 소개합니다
             </h2>
           </div>
 
-          {/* 현재 기수 */}
-          <div className="mb-10 sm:mb-12 md:mb-16">
-            {!currentGeneration.comingSoon && (
-              <h3 className="text-lg sm:text-xl md:text-2xl font-medium text-gray-700 mb-8 sm:mb-10 text-center">
-                {currentGeneration.generation}
-              </h3>
-            )}
-            <div className="px-4 sm:px-6 md:px-8">
-              {currentGeneration.comingSoon ? (
-                // 운영진 명단이 확정되기 전까지는 이 커밍순 블록을 그대로 사용한다.
-                // 명단이 정해지면 executives.ts에서 해당 기수의 comingSoon을 지우고 명단을 채우면
-                // 자동으로 아래 ExecutiveGrid가 대신 렌더된다.
-                <div className="max-w-3xl mx-auto py-6 sm:py-8">
-                  <div className="text-center mb-8 sm:mb-10">
-                    <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
-                      곧 새로운 운영진으로 업데이트됩니다
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-                    {Array.from({ length: 3 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col items-center rounded-2xl bg-gray-50 px-4 py-6 sm:py-7"
-                      >
-                        <div className="mb-3 h-12 w-12 rounded-full bg-gray-200" />
-                        <div className="mb-2 h-3 w-16 rounded-full bg-gray-200" />
-                        <div className="h-2.5 w-12 rounded-full bg-gray-200/70" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <ExecutiveGrid executives={currentGeneration.executives} />
-              )}
-            </div>
-          </div>
-
-          {/* 이전 기수 (토글 형태) */}
-          {pastGenerations.length > 0 && (
-            <div className="space-y-3 sm:space-y-4">
-              {pastGenerations.map((generation) => {
-                const isExpanded = expandedGenerations.has(generation.generation);
-
-                return (
-                  <div
-                    key={generation.generation}
-                    className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50 shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-300"
-                  >
-                    {/* 토글 헤더 */}
-                    <button
-                      onClick={() => toggleGeneration(generation.generation)}
-                      className="w-full px-6 sm:px-8 md:px-10 py-4 sm:py-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors duration-200 group"
-                    >
-                      <span className="text-base sm:text-lg md:text-xl font-medium text-gray-900">
-                        {generation.generation}
-                      </span>
-                      <ChevronDown
-                        className={cn(
-                          "w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-gray-600 transition-all duration-200",
-                          isExpanded && "transform rotate-180"
-                        )}
-                      />
-                    </button>
-
-                    {/* 토글 콘텐츠 */}
-                    <div
-                      className={cn(
-                        "overflow-hidden transition-all duration-300 ease-in-out",
-                        isExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
-                      )}
-                    >
-                      <div className="px-4 sm:px-6 md:px-8 py-5 sm:py-6 md:py-8 border-t border-gray-200 bg-gray-50">
-                        <ExecutiveGrid executives={generation.executives} />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          {/* 기수 단위 아코디언 (다중 펼침, 얇은 구분선) */}
+          <Accordion
+            type="multiple"
+            defaultValue={[currentGeneration.generation]}
+            className="mt-10 sm:mt-14 md:mt-16 w-full border-t border-border"
+          >
+            {EXECUTIVE_PROFILES.map((generation) => (
+              <AccordionItem
+                key={generation.generation}
+                value={generation.generation}
+                className="border-b border-border"
+              >
+                <AccordionTrigger className="py-4 sm:py-5 md:py-6 text-base sm:text-lg md:text-xl font-bold text-gray-900 hover:no-underline">
+                  {generation.generation}
+                </AccordionTrigger>
+                <AccordionContent className="pb-6 sm:pb-7 md:pb-8">
+                  {generation.comingSoon ? (
+                    <ComingSoonBlock />
+                  ) : (
+                    <ExecutiveGrid executives={generation.executives} />
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     </section>
