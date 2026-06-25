@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Grainient.css';
 
@@ -125,18 +125,31 @@ const Grainient = ({
   className = ''
 }) => {
   const containerRef = useRef(null);
+  const [webglFailed, setWebglFailed] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = new Renderer({
-      webgl: 2,
-      alpha: true,
-      antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
-    });
+    // WebGL2 컨텍스트 생성에 실패하는 환경(브라우저 WebGL 비활성, GPU 미지원 등)에서는
+    // 배경 셰이더만 조용히 건너뛴다. 실패 시 Hero 전체가 죽지 않도록 방어한다.
+    let renderer;
+    try {
+      renderer = new Renderer({
+        webgl: 2,
+        alpha: true,
+        antialias: false,
+        dpr: Math.min(window.devicePixelRatio || 1, 2)
+      });
+    } catch {
+      setWebglFailed(true);
+      return;
+    }
 
     const gl = renderer.gl;
+    if (!gl) {
+      setWebglFailed(true);
+      return;
+    }
     const canvas = gl.canvas;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
@@ -235,7 +248,14 @@ const Grainient = ({
     color3
   ]);
 
-  return <div ref={containerRef} className={`grainient-container ${className}`.trim()} />;
+  // WebGL이 안 되는 환경에서는 흰 배경으로 노출한다. (셰이더가 정상이면 캔버스가 위를 덮는다)
+  return (
+    <div
+      ref={containerRef}
+      className={`grainient-container ${className}`.trim()}
+      style={webglFailed ? { background: '#ffffff' } : undefined}
+    />
+  );
 };
 
 export default Grainient;
