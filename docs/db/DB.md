@@ -1,166 +1,57 @@
 # DB-SCHEMA
 
-KHUDA 지원서 시스템 DB 테이블 명세. (web 제출 + admin 조회 연동 기준)
+KHUDA 지원서 시스템 DB 테이블 요약. 원본 명세는 백엔드 레포 `khuda-homepage-api`의 `docs/db/DB.md`다. 이 문서는 연동 관점 요약이며 어긋나면 백엔드 명세를 따른다.
 
-설계 원칙
-- 폼 필드는 `form_fields`로 정의해 슬러그(`field_key`) 기반 동적 폼을 지원한다.
-- 지원서 본문 답변은 `application_answers`(EAV)에 `field_key` → `value`(JSONB)로 저장한다. (값의 실제 타입 보존)
-- 목록 필터/정렬에 쓰는 값(이름/연락처/이메일/트랙)은 `applications`에 비정규화해 조회 성능을 확보한다.
-- 관리자 허용 계정은 `admin_users`로 관리한다.
+DBMS: PostgreSQL. 모든 시각 컬럼은 timezone 포함 타입이다.
 
-DBMS 기준: PostgreSQL
-
----
-
-## 1. admin_users
-
-### 1) 테이블 설명
-관리자 앱 로그인 허용 계정(구글 OAuth 단일 공식 계정 검증용 화이트리스트).
-
-### 2) 테이블 이름
-`admin_users`
-
-### 3) 컬럼 명세
-| Key | Name | Type | Constraint(nullable) | Description | Example |
-|-----|------|------|----------------------|-------------|---------|
-| PK | id | BIGSERIAL | NOT NULL | 관리자 식별자 | `1` |
-| - | email | VARCHAR(255) | NOT NULL (UNIQUE) | 구글 계정 이메일 | `khuda.official@gmail.com` |
-| - | name | VARCHAR(50) | NOT NULL | 표시 이름 | `KHUDA 운영진` |
-| - | role | VARCHAR(20) | NOT NULL | 권한 (`admin`) | `admin` |
-| - | is_active | BOOLEAN | NOT NULL | 활성화 여부 | `true` |
-| - | created_at | TIMESTAMPTZ | NOT NULL | 생성 시각 | `2026-06-01T09:00:00+09:00` |
-
-### 4) Example Row
-```json
-{
-  "id": 1,
-  "email": "khuda.official@gmail.com",
-  "name": "KHUDA 운영진",
-  "role": "admin",
-  "is_active": true,
-  "created_at": "2026-06-01T09:00:00+09:00"
-}
-```
+설계 요점
+- 문항은 `questions`에 정의한다. 선택형(select, checklist)의 선택지는 `options`(JSONB)에 담는다.
+- 지원서 답변은 `applications.answers`(JSONB)에 문항 ID를 key로 하는 맵으로 저장한다. (별도 EAV 테이블을 두지 않는다)
+- 운영진 허용 계정은 `admins`로 관리한다.
 
 ---
 
-## 2. form_fields
+## 1. questions
 
-### 1) 테이블 설명
-지원자 유형별 지원서 폼 필드 정의. `GET /api/questions/{type}` 응답의 원본이며 동적 폼 렌더링과 서버 측 검증의 단일 출처(single source).
-
-### 2) 테이블 이름
-`form_fields`
-
-### 3) 컬럼 명세
-| Key | Name | Type | Constraint(nullable) | Description | Example |
-|-----|------|------|----------------------|-------------|---------|
-| PK | id | BIGSERIAL | NOT NULL | 필드 식별자 | `11` |
-| - | applicant_type | VARCHAR(10) | NOT NULL | 적용 유형 (`common` \| `yb` \| `ob`) | `yb` |
-| - | field_key | VARCHAR(50) | NOT NULL | 답변 슬러그 (유형 내 UNIQUE) | `essay_motivation` |
-| - | label | TEXT | NOT NULL | 화면 표시 라벨 | `1. KHUDA에 지원하게 된 계기와 ...` |
-| - | type | VARCHAR(20) | NOT NULL | 위젯 타입 (`text` \| `textarea` \| `select` \| `date` \| `consent` \| `python_level` \| `track` \| `interview_slot`) | `textarea` |
-| - | required | BOOLEAN | NOT NULL | 필수 여부 | `true` |
-| - | max_length | INTEGER | NULL | 최대 글자 수 | `700` |
-| - | options | JSONB | NULL | select 선택지 (`[{value,label}]`) | `[{"value":"M","label":"남"}]` |
-| - | visible_if | JSONB | NULL | 조건부 노출 (`{field,equals}`) | `{"field":"study_intention","equals":"yes"}` |
-| - | required_if | JSONB | NULL | 조건부 필수 (`{field,equals}`) | `{"field":"study_intention","equals":"yes"}` |
-| - | display_order | INTEGER | NOT NULL | 표시 순서 | `11` |
-| - | is_active | BOOLEAN | NOT NULL | 사용 여부 | `true` |
-
-### 4) Example Row
-```json
-{
-  "id": 11,
-  "applicant_type": "yb",
-  "field_key": "essay_motivation",
-  "label": "1. KHUDA에 지원하게 된 계기와 학회 활동을 통해 이루고 싶은 목표는 무엇인가요?",
-  "type": "textarea",
-  "required": true,
-  "max_length": 700,
-  "options": null,
-  "visible_if": null,
-  "required_if": null,
-  "display_order": 11,
-  "is_active": true
-}
-```
+| Key | Name | Type | Null | Description |
+| --- | --- | --- | --- | --- |
+| PK | id | BIGINT | NOT NULL | 문항 ID |
+| - | question | TEXT | NOT NULL | 문항 내용 |
+| - | applicant_type | ENUM(common, yb, ob) | NOT NULL | 문항 대상 유형 |
+| - | field_type | VARCHAR(32) | NOT NULL | 입력 타입 |
+| - | required | BOOLEAN | NOT NULL | 필수 여부 |
+| - | max_len | INTEGER | NULL | 최대 입력 길이 |
+| - | options | JSONB | NULL | 선택지 목록 |
+| - | position | INTEGER | NOT NULL | 정렬 순서 |
+| - | created_at | TIMESTAMPTZ | NOT NULL | 생성 시각 |
 
 ---
 
-## 3. applications
+## 2. applications
 
-### 1) 테이블 설명
-제출된 지원서 1건. 목록 조회, 필터, 정렬에 필요한 값(이름/연락처/이메일/트랙)을 비정규화해 보관하고, 상세 답변은 `application_answers`에 분리 저장한다.
+| Key | Name | Type | Null | Description |
+| --- | --- | --- | --- | --- |
+| PK | id | BIGINT | NOT NULL | 지원서 ID |
+| - | applicant_type | ENUM(yb, ob) | NOT NULL | 지원자 유형 |
+| - | answers | JSONB | NOT NULL | 문항 ID별 답변 맵 |
+| - | status | ENUM(submitted, reviewing, accepted, rejected) | NOT NULL | 처리 상태 (기본 submitted) |
+| - | created_at | TIMESTAMPTZ | NOT NULL | 생성 시각 |
+| - | updated_at | TIMESTAMPTZ | NULL | 운영진이 답변을 수정한 시각 |
+| - | updated_by | VARCHAR(255) | NULL | 답변을 수정한 운영진 이메일 |
 
-### 2) 테이블 이름
-`applications`
-
-### 3) 컬럼 명세
-| Key | Name | Type | Constraint(nullable) | Description | Example |
-|-----|------|------|----------------------|-------------|---------|
-| PK | id | BIGSERIAL | NOT NULL | 지원서 ID | `1042` |
-| - | applicant_type | VARCHAR(10) | NOT NULL | 유형 (`yb` \| `ob`) | `yb` |
-| - | status | VARCHAR(20) | NOT NULL | 상태 (`submitted` \| `reviewing` \| `accepted` \| `rejected`) | `submitted` |
-| - | name | VARCHAR(20) | NOT NULL | 지원자 이름(비정규화) | `홍길동` |
-| - | phone | VARCHAR(20) | NOT NULL | 연락처(비정규화) | `010-1234-5678` |
-| - | email | VARCHAR(60) | NOT NULL | 이메일(비정규화) | `hong@khu.ac.kr` |
-| - | track | VARCHAR(50) | NULL | 트랙 코드(비정규화, 필터용) | `nlp` |
-| - | submitted_at | TIMESTAMPTZ | NOT NULL | 제출 시각 | `2026-07-05T14:20:00+09:00` |
-| - | created_at | TIMESTAMPTZ | NOT NULL | 생성 시각 | `2026-07-05T14:20:00+09:00` |
-| - | updated_at | TIMESTAMPTZ | NOT NULL | 수정 시각 | `2026-07-05T14:20:00+09:00` |
-
-### 4) Example Row
-```json
-{
-  "id": 1042,
-  "applicant_type": "yb",
-  "status": "submitted",
-  "name": "홍길동",
-  "phone": "010-1234-5678",
-  "email": "hong@khu.ac.kr",
-  "track": "nlp",
-  "submitted_at": "2026-07-05T14:20:00+09:00",
-  "created_at": "2026-07-05T14:20:00+09:00",
-  "updated_at": "2026-07-05T14:20:00+09:00"
-}
-```
+- 이메일을 기준으로 1인 1제출만 허용한다(대소문자 무시).
+- 운영진은 답변만 수정하며 상태는 바꾸지 않는다. 수정 시 `updated_at`, `updated_by`를 기록한다.
+- 목록 요약(이름, 연락처, 이메일, 트랙)은 `answers`에서 문항 키워드로 도출한다(별도 비정규화 컬럼 없음).
 
 ---
 
-## 4. application_answers
+## 3. admins
 
-### 1) 테이블 설명
-지원서별 답변 항목(EAV). `field_key`별로 값을 JSONB로 저장해 string/number/boolean/array/object 등 실제 타입을 보존한다. 상세 조회 시 `form_fields`와 `field_key`로 join해 라벨/타입을 부착한다.
+| Key | Name | Type | Null | Description |
+| --- | --- | --- | --- | --- |
+| PK | id | BIGINT | NOT NULL | 운영진 ID |
+| UNIQUE | email | VARCHAR(255) | NOT NULL | 운영진 이메일 (유일) |
+| - | name | VARCHAR(100) | NULL | 이름 |
+| - | created_at | TIMESTAMPTZ | NOT NULL | 등록 시각 |
 
-### 2) 테이블 이름
-`application_answers`
-
-### 3) 컬럼 명세
-| Key | Name | Type | Constraint(nullable) | Description | Example |
-|-----|------|------|----------------------|-------------|---------|
-| PK | id | BIGSERIAL | NOT NULL | 답변 식별자 | `50231` |
-| FK | application_id | BIGINT | NOT NULL | `applications.id` 참조 | `1042` |
-| - | field_key | VARCHAR(50) | NOT NULL | 답변 슬러그 (`form_fields.field_key`) | `interview_slots` |
-| - | value | JSONB | NOT NULL | 답변 값(실제 타입 보존) | `[{"date":"2026-07-08","times":["10:00"]}]` |
-| - | created_at | TIMESTAMPTZ | NOT NULL | 생성 시각 | `2026-07-05T14:20:00+09:00` |
-
-> 제약: `UNIQUE (application_id, field_key)`, `FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE`
-
-### 4) Example Row
-```json
-{
-  "id": 50231,
-  "application_id": 1042,
-  "field_key": "interview_slots",
-  "value": [{ "date": "2026-07-08", "times": ["10:00", "10:20"] }],
-  "created_at": "2026-07-05T14:20:00+09:00"
-}
-```
-
----
-
-## 근거 (Reference)
-- PostgreSQL JSONB: 가변 스키마 값 저장: https://www.postgresql.org/docs/current/datatype-json.html
-- JSON Schema (슬러그 기반 동적 폼 정의): https://json-schema.org
-- 관계형 비정규화 / EAV 패턴: 동적 속성 저장과 조회 성능 절충
+구글 로그인 시 이 테이블에 이메일이 있는 사용자만 인증을 통과한다.
