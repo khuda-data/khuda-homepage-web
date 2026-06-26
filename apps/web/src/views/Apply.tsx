@@ -14,6 +14,7 @@ import { BasicInfoCard } from "@/components/pages/Apply/BasicInfoCard";
 import { BasicInfoField } from "@/components/pages/Apply/BasicInfoField";
 import { QuestionLoading } from "@/components/pages/Apply/QuestionLoading";
 import { QuestionRenderer } from "@/components/pages/Apply/QuestionRenderer";
+import { ConfirmSubmitModal } from "@/components/pages/Apply/ConfirmSubmitModal";
 import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
 
@@ -52,6 +53,9 @@ const Apply = () => {
     setFormData,
     isSubmitted,
     isSubmitting,
+    showConfirmModal,
+    closeConfirmModal,
+    confirmSubmit,
     interviewSchedule,
     updateAnswer,
     handleCheckboxChange,
@@ -211,6 +215,13 @@ const Apply = () => {
           </form>
         </div>
       </main>
+
+      <ConfirmSubmitModal
+        open={showConfirmModal}
+        onCancel={closeConfirmModal}
+        onConfirm={confirmSubmit}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 };
