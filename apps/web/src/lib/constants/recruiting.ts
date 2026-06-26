@@ -12,6 +12,19 @@ export interface ProcessStepInfo {
   fullDate: string;
 }
 
+// KHUDA_GENERATION = "지금 모집 중이거나, 바로 다음에 모집할 기수".
+// 유지보수 규칙: 한 기수 모집이 끝나면 이 값을 다음 기수로 +1 한다.
+//   - 예) 지금은 10기 모집 전/중 → 10. 10기 모집이 끝나면 11로 올린다.
+// 기수는 6개월 주기이며, 짝수 기수는 7월(7~12월 활동) / 홀수 기수는 1월(1~6월 활동)에 모집한다.
+export const KHUDA_GENERATION = 10;
+
+// 모집 대상 기수의 활동 기간 (짝수=하반기 7~12월 / 홀수=상반기 1~6월)
+export const ACTIVITY_PERIOD = KHUDA_GENERATION % 2 === 0 ? "7월부터 12월까지" : "1월부터 6월까지";
+
+// 다음 모집 월: 모집 대상 기수(KHUDA_GENERATION)의 홀짝으로 결정 (짝수=7월 / 홀수=1월)
+//   - 지금 10기(짝수) 기준이면 다음 모집은 7월. 10기 종료 후 11로 올리면 자동으로 1월이 된다.
+export const NEXT_RECRUITMENT_MONTH = KHUDA_GENERATION % 2 === 0 ? "7월" : "1월";
+
 export const RECRUITMENT_INFO = {
   target: "경희대학교 재학생 및 휴학생",
   targetDetails: "전공 무관, 데이터분석/AI에 관심 있는 모든 분",
@@ -66,6 +79,7 @@ export const RECRUITMENT_SCHEDULE = {
     deadline: "2026년 7월 5일 23:59",
     deadlineISO: "2026-07-05T23:59:59",
     short: "6.29~7.5",
+    compact: "6.29 (월) ~ 7.5 (일)",
     full: "2026년 6월 29일 (월) ~ 7월 5일 (일) 23:59",
     dateRange: (start: string, end: string) => `${start} ~ ${end}`,
     deadlineWithLabel: (label: string, deadline: string) => `${label} ${deadline}`,
