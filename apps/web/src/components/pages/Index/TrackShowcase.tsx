@@ -137,12 +137,14 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
               {track.stage}
             </span>
 
-            <div className="mt-2.5 sm:mt-3 flex items-center gap-2">
-              <h3 className="text-sm sm:text-base md:text-lg font-bold leading-tight">
+            <div className="mt-2.5 sm:mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+              <h3 className="text-sm sm:text-base md:text-lg font-bold leading-tight break-keep">
                 {track.title}
               </h3>
-              <span className="h-3 sm:h-3.5 w-px bg-gray-300" />
-              <span className="text-[10px] sm:text-[11px] font-medium text-gray-500">{track.label}</span>
+              <div className="flex items-center gap-2">
+                <span className="hidden sm:block h-3.5 w-px bg-gray-300" />
+                <span className="text-[10px] sm:text-[11px] font-medium text-gray-500">{track.label}</span>
+              </div>
             </div>
 
             <p className="mt-3 sm:mt-4 flex-1 text-[13px] sm:text-sm md:text-base leading-relaxed text-gray-700">
@@ -151,8 +153,8 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
 
             {/* 자세히 보기 화살표: 모바일은 상시 표시, 데스크톱은 hover 시 등장 */}
             <div className="flex justify-end">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30 transition-all duration-200 opacity-100 md:opacity-0 md:translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0">
-                <ArrowUpRight className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30 transition-all duration-200 opacity-100 md:opacity-0 md:translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+                <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
             </div>
           </div>

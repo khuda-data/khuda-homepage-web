@@ -38,7 +38,7 @@ const ApplicationCTA = () => {
         <div className="flex flex-col items-center justify-center gap-8 sm:gap-10 md:gap-12">
           {/* 제목 - 안내 메시지를 제목으로 */}
           <div className="text-center w-full">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-foreground leading-tight sm:leading-[1.15] tracking-tight">
+            <h2 className="text-xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-2.5 md:mb-3 text-foreground leading-tight sm:leading-[1.15] tracking-tight">
               지금은 모집 기간이 아니에요.
             </h2>
           </div>
