@@ -12,6 +12,7 @@ interface SummaryDto {
   email?: string | null;
   phone?: string | null;
   track?: string | null;
+  answers: AnswerDto[];
 }
 
 interface ListDto {
@@ -37,6 +38,15 @@ interface DetailDto {
   answers: AnswerDto[];
 }
 
+const toAnswers = (answers: AnswerDto[]) =>
+  answers.map((a) => ({
+    questionId: a.question_id,
+    question: a.question,
+    fieldType: a.field_type,
+    position: a.position,
+    value: a.value ?? "",
+  }));
+
 const toApplication = (d: SummaryDto): Application => ({
   id: String(d.application_id),
   name: d.name ?? "",
@@ -45,6 +55,7 @@ const toApplication = (d: SummaryDto): Application => ({
   applicationType: d.applicant_type,
   track: d.track ?? "",
   submittedAt: d.created_at,
+  answers: toAnswers(d.answers ?? []),
 });
 
 const toDetail = (d: DetailDto): ApplicationDetail => ({
@@ -54,13 +65,7 @@ const toDetail = (d: DetailDto): ApplicationDetail => ({
   submittedAt: d.created_at,
   updatedAt: d.updated_at,
   updatedBy: d.updated_by,
-  answers: d.answers.map((a) => ({
-    questionId: a.question_id,
-    question: a.question,
-    fieldType: a.field_type,
-    position: a.position,
-    value: a.value ?? "",
-  })),
+  answers: toAnswers(d.answers),
 });
 
 export async function fetchApplications(): Promise<Application[]> {

@@ -1,6 +1,15 @@
 export type ApplicationType = "yb" | "ob";
 
-// 목록 요약 (GET /api/admin/applications)
+// 상세 답변 항목 (목록, 상세 공통)
+export interface AnswerItem {
+  questionId: number;
+  question: string;
+  fieldType: string;
+  position: number;
+  value: string;
+}
+
+// 목록 요약 (GET /api/admin/applications). CSV 내보내기를 위해 답변 전체도 포함한다.
 export interface Application {
   id: string;
   name: string;
@@ -9,15 +18,7 @@ export interface Application {
   applicationType: ApplicationType;
   track: string;
   submittedAt: string; // ISO 8601
-}
-
-// 상세 답변 항목 (GET /api/admin/applications/{id})
-export interface AnswerItem {
-  questionId: number;
-  question: string;
-  fieldType: string;
-  position: number;
-  value: string;
+  answers: AnswerItem[];
 }
 
 export interface ApplicationDetail {

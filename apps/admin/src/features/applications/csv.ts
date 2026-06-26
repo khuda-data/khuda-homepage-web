@@ -9,11 +9,40 @@ function escapeCsv(value: string): string {
   return value;
 }
 
-// 목록 요약 컬럼을 CSV로 내보낸다. 문항별 상세 답변은 상세 화면에서 확인한다.
+// 체크리스트, 면접 등 JSON 문자열 값을 읽기 좋게 편다.
+function readable(value: string): string {
+  if (!value) return "";
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return parsed.join(", ");
+    if (parsed && typeof parsed === "object") {
+      return Object.entries(parsed)
+        .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+        .join(" / ");
+    }
+  } catch {
+    // 평범한 문자열
+  }
+  return value;
+}
+
+// 기본 컬럼 + 모든 문항(첫 등장 순서) 컬럼을 포함한 CSV를 만든다.
 export function applicationsToCsv(applications: Application[]): string {
-  const header = ["이름", "지원유형", "트랙", "연락처", "이메일", "제출일시"];
+  const questionCols: string[] = [];
+  const seen = new Set<string>();
+  for (const app of applications) {
+    for (const a of app.answers) {
+      if (!seen.has(a.question)) {
+        seen.add(a.question);
+        questionCols.push(a.question);
+      }
+    }
+  }
+
+  const header = ["이름", "지원유형", "트랙", "연락처", "이메일", "제출일시", ...questionCols];
 
   const rows = applications.map((app) => {
+    const answerMap = new Map(app.answers.map((a) => [a.question, readable(a.value)]));
     const cells = [
       app.name,
       APPLICATION_TYPE_LABEL[app.applicationType],
@@ -21,6 +50,7 @@ export function applicationsToCsv(applications: Application[]): string {
       app.phone,
       app.email,
       formatDateTime(app.submittedAt),
+      ...questionCols.map((col) => answerMap.get(col) ?? ""),
     ];
     return cells.map((v) => escapeCsv(String(v))).join(",");
   });

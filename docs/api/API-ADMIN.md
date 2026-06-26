@@ -50,6 +50,7 @@
 | applications[].email | string? | 이메일 |
 | applications[].phone | string? | 연락처 |
 | applications[].track | string? | 트랙 |
+| applications[].answers | array | 문항과 답변 전체 (CSV 내보내기용, 상세와 같은 형태) |
 
 에러: 401 `AUTH_401_001`(토큰 없음) / `AUTH_401_002`(유효하지 않은 토큰), 403 `AUTH_403_001`, 500.
 
