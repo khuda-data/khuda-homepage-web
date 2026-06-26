@@ -14,7 +14,7 @@ export interface Question {
   required: boolean;
   max_len: number | null;
   position: number;
-  // 기본 인적사항용 옵션(성별/재학상태/학년/거주지 등 select 필드). 백엔드 연결 전 mock 단계에서 사용.
+  // select, checklist 문항의 선택지. 백엔드 응답에 포함되며 없는 문항은 생략된다.
   options?: string[];
 }
 
