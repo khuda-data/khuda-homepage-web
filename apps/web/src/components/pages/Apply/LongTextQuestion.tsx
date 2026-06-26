@@ -12,7 +12,7 @@ interface LongTextQuestionProps {
 }
 
 export const LongTextQuestion = ({ question, answer, onAnswerChange }: LongTextQuestionProps) => {
-  const maxLen = question.max_len || 700;
+  const maxLen = question.max_len || 500;
   const description = getLongTextDescription(question.question);
 
   return (
