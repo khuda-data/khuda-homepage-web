@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
-import { Mail, Pencil, Phone, Plus, Save, X } from "lucide-react";
+import { Mail, Pencil, Phone, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -249,21 +249,30 @@ export const ApplicationDetailPage = () => {
     <div className="animate-fade-up space-y-4">
       {/* 프로필 헤더 */}
       <Card className="hover:shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            {/* 이름, 유형, 트랙을 한 줄로 */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              {isEditing && headerName ? (
+        {isEditing ? (
+          <div className="space-y-3">
+            {/* 수정 모드: 이름 + 취소/저장 한 줄, 그 아래 유형/트랙 */}
+            <div className="flex items-center gap-2">
+              {headerName && (
                 <Input
                   value={draftVal(headerName)}
                   onChange={(e) => setField(headerName.questionId, e.target.value)}
-                  className="h-9 max-w-[200px] text-lg font-bold"
+                  className="h-9 flex-1 text-lg font-bold"
                 />
-              ) : (
-                <h1 className="truncate text-2xl font-bold tracking-tight">
-                  {headerName?.value || "이름 미상"}
-                </h1>
               )}
+              <Button size="sm" variant="outline" onClick={cancelEdit} disabled={update.isPending}>
+                취소
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleSave}
+                disabled={update.isPending}
+                className="transition-transform active:scale-95"
+              >
+                {update.isPending ? "저장 중..." : "저장"}
+              </Button>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
               <ApplicationTypeBadge type={application.applicationType} />
               {headerTrack && (
                 <span className="text-sm font-medium text-muted-foreground">
@@ -272,29 +281,29 @@ export const ApplicationDetailPage = () => {
               )}
             </div>
           </div>
-
-          {isEditing ? (
-            <div className="flex shrink-0 gap-2">
-              <Button variant="outline" onClick={cancelEdit} disabled={update.isPending}>
-                <X className="size-4" />
-                취소
-              </Button>
-              <Button
-                onClick={handleSave}
-                disabled={update.isPending}
-                className="transition-transform active:scale-95"
-              >
-                <Save className="size-4" />
-                {update.isPending ? "저장 중..." : "저장"}
-              </Button>
-            </div>
-          ) : (
-            <Button variant="outline" onClick={startEdit} className="shrink-0 transition-transform active:scale-95">
+        ) : (
+          /* 보기 모드: 이름, 유형, 트랙, 수정 버튼을 한 줄에 */
+          <div className="flex items-center gap-2">
+            <h1 className="truncate text-xl font-bold tracking-tight sm:text-2xl">
+              {headerName?.value || "이름 미상"}
+            </h1>
+            <ApplicationTypeBadge type={application.applicationType} />
+            {headerTrack && (
+              <span className="truncate text-sm font-medium text-muted-foreground">
+                {headerTrack.value || "트랙 미선택"}
+              </span>
+            )}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={startEdit}
+              className="ml-auto shrink-0 transition-transform active:scale-95"
+            >
               <Pencil className="size-4" />
               수정
             </Button>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="mt-5 grid grid-cols-1 gap-3 border-t border-border pt-5 sm:grid-cols-2">
           <div className="flex items-center gap-2">
