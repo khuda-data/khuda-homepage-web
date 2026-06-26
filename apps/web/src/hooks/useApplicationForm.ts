@@ -95,6 +95,7 @@ export const useApplicationForm = (questions: Question[]) => {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
   const [submittedAt, setSubmittedAt] = useState<Date | null>(null);
   const [interviewSchedule, setInterviewSchedule] = useState<InterviewSchedule | null>(null);
@@ -305,6 +306,15 @@ export const useApplicationForm = (questions: Question[]) => {
       return;
     }
 
+    // 검증을 모두 통과하면 바로 제출하지 않고 확인 모달을 띄운다.
+    setShowConfirmModal(true);
+  };
+
+  const closeConfirmModal = () => setShowConfirmModal(false);
+
+  // 모달에서 확인을 누르면 실제로 제출한다.
+  const confirmSubmit = async () => {
+    setShowConfirmModal(false);
     await handleFinalSubmit();
   };
 
@@ -381,6 +391,9 @@ export const useApplicationForm = (questions: Question[]) => {
     setFormData,
     isSubmitted,
     isSubmitting,
+    showConfirmModal,
+    closeConfirmModal,
+    confirmSubmit,
     submittedApplicationId,
     submittedAt,
     interviewSchedule,
