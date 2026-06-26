@@ -76,7 +76,7 @@ export const LoginPage = () => {
       </div>
 
       {/* 우측 폼 패널 (모바일에선 배경 전체에 Grainient, 카드 없이 글씨만) */}
-      <div className="relative flex w-full flex-col justify-center px-6 py-12 md:w-1/2 md:bg-background md:px-12 lg:w-2/5">
+      <div className="relative flex w-full flex-col justify-center px-5 py-12 md:w-1/2 md:bg-background md:px-12 lg:w-2/5">
         {/* 모바일 배경 */}
         <div className="absolute inset-0 z-0 md:hidden">
           <Grainient {...GRAINIENT_PROPS} className="h-full w-full" />
@@ -96,8 +96,8 @@ export const LoginPage = () => {
           <h2 className="text-2xl font-bold tracking-tight text-[#191f28] md:text-3xl">
             로그인
           </h2>
-          <p className="mt-3 whitespace-nowrap text-[12px] text-[#4e5968]">
-            KHUDA 운영진분들의 개별 이메일 혹은 쿠다 공식 구글 계정으로 로그인해주세요.
+          <p className="mt-3 whitespace-nowrap text-[11px] leading-snug text-[#4e5968] md:text-[13px]">
+            운영진 개별 이메일 또는 쿠다 공식 구글 계정으로 로그인해주세요.
           </p>
 
           <div className="mt-8">
