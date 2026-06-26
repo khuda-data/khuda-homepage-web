@@ -41,17 +41,17 @@ const getRoleLabel = (executive: ExecutiveProfile): string => {
 
 const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
   // 명함 스타일: 정식 명함 비율(90:55) + 좌측 정렬 정보 + 우상단 KHUDA 아이콘
-  <div className="group relative flex aspect-[90/55] flex-col justify-between rounded-2xl border border-[#E8EBED] bg-white p-5 sm:p-6 text-left shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
+  <div className="group relative flex aspect-auto min-h-[128px] sm:min-h-0 sm:aspect-[90/55] flex-col justify-between gap-3 rounded-2xl border border-[#E8EBED] bg-white p-4 sm:p-6 text-left shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
     {/* 우상단 KHUDA 아이콘 */}
     <img
       src={IMAGE_PATHS.icon}
       alt=""
       aria-hidden="true"
-      className="pointer-events-none absolute right-5 top-5 h-9 w-9 sm:h-11 sm:w-11 opacity-90"
+      className="pointer-events-none absolute right-4 top-4 h-8 w-8 sm:right-5 sm:top-5 sm:h-11 sm:w-11 opacity-90"
     />
 
     {/* 이름 + 직책 */}
-    <div className="pr-12">
+    <div className="pr-10 sm:pr-12">
       <h4 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
         {executive.name}
       </h4>
@@ -71,11 +71,11 @@ const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
         <button
           type="button"
           onClick={() => openExecutiveEmail(executive)}
-          className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-medium text-gray-600 transition-colors duration-200 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 rounded"
+          className="inline-flex items-start gap-1.5 text-[11px] sm:text-xs font-medium text-gray-600 transition-colors duration-200 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 rounded text-left"
           aria-label={`${executive.name}님에게 이메일 보내기`}
         >
-          <Mail className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="truncate">{executive.email}</span>
+          <Mail className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+          <span className="break-all">{executive.email}</span>
         </button>
       )}
     </div>
@@ -83,7 +83,7 @@ const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
 );
 
 const ExecutiveGrid = ({ executives }: { executives: ExecutiveProfile[] }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
+  <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
     {executives.map((executive, index) => (
       <ExecutiveCard key={`${executive.name}-${index}`} executive={executive} />
     ))}
@@ -96,11 +96,11 @@ const ComingSoonBlock = () => (
     <p className="mb-6 sm:mb-8 text-base sm:text-lg font-bold text-gray-900">
       곧 새로운 운영진으로 업데이트됩니다
     </p>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className="aspect-[90/55] rounded-2xl border border-[#E8EBED] bg-white p-5 sm:p-6"
+          className="aspect-[90/55] rounded-2xl border border-[#E8EBED] bg-white p-4 sm:p-6"
         >
           <div className="mb-3 h-4 w-16 rounded-full bg-[#F2F4F6]" />
           <div className="h-3 w-12 rounded-full bg-[#F2F4F6]/80" />
@@ -130,7 +130,7 @@ const ExecutiveProfileSection = () => {
         >
           {/* 섹션 제목 (기존 스타일: 가운데 정렬 큰 제목) */}
           <div className="text-center">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight px-2 break-keep">
+            <h2 className="text-sm sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight px-2 break-keep">
               KHUDA를 이끌어가는 {currentGeneration.generation} 운영진을 소개합니다
             </h2>
           </div>
