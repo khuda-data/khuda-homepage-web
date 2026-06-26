@@ -1,9 +1,30 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
+import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import { RECRUITMENT_SCHEDULE } from "@/lib/constants";
 
 export const SubmissionSuccess = () => {
+  // 제출 완료 화면 진입 시 폭죽을 터뜨린다.
+  useEffect(() => {
+    const colors = ["#3182F6", "#22C55E", "#F59E0B", "#EC4899", "#8B5CF6"];
+
+    // 가운데 한 방 크게
+    confetti({ particleCount: 140, spread: 75, origin: { y: 0.6 }, colors });
+
+    // 양쪽에서 잠깐 뿜기
+    const end = Date.now() + 1200;
+    const frame = () => {
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    };
+    frame();
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-background flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-10 sm:py-12">
