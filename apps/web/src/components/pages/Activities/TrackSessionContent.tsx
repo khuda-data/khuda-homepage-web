@@ -18,14 +18,14 @@ const TrackSessionContent = () => (
         Track Session
       </span>
     </h3>
-    <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-5">
+    <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-2.5 mb-5">
       {tracks.map((track) => (
         <span
           key={track.name}
-          className="inline-flex items-baseline gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-border shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+          className="inline-flex items-baseline justify-center sm:justify-start gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-white border border-border shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
         >
-          <span className="text-sm font-bold text-foreground">{track.fullName}</span>
-          <span className="text-[11px] font-medium text-muted-foreground">{track.name}</span>
+          <span className="text-[13px] sm:text-sm font-bold text-foreground break-keep">{track.fullName}</span>
+          <span className="hidden sm:inline text-[11px] font-medium text-muted-foreground">{track.name}</span>
         </span>
       ))}
     </div>
