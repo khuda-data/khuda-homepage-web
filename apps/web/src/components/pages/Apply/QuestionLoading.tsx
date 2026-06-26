@@ -6,7 +6,7 @@ export const QuestionLoading = () => {
         {[0, 150, 300].map((delay) => (
           <span
             key={delay}
-            className="h-2.5 w-2.5 rounded-full bg-[#3182F6] animate-bounce"
+            className="h-2.5 w-2.5 rounded-full bg-[#191F28] animate-bounce"
             style={{ animationDelay: `${delay}ms`, animationDuration: "0.9s" }}
           />
         ))}

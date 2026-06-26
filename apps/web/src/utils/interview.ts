@@ -1,5 +1,5 @@
 const INTERVIEW_TIME_CONFIG = {
-  startHour: 10,
+  startHour: 13,
   endHour: 20,
   minuteInterval: 20,
 } as const;
