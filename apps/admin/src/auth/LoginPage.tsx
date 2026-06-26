@@ -75,31 +75,38 @@ export const LoginPage = () => {
         </div>
       </div>
 
-      {/* 우측 폼 패널 (모바일에선 배경 전체에 Grainient) */}
-      <div className="relative flex w-full flex-col justify-center px-6 py-12 md:w-1/2 md:bg-background lg:w-2/5">
+      {/* 우측 폼 패널 (모바일에선 배경 전체에 Grainient, 카드 없이 글씨만) */}
+      <div className="relative flex w-full flex-col justify-center px-6 py-12 md:w-1/2 md:bg-background md:px-12 lg:w-2/5">
         {/* 모바일 배경 */}
         <div className="absolute inset-0 z-0 md:hidden">
           <Grainient {...GRAINIENT_PROPS} className="h-full w-full" />
-          <div className="absolute inset-0 bg-white/25" />
+          <div className="absolute inset-0 bg-white/20" />
         </div>
 
-        {/* 폼 카드 (모바일: 흰 카드, 데스크톱: 배경에 그대로). 좌측 정렬. */}
-        <div className="relative z-10 mx-auto w-full max-w-sm animate-fade-up rounded-3xl bg-white/95 p-6 shadow-xl backdrop-blur-sm sm:p-8 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
-          <KhudaLogo className="h-auto w-24 md:hidden" />
-          <h2 className="mt-6 text-2xl font-bold tracking-tight text-[#191f28] md:mt-0 md:text-3xl">
+        {/* 로그인 + 안내 + 버튼을 한 묶음으로 좌측 정렬 */}
+        <div className="relative z-10 w-full max-w-md animate-fade-up">
+          {/* 모바일 브랜딩: KHUDA Recruiting 한 줄 */}
+          <div className="mb-8 flex items-center gap-2 md:hidden">
+            <KhudaLogo className="h-auto w-28" />
+            <span className="font-display text-2xl font-semibold tracking-tight text-[#191f28]">
+              Recruiting
+            </span>
+          </div>
+
+          <h2 className="text-2xl font-bold tracking-tight text-[#191f28] md:text-3xl">
             로그인
           </h2>
-          <p className="mt-3 text-[14px] leading-relaxed text-[#4e5968] md:text-[15px]">
-            KHUDA 운영진분들의 개별 이메일로 로그인해주세요. 쿠다 공식 구글 계정으로도 가능해요.
+          <p className="mt-3 whitespace-nowrap text-[12px] text-[#4e5968]">
+            KHUDA 운영진분들의 개별 이메일 혹은 쿠다 공식 구글 계정으로 로그인해주세요.
           </p>
 
-          <div className="mt-8 md:mt-10">
+          <div className="mt-8">
             {/* 모바일 버튼 */}
             <div className="md:hidden">
               <GoogleLogin
                 onSuccess={(res) => handleCredential(res.credential)}
                 onError={() => setError("구글 로그인에 실패했습니다. 다시 시도해주세요.")}
-                width="300"
+                width="320"
                 text="signin_with"
                 shape="pill"
               />
