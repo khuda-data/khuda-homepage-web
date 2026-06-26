@@ -396,14 +396,9 @@ export const ApplicationDetailPage = () => {
         <Card>
           <SectionTitle hint={`${essays.length}문항`}>자기소개서</SectionTitle>
           <div className="space-y-5">
-            {essays.map((a, i) => (
+            {essays.map((a) => (
               <div key={a.questionId}>
-                <div className="flex gap-2">
-                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-xs font-bold text-blue-600">
-                    {i + 1}
-                  </span>
-                  <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
-                </div>
+                <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
                 {isEditing ? (
                   <textarea
                     value={draftVal(a)}
