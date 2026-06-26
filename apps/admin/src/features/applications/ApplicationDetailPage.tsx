@@ -1,192 +1,245 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
+import { Pencil, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { ApplicationAnswer } from "@/types/application";
-import { SECTIONS } from "@/types/application";
-import { useApplications } from "./api";
+import { formatDateTime } from "@/lib/format";
+import type { AnswerItem } from "@/types/application";
+import { useApplication, useUpdateApplication } from "./api";
 import { ApplicationTypeBadge } from "./ApplicationTypeBadge";
 
-// 섹션 등장 순서를 유지하며 답변을 그룹핑
-function groupBySection(answers: ApplicationAnswer[]): [string, ApplicationAnswer[]][] {
-  const groups: [string, ApplicationAnswer[]][] = [];
-  const index = new Map<string, ApplicationAnswer[]>();
-  for (const a of answers) {
-    if (!index.has(a.section)) {
-      const arr: ApplicationAnswer[] = [];
-      index.set(a.section, arr);
-      groups.push([a.section, arr]);
+// 구조화된 값이라 직접 수정하면 깨질 수 있는 문항은 잠근다.
+const LOCKED_FIELD_TYPES = new Set(["checklist", "interview_date", "interview_time", "consent"]);
+
+const cardClass = "rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6";
+
+// answers에서 키워드로 값 찾기 (헤더 표시용)
+function answerByKeyword(answers: AnswerItem[], keyword: string): string {
+  return answers.find((a) => a.question.includes(keyword))?.value ?? "";
+}
+
+// 체크리스트, 면접 등 JSON 문자열 값을 읽기 좋게 표시한다.
+function displayValue(value: string): string {
+  if (!value) return "-";
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return parsed.join(", ");
+    if (parsed && typeof parsed === "object") {
+      return Object.entries(parsed)
+        .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+        .join(" / ");
     }
-    index.get(a.section)!.push(a);
+  } catch {
+    // 평범한 문자열
   }
-  return groups;
+  return value;
 }
 
 const SectionTitle = ({ children }: { children: ReactNode }) => (
   <h2 className="mb-4 text-[15px] font-bold text-foreground">{children}</h2>
 );
 
-const Field = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <p className="text-xs text-muted-foreground">{label}</p>
-    <p className="mt-1 text-[15px] font-medium text-foreground">{value}</p>
-  </div>
-);
-
-const cardClass = "rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6";
-// 스티키 상단바(h-16) 아래로 스크롤되도록 여백
-const SCROLL_OFFSET = 88;
-
 export const ApplicationDetailPage = () => {
-  const { id } = useParams();
-  const { data, isLoading } = useApplications();
-  const application = data?.find((a) => a.id === id) ?? null;
+  const { id = "" } = useParams();
+  const { data: application, isLoading, isError } = useApplication(id);
+  const update = useUpdateApplication(id);
 
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
-  const [activeId, setActiveId] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState<Record<string, string>>({});
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  const grouped = application ? groupBySection(application.answers) : [];
-  const hasInterview = !!application?.interviewTimes?.length;
+  const answers = application?.answers ?? [];
+  const basics = useMemo(() => answers.filter((a) => a.position <= 9), [answers]);
+  const typeAnswers = useMemo(() => answers.filter((a) => a.position >= 10), [answers]);
 
-  // 목차 항목 (답변 섹션 + 면접 희망시간)
-  const navItems = [
-    ...grouped.map(([section], i) => ({ id: `sec-${i}`, label: section })),
-    ...(hasInterview ? [{ id: "sec-interview", label: "면접 희망시간" }] : []),
-  ];
-
-  // 스크롤 위치에 따라 현재 섹션 강조 (노션 목차처럼)
-  useEffect(() => {
-    if (!application) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
-        });
-      },
-      { rootMargin: `-${SCROLL_OFFSET}px 0px -65% 0px` }
-    );
-    Object.values(sectionRefs.current).forEach((el) => {
-      if (el) observer.observe(el);
+  const startEdit = () => {
+    const seed: Record<string, string> = {};
+    answers.forEach((a) => {
+      seed[String(a.questionId)] = a.value;
     });
-    return () => observer.disconnect();
-  }, [application]);
-
-  const scrollToSection = (sectionKey: string) => {
-    const el = sectionRefs.current[sectionKey];
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-    window.scrollTo({ top, behavior: "smooth" });
+    setDraft(seed);
+    setSaveError(null);
+    setIsEditing(true);
   };
 
-  const setRef = (key: string) => (el: HTMLElement | null) => {
-    sectionRefs.current[key] = el;
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setSaveError(null);
+  };
+
+  const setField = (questionId: number, value: string) => {
+    setDraft((prev) => ({ ...prev, [String(questionId)]: value }));
+  };
+
+  const handleSave = async () => {
+    // 잠긴 문항을 제외하고 바뀐 값만 보낸다.
+    const changed: Record<string, string> = {};
+    answers.forEach((a) => {
+      if (LOCKED_FIELD_TYPES.has(a.fieldType)) return;
+      const next = draft[String(a.questionId)] ?? "";
+      if (next !== a.value) changed[String(a.questionId)] = next;
+    });
+
+    if (Object.keys(changed).length === 0) {
+      setIsEditing(false);
+      return;
+    }
+
+    setSaveError(null);
+    try {
+      await update.mutateAsync(changed);
+      setIsEditing(false);
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : "저장에 실패했습니다.");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="animate-fade-up space-y-4">
+        <div className={cardClass}>
+          <Skeleton className="h-7 w-28" />
+          <Skeleton className="mt-3 h-5 w-40" />
+        </div>
+        <div className={cardClass}>
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="mt-4 h-12 w-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !application) {
+    return (
+      <p className="py-16 text-center text-sm text-muted-foreground">
+        지원서를 찾을 수 없습니다.
+      </p>
+    );
+  }
+
+  const renderEditField = (a: AnswerItem) => {
+    if (LOCKED_FIELD_TYPES.has(a.fieldType)) {
+      return (
+        <p className="mt-1.5 whitespace-pre-wrap rounded-lg bg-muted px-3 py-2 text-[15px] text-muted-foreground">
+          {displayValue(a.value)}
+        </p>
+      );
+    }
+    const value = draft[String(a.questionId)] ?? "";
+    if (a.fieldType === "textarea") {
+      return (
+        <textarea
+          value={value}
+          onChange={(e) => setField(a.questionId, e.target.value)}
+          rows={4}
+          className="mt-1.5 w-full rounded-lg border border-border bg-background px-3 py-2 text-[15px] outline-none focus:ring-2 focus:ring-ring"
+        />
+      );
+    }
+    return (
+      <Input
+        value={value}
+        onChange={(e) => setField(a.questionId, e.target.value)}
+        className="mt-1.5"
+      />
+    );
   };
 
   return (
-    <div className="animate-fade-up">
-      {isLoading ? (
-        <div className="space-y-4">
-          <div className={cardClass}>
-            <Skeleton className="h-7 w-28" />
-            <Skeleton className="mt-3 h-5 w-40" />
+    <div className="animate-fade-up space-y-4">
+      {/* 프로필 헤더 */}
+      <div className={cardClass}>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {answerByKeyword(answers, "이름") || "이름 미상"}
+            </h1>
+            <div className="mt-2 flex items-center gap-2 text-sm">
+              <ApplicationTypeBadge type={application.applicationType} />
+              <span className="text-muted-foreground/40">/</span>
+              <span className="text-muted-foreground">
+                {answerByKeyword(answers, "트랙") || "트랙 미선택"}
+              </span>
+            </div>
           </div>
-          <div className={cardClass}>
-            <Skeleton className="h-5 w-24" />
-            <Skeleton className="mt-4 h-12 w-full" />
+
+          {isEditing ? (
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={cancelEdit} disabled={update.isPending}>
+                <X className="size-4" />
+                취소
+              </Button>
+              <Button onClick={handleSave} disabled={update.isPending}>
+                <Save className="size-4" />
+                {update.isPending ? "저장 중..." : "저장"}
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outline" onClick={startEdit}>
+              <Pencil className="size-4" />
+              수정
+            </Button>
+          )}
+        </div>
+
+        <div className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-5">
+          <div>
+            <p className="text-xs text-muted-foreground">연락처</p>
+            <p className="mt-1 text-[15px] font-medium">{answerByKeyword(answers, "연락처") || "-"}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">이메일</p>
+            <p className="mt-1 text-[15px] font-medium">{answerByKeyword(answers, "이메일") || "-"}</p>
           </div>
         </div>
-      ) : !application ? (
-        <p className="py-16 text-center text-sm text-muted-foreground">
-          지원서를 찾을 수 없습니다.
-        </p>
-      ) : (
-        <div className="flex gap-6">
-          {/* 우측 목차 (노션 스타일) */}
-          <nav className="hidden w-44 shrink-0 lg:order-2 lg:block">
-            <div className="sticky top-24">
-              <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                목차
-              </p>
-              <ul className="space-y-1">
-                {navItems.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      onClick={() => scrollToSection(item.id)}
-                      className={cn(
-                        "w-full rounded-lg px-3 py-1.5 text-left text-sm transition-colors",
-                        activeId === item.id
-                          ? "bg-muted font-semibold text-foreground"
-                          : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-                      )}
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
 
-          {/* 본문 */}
-          <div className="min-w-0 flex-1 space-y-4 lg:order-1">
-            {/* 프로필 헤더 */}
-            <div className={cardClass}>
-              <h1 className="text-2xl font-bold tracking-tight">{application.name}</h1>
-              <div className="mt-2 flex items-center gap-2 text-sm">
-                <ApplicationTypeBadge type={application.applicationType} />
-                <span className="text-muted-foreground/40">/</span>
-                <span className="text-muted-foreground">{application.track}</span>
-              </div>
-              <div className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-5">
-                <Field label="연락처" value={application.phone} />
-                <Field label="이메일" value={application.email} />
-              </div>
-            </div>
+        {application.updatedBy && (
+          <p className="mt-4 text-xs text-muted-foreground">
+            마지막 수정: {application.updatedBy}
+            {application.updatedAt ? ` (${formatDateTime(application.updatedAt)})` : ""}
+          </p>
+        )}
+        {saveError && <p className="mt-3 text-sm text-[#f04452]">{saveError}</p>}
+      </div>
 
-            {/* 섹션별 문항 답변 */}
-            {grouped.map(([section, items], i) => {
-              const key = `sec-${i}`;
-              return (
-                <div key={key} id={key} ref={setRef(key)} className={cardClass}>
-                  <SectionTitle>{section}</SectionTitle>
-                  {section === SECTIONS.basic ? (
-                    <div className="grid grid-cols-2 gap-4">
-                      {items.map((a) => (
-                        <Field key={a.questionId} label={a.question} value={a.answer} />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-5">
-                      {items.map((a) => (
-                        <div key={a.questionId}>
-                          <p className="text-sm font-semibold text-[#333d4b]">{a.question}</p>
-                          <p className="mt-1.5 whitespace-pre-wrap text-[15px] leading-relaxed text-[#4e5968]">
-                            {a.answer}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            {/* 면접 희망시간 */}
-            {hasInterview && (
-              <div id="sec-interview" ref={setRef("sec-interview")} className={cardClass}>
-                <SectionTitle>면접 희망시간</SectionTitle>
-                <div className="flex flex-wrap gap-2">
-                  {application.interviewTimes!.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-lg bg-muted px-3 py-1.5 text-sm font-medium text-foreground"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
+      {/* 기본정보 */}
+      {basics.length > 0 && (
+        <div className={cardClass}>
+          <SectionTitle>기본정보</SectionTitle>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {basics.map((a) => (
+              <div key={a.questionId}>
+                <p className="text-xs text-muted-foreground">{a.question}</p>
+                {isEditing ? (
+                  renderEditField(a)
+                ) : (
+                  <p className="mt-1 text-[15px] font-medium">{displayValue(a.value)}</p>
+                )}
               </div>
-            )}
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 유형별 문항 */}
+      {typeAnswers.length > 0 && (
+        <div className={cardClass}>
+          <SectionTitle>유형별 문항</SectionTitle>
+          <div className="space-y-5">
+            {typeAnswers.map((a) => (
+              <div key={a.questionId}>
+                <p className="text-sm font-semibold text-[#333d4b]">{a.question}</p>
+                {isEditing ? (
+                  renderEditField(a)
+                ) : (
+                  <p className="mt-1.5 whitespace-pre-wrap text-[15px] leading-relaxed text-[#4e5968]">
+                    {displayValue(a.value)}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}
