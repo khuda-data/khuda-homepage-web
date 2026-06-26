@@ -96,7 +96,6 @@ export const useApplicationForm = (questions: Question[]) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [submittedApplicationId, setSubmittedApplicationId] = useState<string | null>(null);
   const [submittedAt, setSubmittedAt] = useState<Date | null>(null);
   const [interviewSchedule, setInterviewSchedule] = useState<InterviewSchedule | null>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -330,15 +329,14 @@ export const useApplicationForm = (questions: Question[]) => {
         interviewTimesQuestion?.id.toString() ?? null,
       );
 
-      const response = await submitApplication(formData.applicationType as "yb" | "ob", payload);
+      await submitApplication(formData.applicationType as "yb" | "ob", payload);
 
-      setSubmittedApplicationId(response.application_id.toString());
       setSubmittedAt(new Date());
       setIsSubmitted(true);
       clearDraft();
       toast({
         title: "지원서가 제출되었습니다",
-        description: `지원서 ID: ${response.application_id}`,
+        description: "작성하신 내용이 정상적으로 접수되었어요.",
       });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "지원서 제출 중 오류가 발생했습니다.";
@@ -394,7 +392,6 @@ export const useApplicationForm = (questions: Question[]) => {
     showConfirmModal,
     closeConfirmModal,
     confirmSubmit,
-    submittedApplicationId,
     submittedAt,
     interviewSchedule,
     updateAnswer,
