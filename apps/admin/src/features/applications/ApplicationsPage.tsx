@@ -47,9 +47,20 @@ export const ApplicationsPage = () => {
   const [sort, setSort] = useState<SortKey>("recent");
   const [page, setPage] = useState(1);
   const [slideDir, setSlideDir] = useState<"left" | "right">("left");
+  const [refreshMsg, setRefreshMsg] = useState<string | null>(null);
   const touchStartX = useRef<number | null>(null);
 
   const applications = data ?? [];
+
+  // 새로고침 시 변동을 알려준다. 새로 들어온 게 없으면 그대로 안내한다.
+  const handleRefresh = async () => {
+    const prev = applications.length;
+    const res = await refetch();
+    const next = res.data?.length ?? prev;
+    const diff = next - prev;
+    setRefreshMsg(diff > 0 ? `지원서 ${diff}건이 새로 들어왔어요` : "새로 들어온 지원서가 없어요");
+    window.setTimeout(() => setRefreshMsg(null), 2200);
+  };
 
   const filtered = useMemo(() => {
     const keyword = search.trim().toLowerCase();
@@ -166,7 +177,7 @@ export const ApplicationsPage = () => {
         </Select>
 
         <div className="flex items-center gap-2 sm:ml-auto">
-          <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
+          <Button variant="outline" onClick={handleRefresh} disabled={isFetching}>
             <RefreshCw className={cn("size-4", isFetching && "animate-spin")} />
             새로고침
           </Button>
@@ -292,6 +303,15 @@ export const ApplicationsPage = () => {
           >
             <ChevronRight className="size-5" />
           </button>
+        </div>
+      )}
+
+      {/* 새로고침 결과 안내 */}
+      {refreshMsg && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center">
+          <div className="animate-in fade-in slide-in-from-bottom-2 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg duration-300">
+            {refreshMsg}
+          </div>
         </div>
       )}
     </div>
