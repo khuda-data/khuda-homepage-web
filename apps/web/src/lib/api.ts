@@ -233,7 +233,13 @@ const apiCall = async <T>(
       );
     }
     
-    return validator(data);
+    // 백엔드 공통 응답 래퍼(ApiResponse)에서 data를 언랩한다.
+    const payload =
+      data && typeof data === "object" && "data" in data
+        ? (data as { data: unknown }).data
+        : data;
+
+    return validator(payload);
   } catch (error) {
     return handleNetworkError(error);
   }

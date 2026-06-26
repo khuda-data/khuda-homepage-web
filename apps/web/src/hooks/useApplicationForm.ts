@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { type Question, type InterviewSchedule } from "@/lib/api";
-// 백엔드 리팩토링 중이라 제출은 mock으로 처리한다. 재연결 시 submitApplication(@/lib/api)로 되돌린다.
-import { mockSubmitApplication } from "@/lib/mock/applicationQuestions";
+import { submitApplication, type Question, type InterviewSchedule } from "@/lib/api";
 import { 
   RECRUITMENT_SCHEDULE, 
   RECRUITMENT_INFO,
@@ -322,7 +320,7 @@ export const useApplicationForm = (questions: Question[]) => {
         interviewTimesQuestion?.id.toString() ?? null,
       );
 
-      const response = await mockSubmitApplication(formData.applicationType as "yb" | "ob", payload);
+      const response = await submitApplication(formData.applicationType as "yb" | "ob", payload);
 
       setSubmittedApplicationId(response.application_id.toString());
       setSubmittedAt(new Date());
