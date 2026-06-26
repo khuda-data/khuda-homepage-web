@@ -30,9 +30,9 @@ const YB_QUESTIONS: Question[] = [
   { id: 202, question: "데이터·AI 분야와 관련해 들었던 이론 강의나 수업을 한 개 이상 작성해주세요.", applicant_type: "yb", field_type: "course_experience", required: true, max_len: null, position: 202 },
   { id: 203, question: "관심 있는 심화 트랙을 선택해주세요.", applicant_type: "yb", field_type: "select", required: true, max_len: null, position: 203 },
   // 자기소개서 (YB)
-  { id: 204, question: "1. KHUDA에 지원하게 된 계기와 학회 활동을 통해 이루고 싶은 목표는 무엇인가요?", applicant_type: "yb", field_type: "textarea", required: true, max_len: 700, position: 204 },
-  { id: 205, question: "2. 본인이 세운 목표를 달성하기 위해 어려운 상황 속에서도 끝까지 포기하지 않았던 경험에 대해 서술해주세요.", applicant_type: "yb", field_type: "textarea", required: true, max_len: 700, position: 205 },
-  { id: 206, question: "3. 데이터·AI 관련 프로젝트나 관련 지식을 탐구해본 경험이 있다면, 그 과정과 배운 점을 함께 서술해주세요.", applicant_type: "yb", field_type: "textarea", required: true, max_len: 700, position: 206 },
+  { id: 204, question: "1. KHUDA에 지원하게 된 계기와 학회 활동을 통해 이루고 싶은 목표는 무엇인가요?", applicant_type: "yb", field_type: "textarea", required: true, max_len: 500, position: 204 },
+  { id: 205, question: "2. 본인이 세운 목표를 달성하기 위해 어려운 상황 속에서도 끝까지 포기하지 않았던 경험에 대해 서술해주세요.", applicant_type: "yb", field_type: "textarea", required: true, max_len: 500, position: 205 },
+  { id: 206, question: "3. 데이터·AI 관련 프로젝트나 관련 지식을 탐구해본 경험이 있다면, 그 과정과 배운 점을 함께 서술해주세요.", applicant_type: "yb", field_type: "textarea", required: true, max_len: 500, position: 206 },
   // 면접 일정/시간 (InterviewDateSelector에서 함께 처리, 시간 문항은 화면에 숨김)
   { id: 290, question: "면접 가능 일정", applicant_type: "yb", field_type: "interview_date", required: true, max_len: null, position: 290 },
   { id: 291, question: "면접 가능 시간", applicant_type: "yb", field_type: "interview_time", required: true, max_len: null, position: 291 },
@@ -48,6 +48,7 @@ const YB_QUESTIONS: Question[] = [
     options: [
       "YB는 수료 조건을 반드시 이행하여야 함을 확인했습니다.",
       "지원하기 탭에서 수료 조건 내용을 확인했습니다.",
+      "OT는 7월 13일에 진행되며, 필수로 참여해야 함을 확인했습니다.",
     ],
   },
 ];
@@ -58,7 +59,7 @@ const OB_QUESTIONS: Question[] = [
   { id: 302, question: "스터디 개설 의향이 있으신가요?", applicant_type: "ob", field_type: "select", required: true, max_len: null, position: 302 },
   { id: 303, question: "개설하고 싶은 스터디 또는 소모임이 있다면 작성해주세요.", applicant_type: "ob", field_type: "text", required: false, max_len: 120, position: 303 },
   // 자기소개서 (OB) - 1번 문항만 사용
-  { id: 304, question: "1. KHUDA에 지원하게 된 계기와 학회 활동을 통해 이루고 싶은 목표는 무엇인가요?", applicant_type: "ob", field_type: "textarea", required: true, max_len: 700, position: 304 },
+  { id: 304, question: "1. KHUDA에 지원하게 된 계기와 학회 활동을 통해 이루고 싶은 목표는 무엇인가요?", applicant_type: "ob", field_type: "textarea", required: true, max_len: 500, position: 304 },
   // 확인 체크리스트 (지원 유형 바로 아래에 노출, 모든 항목 체크 필수)
   {
     id: 307,
@@ -71,6 +72,7 @@ const OB_QUESTIONS: Question[] = [
     options: [
       "OB는 별도의 수료 조건이 없음을 인지했습니다.",
       "지원하기 탭에서 혜택에 대한 내용을 확인했습니다.",
+      "OT는 7월 13일에 진행되며, 필수로 참여해야 함을 확인했습니다.",
     ],
   },
 ];
