@@ -140,41 +140,44 @@ export const ApplicationsPage = () => {
           />
         </div>
 
-        <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as TypeFilter)}>
-          <SelectTrigger className="w-28">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">전체 유형</SelectItem>
-            <SelectItem value="yb">YB</SelectItem>
-            <SelectItem value="ob">OB</SelectItem>
-          </SelectContent>
-        </Select>
+        {/* 모바일에선 셀렉트 3개를 한 줄에, 데스크톱에선 기존 배치 유지 */}
+        <div className="flex w-full gap-2 sm:contents">
+          <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as TypeFilter)}>
+            <SelectTrigger className="flex-1 sm:w-28 sm:flex-none">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">전체 유형</SelectItem>
+              <SelectItem value="yb">YB</SelectItem>
+              <SelectItem value="ob">OB</SelectItem>
+            </SelectContent>
+          </Select>
 
-        <Select value={trackFilter} onValueChange={(v) => setTrackFilter(v as TrackFilter)}>
-          <SelectTrigger className="w-36">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">전체 트랙</SelectItem>
-            {APPLICATION_TRACKS.map((track) => (
-              <SelectItem key={track} value={track}>
-                {track}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Select value={trackFilter} onValueChange={(v) => setTrackFilter(v as TrackFilter)}>
+            <SelectTrigger className="flex-1 sm:w-36 sm:flex-none">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">전체 트랙</SelectItem>
+              {APPLICATION_TRACKS.map((track) => (
+                <SelectItem key={track} value={track}>
+                  {track}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-          <SelectTrigger className="w-28">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="recent">최신순</SelectItem>
-            <SelectItem value="oldest">오래된순</SelectItem>
-            <SelectItem value="name">이름순</SelectItem>
-          </SelectContent>
-        </Select>
+          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+            <SelectTrigger className="flex-1 sm:w-28 sm:flex-none">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recent">최신순</SelectItem>
+              <SelectItem value="oldest">오래된순</SelectItem>
+              <SelectItem value="name">이름순</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className="flex items-center gap-2 sm:ml-auto">
           <Button variant="outline" onClick={handleRefresh} disabled={isFetching}>
