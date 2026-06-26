@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
-import { Calendar, Mail, Pencil, Phone, Plus, Save, X } from "lucide-react";
+import { Mail, Pencil, Phone, Plus, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,11 +15,49 @@ const HIDDEN_FIELD_TYPES = new Set(["consent", "checklist"]);
 const INTERVIEW_DATE = "interview_date";
 const INTERVIEW_TIME = "interview_time";
 
+// 파이썬 활용 단계: 저장 값(숫자)을 운영진이 이해할 수 있는 라벨로 보여준다.
+const PYTHON_LEVELS: Record<string, string> = {
+  "1": "기본 문법",
+  "2": "기본 프로그래밍",
+  "3": "데이터 분석",
+  "4": "모델 학습",
+  "5": "프로젝트 수행",
+};
+
 const has = (a: AnswerItem, kw: string) => a.question.includes(kw);
 const isEssay = (a: AnswerItem) => a.fieldType === "textarea";
 const isInterview = (a: AnswerItem) => a.fieldType === INTERVIEW_DATE || a.fieldType === INTERVIEW_TIME;
 
-// 면접 시간 값(JSON 객체 문자열)을 {날짜: [시간]} 형태로 파싱한다.
+// 보기 좋은 값 표시. 파이썬 단계는 라벨로, 배열 값은 칩으로 보여준다.
+function FieldValue({ answer }: { answer: AnswerItem }) {
+  const value = answer.value;
+  if (!value) return <span className="text-muted-foreground">-</span>;
+
+  if (answer.fieldType === "python") {
+    const label = PYTHON_LEVELS[value];
+    return <span>{label ? `${label} (${value}단계)` : value}</span>;
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      if (parsed.length === 0) return <span className="text-muted-foreground">-</span>;
+      return (
+        <div className="flex flex-wrap gap-1.5">
+          {parsed.map((item, i) => (
+            <span key={i} className="rounded-lg bg-muted px-2.5 py-1 text-sm font-medium">
+              {String(item)}
+            </span>
+          ))}
+        </div>
+      );
+    }
+  } catch {
+    // 평범한 문자열
+  }
+  return <span className="whitespace-pre-wrap">{value}</span>;
+}
+
 function parseInterviewTime(value: string): Record<string, string[]> {
   try {
     const parsed = JSON.parse(value || "{}");
@@ -78,7 +116,6 @@ export const ApplicationDetailPage = () => {
 
   const answers = application?.answers ?? [];
 
-  // 화면에 보일 문항만 추린다.
   const visible = useMemo(() => answers.filter((a) => !HIDDEN_FIELD_TYPES.has(a.fieldType)), [answers]);
   const headerName = useMemo(() => answers.find((a) => has(a, "이름")), [answers]);
   const headerPhone = useMemo(() => answers.find((a) => has(a, "연락처")), [answers]);
@@ -89,12 +126,10 @@ export const ApplicationDetailPage = () => {
     [headerName, headerPhone, headerEmail, headerTrack]
   );
 
-  // 기본 정보: 공통(position <= 9) 중 헤더에 이미 쓴 것 제외.
   const basics = useMemo(
     () => visible.filter((a) => a.position <= 9 && !headerIds.has(a.questionId)),
     [visible, headerIds]
   );
-  // 활동 정보: 유형 문항 중 자기소개서, 면접, 트랙(헤더)이 아닌 것.
   const general = useMemo(
     () => visible.filter((a) => a.position >= 10 && !isEssay(a) && !isInterview(a) && !headerIds.has(a.questionId)),
     [visible, headerIds]
@@ -125,7 +160,6 @@ export const ApplicationDetailPage = () => {
   const setField = (questionId: number, value: string) =>
     setDraft((prev) => ({ ...prev, [String(questionId)]: value }));
 
-  // 면접 시간 편집
   const removeTime = (date: string, time: string) =>
     setInterviewDraft((prev) => ({ ...prev, [date]: (prev[date] ?? []).filter((t) => t !== time) }));
   const addTime = (date: string, time: string) => {
@@ -155,14 +189,12 @@ export const ApplicationDetailPage = () => {
   const handleSave = async () => {
     const changed: Record<string, string> = {};
 
-    // 일반/자기소개서 문항: 바뀐 값만
     answers.forEach((a) => {
       if (HIDDEN_FIELD_TYPES.has(a.fieldType) || isInterview(a)) return;
       const next = draft[String(a.questionId)] ?? "";
       if (next !== a.value) changed[String(a.questionId)] = next;
     });
 
-    // 면접: 시간이 1개 이상인 날짜만 유지
     if (interviewTime || interviewDate) {
       const cleaned: Record<string, string[]> = {};
       Object.entries(interviewDraft).forEach(([date, times]) => {
@@ -219,21 +251,22 @@ export const ApplicationDetailPage = () => {
       <Card className="hover:shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            {isEditing && headerName ? (
-              <Input
-                value={draftVal(headerName)}
-                onChange={(e) => setField(headerName.questionId, e.target.value)}
-                className="h-9 max-w-[220px] text-lg font-bold"
-              />
-            ) : (
-              <h1 className="truncate text-2xl font-bold tracking-tight">
-                {headerName?.value || "이름 미상"}
-              </h1>
-            )}
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+            {/* 이름, 유형, 트랙을 한 줄로 */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              {isEditing && headerName ? (
+                <Input
+                  value={draftVal(headerName)}
+                  onChange={(e) => setField(headerName.questionId, e.target.value)}
+                  className="h-9 max-w-[200px] text-lg font-bold"
+                />
+              ) : (
+                <h1 className="truncate text-2xl font-bold tracking-tight">
+                  {headerName?.value || "이름 미상"}
+                </h1>
+              )}
               <ApplicationTypeBadge type={application.applicationType} />
               {headerTrack && (
-                <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground">
+                <span className="text-sm font-medium text-muted-foreground">
                   {headerTrack.value || "트랙 미선택"}
                 </span>
               )}
@@ -314,7 +347,9 @@ export const ApplicationDetailPage = () => {
                     className="mt-1.5 h-9"
                   />
                 ) : (
-                  <p className="mt-1 text-[15px] font-medium">{a.value || "-"}</p>
+                  <div className="mt-1 text-[15px] font-medium">
+                    <FieldValue answer={a} />
+                  </div>
                 )}
               </div>
             ))}
@@ -337,7 +372,9 @@ export const ApplicationDetailPage = () => {
                     className="mt-1.5 h-9"
                   />
                 ) : (
-                  <p className="mt-1 whitespace-pre-wrap text-[15px] font-medium">{a.value || "-"}</p>
+                  <div className="mt-1 text-[15px] font-medium">
+                    <FieldValue answer={a} />
+                  </div>
                 )}
               </div>
             ))}
@@ -349,37 +386,38 @@ export const ApplicationDetailPage = () => {
       {essays.length > 0 && (
         <Card>
           <SectionTitle hint={`${essays.length}문항`}>자기소개서</SectionTitle>
-          <div className="space-y-6">
+          <div className="space-y-5">
             {essays.map((a, i) => (
-              <div key={a.questionId} className="border-l-2 border-blue-500/30 pl-4">
-                <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
+              <div key={a.questionId}>
+                <div className="flex gap-2">
+                  <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-500/10 text-xs font-bold text-blue-600">
+                    {i + 1}
+                  </span>
+                  <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
+                </div>
                 {isEditing ? (
                   <textarea
                     value={draftVal(a)}
                     onChange={(e) => setField(a.questionId, e.target.value)}
                     rows={5}
-                    className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-[15px] leading-relaxed outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30"
+                    className="mt-2 w-full rounded-xl border border-border bg-background px-3.5 py-3 text-[15px] leading-relaxed outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30"
                   />
                 ) : (
-                  <p className="mt-2 whitespace-pre-wrap text-[15px] leading-[1.75] text-[#4e5968]">
+                  <div className="mt-2 rounded-xl bg-[#F8F9FA] px-4 py-3.5 text-[15px] leading-[1.75] text-[#4e5968] whitespace-pre-wrap">
                     {a.value || "-"}
-                  </p>
+                  </div>
                 )}
-                {i < essays.length - 1 && <div className="mt-6 border-b border-border/60" />}
               </div>
             ))}
           </div>
         </Card>
       )}
 
-      {/* 면접 일정 (수정 가능) */}
+      {/* 면접 가능 일정 (수정 가능) */}
       {hasInterview && (
         <Card>
           <SectionTitle hint={isEditing ? "시간을 추가하거나 빼서 조율하세요" : undefined}>
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="size-4 text-muted-foreground" />
-              면접 가능 일정
-            </span>
+            면접 가능 일정
           </SectionTitle>
 
           {isEditing ? (
@@ -416,7 +454,6 @@ export const ApplicationDetailPage = () => {
                 </div>
               ))}
 
-              {/* 날짜 추가 */}
               <div className="flex items-center gap-2">
                 <Input
                   value={newDate}
@@ -454,7 +491,6 @@ export const ApplicationDetailPage = () => {
                   </div>
                 </div>
               ))}
-              {/* 시간 정보가 없으면 날짜만 표시 */}
               {interviewTime && Object.keys(parseInterviewTime(interviewTime.value)).length === 0 && interviewDate && (
                 <div className="flex flex-wrap gap-1.5">
                   {parseStringArray(interviewDate.value).map((d) => (
