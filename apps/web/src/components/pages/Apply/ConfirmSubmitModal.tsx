@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { AlertTriangle } from "lucide-react";
 
 interface ConfirmSubmitModalProps {
   open: boolean;
@@ -39,10 +38,6 @@ export const ConfirmSubmitModal = ({ open, onCancel, onConfirm, isSubmitting }: 
         className="relative w-full max-w-[400px] rounded-2xl bg-white border border-[#E8EBED] shadow-2xl animate-in fade-in zoom-in-95 duration-200"
       >
         <div className="px-7 pt-8 pb-7">
-          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#FFF1E8]">
-            <AlertTriangle className="h-6 w-6 text-[#F2780C]" />
-          </div>
-
           <h2 className="text-lg font-bold text-[#191F28]">지원서를 제출할까요?</h2>
           <p className="mt-2 text-sm leading-relaxed text-[#4E5968]">
             제출한 뒤에는 내용을 수정할 수 없어요. 작성한 내용을 다시 한 번 확인해주세요.
