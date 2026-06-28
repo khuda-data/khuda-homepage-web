@@ -40,7 +40,7 @@ const InterviewReferenceCard = () => {
         href={INTERVIEW_REFERENCE.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block rounded-2xl sm:rounded-3xl border border-blue-100 bg-white p-5 sm:p-6 md:p-7 lg:p-8 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"
+        className="group block rounded-2xl sm:rounded-3xl border border-blue-100 bg-white p-5 sm:p-6 md:p-7 lg:p-8 shadow-sm transition-all duration-300 hover:border-blue-200 hover:shadow-md"
       >
         <div className="flex items-start gap-4 sm:gap-5">
           {/* 노션 아이콘 배지 */}
@@ -50,10 +50,7 @@ const InterviewReferenceCard = () => {
 
           {/* 본문 */}
           <div className="min-w-0 flex-1">
-            <span className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-blue-600">
-              {INTERVIEW_REFERENCE.badge}
-            </span>
-            <h3 className="mt-2 text-base sm:text-lg md:text-xl font-bold text-gray-900">
+            <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">
               {INTERVIEW_REFERENCE.title}
             </h3>
             <p className="mt-1.5 text-xs sm:text-sm md:text-base leading-relaxed text-gray-600">
