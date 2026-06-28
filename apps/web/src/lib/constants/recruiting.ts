@@ -25,6 +25,19 @@ export const ACTIVITY_PERIOD = KHUDA_GENERATION % 2 === 0 ? "7월부터 12월까
 //   - 지금 10기(짝수) 기준이면 다음 모집은 7월. 10기 종료 후 11로 올리면 자동으로 1월이 된다.
 export const NEXT_RECRUITMENT_MONTH = KHUDA_GENERATION % 2 === 0 ? "7월" : "1월";
 
+// 기술 면접 참고 자료. 유의사항 섹션 가장 아래 카드로 보여준다.
+// 서류 접수 기간(RECRUITMENT_SCHEDULE.application.startISO ~ deadlineISO)에만 노출하며,
+// 노출 여부 판단은 InterviewReferenceCard 컴포넌트가 담당한다.
+// url은 운영진이 공유하는 노션 링크로, 기수마다 갱신한다.
+export const INTERVIEW_REFERENCE = {
+  badge: "지원 기간 한정",
+  title: "기술 면접 참고 자료",
+  description: "기술 면접은 아래 자료를 바탕으로 진행돼요. 지원 전에 미리 살펴보시면 도움이 돼요.",
+  linkLabel: "노션에서 참고 자료 보기",
+  // TODO: 정식 노션 링크로 교체 예정 (현재는 임시 URL)
+  url: "https://recondite-dry-2f7.notion.site/38de55358a8d80999b91fa0b8c82c0db?source=copy_link",
+};
+
 export const RECRUITMENT_INFO = {
   target: "경희대학교 재학생 및 휴학생",
   targetDetails: "전공 무관, 데이터분석/AI에 관심 있는 모든 분",
