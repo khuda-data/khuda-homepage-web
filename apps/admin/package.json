@@ -17,6 +17,7 @@
     "@tanstack/react-query": "^5.83.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
     "lucide-react": "^0.462.0",
     "ogl": "^1.0.11",
     "react": "^19.2.4",

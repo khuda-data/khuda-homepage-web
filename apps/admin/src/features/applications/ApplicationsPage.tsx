@@ -24,7 +24,7 @@ import type { Application, ApplicationType } from "@/types/application";
 import { APPLICATION_TRACKS } from "@/types/application";
 import { formatDateTime } from "@/lib/format";
 import { useApplications } from "./api";
-import { applicationsToCsv, downloadCsv } from "./csv";
+import { exportApplicationsXlsx } from "./xlsx";
 import { ApplicationTypeBadge } from "./ApplicationTypeBadge";
 
 type TypeFilter = "all" | ApplicationType;
@@ -115,8 +115,7 @@ export const ApplicationsPage = () => {
   };
 
   const handleExport = () => {
-    const csv = applicationsToCsv(filtered);
-    downloadCsv(`khuda-applications-${filtered.length}.csv`, csv);
+    exportApplicationsXlsx(filtered, `khuda-applications-${filtered.length}.xlsx`);
   };
 
   return (
@@ -186,7 +185,7 @@ export const ApplicationsPage = () => {
           </Button>
           <Button variant="outline" onClick={handleExport} disabled={filtered.length === 0}>
             <Download className="size-4" />
-            CSV 내보내기
+            엑셀 내보내기
           </Button>
         </div>
       </div>
