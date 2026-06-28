@@ -10,6 +10,30 @@
 
 [![API 명세서](https://img.shields.io/badge/API_명세서-보기-85EA2D?style=flat&logo=swagger&logoColor=black)](doc/api-spec.md)
 
+## 프로젝트 구조와 배포
+
+pnpm 워크스페이스 모노레포다. 공식 홈페이지와 운영진 어드민을 한 레포에서 관리한다.
+
+```
+apps/
+  web     공식 홈페이지 (Next.js)
+  admin   운영진 어드민 (Vite SPA, 지원자 조회/수정/내보내기)
+```
+
+빌드가 서로 다르고, Vercel에 프로젝트 2개를 같은 레포에 연결해 분리 배포한다.
+
+| Vercel 프로젝트 | Root Directory | 프레임워크 | 도메인 |
+| --- | --- | --- | --- |
+| `khuda-homepage-web` | `apps/web` | Next.js | `www.khuda.co.kr` (`khuda.co.kr`은 www로 리다이렉트) |
+| `khuda-homepage-web-admin` | `apps/admin` | Vite | 운영진 전용 (커스텀 도메인은 추후 연결) |
+
+- 각 앱의 `vercel.json`이 프레임워크와 라우팅을 따로 잡는다.
+- 두 프로젝트 모두 Vercel의 Root Directory 변경 감지가 켜져 있어, `apps/web`만 바뀌면 web만 배포되고 admin은 건너뛴다. (반대도 동일)
+- `main`에 머지하면 프로덕션이 배포되고, PR 브랜치는 프리뷰가 자동으로 올라온다.
+- Vercel 팀은 쿠다 공식 계정(`khuda-officials-projects`)이다.
+
+지원 접수 API 같은 백엔드는 별도 레포 [`khuda-homepage-api`](https://github.com/khuda-data/khuda-homepage-api)에서 관리한다.
+
 ## Team
 
 ### PM
