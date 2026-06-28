@@ -34,8 +34,7 @@ export const INTERVIEW_REFERENCE = {
   title: "기술 면접 참고 자료",
   description: "기술 면접은 아래 자료를 바탕으로 진행돼요. 지원 전에 미리 살펴보시면 도움이 돼요.",
   linkLabel: "노션에서 참고 자료 보기",
-  // TODO: 정식 노션 링크로 교체 예정 (현재는 임시 URL)
-  url: "https://recondite-dry-2f7.notion.site/38de55358a8d80999b91fa0b8c82c0db?source=copy_link",
+  url: "https://shell-haumea-d72.notion.site/38d61af7da2980c2bf1cf43459557cc8?source=copy_link",
 };
 
 export const RECRUITMENT_INFO = {
