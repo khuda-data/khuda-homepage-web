@@ -6,6 +6,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import AccordionCard from "./NotesSection/AccordionCard";
 import YBContent from "./NotesSection/YBContent";
 import OBContent from "./NotesSection/OBContent";
+import InterviewReferenceCard from "./NotesSection/InterviewReferenceCard";
 
 const NotesSection = memo(() => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
@@ -80,6 +81,9 @@ const NotesSection = memo(() => {
           <OBContent />
         </AccordionCard>
       </div>
+
+      {/* 기술 면접 참고 자료 - 서류 접수 기간에만 노출 */}
+      <InterviewReferenceCard />
     </div>
   );
 });
