@@ -6,6 +6,7 @@ import { ConfirmChecklistField } from "@/components/pages/Apply/ConfirmChecklist
 import { LongTextQuestion } from "@/components/pages/Apply/LongTextQuestion";
 import { StudyCreationSelector } from "@/components/pages/Apply/StudyCreationSelector";
 import { TrackSelector } from "@/components/pages/Apply/TrackSelector";
+import { ChoiceSelectField } from "@/components/pages/Apply/ChoiceSelectField";
 import { QuestionCard } from "@/components/pages/Apply/QuestionCard";
 import { QuestionField } from "@/components/pages/Apply/QuestionField";
 import { TextInputField } from "@/components/pages/Apply/TextInputField";
@@ -161,6 +162,17 @@ export const QuestionRenderer = ({
         question={question}
         answer={answer}
         applicationType={applicationType}
+        onAnswerChange={onAnswerChange}
+      />
+    );
+  }
+
+  // 예/아니요 같은 정해진 선택지 select 문항 (트랙, 스터디 의향은 위에서 이미 처리됨)
+  if (question.field_type === "select") {
+    return (
+      <ChoiceSelectField
+        question={question}
+        answer={answer}
         onAnswerChange={onAnswerChange}
       />
     );
