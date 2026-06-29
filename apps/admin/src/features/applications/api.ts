@@ -25,6 +25,7 @@ interface AnswerDto {
   question: string;
   field_type: string;
   position: number;
+  max_len?: number | null;
   value?: string | null;
 }
 
@@ -44,6 +45,7 @@ const toAnswers = (answers: AnswerDto[]) =>
     question: a.question,
     fieldType: a.field_type,
     position: a.position,
+    maxLen: a.max_len ?? null,
     value: a.value ?? "",
   }));
 

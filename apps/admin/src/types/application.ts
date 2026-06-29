@@ -6,6 +6,8 @@ export interface AnswerItem {
   question: string;
   fieldType: string;
   position: number;
+  // 문항 최대 글자수. 제한 없는 문항은 null. 답변 분량 평가에 쓴다.
+  maxLen: number | null;
   value: string;
 }
 
