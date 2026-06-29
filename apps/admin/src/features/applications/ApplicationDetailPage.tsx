@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDateTime } from "@/lib/format";
 import type { AnswerItem } from "@/types/application";
+import { normalizeTrack } from "@/types/application";
 import { useApplication, useUpdateApplication } from "./api";
 import { ApplicationTypeBadge } from "./ApplicationTypeBadge";
 
@@ -276,7 +277,7 @@ export const ApplicationDetailPage = () => {
               <ApplicationTypeBadge type={application.applicationType} />
               {headerTrack && (
                 <span className="text-sm font-medium text-muted-foreground">
-                  {headerTrack.value || "트랙 미선택"}
+                  {normalizeTrack(headerTrack.value) || "트랙 미선택"}
                 </span>
               )}
             </div>
@@ -290,7 +291,7 @@ export const ApplicationDetailPage = () => {
             <ApplicationTypeBadge type={application.applicationType} />
             {headerTrack && (
               <span className="truncate text-sm font-medium text-muted-foreground">
-                {headerTrack.value || "트랙 미선택"}
+                {normalizeTrack(headerTrack.value) || "트랙 미선택"}
               </span>
             )}
             <Button

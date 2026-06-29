@@ -1,5 +1,6 @@
 import ExcelJS from "exceljs";
 import type { Application, ApplicationType } from "@/types/application";
+import { normalizeTrack } from "@/types/application";
 import { formatDateTime } from "@/lib/format";
 
 // 체크리스트, 면접 일정 등 JSON 문자열 값을 읽기 좋게 편다.
@@ -76,7 +77,7 @@ function buildSheet(workbook: ExcelJS.Workbook, type: ApplicationType, apps: App
     const answerMap = new Map(app.answers.map((a) => [a.question, readable(a.value)]));
     const row: Record<string, string> = {
       이름: app.name,
-      트랙: app.track,
+      트랙: normalizeTrack(app.track),
       연락처: app.phone,
       이메일: app.email,
       제출일시: formatDateTime(app.submittedAt),
