@@ -45,3 +45,20 @@ export const APPLICATION_TRACKS = [
   "AI 엔지니어링",
   "금융",
 ] as const;
+
+// 트랙 id(영문)를 제목(한글)으로 잇는 표.
+// 공개 폼에서 YB는 제목으로, OB는 id로 저장돼 표기가 갈린다. 이를 한쪽으로 맞추기 위함.
+const TRACK_ID_TO_LABEL: Record<string, string> = {
+  da: "데이터 분석",
+  de: "데이터 엔지니어링",
+  nlp: "자연어 처리",
+  cv: "컴퓨터 비전",
+  aie: "AI 엔지니어링",
+  fin: "금융",
+};
+
+// 저장된 트랙 값을 한글 제목으로 정규화한다. id로 저장된 값은 제목으로 바꾸고, 모르는 값은 그대로 둔다.
+export function normalizeTrack(track: string | null | undefined): string {
+  if (!track) return "";
+  return TRACK_ID_TO_LABEL[track.trim().toLowerCase()] ?? track;
+}

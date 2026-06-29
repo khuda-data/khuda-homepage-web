@@ -21,7 +21,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import type { Application, ApplicationType } from "@/types/application";
-import { APPLICATION_TRACKS } from "@/types/application";
+import { APPLICATION_TRACKS, normalizeTrack } from "@/types/application";
 import { formatDateTime } from "@/lib/format";
 import { useApplications } from "./api";
 import { exportApplicationsXlsx } from "./xlsx";
@@ -71,7 +71,7 @@ export const ApplicationsPage = () => {
         app.email.toLowerCase().includes(keyword) ||
         app.phone.replace(/-/g, "").includes(keyword.replace(/-/g, ""));
       const matchesType = typeFilter === "all" || app.applicationType === typeFilter;
-      const matchesTrack = trackFilter === "all" || app.track === trackFilter;
+      const matchesTrack = trackFilter === "all" || normalizeTrack(app.track) === trackFilter;
       return matchesKeyword && matchesType && matchesTrack;
     });
 
@@ -241,7 +241,7 @@ export const ApplicationsPage = () => {
                   <TableCell>
                     <ApplicationTypeBadge type={app.applicationType} />
                   </TableCell>
-                  <TableCell className="hidden md:table-cell">{app.track}</TableCell>
+                  <TableCell className="hidden md:table-cell">{normalizeTrack(app.track)}</TableCell>
                   <TableCell className="hidden text-muted-foreground md:table-cell">
                     {app.phone}
                   </TableCell>
