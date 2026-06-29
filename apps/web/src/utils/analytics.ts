@@ -9,7 +9,8 @@ declare global {
   }
 }
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PD86DRNELF";
+// 쿠다 공식 계정 GA4 측정 ID. layout.tsx의 GA_ID와 같은 값을 유지한다.
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-P6P623H40Z";
 
 export const trackPageView = (path: string): void => {
   if (typeof window === "undefined" || !window.gtag) return;
