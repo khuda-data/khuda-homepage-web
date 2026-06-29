@@ -80,11 +80,11 @@ export default function RootLayout({
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
+        {/* gtag 함수만 준비한다. 실제 config(page_view)는 providers의 trackPageView가 운영 도메인에서만 호출한다. */}
         <Script id="ga-init" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
+gtag('js', new Date());`}
         </Script>
 
         <Providers>

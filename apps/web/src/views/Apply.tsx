@@ -17,6 +17,7 @@ import { QuestionRenderer } from "@/components/pages/Apply/QuestionRenderer";
 import { ConfirmSubmitModal } from "@/components/pages/Apply/ConfirmSubmitModal";
 import { useApplicationQuestions } from "@/hooks/useApplicationQuestions";
 import { useApplicationForm } from "@/hooks/useApplicationForm";
+import { trackApplicationStart } from "@/utils/analytics";
 
 // 질문 로딩 중 스켈레톤 카드
 const QuestionSkeleton = ({ count = 2 }: { count?: number }) => (
@@ -69,6 +70,11 @@ const Apply = () => {
     isFormValid,
     saveDraft,
   } = useApplicationForm(questions);
+
+  // 지원 페이지 진입 시 모집 퍼널 '지원 시작' 이벤트 1회 전송
+  useEffect(() => {
+    trackApplicationStart();
+  }, []);
 
   // formData → 로컬 상태 동기화
   useEffect(() => {
