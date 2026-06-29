@@ -9,7 +9,8 @@ import { Providers } from "./providers";
 const SITE_URL = "https://www.khuda.co.kr";
 const DESCRIPTION =
   "KHUDA는 인공지능과 데이터 분석을 기반으로 실전 프로젝트와 협업을 통해 성장하는 경희대학교 데이터·AI 학술 동아리입니다.";
-const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PD86DRNELF";
+// 쿠다 공식 계정 GA4 측정 ID. env가 있으면 우선 적용, 없으면 이 값으로 폴백한다.
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-P6P623H40Z";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -79,11 +80,11 @@ export default function RootLayout({
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
+        {/* gtag 함수만 준비한다. 실제 config(page_view)는 providers의 trackPageView가 운영 도메인에서만 호출한다. */}
         <Script id="ga-init" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
+gtag('js', new Date());`}
         </Script>
 
         <Providers>

@@ -6,8 +6,14 @@ import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import { RECRUITMENT_SCHEDULE } from "@/lib/constants";
+import { trackApplicationComplete } from "@/utils/analytics";
 
 export const SubmissionSuccess = () => {
+  // 제출 완료 화면 진입 시 모집 퍼널 '지원 완료' 전환 이벤트 1회 전송
+  useEffect(() => {
+    trackApplicationComplete();
+  }, []);
+
   // 제출 완료 화면 진입 시 폭죽을 터뜨린다.
   useEffect(() => {
     const colors = ["#3182F6", "#22C55E", "#F59E0B", "#EC4899", "#8B5CF6"];
