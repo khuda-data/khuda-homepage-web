@@ -30,12 +30,14 @@ export const INDEX_TRACKS: IndexTrackInfo[] = [
     projectTrack: "데이터 엔지니어링",
   },
   {
+    // 10기부터 NLP에서 LLM으로 리브랜딩. 내부 id는 nlp로 유지(과거 OB 저장값과 호환).
     id: "nlp",
-    label: "NLP",
-    title: "자연어 처리",
+    label: "LLM",
+    title: "LLM",
     stage: "모델링",
     description:
       "모델링 단계에서 텍스트와 언어를 다룹니다. 문장의 의미를 이해하고 새로운 문장을 생성하는 모델을 설계합니다.",
+    // projectTrack은 과거 8기 NLP 프로젝트 필터 연결을 위해 유지한다.
     projectTrack: "NLP",
   },
   {
@@ -74,7 +76,7 @@ export const CURRICULUM_INFO = {
   basicSessionDescription: `방학 동안 파이썬 실습과 머신러닝 기초를 함께 배워요.
 개인 랜덤 발제, 퀴즈, 팀별 토의를 통해 기초를 탄탄히 다지고, 팀 단위로 토이프로젝트를 진행합니다.`,
   advancedSessionDescription: (trackCount: number) => `각 심화트랙의 트랙장들과 함께 한 학기 동안 선택한 분야를 깊이 있게 탐구합니다.
-자연어 처리, 컴퓨터 비전, 데이터 엔지니어링 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고, 학기 말 정기 학술제를 진행합니다.`,
+LLM, 컴퓨터 비전, 데이터 엔지니어링 등 ${trackCount}가지 트랙에서 전문 지식을 쌓고, 학기 말 정기 학술제를 진행합니다.`,
   basicTrackTitle: "기초 세션",
   basicTrackDescription: `방학 기간 동안 머신러닝의 기본 개념부터 주요 알고리즘까지 체계적으로 학습합니다.
 이론과 실습을 통해 단계별로 실력을 쌓아갑니다.`,
@@ -124,9 +126,9 @@ export const CURRICULUM_INFO = {
     },
     {
       id: "nlp",
-      label: "NLP",
-      title: "자연어 처리",
-      description: "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 뉴스/댓글/문서 같은 실제 데이터를 기반으로 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 NLP 파이프라인을 경험합니다.",
+      label: "LLM",
+      title: "LLM",
+      description: "텍스트 데이터를 컴퓨터가 이해하고 활용하도록 만드는 기술을 다루는 트랙입니다. 뉴스/댓글/문서 같은 실제 데이터를 기반으로 분류·요약·검색·챗봇 등 실전 과제를 직접 구현하며 LLM 파이프라인을 경험합니다.",
     },
     {
       id: "cv",
