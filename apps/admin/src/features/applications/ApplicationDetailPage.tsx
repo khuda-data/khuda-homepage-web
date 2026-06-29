@@ -96,6 +96,21 @@ const Card = ({ children, className }: { children: ReactNode; className?: string
   </section>
 );
 
+// 자기소개서 답변 분량 표시. 문항 최대 글자수가 있으면 현재/최대로, 없으면 현재 글자수만 보여준다.
+const CharCount = ({ length, maxLen }: { length: number; maxLen: number | null }) => {
+  const over = maxLen != null && length > maxLen;
+  return (
+    <span
+      className={cn(
+        "shrink-0 whitespace-nowrap text-xs font-medium tabular-nums",
+        over ? "text-[#f04452]" : "text-muted-foreground"
+      )}
+    >
+      {maxLen != null ? `${length} / ${maxLen}자` : `${length}자`}
+    </span>
+  );
+};
+
 const SectionTitle = ({ children, hint }: { children: ReactNode; hint?: string }) => (
   <div className="mb-4 flex items-baseline justify-between">
     <h2 className="text-[15px] font-bold text-foreground">{children}</h2>
@@ -399,7 +414,10 @@ export const ApplicationDetailPage = () => {
           <div className="space-y-5">
             {essays.map((a) => (
               <div key={a.questionId}>
-                <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="text-sm font-semibold leading-relaxed text-[#333d4b]">{a.question}</p>
+                  <CharCount length={(isEditing ? draftVal(a) : a.value).length} maxLen={a.maxLen} />
+                </div>
                 {isEditing ? (
                   <textarea
                     value={draftVal(a)}
