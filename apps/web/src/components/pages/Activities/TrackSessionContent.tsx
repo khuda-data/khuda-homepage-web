@@ -3,7 +3,7 @@ import ImageGallery from "./ImageGallery";
 const tracks = [
   { name: "Data Analytics", fullName: "데이터 분석" },
   { name: "Data Engineering", fullName: "데이터 엔지니어링" },
-  { name: "NLP", fullName: "자연어 처리" },
+  { name: "LLM", fullName: "LLM" },
   { name: "CV", fullName: "컴퓨터 비전" },
   { name: "AI Engineering", fullName: "AI 엔지니어링" },
   { name: "Finance", fullName: "금융" },

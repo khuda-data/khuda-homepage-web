@@ -40,7 +40,7 @@ export const APPLICATION_TYPE_LABEL: Record<ApplicationType, string> = {
 export const APPLICATION_TRACKS = [
   "데이터 분석",
   "데이터 엔지니어링",
-  "자연어 처리",
+  "LLM",
   "컴퓨터 비전",
   "AI 엔지니어링",
   "금융",
@@ -48,10 +48,12 @@ export const APPLICATION_TRACKS = [
 
 // 트랙 id(영문)를 제목(한글)으로 잇는 표.
 // 공개 폼에서 YB는 제목으로, OB는 id로 저장돼 표기가 갈린다. 이를 한쪽으로 맞추기 위함.
+// nlp는 10기부터 LLM으로 리브랜딩됐다. 기존에 저장된 "자연어 처리"(과거 YB)도 LLM으로 흡수한다.
 const TRACK_ID_TO_LABEL: Record<string, string> = {
   da: "데이터 분석",
   de: "데이터 엔지니어링",
-  nlp: "자연어 처리",
+  nlp: "LLM",
+  "자연어 처리": "LLM",
   cv: "컴퓨터 비전",
   aie: "AI 엔지니어링",
   fin: "금융",
