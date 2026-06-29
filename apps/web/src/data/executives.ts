@@ -20,7 +20,7 @@ export interface GenerationExecutives {
 
 export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
   {
-    // 트랙장은 아직 미정이라 제외했다. 확정되면 role "트랙장" + department(트랙명)으로 추가한다.
+    // 트랙장은 role "트랙장" + department(트랙명)으로 추가한다. 한 사람이 두 직책이면 기존 role을 두고 department만 더한다.
     generation: "10기",
     executives: [
       {
@@ -80,6 +80,7 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
       {
         name: "조윤수",
         role: "대외홍보부장",
+        department: "데이터 분석",
         affiliation: "공과대학 산업경영공학과",
         email: "yoonsoo2002@khu.ac.kr",
       },
@@ -100,6 +101,34 @@ export const EXECUTIVE_PROFILES: GenerationExecutives[] = [
         role: "대외홍보부원",
         affiliation: "공과대학 산업경영공학과",
         email: "0503kng@khu.ac.kr",
+      },
+      {
+        name: "양경식",
+        role: "트랙장",
+        department: "LLM",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        email: "sondin144@gmail.com",
+      },
+      {
+        name: "박재원",
+        role: "트랙장",
+        department: "CV",
+        affiliation: "소프트웨어융합대학 소프트웨어융합학과",
+        email: "ashcircle03@gmail.com",
+      },
+      {
+        name: "박세혁",
+        role: "트랙장",
+        department: "AI 엔지니어링",
+        affiliation: "공과대학 산업경영공학과",
+        email: "shpark0506@gmail.com",
+      },
+      {
+        name: "강병오",
+        role: "트랙장",
+        department: "금융",
+        affiliation: "소프트웨어융합대학 컴퓨터공학부",
+        email: "garamkg@khu.ac.kr",
       },
     ],
   },
