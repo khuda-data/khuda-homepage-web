@@ -4,7 +4,7 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { projectsData, generations, trackOptions, trackDisplayOrder, type Project } from "@/data/projects";
+import { generations, trackOptions, trackDisplayOrder, type Project } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import CustomSelect from "./CustomSelect";
@@ -12,7 +12,7 @@ import CustomSelect from "./CustomSelect";
 const DEFAULT_GENERATION = "모든 기수";
 const DEFAULT_TRACK = "모든 트랙";
 
-const ProjectsSection = () => {
+const ProjectsSection = ({ projects }: { projects: Project[] }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,7 +39,7 @@ const ProjectsSection = () => {
   );
 
   const filteredProjects = useMemo(() => {
-    const filtered = projectsData.filter((project) => {
+    const filtered = projects.filter((project) => {
       const matchesGeneration =
         selectedGeneration === "모든 기수" || project.generation === selectedGeneration;
       const matchesTrack =
@@ -54,7 +54,7 @@ const ProjectsSection = () => {
       (a, b) =>
         trackDisplayOrder.indexOf(a.track) - trackDisplayOrder.indexOf(b.track)
     );
-  }, [selectedGeneration, selectedTrack, searchQuery]);
+  }, [projects, selectedGeneration, selectedTrack, searchQuery]);
 
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);

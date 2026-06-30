@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Projects from "@/views/Projects";
+import { getProjects } from "@/data/projects.server";
 
 const DESCRIPTION = "KHUDA 구성원들이 기획하고 개발한 프로젝트들을 소개합니다.";
 
@@ -30,6 +31,8 @@ const collectionJsonLd = {
 };
 
 export default function Page() {
+  // 빌드 시점에 content/projects/**/*.md 를 읽어 프로젝트 목록을 만든다.
+  const projects = getProjects();
   return (
     <>
       <script
@@ -37,7 +40,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbJsonLd, collectionJsonLd]) }}
       />
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
-        <Projects />
+        <Projects projects={projects} />
       </Suspense>
     </>
   );
