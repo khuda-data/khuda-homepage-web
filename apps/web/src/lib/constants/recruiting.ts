@@ -16,7 +16,7 @@ export interface ProcessStepInfo {
 // 유지보수 규칙: 한 기수 모집이 끝나면 이 값을 다음 기수로 +1 한다.
 //   - 예) 지금은 10기 모집 전/중 → 10. 10기 모집이 끝나면 11로 올린다.
 // 기수는 6개월 주기이며, 짝수 기수는 7월(7~12월 활동) / 홀수 기수는 1월(1~6월 활동)에 모집한다.
-export const KHUDA_GENERATION = 10;
+export const KHUDA_GENERATION = 11;
 
 // 모집 대상 기수의 활동 기간 (짝수=하반기 7~12월 / 홀수=상반기 1~6월)
 export const ACTIVITY_PERIOD = KHUDA_GENERATION % 2 === 0 ? "7월부터 12월까지" : "1월부터 6월까지";
