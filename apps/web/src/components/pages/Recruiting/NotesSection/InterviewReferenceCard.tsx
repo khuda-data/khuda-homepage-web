@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { RECRUITMENT_SCHEDULE, INTERVIEW_REFERENCE } from "@/lib/constants";
 
-// 서류 접수 기간(application.startISO ~ deadlineISO)에만 노출하는 기술 면접 참고 자료 카드.
+// 서류 접수 시작(application.startISO)부터 면접 종료(interview.endISO)까지 노출하는
+// 기술 면접 참고 자료 카드. 서류 마감 이후에도 면접 당일까지는 참고할 수 있어야 한다.
 // SSR과 클라이언트의 시간 차이로 인한 하이드레이션 불일치를 막기 위해
 // 초기에는 숨기고 마운트 후 클라이언트에서만 노출 여부를 계산한다. (RecruitmentBanner와 같은 패턴)
 const START = new Date(RECRUITMENT_SCHEDULE.application.startISO);
-const DEADLINE = new Date(RECRUITMENT_SCHEDULE.application.deadlineISO);
+const DEADLINE = new Date(RECRUITMENT_SCHEDULE.interview.endISO);
 
-const isWithinApplicationPeriod = () => {
+const isWithinReferencePeriod = () => {
   const now = Date.now();
   return now >= START.getTime() && now <= DEADLINE.getTime();
 };
@@ -26,9 +27,9 @@ const InterviewReferenceCard = () => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setVisible(isWithinApplicationPeriod());
+    setVisible(isWithinReferencePeriod());
     // 마감 시점에 자동으로 사라지도록 1분마다 다시 확인한다.
-    const timerId = setInterval(() => setVisible(isWithinApplicationPeriod()), 60_000);
+    const timerId = setInterval(() => setVisible(isWithinReferencePeriod()), 60_000);
     return () => clearInterval(timerId);
   }, []);
 

@@ -26,7 +26,7 @@ export const ACTIVITY_PERIOD = KHUDA_GENERATION % 2 === 0 ? "7월부터 12월까
 export const NEXT_RECRUITMENT_MONTH = KHUDA_GENERATION % 2 === 0 ? "7월" : "1월";
 
 // 기술 면접 참고 자료. 유의사항 섹션 가장 아래 카드로 보여준다.
-// 서류 접수 기간(RECRUITMENT_SCHEDULE.application.startISO ~ deadlineISO)에만 노출하며,
+// 서류 접수 시작(application.startISO)부터 면접 종료(interview.endISO)까지 노출하며,
 // 노출 여부 판단은 InterviewReferenceCard 컴포넌트가 담당한다.
 // url은 운영진이 공유하는 노션 링크로, 기수마다 갱신한다.
 export const INTERVIEW_REFERENCE = {
@@ -104,6 +104,7 @@ export const RECRUITMENT_SCHEDULE = {
   interview: {
     start: "2026년 7월 8일 (수)",
     end: "2026년 7월 9일 (목)",
+    endISO: "2026-07-09T23:59:59+09:00",
     method: "온라인 비대면",
     short: "7.8~7.9",
     full: "2026년 7월 8일 (수) ~ 7월 9일 (목) 온라인 비대면",
