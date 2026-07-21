@@ -2,8 +2,9 @@
 
 import PageHeroSection from "@/components/shared/PageHeroSection";
 import ProjectsSection from "@/components/pages/Projects/ProjectsSection";
+import type { Project } from "@/data/projects";
 
-const Projects = () => {
+const Projects = ({ projects }: { projects: Project[] }) => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main>
@@ -13,7 +14,7 @@ const Projects = () => {
           backgroundImage="/images/headers/page-header.png"
         />
 
-        <ProjectsSection />
+        <ProjectsSection projects={projects} />
       </main>
     </div>
   );
