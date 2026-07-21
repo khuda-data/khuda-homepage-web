@@ -38,7 +38,8 @@ export const APPLICATION_TYPE_LABEL: Record<ApplicationType, string> = {
   ob: "OB",
 };
 
-// 지원 트랙 목록 (목록 필터용). 공개 폼의 트랙 제목과 같은 값으로 저장된다.
+// 목록 필터에 표시할 트랙 이름이다.
+// 저장된 트랙 ID를 `normalizeTrack`으로 표시 이름으로 변환한 뒤 이 값과 비교한다.
 export const APPLICATION_TRACKS = [
   "데이터 분석",
   "데이터 엔지니어링",
@@ -48,9 +49,10 @@ export const APPLICATION_TRACKS = [
   "금융",
 ] as const;
 
-// 트랙 id(영문)를 제목(한글)으로 잇는 표.
-// 공개 폼에서 YB는 제목으로, OB는 id로 저장돼 표기가 갈린다. 이를 한쪽으로 맞추기 위함.
-// nlp는 10기부터 LLM으로 리브랜딩됐다. 기존에 저장된 "자연어 처리"(과거 YB)도 LLM으로 흡수한다.
+// 저장된 트랙 ID인 영문 코드를 화면에 표시할 한글 제목으로 변환하는 매핑이다.
+// 공개 지원 폼과 기존 데이터 모두 트랙 ID를 저장하므로, 화면에 표시할 때 이 매핑을 통해 제목으로 변환한다.
+// `nlp` 트랙은 10기부터 `LLM`으로 이름이 변경되었다.
+// 마이그레이션 전에 남아 있을 수 있는 `"자연어 처리"` 값도 `LLM`으로 변환한다.
 const TRACK_ID_TO_LABEL: Record<string, string> = {
   da: "데이터 분석",
   de: "데이터 엔지니어링",
@@ -61,7 +63,8 @@ const TRACK_ID_TO_LABEL: Record<string, string> = {
   fin: "금융",
 };
 
-// 저장된 트랙 값을 한글 제목으로 정규화한다. id로 저장된 값은 제목으로 바꾸고, 모르는 값은 그대로 둔다.
+// 저장된 트랙 값을 화면 표시용 제목으로 변환한다.
+// 트랙 ID는 매핑된 제목으로 바꾸고, 매핑에 정의되지 않은 값은 그대로 반환한다.
 export function normalizeTrack(track: string | null | undefined): string {
   if (!track) return "";
   return TRACK_ID_TO_LABEL[track.trim().toLowerCase()] ?? track;
