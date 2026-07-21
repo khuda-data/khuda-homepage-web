@@ -52,12 +52,10 @@ export const APPLICATION_TRACKS = [
 // 저장된 트랙 ID인 영문 코드를 화면에 표시할 한글 제목으로 변환하는 매핑이다.
 // 공개 지원 폼과 기존 데이터 모두 트랙 ID를 저장하므로, 화면에 표시할 때 이 매핑을 통해 제목으로 변환한다.
 // `nlp` 트랙은 10기부터 `LLM`으로 이름이 변경되었다.
-// 마이그레이션 전에 남아 있을 수 있는 `"자연어 처리"` 값도 `LLM`으로 변환한다.
 const TRACK_ID_TO_LABEL: Record<string, string> = {
   da: "데이터 분석",
   de: "데이터 엔지니어링",
   nlp: "LLM",
-  "자연어 처리": "LLM",
   cv: "컴퓨터 비전",
   aie: "AI 엔지니어링",
   fin: "금융",
