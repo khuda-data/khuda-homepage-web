@@ -74,13 +74,8 @@ export const TrackSelector = ({ question, answer, applicationType, onAnswerChang
             </Select>
           ) : isYB ? (
             <Select
-              value={CURRICULUM_INFO.tracks.find(track => track.title === answer)?.id || ""}
-              onValueChange={(value) => {
-                const selectedTrack = CURRICULUM_INFO.tracks.find(track => track.id === value);
-                if (selectedTrack) {
-                  onAnswerChange(question.id, selectedTrack.title);
-                }
-              }}
+              value={answer || ""}
+              onValueChange={(value) => onAnswerChange(question.id, value)}
               required={question.required}
             >
               <SelectTrigger
