@@ -1,0 +1,74 @@
+# PR과 main 푸시마다 web, admin 두 앱의 타입체크와 빌드를 돌린다.
+# Vercel 빌드는 next.config.mjs(ignoreBuildErrors)와 admin build 스크립트(tsc --noCheck) 때문에
+# 타입 에러를 걸러 주지 않으므로, 이 워크플로가 PR 머지 전 유일한 자동 검증이다.
+# 두 잡의 이름(web, admin)은 브랜치 룰셋의 required status check 이름과 같아야 한다.
+# (docs/github/BRANCH_PROTECTION.md 참고)
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# 같은 PR에 새 푸시가 오면 이전 실행을 취소한다.
+# main 푸시는 취소하지 않는다. 취소된 실행이 남으면 main이 통과했는지 기록이 사라진다.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# 빌드와 타입체크만 하므로 읽기 권한이면 충분하다.
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 루트 package.json의 packageManager 필드(pnpm@9.x)를 읽어 같은 버전을 설치한다.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # 빌드를 먼저 돌려 next-env.d.ts와 .next/types를 생성한 뒤 타입체크한다.
+      # (apps/web/tsconfig.json이 두 경로를 include한다.)
+      - name: Build (web)
+        run: pnpm --filter @khuda/web build
+
+      - name: Typecheck (web)
+        run: pnpm --filter @khuda/web exec tsc --noEmit
+
+  admin:
+    name: admin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # build 스크립트는 `tsc -b --noCheck`라 타입을 검사하지 않는다. 여기서는 --noCheck 없이 돌린다.
+      - name: Typecheck (admin)
+        run: pnpm --filter @khuda/admin exec tsc -b
+
+      - name: Build (admin)
+        run: pnpm --filter @khuda/admin build
