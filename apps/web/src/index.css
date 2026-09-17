@@ -335,3 +335,5 @@
 .animate-progress-bar {
   animation: progress-bar linear forwards;
 }
+
+/* Vercel 프리뷰 배포 권한 확인용 임시 주석. 확인 후 브랜치와 함께 삭제한다. */
