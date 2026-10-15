@@ -55,11 +55,7 @@ apps/
 
 | 문서 | 내용 |
 | --- | --- |
-| [docs/api/API.md](docs/api/API.md) | 지원서 API 명세 (API 레포와 같은 내용) |
-| [docs/db/DB.md](docs/db/DB.md) | 지원서 DB 스키마 (API 레포와 같은 내용) |
 | [docs/analytics/ANALYTICS.md](docs/analytics/ANALYTICS.md) | GA4 측정 ID와 전환 이벤트 설정 |
-
-`docs/api/API.md`와 `docs/db/DB.md`는 API 레포에 같은 파일이 있다. 한쪽만 고치면 갈라지니 함께 갱신한다.
 
 ## Team
 
