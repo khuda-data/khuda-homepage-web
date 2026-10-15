@@ -42,7 +42,7 @@ apps/
 | Vercel 프로젝트 | Root Directory | 프레임워크 | 도메인 |
 | --- | --- | --- | --- |
 | `khuda-homepage-web` | `apps/web` | Next.js | `www.khuda.co.kr` (`khuda.co.kr`은 www로 리다이렉트) |
-| `khuda-homepage-web-admin` | `apps/admin` | Vite | `khuda-homepage-web-admin.vercel.app` (운영진 전용, 커스텀 도메인은 미연결) |
+| `khuda-homepage-web-admin` | `apps/admin` | Vite | 운영진 전용 (Vercel 기본 도메인, 커스텀 도메인은 미연결) |
 
 - 각 앱의 `vercel.json`이 프레임워크와 라우팅을 따로 잡는다.
 - 두 프로젝트 모두 Vercel의 Root Directory 변경 감지가 켜져 있어, `apps/web`만 바뀌면 web만 배포되고 admin은 건너뛴다. (반대도 동일)
