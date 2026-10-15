@@ -9,7 +9,7 @@
 
 - **홈페이지** (`apps/web`): Next.js 15 App Router, React 19, TypeScript, Tailwind CSS
 - **어드민** (`apps/admin`): Vite 5, React 19, TypeScript, Tailwind CSS
-- **공통**: pnpm 9 모노레포, Vercel 배포 · 지원서 백엔드는 별도 레포(FastAPI)
+- **공통**: pnpm 9 모노레포, Vercel 배포, GitHub Actions CI · 지원서 백엔드는 별도 레포(FastAPI)
 
 ## 시작하기
 
@@ -63,17 +63,17 @@ apps/
 
 ## Team
 
-### PM
-![PM](https://img.shields.io/badge/PM-신진수-FFFFFF?style=flat&logoColor=black)
+- **기획** 김은아 · 김나균
+- **개발** 이세혁 · 박세혁 · 백지원
 
-### 기획
-![Planning](https://img.shields.io/badge/기획-신진수%20|%20양경식%20|%20오윤진%20|%20오종현-FFFFFF?style=flat&logoColor=black)
+기수가 바뀌면 TF 리더가 이 절을 갱신한다.
 
-### 프론트엔드 개발
-![Frontend](https://img.shields.io/badge/프론트엔드-신진수%20|%20오종현-FFFFFF?style=flat&logoColor=black)
+<details>
+<summary>이전 TF</summary>
 
-### QA
-![QA](https://img.shields.io/badge/QA-양경식%20|%20조윤수-FFFFFF?style=flat&logoColor=black)
+PM 신진수 · 기획 신진수, 양경식, 오윤진, 오종현 · 프론트엔드 신진수, 오종현 · QA 양경식, 조윤수
+
+</details>
 
 ## 외부 참여자 협업
 
