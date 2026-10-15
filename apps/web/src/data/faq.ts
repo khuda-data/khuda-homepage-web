@@ -1,3 +1,5 @@
+import { ACTIVITY_PERIOD } from "@/lib/constants/recruiting";
+
 export interface FAQ {
   question: string;
   answer: string;
@@ -10,7 +12,7 @@ export const FAQ_DATA: FAQ[] = [
   },
   {
     question: "활동 기간 및 시간은 어떻게 되나요?",
-    answer: "2026년 7월 13일 활동 시작 시점부터 2026학년도 2학기 정기학술제 종료 시까지 약 6개월간 활동합니다. 수료 이후에는 KHUDA OB로서 지속적인 네트워크 참여 및 활동이 가능합니다.",
+    answer: `${ACTIVITY_PERIOD} 약 6개월간 활동하며, 학기 말 정기학술제로 마무리합니다. 정확한 OT·첫 세션 일정은 최종 합격 안내 때 공지합니다. 수료 이후에는 KHUDA OB로서 지속적인 네트워크 참여 및 활동이 가능합니다.`,
   },
   {
     question: "트랙 배정은 어떤 방식으로 이루어지나요?",
@@ -18,7 +20,7 @@ export const FAQ_DATA: FAQ[] = [
   },
   {
     question: "활동비는 얼마인가요?",
-    answer: "10기 YB는 45,000원, 10기 OB는 5,000원입니다. 납부하신 활동비는 동아리 운영, 행사 기획 및 회원분들께 제공되는 교재비 등으로 투명하게 사용될 예정입니다.",
+    answer: "YB는 45,000원, OB는 5,000원입니다. 납부하신 활동비는 동아리 운영, 행사 기획 및 회원분들께 제공되는 교재비 등으로 투명하게 사용될 예정입니다.",
   },
   {
     question: "타 동아리와 병행이 가능한가요?",

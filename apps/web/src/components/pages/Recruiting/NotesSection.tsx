@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
-import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG, ACTIVITY_PERIOD } from "@/lib/constants";
+import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG, ACTIVITY_PERIOD_LABEL } from "@/lib/constants";
 import SectionHeader from "@/components/shared/SectionHeader";
 import AccordionCard from "./NotesSection/AccordionCard";
 import YBContent from "./NotesSection/YBContent";
@@ -32,7 +32,7 @@ const NotesSection = memo(() => {
             활동 기간
           </h3>
           <p className="text-xs sm:text-sm md:text-base text-gray-900 leading-relaxed">
-            {ACTIVITY_PERIOD}
+            {ACTIVITY_PERIOD_LABEL}
             <br />
             활동할 수 있어야 해요.
           </p>

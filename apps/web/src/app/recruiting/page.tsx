@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   openGraph: { title: "모집 | KHUDA", description: DESCRIPTION, url: "/recruiting" },
 };
 
+// 모집 중 여부·지난 일정 여부를 화면에서 현재 시각으로 판단한다. 정적 HTML이 오래 남으면
+// 서버 HTML과 브라우저 계산이 어긋나므로 1시간마다 다시 생성한다.
+export const revalidate = 3600;
+
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",

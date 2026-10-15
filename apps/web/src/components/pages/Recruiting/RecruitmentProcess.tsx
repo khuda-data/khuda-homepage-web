@@ -2,7 +2,7 @@ import { useState, type CSSProperties } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { getStepStatus, type ProcessStep } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
-import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, APPLICATION_FORM_CONFIG, SECTION_STYLES, SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
+import { RECRUITMENT_INFO, RECRUITMENT_SCHEDULE, APPLICATION_FORM_CONFIG, SECTION_STYLES, SCROLL_ANIMATION_CONFIG, KHUDA_GENERATION, NEXT_RECRUITMENT_MONTH } from "@/lib/constants";
 import SectionHeader from "@/components/shared/SectionHeader";
 
 // 프로세스 스텝 배열 (상수)
@@ -215,6 +215,14 @@ const RecruitmentProcess = () => {
     return { isCompleted, isActive };
   };
 
+  // 면접 종료가 아니라 최종 발표 시각 기준이다. (면접 다음 날 최종 발표가 아직 남아 있을 수 있다)
+  const isPastCycle = Date.now() > new Date(RECRUITMENT_SCHEDULE.final.endISO).getTime();
+  // 지난 기수 일정이 끝났으면 날짜 대신 "1월 중 / 일정 추후 공지"를 보여 준다.
+  // 구체적인 날짜는 다음 회장단이 정해 RECRUITMENT_SCHEDULE에 넣으면 자동으로 다시 표시된다.
+  const displaySteps: ProcessStep[] = isPastCycle
+    ? PROCESS_STEPS.map((step) => ({ ...step, date: `${NEXT_RECRUITMENT_MONTH} 중`, fullDate: "일정 추후 공지" }))
+    : PROCESS_STEPS;
+
   const circleStyle = {
     "--circle-size": "clamp(9.5rem, 13vw, 12.5rem)",
   } as CSSProperties;
@@ -229,6 +237,13 @@ const RecruitmentProcess = () => {
     >
       {/* 헤더 */}
       <SectionHeader label="Step" title="지원 절차" labelClassName="text-blue-600" />
+
+      {/* 모집이 끝난 뒤에도 지난 기수 날짜가 현재 일정처럼 보였다. 다음 모집 시기만 안내한다. */}
+      {isPastCycle && (
+        <p className="-mt-4 sm:-mt-8 mb-8 sm:mb-12 text-center text-xs sm:text-sm text-muted-foreground px-4">
+          {KHUDA_GENERATION}기 모집은 {NEXT_RECRUITMENT_MONTH} 중 진행됩니다. 구체적인 일정은 확정되는 대로 공지합니다.
+        </p>
+      )}
 
       {/* 데스크톱 버전 */}
       <div className="hidden md:block max-w-7xl mx-auto">
@@ -246,7 +261,7 @@ const RecruitmentProcess = () => {
 
           {/* 스텝들 */}
           <div className="relative flex items-start justify-between gap-6">
-              {PROCESS_STEPS.map((step, index) => {
+              {displaySteps.map((step, index) => {
               const { isCompleted, isActive } = getStepStatuses(index);
                 return (
                 <div key={index} className="flex-1 flex flex-col items-center relative z-10">
@@ -267,7 +282,7 @@ const RecruitmentProcess = () => {
         
       {/* 모바일 버전 */}
       <div className="md:hidden space-y-6" style={circleStyle}>
-          {PROCESS_STEPS.map((step, index) => {
+          {displaySteps.map((step, index) => {
           const { isCompleted, isActive } = getStepStatuses(index);
             return (
             <div key={index} className="flex flex-col items-center">
