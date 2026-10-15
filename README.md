@@ -7,16 +7,9 @@
 
 ## 기술 스택
 
-| Category | Stack |
-|---|---|
-| Language | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) |
-| Framework | ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white) ![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite_5-646CFF?style=for-the-badge&logo=vite&logoColor=white) |
-| Styling | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Radix UI](https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge&logo=radixui&logoColor=white) |
-| State / Data | ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white) |
-| Package Manager | ![pnpm](https://img.shields.io/badge/pnpm_9-F69220?style=for-the-badge&logo=pnpm&logoColor=white) |
-| Deploy | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white) |
-
-공식 홈페이지는 Next.js App Router, 운영진 어드민은 Vite SPA다. 지원서 접수 백엔드는 별도 레포에서 FastAPI로 운영한다.
+- **홈페이지** (`apps/web`): Next.js 15 App Router, React 19, TypeScript, Tailwind CSS
+- **어드민** (`apps/admin`): Vite 5, React 19, TypeScript, Tailwind CSS
+- **공통**: pnpm 9 모노레포, Vercel 배포 · 지원서 백엔드는 별도 레포(FastAPI)
 
 ## 시작하기
 
