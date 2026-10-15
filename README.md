@@ -8,7 +8,7 @@
 
 ## 문서
 
-[![API 명세서](https://img.shields.io/badge/API_명세서-보기-85EA2D?style=flat&logo=swagger&logoColor=black)](doc/api-spec.md)
+[![API 명세서](https://img.shields.io/badge/API_명세서-보기-85EA2D?style=flat&logo=swagger&logoColor=black)](docs/api/API.md)
 
 ## 프로젝트 구조와 배포
 
