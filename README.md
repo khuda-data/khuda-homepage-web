@@ -5,10 +5,34 @@
 <img width="2846" height="1520" alt="image" src="https://github.com/user-attachments/assets/2b8af8d8-44fb-4f23-9b56-6b07d80b08ee" />
 <img width="2838" height="1522" alt="hero-2" src="https://github.com/user-attachments/assets/0e8f8e85-fa11-41ec-b98e-3c837b90d8ce" />
 
+## 기술 스택
 
-## 문서
+| Category | Stack |
+|---|---|
+| Language | ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) |
+| Framework | ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white) ![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite_5-646CFF?style=for-the-badge&logo=vite&logoColor=white) |
+| Styling | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white) ![Radix UI](https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge&logo=radixui&logoColor=white) |
+| State / Data | ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white) |
+| Package Manager | ![pnpm](https://img.shields.io/badge/pnpm_9-F69220?style=for-the-badge&logo=pnpm&logoColor=white) |
+| Deploy | ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white) |
 
-[![API 명세서](https://img.shields.io/badge/API_명세서-보기-85EA2D?style=flat&logo=swagger&logoColor=black)](docs/api/API.md)
+공식 홈페이지는 Next.js App Router, 운영진 어드민은 Vite SPA다. 지원서 접수 백엔드는 별도 레포에서 FastAPI로 운영한다.
+
+## 시작하기
+
+Node 22와 pnpm 9가 필요하다. pnpm은 corepack으로 받는다.
+
+```bash
+corepack enable
+pnpm install
+```
+
+```bash
+pnpm dev          # 공식 홈페이지  http://localhost:8080
+pnpm admin dev    # 운영진 어드민  http://localhost:8081
+```
+
+환경변수를 설정하지 않으면 두 앱 모두 운영 API(`https://api.khuda.kro.kr`)에 붙는다. 로컬 백엔드를 쓰려면 `apps/web/.env.local`에 `NEXT_PUBLIC_API_BASE_URL`, `apps/admin/.env`에 `VITE_API_BASE_URL`을 로컬 API 주소로 넣는다. (`apps/admin/.env.example` 참고)
 
 ## 프로젝트 구조와 배포
 
@@ -25,7 +49,7 @@ apps/
 | Vercel 프로젝트 | Root Directory | 프레임워크 | 도메인 |
 | --- | --- | --- | --- |
 | `khuda-homepage-web` | `apps/web` | Next.js | `www.khuda.co.kr` (`khuda.co.kr`은 www로 리다이렉트) |
-| `khuda-homepage-web-admin` | `apps/admin` | Vite | 운영진 전용 (커스텀 도메인은 추후 연결) |
+| `khuda-homepage-web-admin` | `apps/admin` | Vite | `khuda-homepage-web-admin.vercel.app` (운영진 전용, 커스텀 도메인은 미연결) |
 
 - 각 앱의 `vercel.json`이 프레임워크와 라우팅을 따로 잡는다.
 - 두 프로젝트 모두 Vercel의 Root Directory 변경 감지가 켜져 있어, `apps/web`만 바뀌면 web만 배포되고 admin은 건너뛴다. (반대도 동일)
@@ -33,6 +57,16 @@ apps/
 - Vercel 팀은 쿠다 공식 계정(`khuda-officials-projects`)이다.
 
 지원 접수 API 같은 백엔드는 별도 레포 [`khuda-homepage-api`](https://github.com/khuda-data/khuda-homepage-api)에서 관리한다.
+
+## 문서
+
+| 문서 | 내용 |
+| --- | --- |
+| [docs/api/API.md](docs/api/API.md) | 지원서 API 명세 (API 레포와 같은 내용) |
+| [docs/db/DB.md](docs/db/DB.md) | 지원서 DB 스키마 (API 레포와 같은 내용) |
+| [docs/analytics/ANALYTICS.md](docs/analytics/ANALYTICS.md) | GA4 측정 ID와 전환 이벤트 설정 |
+
+`docs/api/API.md`와 `docs/db/DB.md`는 API 레포에 같은 파일이 있다. 한쪽만 고치면 갈라지니 함께 갱신한다.
 
 ## Team
 
@@ -47,21 +81,6 @@ apps/
 
 ### QA
 ![QA](https://img.shields.io/badge/QA-양경식%20|%20조윤수-FFFFFF?style=flat&logoColor=black)
-
-## 홈페이지 권한 관리 및 인수인계
-
-홈페이지 운영에 대한 **기획 권한은 회장과 부회장**이 가지며, 홈페이지 개발 및 운영을 위해 TF를 구성할 수 있습니다.
-
-TF는 필요에 따라 **기획에 참여할 운영진**과 **개발에 참여할 운영진**으로 구성합니다.
-
-개발 권한은 코드베이스의 안정적인 관리를 위해 다음 원칙을 따릅니다.
-
-* 홈페이지 개발은 기수 단위의 인수인계 체계로 운영합니다.
-* 현재 기수의 개발자는 다음 기수 개발자에게 코드베이스를 인수인계하고, 약 한 기수 동안 함께 운영하며 안정화를 지원합니다.
-* 인수인계가 완료된 이후에는 후배 개발자가 홈페이지의 실질적인 개발 및 유지보수를 담당하며, 선배 개발자는 조언 및 피드백을 제공하는 역할을 수행합니다.
-* 다만 선배 개발자가 현재도 KHUDA 소속 운영진으로 활동하고 있는 경우에는 개발 권한을 함께 가질 수 있습니다.
-
-또한 README를 통해 권한 관리 및 인수인계 원칙을 문서화하여 이후 기수에도 동일한 기준이 이어질 수 있도록 관리하겠습니다.
 
 ## 외부 참여자 협업
 
