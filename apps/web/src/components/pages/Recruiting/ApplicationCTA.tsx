@@ -108,8 +108,11 @@ const ApplicationCTA = () => {
               {...EXTERNAL_LINK_PROPS}
               className="mt-6 inline-flex h-12 items-center justify-center rounded-full border border-foreground/20 px-6 text-sm font-semibold text-foreground hover:bg-foreground/5"
             >
-              인스타그램에서 모집 공지 받기
+              인스타그램에서 공지 확인하기
             </a>
+            <p className="mt-4 text-xs sm:text-sm text-muted-foreground">
+              모집이 시작되면 이 홈페이지에서도 모집 일정과 지원서를 확인할 수 있어요.
+            </p>
           </div>
         )}
       </div>

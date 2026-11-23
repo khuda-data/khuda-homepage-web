@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
-import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG, ACTIVITY_PERIOD_LABEL } from "@/lib/constants";
+import { SECTION_STYLES, SCROLL_ANIMATION_CONFIG, ACTIVITY_PERIOD_LABEL, KHUDA_GENERATION } from "@/lib/constants";
 import SectionHeader from "@/components/shared/SectionHeader";
 import AccordionCard from "./NotesSection/AccordionCard";
 import YBContent from "./NotesSection/YBContent";
@@ -64,6 +64,10 @@ const NotesSection = memo(() => {
       </div>
 
       {/* YB 수료 조건 & OB 혜택 - 아코디언 */}
+      {/* 내용은 지난 기수 기준이다. 다음 기수 모집 공고에 맞춰 application.ts의 문구를 고치면 이 안내도 지운다. */}
+      <p className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 mb-3 sm:mb-4 text-xs sm:text-sm text-muted-foreground">
+        아래 YB 수료 조건과 OB 혜택은 {KHUDA_GENERATION - 1}기 기준 참고용이에요. {KHUDA_GENERATION}기 모집 공고와 함께 수정될 예정이에요.
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-3 sm:gap-4 md:gap-5 lg:gap-6 max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
         <AccordionCard
           title="YB 수료 조건"
