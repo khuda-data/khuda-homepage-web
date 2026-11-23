@@ -10,6 +10,8 @@ import {
   SCROLL_ANIMATION_CONFIG,
   KHUDA_GENERATION,
   NEXT_RECRUITMENT_MONTH,
+  SOCIAL_LINKS,
+  EXTERNAL_LINK_PROPS,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { parseKoreanDate } from "@/lib/date-utils";
@@ -97,8 +99,19 @@ const ApplicationCTA = () => {
             <h2 className="text-xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight text-foreground">
               지금은 모집 기간이 아니에요
             </h2>
-            <p className="mt-6 whitespace-nowrap text-sm sm:text-lg md:text-xl leading-relaxed text-muted-foreground">
-              다음 모집은 {NEXT_RECRUITMENT_MONTH}이에요. 다음 기수에서 꼭 만나요!
+            <p className="mt-6 text-sm sm:text-lg md:text-xl leading-relaxed text-muted-foreground">
+              {KHUDA_GENERATION}기 모집은 {NEXT_RECRUITMENT_MONTH} 중에 시작해요. 구체적인 일정은 정해지는 대로 알려 드릴게요!
+            </p>
+            {/* 비모집 기간에 온 지원 희망자가 다음 공고를 놓치지 않도록 공지 채널을 안내한다 */}
+            <a
+              href={SOCIAL_LINKS.instagram}
+              {...EXTERNAL_LINK_PROPS}
+              className="mt-6 inline-flex h-12 items-center justify-center rounded-full border border-foreground/20 px-6 text-sm font-semibold text-foreground hover:bg-foreground/5"
+            >
+              인스타그램에서 공지 확인하기
+            </a>
+            <p className="mt-4 text-xs sm:text-sm text-muted-foreground">
+              모집이 시작되면 이 홈페이지에서도 모집 일정과 지원서를 확인할 수 있어요.
             </p>
           </div>
         )}

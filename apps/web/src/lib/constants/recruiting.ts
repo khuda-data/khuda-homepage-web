@@ -21,6 +21,11 @@ export const KHUDA_GENERATION = 11;
 // 모집 대상 기수의 활동 기간 (짝수=하반기 7~12월 / 홀수=상반기 1~6월)
 export const ACTIVITY_PERIOD = KHUDA_GENERATION % 2 === 0 ? "7월부터 12월까지" : "1월부터 6월까지";
 
+// 모집 대상 기수가 활동하는 연도. 기수를 올릴 때 함께 바꾼다. (11기 = 2027년 1~6월)
+// 활동 기간을 기수·연도 없이 "1월부터 6월까지"로만 쓰면, 이전 기수가 활동 중인 하반기에 보는 사람이 틀린 정보로 읽는다.
+export const ACTIVITY_YEAR = 2027;
+export const ACTIVITY_PERIOD_LABEL = `${KHUDA_GENERATION}기 · ${ACTIVITY_YEAR}년 ${ACTIVITY_PERIOD}`;
+
 // 다음 모집 월: 모집 대상 기수(KHUDA_GENERATION)의 홀짝으로 결정 (짝수=7월 / 홀수=1월)
 //   - 지금 10기(짝수) 기준이면 다음 모집은 7월. 10기 종료 후 11로 올리면 자동으로 1월이 된다.
 export const NEXT_RECRUITMENT_MONTH = KHUDA_GENERATION % 2 === 0 ? "7월" : "1월";
@@ -55,9 +60,9 @@ export const RECRUITMENT_INFO = {
       description: "데이터 및 AI 분야에\n관심이 많은 분",
     },
     {
-      // 정기 세션 요일은 기수마다 달라질 수 있으니 모집 공지를 보고 맞춰서 수정한다. 10기는 수요일.
+      // 정기 세션 요일은 기수마다 달라진다. 다음 회장단이 요일을 정하면 "방학 중 매주 O요일 대면"으로 바꾼다. (10기는 수요일)
       icon: "CalendarCheck",
-      description: "방학 중 매주 수요일 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
+      description: "방학 중 주 1회 대면 및\n학기 중 주 1회 세션 정기 참여 가능한 분",
     },
     {
       icon: "Flame",
@@ -117,6 +122,8 @@ export const RECRUITMENT_SCHEDULE = {
     date: "2026년 7월 10일 (금) 이후 개별 안내",
     short: "7.10",
     full: "2026년 7월 10일 (금) 이후 개별 안내",
+    // 최종 발표까지 끝난 시각. 이 시각이 지나면 모집 페이지가 지난 일정 대신 다음 모집 안내를 보여 준다.
+    endISO: "2026-07-10T23:59:59+09:00",
     ot: "최종 합격자 대상으로 7월 13일에 오리엔테이션을 진행하며, YB 세션은 7월 15일에 시작합니다.",
   },
 };
