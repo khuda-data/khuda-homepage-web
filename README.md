@@ -2,7 +2,7 @@
 
 경희대학교 데이터분석/AI 학회 KHUDA 공식 홈페이지
 
-<img width="2846" height="1520" alt="image" src="https://github.com/user-attachments/assets/2b8af8d8-44fb-4f23-9b56-6b07d80b08ee" />
+<img width="1897" height="901" alt="KHUDA 홈페이지 메인 화면" src="docs/images/readme-main.webp" />
 <img width="2838" height="1522" alt="hero-2" src="https://github.com/user-attachments/assets/0e8f8e85-fa11-41ec-b98e-3c837b90d8ce" />
 
 ## 기술 스택
