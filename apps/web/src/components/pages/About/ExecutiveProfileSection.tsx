@@ -12,6 +12,7 @@ import {
 import { EXECUTIVE_PROFILES, type ExecutiveProfile } from "@/data/executives";
 import { cn } from "@/lib/utils";
 import { Mail } from "lucide-react";
+import type { ReactNode } from "react";
 
 const SCROLL_REVEAL_OPTIONS = {
   threshold: SCROLL_ANIMATION_CONFIG.threshold,
@@ -39,7 +40,7 @@ const getRoleLabel = (executive: ExecutiveProfile): string => {
   return executive.role;
 };
 
-const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
+const ExecutiveCard = ({ executive, roleLabel }: { executive: ExecutiveProfile; roleLabel?: string }) => (
   // 명함 스타일: 정식 명함 비율(90:55) + 좌측 정렬 정보 + 우상단 KHUDA 아이콘
   <div className="group relative flex aspect-auto min-h-[128px] sm:min-h-0 sm:aspect-[90/55] flex-col justify-between gap-3 rounded-2xl border border-[#E8EBED] bg-white p-4 sm:p-6 text-left shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
     {/* 우상단 KHUDA 아이콘 */}
@@ -56,7 +57,7 @@ const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
         {executive.name}
       </h4>
       <p className="mt-1 text-xs sm:text-sm font-semibold text-gray-500">
-        {getRoleLabel(executive)}
+        {roleLabel ?? getRoleLabel(executive)}
       </p>
     </div>
 
@@ -81,6 +82,88 @@ const ExecutiveCard = ({ executive }: { executive: ExecutiveProfile }) => (
     </div>
   </div>
 );
+
+// 명단을 회장단 / 부서별 / 트랙장으로 나눈다.
+// - 부서는 role이 "OO부장", "OO부원"인 사람을 OO부로 묶고 부장을 앞에 둔다. (교육부, 기획부, 대외홍보부 등)
+// - 겸임자는 회장단 > 부서 > 트랙장 순으로 우선순위가 높은 한 곳에만 둔다.
+//   (예: 대외홍보부장 + 데이터 분석 트랙장 → 부서에만, 카드 직책에 "대외홍보부장 / 데이터 분석 트랙장"으로 표기)
+interface OrgGroup {
+  title: string;
+  members: { executive: ExecutiveProfile; roleLabel?: string }[];
+}
+
+const groupExecutives = (executives: ExecutiveProfile[]) => {
+  const leaders = executives
+    .filter((e) => e.role === "회장" || e.role === "부회장")
+    .sort((a, b) => (a.role === "회장" ? -1 : 0) - (b.role === "회장" ? -1 : 0));
+
+  const departments = new Map<string, ExecutiveProfile[]>();
+  executives.forEach((e) => {
+    const match = e.role.match(/^(.+부)(장|원)$/);
+    if (!match || e.role === "부회장") return;
+    const list = departments.get(match[1]) ?? [];
+    list.push(e);
+    departments.set(match[1], list);
+  });
+  const departmentGroups: OrgGroup[] = [...departments.entries()].map(([name, list]) => ({
+    title: name,
+    members: [...list]
+      .sort((a, b) => Number(b.role.endsWith("장")) - Number(a.role.endsWith("장")))
+      .map((executive) => ({ executive })),
+  }));
+
+  const trackLeads: OrgGroup["members"] = executives
+    .filter((e) => e.role === "트랙장")
+    .map((executive) => ({
+      executive,
+      roleLabel: executive.department ? `${executive.department} 트랙장` : "트랙장",
+    }));
+
+  return { leaders, departmentGroups, trackLeads };
+};
+
+const GroupLabel = ({ children }: { children: ReactNode }) => (
+  <h3 className="mb-3 sm:mb-4 text-sm sm:text-base font-bold text-gray-900">{children}</h3>
+);
+
+const OrganizationView = ({ executives }: { executives: ExecutiveProfile[] }) => {
+  const { leaders, departmentGroups, trackLeads } = groupExecutives(executives);
+  return (
+    <div className="space-y-10 sm:space-y-12">
+      {leaders.length > 0 && (
+        <div>
+          <GroupLabel>회장단</GroupLabel>
+          <ExecutiveGrid executives={leaders} />
+        </div>
+      )}
+
+      {departmentGroups.length > 0 && (
+        <div>
+          <GroupLabel>부서</GroupLabel>
+          <div className="space-y-6 sm:space-y-8">
+            {departmentGroups.map((group) => (
+              <div key={group.title}>
+                <p className="mb-2.5 sm:mb-3 text-xs sm:text-sm font-semibold text-blue-600">{group.title}</p>
+                <ExecutiveGrid executives={group.members.map((m) => m.executive)} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {trackLeads.length > 0 && (
+        <div>
+          <GroupLabel>트랙장</GroupLabel>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
+            {trackLeads.map(({ executive, roleLabel }, index) => (
+              <ExecutiveCard key={`${executive.name}-track-${index}`} executive={executive} roleLabel={roleLabel} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ExecutiveGrid = ({ executives }: { executives: ExecutiveProfile[] }) => (
   <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
@@ -140,7 +223,7 @@ const ExecutiveProfileSection = () => {
             {currentGeneration.comingSoon ? (
               <ComingSoonBlock />
             ) : (
-              <ExecutiveGrid executives={currentGeneration.executives} />
+              <OrganizationView executives={currentGeneration.executives} />
             )}
           </div>
 
@@ -163,7 +246,7 @@ const ExecutiveProfileSection = () => {
                     {generation.comingSoon ? (
                       <ComingSoonBlock />
                     ) : (
-                      <ExecutiveGrid executives={generation.executives} />
+                      <OrganizationView executives={generation.executives} />
                     )}
                   </AccordionContent>
                 </AccordionItem>

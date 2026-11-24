@@ -3,13 +3,23 @@ import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SCROLL_REVEAL_OPTIONS, ROUTES } from "@/lib/constants";
 import type { IndexTrackInfo } from "@/lib/constants";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, LineChart, Database, MessageCircleMore, Eye, Cpu, TrendingUp, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface TrackShowcaseProps {
   tracks: IndexTrackInfo[];
 }
+
+// 트랙 카드 꾸밈 요소: 아이콘과 카드 오른쪽 아래에 깔리는 영문 워터마크 (트랙 id 기준)
+const TRACK_DECOR: Record<string, { icon: LucideIcon; watermark: string }> = {
+  da: { icon: LineChart, watermark: "Analytics" },
+  de: { icon: Database, watermark: "Engineering" },
+  nlp: { icon: MessageCircleMore, watermark: "LLM" },
+  cv: { icon: Eye, watermark: "Vision" },
+  aie: { icon: Cpu, watermark: "AI Eng" },
+  fin: { icon: TrendingUp, watermark: "Finance" },
+};
 
 const LONG_PRESS_MS = 600;
 
@@ -118,11 +128,14 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
 
       {/* 트랙 카드 그리드 (설명 상시 노출 / 데스크톱 hover 시 자세히 보기 화살표) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4">
-        {tracks.map((track) => (
+        {tracks.map((track) => {
+          const decor = TRACK_DECOR[track.id];
+          const Icon = decor?.icon;
+          return (
           <div
             key={track.id}
             className={cn(
-              "group relative flex flex-col h-full min-h-[180px] sm:min-h-[205px] md:min-h-[230px] rounded-2xl p-3.5 sm:p-4 md:p-5 bg-white border border-gray-100 text-gray-900 cursor-pointer select-none overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200 ease-out hover:-translate-y-1.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.14)] active:scale-[0.97] active:shadow-[0_2px_8px_rgba(0,0,0,0.06)]",
+              "group relative flex flex-col h-full min-h-[180px] sm:min-h-[205px] md:min-h-[230px] rounded-2xl p-3.5 sm:p-4 md:p-5 bg-slate-50 border border-slate-200 text-gray-900 cursor-pointer select-none overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-all duration-200 ease-out hover:-translate-y-1.5 hover:shadow-[0_14px_32px_rgba(0,0,0,0.14)] active:scale-[0.97] active:shadow-[0_2px_8px_rgba(0,0,0,0.06)]",
               pressingId === track.id && "scale-[0.97] shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
             )}
             onPointerDown={(e) => handlePointerDown(e, track)}
@@ -132,6 +145,19 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
             onContextMenu={(e) => e.preventDefault()}
             onClick={() => handleCardClick(track)}
           >
+            {/* 영문 워터마크: 일부러 카드 밖으로 잘리게 둔다 */}
+            {decor && (
+              <span aria-hidden className="pointer-events-none select-none absolute -right-2 -bottom-3 sm:-bottom-4 text-[40px] sm:text-[52px] md:text-[64px] font-extrabold tracking-tight leading-none text-slate-200/80">
+                {decor.watermark}
+              </span>
+            )}
+
+            <div className="relative flex items-center gap-2.5 sm:gap-3">
+            {Icon && (
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+              </div>
+            )}
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
               <h3 className="text-sm sm:text-base md:text-lg font-bold leading-tight break-keep">
                 {track.title}
@@ -141,19 +167,21 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
                 <span className="text-[10px] sm:text-[11px] font-medium text-gray-500">{track.label}</span>
               </div>
             </div>
+            </div>
 
-            <p className="mt-3 sm:mt-4 flex-1 text-[13px] sm:text-sm md:text-base leading-relaxed text-gray-700">
+            <p className="relative mt-3 sm:mt-4 flex-1 text-[13px] sm:text-sm md:text-base leading-relaxed text-gray-700 break-keep">
               {track.description}
             </p>
 
             {/* 자세히 보기 화살표: 모바일은 상시 표시, 데스크톱은 hover 시 등장 */}
-            <div className="flex justify-end">
+            <div className="relative flex justify-end">
               <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30 transition-all duration-200 opacity-100 md:opacity-0 md:translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0">
                 <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
