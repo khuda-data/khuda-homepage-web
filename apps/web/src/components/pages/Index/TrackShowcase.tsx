@@ -183,6 +183,9 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
           );
         })}
       </div>
+      <p className="mt-3 sm:mt-4 text-[11px] sm:text-xs text-gray-400">
+        * 운영하는 트랙과 트랙별 내용은 기수마다 다를 수 있어요.
+      </p>
     </div>
   );
 };

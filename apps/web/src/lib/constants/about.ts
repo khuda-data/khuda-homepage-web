@@ -103,6 +103,6 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
     value: 80,
     label: "KHUDA에서 진행한 토이·심화 프로젝트",
     suffix: "+",
-    link: { label: "모두 KHUDA GitHub에서 확인할 수 있어요", href: "https://github.com/khuda-data" },
+    link: { label: "GitHub에서 확인하기", href: "https://github.com/khuda-data" },
   },
 ];
