@@ -2,11 +2,19 @@
 // 파일명이 .server.ts 이고 page.tsx 에서만 import 하므로 브라우저 번들에는 포함되지 않는다.
 import fs from "node:fs";
 import path from "node:path";
-import type { Project } from "./projects";
+import type { Project, ProjectType } from "./projects";
 
 // 프로젝트 글 .md 파일들이 들어있는 폴더. (content/projects/<기수>/*.md)
 const CONTENT_DIR = path.join(process.cwd(), "content/projects");
-// .md 의 thumbnail/slides 에는 파일명만 적고, 실제 이미지는 여기에 올린다.
+// "a, b, c" -> ["a", "b", "c"]
+function toList(value: string | undefined): string[] {
+  return (value ?? "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+// .md 의 thumbnail 에는 파일명만 적고, 실제 이미지는 여기에 올린다.
 const IMAGE_BASE = "/images/projects";
 
 // "my.png" -> "/images/projects/my.png". 이미 "/"로 시작하면 그대로 둔다.
@@ -59,21 +67,25 @@ export function getProjects(): Project[] {
     if (!parsed) continue;
     const { data, body } = parsed;
 
-    const slides = (data.slides ?? "")
-      .split(",")
-      .map((slide) => toImagePath(slide))
-      .filter(Boolean);
-
     projects.push({
+      id: path.basename(file, ".md"),
       title: data.title ?? "",
-      members: data.members ?? "",
-      longDescription: body,
       generation: data.generation ?? "",
-      track: data.track ?? "",
+      type: (data.type === "토이" ? "토이" : "심화") as ProjectType,
+      tracks: toList(data.tracks),
+      searchTracks: toList(data.searchTracks),
+      tags: toList(data.tags),
+      summary: data.summary ?? "",
+      description: body,
       thumbnail: toImagePath(data.thumbnail ?? ""),
-      slides,
       githubUrl: data.github || undefined,
     });
   }
+  // 최신 기수부터, 같은 기수 안에서는 심화 → 토이 순서
+  projects.sort(
+    (a, b) =>
+      parseInt(b.generation, 10) - parseInt(a.generation, 10) ||
+      Number(a.type === "토이") - Number(b.type === "토이")
+  );
   return projects;
 }

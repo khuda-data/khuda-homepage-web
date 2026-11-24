@@ -1,19 +1,26 @@
 import { useState, useMemo, useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { SCROLL_ANIMATION_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { generations, trackOptions, trackDisplayOrder, type Project } from "@/data/projects";
+import {
+  ALL_GENERATIONS,
+  ALL_TRACKS,
+  getGenerationOptions,
+  getTrackOptions,
+  type Project,
+} from "@/data/projects";
 import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import CustomSelect from "./CustomSelect";
 
-const DEFAULT_GENERATION = "모든 기수";
-const DEFAULT_TRACK = "모든 트랙";
+const DEFAULT_GENERATION = ALL_GENERATIONS;
+const DEFAULT_TRACK = ALL_TRACKS;
 
 const ProjectsSection = ({ projects }: { projects: Project[] }) => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: SCROLL_ANIMATION_CONFIG.threshold });
+  // 프로젝트가 많아 섹션이 화면보다 훨씬 길다. 비율(threshold) 기준이면 모바일에서
+  // 영영 나타나지 않으므로, 섹션이 조금이라도 보이면 바로 나타나게 한다.
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0, rootMargin: "0px" });
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -22,6 +29,8 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
   const selectedGeneration = searchParams.get("generation") ?? DEFAULT_GENERATION;
   const selectedTrack = searchParams.get("track") ?? DEFAULT_TRACK;
   const searchQuery = searchParams.get("q") ?? "";
+  const trackOptions = useMemo(() => getTrackOptions(projects), [projects]);
+  const generationOptions = useMemo(() => getGenerationOptions(projects), [projects]);
 
   const setFilter = useCallback(
     (key: string, value: string, defaultValue: string) => {
@@ -38,22 +47,23 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
     [router, pathname, searchParams]
   );
 
+  // 트랙은 현재 이름(searchTracks)으로 찾는다. 카드에는 당시 이름(tracks)이 보인다.
+  // 검색어는 제목·한 줄 소개·설명·태그·당시 트랙 이름에서 찾는다.
   const filteredProjects = useMemo(() => {
-    const filtered = projects.filter((project) => {
+    const query = searchQuery.trim().toLowerCase();
+    return projects.filter((project) => {
       const matchesGeneration =
-        selectedGeneration === "모든 기수" || project.generation === selectedGeneration;
+        selectedGeneration === DEFAULT_GENERATION || project.generation === selectedGeneration;
       const matchesTrack =
-        selectedTrack === "모든 트랙" || project.track === selectedTrack;
+        selectedTrack === DEFAULT_TRACK || project.searchTracks.includes(selectedTrack);
       const matchesSearch =
-        searchQuery === "" ||
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.members.toLowerCase().includes(searchQuery.toLowerCase());
+        query === "" ||
+        [project.title, project.summary, project.description, ...project.tags, ...project.tracks]
+          .join(" ")
+          .toLowerCase()
+          .includes(query);
       return matchesGeneration && matchesTrack && matchesSearch;
     });
-    return [...filtered].sort(
-      (a, b) =>
-        trackDisplayOrder.indexOf(a.track) - trackDisplayOrder.indexOf(b.track)
-    );
   }, [projects, selectedGeneration, selectedTrack, searchQuery]);
 
   const handleCloseModal = useCallback(() => {
@@ -81,7 +91,7 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
               <CustomSelect
                 value={selectedGeneration}
                 onChange={(v) => setFilter("generation", v, DEFAULT_GENERATION)}
-                options={generations}
+                options={generationOptions}
               />
             </div>
 
@@ -89,7 +99,7 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="프로젝트 검색 (제목, 팀명..)"
+                placeholder="프로젝트 검색 (제목, 키워드..)"
                 value={searchQuery}
                 onChange={(e) => setFilter("q", e.target.value, "")}
                 className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-card border border-border hover:border-foreground/20 focus:border-foreground/30 focus:outline-none text-sm text-foreground placeholder:text-muted-foreground transition-colors duration-200"
@@ -99,9 +109,9 @@ const ProjectsSection = ({ projects }: { projects: Project[] }) => {
 
           {filteredProjects.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-              {filteredProjects.map((project, index) => (
+              {filteredProjects.map((project) => (
                 <ProjectCard
-                  key={`${project.title}-${index}`}
+                  key={project.id}
                   project={project}
                   onClick={() => setSelectedProject(project)}
                 />

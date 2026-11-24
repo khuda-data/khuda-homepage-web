@@ -1,54 +1,7 @@
-import { useState, useEffect } from "react";
-import { X, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect } from "react";
+import { X, Github } from "lucide-react";
 import type { Project } from "@/data/projects";
-import { TRACK_ACCENT_CLASS } from "@/lib/constants";
-
-const SlideCarousel = ({ slides, title }: { slides: string[]; title: string }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  if (slides.length === 0) return null;
-
-  const currentSlide = slides[currentIndex];
-
-  return (
-    <div className="relative group/carousel">
-      <div className="relative aspect-[2/1] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
-        {currentSlide ? (
-          <>
-            <img
-              src={currentSlide}
-              alt={`${title} ${currentIndex + 1}`}
-              className="w-full h-full object-cover"
-            />
-            {slides.length > 1 && (
-              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-black/60 text-xs text-white/80 backdrop-blur-sm">
-                {currentIndex + 1} / {slides.length}
-              </div>
-            )}
-          </>
-        ) : (
-          <p className="text-muted-foreground text-sm">이미지 준비중</p>
-        )}
-      </div>
-      {slides.length > 1 && (
-        <>
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1))}
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all opacity-0 group-hover/carousel:opacity-100"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1))}
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all opacity-0 group-hover/carousel:opacity-100"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </>
-      )}
-    </div>
-  );
-};
+import { ProjectTags, ProjectTrackLabel } from "./ProjectMeta";
 
 interface ProjectModalProps {
   project: Project;
@@ -84,7 +37,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
 
         <div className="px-10 sm:px-14 pt-12 sm:pt-14 pb-10 sm:pb-12">
           <div className="flex items-center gap-1.5 mb-4 text-sm font-semibold">
-            <span className={TRACK_ACCENT_CLASS}>{project.track}</span>
+            <ProjectTrackLabel project={project} />
             <span className="text-muted-foreground/40">·</span>
             <span className="text-foreground/60">{project.generation}</span>
             {project.githubUrl && (
@@ -94,32 +47,31 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="GitHub에서 코드 보기"
+                  title="GitHub에서 코드 보기"
+                  className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Github className="w-3.5 h-3.5" />
-                  <span>GitHub</span>
+                  <Github className="w-4 h-4" />
                 </a>
               </>
             )}
           </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">
             {project.title}
           </h2>
-
-          <div className="mb-8">
-            <SlideCarousel
-              slides={project.slides.length > 0 ? project.slides : [project.thumbnail]}
-              title={project.title}
-            />
-          </div>
-
-          <div>
-            <p className="text-[15px] text-foreground/65 leading-[1.8]">
-              {project.longDescription}
-            </p>
-          </div>
+          <p className="mt-2 text-[15px] text-foreground/65 leading-[1.8]">{project.description}</p>
+          {project.tags.length > 0 && (
+            <div className="mt-4">
+              <ProjectTags tags={project.tags} />
+            </div>
+          )}
+          {project.thumbnail && (
+            <div className="mt-6 aspect-[2/1] rounded-lg overflow-hidden bg-muted">
+              <img src={project.thumbnail} alt="" className="w-full h-full object-cover" />
+            </div>
+          )}
         </div>
       </div>
     </div>
