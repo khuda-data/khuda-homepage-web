@@ -81,7 +81,7 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
   {
     // 현재 기수와 숫자를 맞춘다. 새 기수가 시작되면 함께 올린다.
     value: 10,
-    label: "기수",
+    label: "현재 진행 기수",
     suffix: "기",
     from: 1,
   },
@@ -90,7 +90,7 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
     label: "경희대학교 총동아리연합회 선정",
     suffix: "",
     isStatic: true,
-    staticText: "경희대학교\n2025 최우수 동아리",
+    staticText: "경희대학교\n2025·2026 최우수 동아리",
   },
   {
     // 누적 수료생 인원. 50 단위로 갱신한다.

@@ -132,12 +132,7 @@ const TrackShowcase = ({ tracks }: TrackShowcaseProps) => {
             onContextMenu={(e) => e.preventDefault()}
             onClick={() => handleCardClick(track)}
           >
-            {/* 파이프라인 단계 */}
-            <span className="self-start px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-blue-50 text-[10px] sm:text-xs font-semibold text-blue-600">
-              {track.stage}
-            </span>
-
-            <div className="mt-2.5 sm:mt-3 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
               <h3 className="text-sm sm:text-base md:text-lg font-bold leading-tight break-keep">
                 {track.title}
               </h3>
