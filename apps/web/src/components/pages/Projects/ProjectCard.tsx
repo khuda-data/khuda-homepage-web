@@ -1,5 +1,8 @@
 import type { Project } from "@/data/projects";
-import { TRACK_ACCENT_CLASS } from "@/lib/constants";
+import { ProjectTags, ProjectTrackLabel } from "./ProjectMeta";
+
+// 목록에서는 카드 높이를 맞추려고 태그를 앞의 3개만 보여 준다. 전체는 상세 화면에서 보인다.
+const CARD_TAG_LIMIT = 3;
 
 interface ProjectCardProps {
   project: Project;
@@ -17,7 +20,7 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => (
         <>
           <img
             src={project.thumbnail}
-            alt={project.title}
+            alt=""
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
@@ -30,13 +33,18 @@ const ProjectCard = ({ project, onClick }: ProjectCardProps) => (
 
     <div className="p-4 sm:p-5">
       <p className="text-sm font-semibold mb-2">
-        <span className={TRACK_ACCENT_CLASS}>{project.track}</span>
+        <ProjectTrackLabel project={project} />
         <span className="text-muted-foreground/40 mx-1.5">·</span>
         <span className="text-foreground/60">{project.generation}</span>
       </p>
       <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug group-hover:text-foreground/80 transition-colors line-clamp-2">
         {project.title}
       </h3>
+      {project.tags.length > 0 && (
+        <div className="mt-3">
+          <ProjectTags tags={project.tags.slice(0, CARD_TAG_LIMIT)} size="sm" />
+        </div>
+      )}
     </div>
   </button>
 );
