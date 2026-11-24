@@ -46,22 +46,28 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
               className={cn(
                 "relative rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 min-h-[140px] sm:min-h-[160px] md:min-h-[180px] overflow-hidden",
                 "transition-all duration-700 ease-out",
-                isRedCard ? "bg-red-300/70 text-gray-900" : "bg-blue-200/70 text-gray-900",
+                // 수상 카드는 로고 글자색(네이비)으로 강조하고, 나머지 수치 카드는 밝은 회색 + 얇은 테두리로 둔다.
+                isRedCard ? "bg-[#0f172a] text-white" : "bg-slate-50 border border-slate-200 text-slate-900",
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
               )}
               style={{ transitionDelay: `${200 + index * 120}ms` }}
             >
+              {/* 수상 카드 상단 강조선: 로고 U의 파랑→빨강 */}
+              {isRedCard && (
+                <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#2563eb] from-60% to-[#ef4444]" />
+              )}
+
               {/* 라벨 */}
-              <div className="text-xs sm:text-sm font-medium tracking-wide mb-2 sm:mb-3 text-gray-600">
+              <div className={cn("text-xs sm:text-sm font-medium tracking-wide mb-2 sm:mb-3 break-keep", isRedCard ? "text-white/60" : "text-slate-500")}>
                 {achievement.label}
               </div>
 
               {/* 값 */}
               <div className="mt-1 sm:mt-2">
                 {achievement.isStatic ? (
-                  <div className="text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight leading-tight text-gray-900 break-keep">
+                  <div className="text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight leading-tight text-white break-keep">
                     {achievement.staticText?.split("\n").map((line, i) => (
                       <span key={i}>
                         {i > 0 && <br />}
@@ -70,18 +76,31 @@ const AchievementsSection = ({ achievements, resetKey }: AchievementsSectionProp
                     ))}
                   </div>
                 ) : (
-                  <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900">
+                  <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0f172a]">
                     <CountUp
                       from={achievement.from ?? 0}
                       to={achievement.value}
                       duration={2}
                       delay={index * 0.15}
                       suffix={achievement.suffix}
-                      className="[&>.suffix]:text-lg [&>.suffix]:sm:text-xl [&>.suffix]:md:text-2xl [&>.suffix]:font-bold [&>.suffix]:ml-0.5 text-gray-900"
+                      className="[&>.suffix]:text-lg [&>.suffix]:sm:text-xl [&>.suffix]:md:text-2xl [&>.suffix]:font-bold [&>.suffix]:ml-0.5 [&>.suffix]:text-[#2563eb] text-[#0f172a]"
                       startWhen={isVisible}
                       resetKey={resetKey}
                     />
                   </div>
+                )}
+
+                {/* 근거 링크 (예: 프로젝트 수 → GitHub) */}
+                {achievement.link && (
+                  <a
+                    href={achievement.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-[#2563eb] hover:underline break-keep"
+                  >
+                    {achievement.link.label}
+                    <span aria-hidden>↗</span>
+                  </a>
                 )}
               </div>
             </div>

@@ -21,6 +21,8 @@ export interface AchievementInfo {
   staticText?: string;
   emoji?: string;
   variant?: "primary" | "white" | "accent";
+  // 숫자 아래에 붙는 작은 링크 (예: 근거 자료로 이동)
+  link?: { label: string; href: string };
 }
 
 export const KHUDA_VALUES: KhudaValue[] = [
@@ -72,9 +74,9 @@ export const KHUDA_FEATURES: FeatureInfo[] = [
   },
 ];
 
-// 메인 페이지 성과 집계 수치.
-// 수료생과 아이디어 제출 수치는 기수마다 정확히 집계해서 갱신하고, 두 값 모두 50 단위로만 올린다.
-// (10기 출범 기준 초기값: 수료생 450, 아이디어 제출 150)
+// 메인 페이지 성과 집계 수치. 기수마다 정확히 집계해서 갱신한다.
+// 프로젝트 수는 GitHub 공식 조직(khuda-data)의 공개 저장소 중 토이·심화 프로젝트 수다.
+// (2026-11 기준: 토이 28 + 심화 52 = 80. 데이터톤 팀 9개와 강의 자료 저장소는 제외)
 export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
   {
     // 현재 기수와 숫자를 맞춘다. 새 기수가 시작되면 함께 올린다.
@@ -91,15 +93,16 @@ export const KHUDA_ACHIEVEMENTS: AchievementInfo[] = [
     staticText: "경희대학교\n2025 최우수 동아리",
   },
   {
-    // 누적 수료생 인원. 이 값부터 정확히 집계해서 50 단위로 갱신한다.
+    // 누적 수료생 인원. 50 단위로 갱신한다.
     value: 450,
-    label: "수료생",
+    label: "KHUDA를 거쳐 가신 분들",
     suffix: "+",
   },
   {
-    // 누적 아이디어 제출 건수. 마찬가지로 50 단위로 갱신한다.
-    value: 150,
-    label: "아이디어 제출",
+    // 토이·심화 프로젝트 저장소 수. 새 기수 프로젝트가 GitHub에 올라오면 다시 센다.
+    value: 80,
+    label: "KHUDA에서 진행한 토이·심화 프로젝트",
     suffix: "+",
+    link: { label: "모두 KHUDA GitHub에서 확인할 수 있어요", href: "https://github.com/khuda-data" },
   },
 ];
